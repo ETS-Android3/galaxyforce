@@ -17,7 +17,7 @@ android {
      * compile your app. This means your app can use the API features included in
      * this API level and lower.
      */
-    compileSdkVersion 24
+    compileSdkVersion 27
 
     /**
      * The defaultConfig block encapsulates default settings and entries for all
@@ -35,10 +35,16 @@ android {
         applicationId "com.danosoftware.galaxyforce"
 
         // Defines the minimum API level required to run the app.
-        minSdkVersion 11
+        minSdkVersion 14
 
         // Specifies the API level used to test the app.
-        targetSdkVersion 24
+        targetSdkVersion 27
+
+        // Defines the version number of your app.
+        versionCode 4
+
+        // Defines a user-friendly version name for your app.
+        versionName "0.04"
     }
 
     /**
@@ -70,5 +76,5 @@ android {
  * restricting which dependencies leak their APIs to other modules.
  */
 dependencies {
-    compile 'com.android.support:support-v4:24.1.1'
+    compile 'com.android.support:support-v4:27.0.2'
 }
