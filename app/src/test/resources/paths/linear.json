@@ -1,0 +1,42 @@
+{
+  "pathData": [
+    {
+      "type": "linear",
+      "pathPoints": 100,
+      "start": {
+        "x": 20,
+        "y": 940
+      },
+      "finish": {
+        "x": 520,
+        "y": 940
+      }
+    },
+    {
+      "type": "linear",
+      "pathPoints": 100,
+      "start": {
+        "x": 520,
+        "y": 940
+      },
+      "finish": {
+        "x": 179,
+        "y": 285
+      }
+    },
+    {
+      "type": "linear",
+      "pathPoints": 100,
+      "start": {
+        "x": 179,
+        "y": 285
+      },
+      "finish": {
+        "x": 321,
+        "y": 102
+      }
+    }
+  ],
+  "width": 540,
+  "height": 960
+}
