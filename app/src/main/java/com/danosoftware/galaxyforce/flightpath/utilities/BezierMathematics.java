@@ -40,13 +40,14 @@ public final class BezierMathematics {
         for (int i = 0; i <= pathPoints; i++)
         {
             double t = (double) i / pathPoints;
-            Point2 position = calculateBezierPoint(
-                    start,
-                    startControl,
-                    finish,
-                    finishControl,
-                    t);
-            path.add(position);
+            path.add(
+                    calculateBezierPoint(
+                            start,
+                            startControl,
+                            finish,
+                            finishControl,
+                            t)
+            );
         }
 
         return path;
@@ -84,8 +85,6 @@ public final class BezierMathematics {
         Point2 stage3 = addition(stage2, multiply(finishControl, (3 * u * tt)));
 
         /* stage 4 - stage 3 + (ttt * finish) */
-        Point2 stage4 = addition(stage3, multiply(finish, ttt));
-
-        return stage4;
+        return addition(stage3, multiply(finish, ttt));
     }
 }
