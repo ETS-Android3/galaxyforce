@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 /**
- * Represents the interface for all Data Transfer Object paths.
+ * Represents the base class for all Data Transfer Object paths.
  *
  * Jackson annotations ensure the correct concrete implementation
  * is constructed on deserialization.
@@ -20,10 +20,18 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         @JsonSubTypes.Type(value = BezierPathDTO.class, name = "bezier"),
         @JsonSubTypes.Type(value = LinearPathDTO.class, name = "linear")
 })
-public interface PathDTO {
+public abstract class PathDTO {
+
+    private final PathType pathType;
+
+    public PathDTO(final PathType pathType) {
+        this.pathType = pathType;
+    }
 
     /*
      * Return the path DTO's type.
      */
-    PathType getType();
+    PathType getType() {
+        return pathType;
+    }
 }

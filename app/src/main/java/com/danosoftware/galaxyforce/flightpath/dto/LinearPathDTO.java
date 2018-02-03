@@ -6,12 +6,11 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 /**
  * Represents the Data Transfer Object of Linear Paths.
  */
-public class LinearPathDTO implements PathDTO {
+public class LinearPathDTO extends PathDTO {
 
     private final Integer pathPoints;
     private final PointDTO start;
     private final PointDTO finish;
-    private final PathType pathType;
 
     @JsonCreator
     public LinearPathDTO(
@@ -19,15 +18,10 @@ public class LinearPathDTO implements PathDTO {
             @JsonProperty("start") PointDTO start,
             @JsonProperty("finish") PointDTO finish) {
 
-        this.pathType = PathType.LINEAR;
+        super(PathType.LINEAR);
         this.pathPoints = pathPoints;
         this.start = start;
         this.finish = finish;
-    }
-
-    @Override
-    public PathType getType() {
-        return pathType;
     }
 
     public Integer getPathPoints() {
