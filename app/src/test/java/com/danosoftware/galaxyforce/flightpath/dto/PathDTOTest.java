@@ -1,4 +1,4 @@
-package com.danosoftware.galaxyforce.dto;
+package com.danosoftware.galaxyforce.flightpath.dto;
 
 import android.support.annotation.NonNull;
 

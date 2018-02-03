@@ -1,34 +1,28 @@
-package com.danosoftware.galaxyforce.dto;
+package com.danosoftware.galaxyforce.flightpath.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
- * Represents the Data Transfer Object of Bezier Paths.
+ * Represents the Data Transfer Object of Linear Paths.
  */
-public class BezierPathDTO implements PathDTO {
+public class LinearPathDTO implements PathDTO {
 
     private final Integer pathPoints;
     private final PointDTO start;
-    private final PointDTO startControl;
     private final PointDTO finish;
-    private final PointDTO finishControl;
     private final PathType pathType;
 
     @JsonCreator
-    public BezierPathDTO(
+    public LinearPathDTO(
             @JsonProperty("pathPoints") Integer pathPoints,
             @JsonProperty("start") PointDTO start,
-            @JsonProperty("startControl") PointDTO startControl,
-            @JsonProperty("finish") PointDTO finish,
-            @JsonProperty("finishControl") PointDTO finishControl) {
+            @JsonProperty("finish") PointDTO finish) {
 
-        this.pathType = PathType.BEZIER;
+        this.pathType = PathType.LINEAR;
         this.pathPoints = pathPoints;
         this.start = start;
-        this.startControl = startControl;
         this.finish = finish;
-        this.finishControl = finishControl;
     }
 
     @Override
@@ -44,15 +38,7 @@ public class BezierPathDTO implements PathDTO {
         return start;
     }
 
-    public PointDTO getStartControl() {
-        return startControl;
-    }
-
     public PointDTO getFinish() {
         return finish;
-    }
-
-    public PointDTO getFinishControl() {
-        return finishControl;
     }
 }

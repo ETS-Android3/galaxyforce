@@ -1,4 +1,4 @@
-package com.danosoftware.galaxyforce.dto;
+package com.danosoftware.galaxyforce.flightpath.dto;
 
 /**
  * Holds the different possible types of path DTOs.
