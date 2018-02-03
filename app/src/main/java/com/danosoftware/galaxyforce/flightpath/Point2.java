@@ -12,12 +12,6 @@ public class Point2
     private final int x;
     private final int y;
 
-    public Point2(PointDTO point)
-    {
-        this.x = point.getX();
-        this.y = point.getY();
-    }
-
     public Point2(int x, int y)
     {
         this.x = x;
