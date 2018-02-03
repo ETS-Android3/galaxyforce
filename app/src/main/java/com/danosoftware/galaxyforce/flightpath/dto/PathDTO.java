@@ -1,4 +1,4 @@
-package com.danosoftware.galaxyforce.dto;
+package com.danosoftware.galaxyforce.flightpath.dto;
 
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
