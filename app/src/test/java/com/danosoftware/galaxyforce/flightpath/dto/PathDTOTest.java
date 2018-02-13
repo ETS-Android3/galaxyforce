@@ -2,6 +2,7 @@ package com.danosoftware.galaxyforce.flightpath.dto;
 
 import android.support.annotation.NonNull;
 
+import com.danosoftware.galaxyforce.flightpath.new_refactor.Path2;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.Test;
@@ -12,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 
+import static com.danosoftware.galaxyforce.helpers.AssetHelpers.pathAsset;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
@@ -60,6 +62,52 @@ public class PathDTOTest {
             assertThat(linearDTO.getPathPoints(), is(notNullValue()));
         }
         logger.info("Verified Linear path DTOs");
+    }
+
+    @Test
+    public void shouldLoadPausedPaths() throws IOException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        PathListDTO pathData = mapper.readValue(getFileFromPath(this, "paths/pause.json"), PathListDTO.class);
+
+        assertThat(pathData.getPathList().size(), is(3));
+        for (PathDTO pathDTO : pathData.getPathList()) {
+            assertThat(pathDTO.getType(), is(PathType.PAUSE));
+            assertThat(pathDTO instanceof PausePathDTO, is(true));
+            PausePathDTO pauseDTO = (PausePathDTO) pathDTO;
+            checkPoints(pauseDTO.getPosition());
+            assertThat(pauseDTO.getPauseTime(), is(notNullValue()));
+        }
+        logger.info("Verified Paused path DTOs");
+    }
+
+
+    @Test
+    public void shouldLoadCircularPaths() throws IOException {
+
+        ObjectMapper mapper = new ObjectMapper();
+        PathListDTO pathData = mapper.readValue(getFileFromPath(this, "paths/circular.json"), PathListDTO.class);
+
+        assertThat(pathData.getPathList().size(), is(2));
+        for (PathDTO pathDTO : pathData.getPathList()) {
+            assertThat(pathDTO.getType(), is(PathType.CIRCULAR));
+            assertThat(pathDTO instanceof CircularPathDTO, is(true));
+            CircularPathDTO circularDTO = (CircularPathDTO) pathDTO;
+            checkPoints(circularDTO.getCentre());
+            assertThat(circularDTO.getPiMultiplier(), is(notNullValue()));
+        }
+        logger.info("Verified Circular path DTOs");
+    }
+
+    @Test
+    public void shouldLoadAllPathAssets() throws IOException {
+        for (Path2 path : Path2.values()) {
+            logger.info("Checking path : '{}' for: {}.", path.getPathFile(), path.name());
+            File file = pathAsset(path.getPathFile());
+            ObjectMapper mapper = new ObjectMapper();
+            PathListDTO pathData = mapper.readValue(file, PathListDTO.class);
+        }
+        logger.info("All loaded successfully");
     }
 
     // verify point DTOs

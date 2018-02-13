@@ -1,6 +1,12 @@
-package com.danosoftware.galaxyforce.flightpath;
+package com.danosoftware.galaxyforce.flightpath.legacy;
 
 import com.danosoftware.galaxyforce.constants.GameConstants;
+import com.danosoftware.galaxyforce.flightpath.BezierCurve;
+import com.danosoftware.galaxyforce.flightpath.CircularPath;
+import com.danosoftware.galaxyforce.flightpath.FlightPath;
+import com.danosoftware.galaxyforce.flightpath.FlightPause;
+import com.danosoftware.galaxyforce.flightpath.Point;
+import com.danosoftware.galaxyforce.flightpath.StraightLine;
 
 import java.util.ArrayList;
 import java.util.Arrays;

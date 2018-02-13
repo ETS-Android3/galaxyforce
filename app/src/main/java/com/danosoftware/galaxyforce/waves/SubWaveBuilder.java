@@ -1,10 +1,10 @@
 package com.danosoftware.galaxyforce.waves;
 
-import java.util.Arrays;
-import java.util.List;
-
 import com.danosoftware.galaxyforce.flightpath.Path;
 import com.danosoftware.galaxyforce.flightpath.PathFactory;
+
+import java.util.Arrays;
+import java.util.List;
 
 public enum SubWaveBuilder
 {
@@ -16,9 +16,30 @@ public enum SubWaveBuilder
      * immediately
      */
 
-    WAVE_01(true, new SubWaveProperty(AlienType.OCTOPUS, Path.VALLEY_DROP, PathFactory.X_INVERT_FALSE, PathFactory.Y_INVERT_FALSE, 0, 0,
-            10, 0.5f, 0, false), new SubWaveProperty(AlienType.OCTOPUS, Path.VALLEY_DROP, PathFactory.X_INVERT_TRUE,
-            PathFactory.Y_INVERT_FALSE, 0, 100, 10, 0.5f, 0, false)),
+    WAVE_01(true,
+            new SubWaveProperty(
+                    AlienType.OCTOPUS,
+                    Path.VALLEY_DROP,
+                    PathFactory.X_INVERT_FALSE,
+                    PathFactory.Y_INVERT_FALSE,
+                    0,
+                    0,
+                    10,
+                    0.5f,
+                    0,
+                    false
+            ),
+            new SubWaveProperty(
+                    AlienType.OCTOPUS,
+                    Path.VALLEY_DROP,
+                    PathFactory.X_INVERT_TRUE,
+                    PathFactory.Y_INVERT_FALSE,
+                    0,
+                    100,
+                    10,
+                    0.5f,
+                    0,
+                    false)),
 
     /**
      * space invader style attack

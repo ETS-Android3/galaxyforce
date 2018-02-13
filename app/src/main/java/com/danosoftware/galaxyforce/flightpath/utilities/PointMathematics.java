@@ -1,8 +1,8 @@
 package com.danosoftware.galaxyforce.flightpath.utilities;
 
-import com.danosoftware.galaxyforce.flightpath.Point;
 import com.danosoftware.galaxyforce.flightpath.Point2;
 import com.danosoftware.galaxyforce.flightpath.dto.PointDTO;
+import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
 
 
 /**
@@ -22,6 +22,21 @@ public final class PointMathematics {
      */
     public static Point2 convertPoint(PointDTO pointData) {
         return new Point2(pointData.getX(), pointData.getY());
+    }
+
+    /**
+     * Convert from point DTO (used for JSON deserialization)
+     * to point object used across app. Then translate to new position
+     * based on provided point translators.
+     *
+     * @param pointData
+     * @param translators
+     * @return point
+     */
+    public static Point2 convertAndTranslatePoint(PointDTO pointData, PointTranslatorChain translators) {
+        return translators.translate(
+                convertPoint(pointData)
+        );
     }
 
     /**

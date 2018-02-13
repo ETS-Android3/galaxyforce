@@ -1,0 +1,25 @@
+{
+  "pathData" : [ {
+    "type" : "linear",
+    "pathPoints" : 5,
+    "start" : {
+      "x" : 0,
+      "y" : 992
+    },
+    "finish" : {
+      "x" : 0,
+      "y" : 318
+    }
+  }, {
+    "type" : "linear",
+    "pathPoints" : 5,
+    "start" : {
+      "x" : 0,
+      "y" : 318
+    },
+    "finish" : {
+      "x" : 0,
+      "y" : 992
+    }
+  } ]
+}

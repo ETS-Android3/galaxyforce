@@ -1,5 +1,9 @@
 package com.danosoftware.galaxyforce.flightpath;
 
+import com.danosoftware.galaxyforce.flightpath.dto.CircularPathDTO;
+import com.danosoftware.galaxyforce.flightpath.dto.PathDTO;
+import com.danosoftware.galaxyforce.flightpath.dto.PointDTO;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,4 +60,10 @@ public class CircularPath implements FlightPath
 
     }
 
+    @Override
+    public PathDTO createDTO() {
+        return new CircularPathDTO(
+                new PointDTO(centre.getX(), centre.getY()),
+                piMulitplier);
+    }
 }

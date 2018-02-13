@@ -14,11 +14,11 @@ import java.util.List;
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PathListDTO {
 
+    @JsonProperty("pathData")
     private final List<PathDTO> pathList;
 
     @JsonCreator
-    public PathListDTO(
-            @JsonProperty("pathData") List<PathDTO> pathList) {
+    public PathListDTO(@JsonProperty("pathData") List<PathDTO> pathList) {
         this.pathList = pathList;
     }
 

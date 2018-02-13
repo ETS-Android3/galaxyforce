@@ -1,5 +1,9 @@
 package com.danosoftware.galaxyforce.flightpath;
 
+import com.danosoftware.galaxyforce.flightpath.dto.PathDTO;
+import com.danosoftware.galaxyforce.flightpath.dto.PausePathDTO;
+import com.danosoftware.galaxyforce.flightpath.dto.PointDTO;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,6 +41,13 @@ public class FlightPause implements FlightPath
         }
 
         return path;
+    }
+
+    @Override
+    public PathDTO createDTO() {
+        return new PausePathDTO(
+                timeInSeconds,
+                new PointDTO(position.getX(),position.getY()));
     }
 
 }

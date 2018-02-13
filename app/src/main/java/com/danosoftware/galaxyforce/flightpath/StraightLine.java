@@ -1,5 +1,9 @@
 package com.danosoftware.galaxyforce.flightpath;
 
+import com.danosoftware.galaxyforce.flightpath.dto.LinearPathDTO;
+import com.danosoftware.galaxyforce.flightpath.dto.PathDTO;
+import com.danosoftware.galaxyforce.flightpath.dto.PointDTO;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -50,5 +54,13 @@ public class StraightLine implements FlightPath
         }
 
         return path;
+    }
+
+    @Override
+    public PathDTO createDTO() {
+        return new LinearPathDTO(
+                distancePerCycle,
+                new PointDTO(start.getX(),start.getY()),
+                new PointDTO(finish.getX(),finish.getY()));
     }
 }

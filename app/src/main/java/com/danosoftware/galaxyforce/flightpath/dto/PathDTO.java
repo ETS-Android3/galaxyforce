@@ -1,5 +1,6 @@
 package com.danosoftware.galaxyforce.flightpath.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
@@ -18,8 +19,11 @@ import com.fasterxml.jackson.annotation.JsonTypeInfo;
         property = "type")
 @JsonSubTypes({
         @JsonSubTypes.Type(value = BezierPathDTO.class, name = "bezier"),
-        @JsonSubTypes.Type(value = LinearPathDTO.class, name = "linear")
+        @JsonSubTypes.Type(value = LinearPathDTO.class, name = "linear"),
+        @JsonSubTypes.Type(value = PausePathDTO.class, name = "pause"),
+        @JsonSubTypes.Type(value = CircularPathDTO.class, name = "circular")
 })
+@JsonIgnoreProperties({"type"}) // prevents type enum also being serialized when creating JSON
 public abstract class PathDTO {
 
     private final PathType pathType;
@@ -28,10 +32,12 @@ public abstract class PathDTO {
         this.pathType = pathType;
     }
 
-    /*
+    /**
      * Return the path DTO's type.
+     *
+     * @return path type
      */
-    PathType getType() {
+    public PathType getType() {
         return pathType;
     }
 }

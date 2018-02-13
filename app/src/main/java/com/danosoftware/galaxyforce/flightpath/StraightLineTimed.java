@@ -1,5 +1,8 @@
 package com.danosoftware.galaxyforce.flightpath;
 
+import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
+import com.danosoftware.galaxyforce.flightpath.dto.PathDTO;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,5 +52,10 @@ public class StraightLineTimed implements FlightPath
 
         return path;
 
+    }
+
+    @Override
+    public PathDTO createDTO() {
+        throw new GalaxyForceException(this.getClass().getName());
     }
 }
