@@ -1,6 +1,7 @@
-package com.danosoftware.galaxyforce.waves;
+package com.danosoftware.galaxyforce.legacy.waves;
 
-import com.danosoftware.galaxyforce.flightpath.Path;
+import com.danosoftware.galaxyforce.legacy.flightpath.Path;
+import com.danosoftware.galaxyforce.waves.AlienType;
 
 /*
  * Class references a sub-wave of aliens on a path

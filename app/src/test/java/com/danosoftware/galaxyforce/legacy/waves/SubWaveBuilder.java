@@ -1,7 +1,8 @@
-package com.danosoftware.galaxyforce.waves;
+package com.danosoftware.galaxyforce.legacy.waves;
 
-import com.danosoftware.galaxyforce.flightpath.Path;
-import com.danosoftware.galaxyforce.flightpath.PathFactory;
+import com.danosoftware.galaxyforce.legacy.flightpath.Path;
+import com.danosoftware.galaxyforce.legacy.flightpath.PathFactory;
+import com.danosoftware.galaxyforce.waves.AlienType;
 
 import java.util.Arrays;
 import java.util.List;

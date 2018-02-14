@@ -1,6 +1,6 @@
 package com.danosoftware.galaxyforce.flightpath.utilities;
 
-import com.danosoftware.galaxyforce.flightpath.Point2;
+import com.danosoftware.galaxyforce.flightpath.paths.Point;
 import com.danosoftware.galaxyforce.flightpath.dto.PointDTO;
 import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
 
@@ -20,8 +20,8 @@ public final class PointMathematics {
      * @param pointData
      * @return point
      */
-    public static Point2 convertPoint(PointDTO pointData) {
-        return new Point2(pointData.getX(), pointData.getY());
+    public static Point convertPoint(PointDTO pointData) {
+        return new Point(pointData.getX(), pointData.getY());
     }
 
     /**
@@ -33,7 +33,7 @@ public final class PointMathematics {
      * @param translators
      * @return point
      */
-    public static Point2 convertAndTranslatePoint(PointDTO pointData, PointTranslatorChain translators) {
+    public static Point convertAndTranslatePoint(PointDTO pointData, PointTranslatorChain translators) {
         return translators.translate(
                 convertPoint(pointData)
         );
@@ -46,9 +46,9 @@ public final class PointMathematics {
      * @param multiplier
      * @return scaled point
      */
-    public static Point2 multiply(Point2 point, double multiplier)
+    public static Point multiply(Point point, double multiplier)
     {
-        return new Point2(
+        return new Point(
                 (int) (point.getX() * multiplier),
                 (int) (point.getY() * multiplier));
     }
@@ -60,9 +60,9 @@ public final class PointMathematics {
      * @param point2
      * @return summed point
      */
-    public static Point2 addition(Point2 point1, Point2 point2)
+    public static Point addition(Point point1, Point point2)
     {
-        return new Point2(
+        return new Point(
                 point1.getX() + point2.getX(),
                 point1.getY() + point2.getY());
     }
@@ -74,9 +74,9 @@ public final class PointMathematics {
      * @param point2
      * @return subtracted point
      */
-    public static Point2 subtraction(Point2 point1, Point2 point2)
+    public static Point subtraction(Point point1, Point point2)
     {
-        return new Point2(
+        return new Point(
                 point1.getX() - point2.getX(),
                 point1.getY() - point2.getY());
     }

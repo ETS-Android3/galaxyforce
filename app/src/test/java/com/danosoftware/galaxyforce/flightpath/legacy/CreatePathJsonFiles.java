@@ -2,9 +2,10 @@ package com.danosoftware.galaxyforce.flightpath.legacy;
 
 import android.support.annotation.NonNull;
 
-import com.danosoftware.galaxyforce.flightpath.FlightPath;
 import com.danosoftware.galaxyforce.flightpath.dto.PathDTO;
 import com.danosoftware.galaxyforce.flightpath.dto.PathListDTO;
+import com.danosoftware.galaxyforce.legacy.flightpath.FlightPath;
+import com.danosoftware.galaxyforce.legacy.flightpath.Path;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 

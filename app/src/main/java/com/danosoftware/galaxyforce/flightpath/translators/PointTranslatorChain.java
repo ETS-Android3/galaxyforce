@@ -1,6 +1,6 @@
 package com.danosoftware.galaxyforce.flightpath.translators;
 
-import com.danosoftware.galaxyforce.flightpath.Point2;
+import com.danosoftware.galaxyforce.flightpath.paths.Point;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,8 +36,8 @@ public class PointTranslatorChain {
      * @param point
      * @return
      */
-    public Point2 translate(final Point2 point) {
-        Point2 convertedPoint = point;
+    public Point translate(final Point point) {
+        Point convertedPoint = point;
         for (PointTranslator translator : translators) {
             convertedPoint = translator.convert(convertedPoint);
         }

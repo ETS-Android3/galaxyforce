@@ -1,6 +1,6 @@
 package com.danosoftware.galaxyforce.waves;
 
-import com.danosoftware.galaxyforce.flightpath.new_refactor.Path2;
+import com.danosoftware.galaxyforce.flightpath.paths.Path;
 import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
 
 /*
@@ -9,7 +9,7 @@ import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
 public class SubWaveProperty2
 {
     private final AlienType alienType;
-    private final Path2 path;
+    private final Path path;
     private final int numberOfAliens;
     private final float delayBetweenAliens;
     private final float delayOffet;
@@ -30,7 +30,7 @@ public class SubWaveProperty2
      */
     public SubWaveProperty2(
             final AlienType alienType,
-            final Path2 path,
+            final Path path,
             final int numberOfAliens,
             final float delayBetweenAliens,
             final float delayOffet,
@@ -61,7 +61,7 @@ public class SubWaveProperty2
      */
     public SubWaveProperty2(
             final AlienType alienType,
-            final Path2 path,
+            final Path path,
             final int numberOfAliens,
             final float delayBetweenAliens,
             final float delayOffet,
@@ -81,7 +81,7 @@ public class SubWaveProperty2
         return alienType;
     }
 
-    public Path2 getPath() {
+    public Path getPath() {
         return path;
     }
 

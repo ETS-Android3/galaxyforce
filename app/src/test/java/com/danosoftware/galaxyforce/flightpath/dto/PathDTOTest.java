@@ -2,7 +2,7 @@ package com.danosoftware.galaxyforce.flightpath.dto;
 
 import android.support.annotation.NonNull;
 
-import com.danosoftware.galaxyforce.flightpath.new_refactor.Path2;
+import com.danosoftware.galaxyforce.flightpath.paths.Path;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.Test;
@@ -101,7 +101,7 @@ public class PathDTOTest {
 
     @Test
     public void shouldLoadAllPathAssets() throws IOException {
-        for (Path2 path : Path2.values()) {
+        for (Path path : Path.values()) {
             logger.info("Checking path : '{}' for: {}.", path.getPathFile(), path.name());
             File file = pathAsset(path.getPathFile());
             ObjectMapper mapper = new ObjectMapper();

@@ -1,16 +1,20 @@
-package com.danosoftware.galaxyforce.waves;
+package com.danosoftware.galaxyforce.legacy.waves;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-import com.danosoftware.galaxyforce.flightpath.PathFactory;
-import com.danosoftware.galaxyforce.flightpath.Point;
 import com.danosoftware.galaxyforce.game.handlers.GameHandler;
+import com.danosoftware.galaxyforce.legacy.flightpath.PathFactory;
+import com.danosoftware.galaxyforce.legacy.flightpath.Point;
 import com.danosoftware.galaxyforce.sprites.game.factories.AlienFactory;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlien;
 import com.danosoftware.galaxyforce.utilities.Reversed;
 import com.danosoftware.galaxyforce.utilities.WaveUtilities;
+import com.danosoftware.galaxyforce.waves.AlienType;
+import com.danosoftware.galaxyforce.waves.SubWave;
+import com.danosoftware.galaxyforce.waves.SubWaveBuilderNoPath;
+import com.danosoftware.galaxyforce.waves.SubWavePropertyNoPath;
 
 /**
  * Creates a wave of aliens based on the provided wave number. Each wave
@@ -180,15 +184,16 @@ public class WaveFactory
      * the delay seconds specified.
      */
     private List<SpriteAlien> addToPath(AlienType alienType, int numberOfAliens, List<Point> alienPath, float delayBetweenAliens,
-            float delayOffset, boolean restartImmediately)
+                                        float delayOffset, boolean restartImmediately)
     {
 
         List<SpriteAlien> aliensOnPath = new ArrayList<SpriteAlien>();
 
         for (int i = 0; i < numberOfAliens; i++)
         {
-            aliensOnPath.addAll(AlienFactory.createAlien(alienType, alienPath, (i * delayBetweenAliens) + delayOffset, model,
-                    restartImmediately));
+            // temporary commented out as no longer compiles
+//            aliensOnPath.addAll(AlienFactory.createAlien(alienType, alienPath, (i * delayBetweenAliens) + delayOffset, model,
+//                    restartImmediately));
         }
 
         return aliensOnPath;

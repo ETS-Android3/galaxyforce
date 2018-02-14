@@ -1,6 +1,6 @@
 package com.danosoftware.galaxyforce.flightpath.translators;
 
-import com.danosoftware.galaxyforce.flightpath.Point2;
+import com.danosoftware.galaxyforce.flightpath.paths.Point;
 
 /**
  * Point translators convert supplied points
@@ -13,5 +13,5 @@ public interface PointTranslator {
      * @param point
      * @return converted point
      */
-    Point2 convert(final Point2 point);
+    Point convert(final Point point);
 }

@@ -1,10 +1,4 @@
-package com.danosoftware.galaxyforce.flightpath.new_refactor;
-
-import com.danosoftware.galaxyforce.constants.GameConstants;
-import com.danosoftware.galaxyforce.flightpath.BezierCurve;
-import com.danosoftware.galaxyforce.flightpath.CircularPath;
-import com.danosoftware.galaxyforce.flightpath.Point;
-import com.danosoftware.galaxyforce.flightpath.StraightLine;
+package com.danosoftware.galaxyforce.flightpath.paths;
 
 /**
  * enum containing all the possible flight paths for aliens.
@@ -15,7 +9,7 @@ import com.danosoftware.galaxyforce.flightpath.StraightLine;
  * https://www.desmos.com/calculator/cahqdxeshd
  *
  */
-public enum Path2 {
+public enum Path {
 
     TEST("testPathData.json"),
 
@@ -117,7 +111,7 @@ public enum Path2 {
     // file name holding path data
     private final String pathFile;
 
-    Path2(String pathFile) {
+    Path(String pathFile) {
         this.pathFile = pathFile;
     }
 

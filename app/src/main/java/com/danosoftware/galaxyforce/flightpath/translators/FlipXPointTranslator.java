@@ -1,6 +1,6 @@
 package com.danosoftware.galaxyforce.flightpath.translators;
 
-import com.danosoftware.galaxyforce.flightpath.Point2;
+import com.danosoftware.galaxyforce.flightpath.paths.Point;
 
 /**
  * Point translator that flips the point in the x-axis
@@ -15,7 +15,7 @@ public class FlipXPointTranslator implements PointTranslator {
     }
 
     @Override
-    public Point2 convert(Point2 point) {
-        return new Point2(width - point.getX(), point.getY());
+    public Point convert(Point point) {
+        return new Point(width - point.getX(), point.getY());
     }
 }

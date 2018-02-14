@@ -1,4 +1,4 @@
-package com.danosoftware.galaxyforce.flightpath;
+package com.danosoftware.galaxyforce.legacy.flightpath;
 
 import com.danosoftware.galaxyforce.flightpath.dto.BezierPathDTO;
 import com.danosoftware.galaxyforce.flightpath.dto.PathDTO;

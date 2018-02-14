@@ -1,4 +1,4 @@
-package com.danosoftware.galaxyforce.flightpath;
+package com.danosoftware.galaxyforce.legacy.flightpath;
 
 import com.danosoftware.galaxyforce.flightpath.dto.BezierPathDTO;
 import com.danosoftware.galaxyforce.flightpath.dto.PathDTO;
@@ -56,14 +56,14 @@ public class PathFactory
 
         // temporary test of new JSON loading
         PathListDTO pathData = loadPaths("testPathData.json");
-        List<Point2> points = new ArrayList<>();
+        List<com.danosoftware.galaxyforce.flightpath.paths.Point> points = new ArrayList<>();
         for (PathDTO aPath: pathData.getPathList()) {
             BezierPathDTO bezierData = (BezierPathDTO) aPath;
             BezierCurveGenerator generator = new BezierCurveGenerator(bezierData, new PointTranslatorChain());
             points.addAll(generator.path());
         }
         alienPath = new ArrayList<>();
-        for (Point2 aPoint: points) {
+        for (com.danosoftware.galaxyforce.flightpath.paths.Point aPoint: points) {
             alienPath.add(new Point(aPoint.getX(),aPoint.getY()));
         }
 

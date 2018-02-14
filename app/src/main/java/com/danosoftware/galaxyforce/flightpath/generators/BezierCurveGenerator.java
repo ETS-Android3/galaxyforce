@@ -1,6 +1,6 @@
 package com.danosoftware.galaxyforce.flightpath.generators;
 
-import com.danosoftware.galaxyforce.flightpath.Point2;
+import com.danosoftware.galaxyforce.flightpath.paths.Point;
 import com.danosoftware.galaxyforce.flightpath.dto.BezierPathDTO;
 import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
 
@@ -14,10 +14,10 @@ import static com.danosoftware.galaxyforce.flightpath.utilities.PointMathematics
  */
 public class BezierCurveGenerator implements PathGenerator
 {
-    private final Point2 start;
-    private final Point2 startControl;
-    private final Point2 finish;
-    private final Point2 finishControl;
+    private final Point start;
+    private final Point startControl;
+    private final Point finish;
+    private final Point finishControl;
     private final int pathPoints;
 
     /**
@@ -43,7 +43,7 @@ public class BezierCurveGenerator implements PathGenerator
      * @return array of points representing Bezier curve
      */
     @Override
-    public List<Point2> path()
+    public List<Point> path()
     {
         return createBezierPath(
                 start,

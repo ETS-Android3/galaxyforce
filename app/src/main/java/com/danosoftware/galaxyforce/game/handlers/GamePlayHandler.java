@@ -21,7 +21,7 @@ import com.danosoftware.galaxyforce.enumerations.Direction;
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.enumerations.TextPositionX;
 import com.danosoftware.galaxyforce.enumerations.TextPositionY;
-import com.danosoftware.galaxyforce.flightpath.Point;
+import com.danosoftware.galaxyforce.flightpath.paths.Point;
 import com.danosoftware.galaxyforce.game.beans.AlienMissileBean;
 import com.danosoftware.galaxyforce.game.beans.BaseMissileBean;
 import com.danosoftware.galaxyforce.game.beans.PowerUpBean;
@@ -68,7 +68,7 @@ import com.danosoftware.galaxyforce.vibration.Vibration;
 import com.danosoftware.galaxyforce.vibration.VibrationSingleton;
 import com.danosoftware.galaxyforce.view.FPSCounter;
 import com.danosoftware.galaxyforce.waves.SubWave;
-import com.danosoftware.galaxyforce.waves.WaveFactory;
+import com.danosoftware.galaxyforce.waves.WaveFactory2;
 import com.danosoftware.galaxyforce.waves.WaveManager;
 import com.danosoftware.galaxyforce.waves.WaveManagerImpl;
 
@@ -265,7 +265,7 @@ public class GamePlayHandler implements GameHandler
          * create wave factory and manager to create lists of aliens on each
          * wave
          */
-        WaveFactory waveFactory = new WaveFactory(GameConstants.GAME_WIDTH, GameConstants.GAME_HEIGHT, this);
+        WaveFactory2 waveFactory = new WaveFactory2(GameConstants.GAME_WIDTH, GameConstants.GAME_HEIGHT, this);
         waveManager = new WaveManagerImpl(waveFactory);
 
         /* counter used to report frames per second */

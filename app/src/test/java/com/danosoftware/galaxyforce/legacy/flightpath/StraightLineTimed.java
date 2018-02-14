@@ -1,28 +1,26 @@
-package com.danosoftware.galaxyforce.flightpath;
+package com.danosoftware.galaxyforce.legacy.flightpath;
 
-import com.danosoftware.galaxyforce.flightpath.dto.LinearPathDTO;
+import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
 import com.danosoftware.galaxyforce.flightpath.dto.PathDTO;
-import com.danosoftware.galaxyforce.flightpath.dto.PointDTO;
 
 import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Create straight line from provided start/finish points and delta multiplier
+ * Create straight line from provided start/finish points that should complete
+ * in supplied time.
  */
-public class StraightLine implements FlightPath
+public class StraightLineTimed implements FlightPath
 {
     private final Point start;
     private final Point finish;
+    private final float timeInSeconds;
 
-    /* distance alien can move each cycle in pixels */
-    private final int distancePerCycle;
-
-    public StraightLine(int distancePerCycle, Point start, Point finish)
+    public StraightLineTimed(float timeInSeconds, Point start, Point finish)
     {
         this.start = start;
         this.finish = finish;
-        this.distancePerCycle = distancePerCycle;
+        this.timeInSeconds = timeInSeconds;
     }
 
     /**
@@ -34,13 +32,12 @@ public class StraightLine implements FlightPath
     {
         List<Point> path = new ArrayList<Point>();
 
-        /* calculate x, y delta and distance to be travelled */
-        double xDelta = finish.getX() - start.getX();
-        double yDelta = finish.getY() - start.getY();
-        double distance = Math.sqrt(Math.pow(xDelta, 2) + Math.pow(yDelta, 2));
-
-        /* number of points on line */
-        double delta = distancePerCycle / distance;
+        /*
+         * Calculate delta required to cover distance in supplied time in
+         * seconds. Assumes 60 screen updates each second. Move routines will
+         * compensate for this is updates are slower.
+         */
+        Double delta = 1 / (60D * timeInSeconds);
 
         for (double t = 0; t < 1; t = t + delta)
         {
@@ -54,13 +51,11 @@ public class StraightLine implements FlightPath
         }
 
         return path;
+
     }
 
     @Override
     public PathDTO createDTO() {
-        return new LinearPathDTO(
-                distancePerCycle,
-                new PointDTO(start.getX(),start.getY()),
-                new PointDTO(finish.getX(),finish.getY()));
+        throw new GalaxyForceException(this.getClass().getName());
     }
 }

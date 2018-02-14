@@ -1,12 +1,13 @@
-package com.danosoftware.galaxyforce.flightpath;
+package com.danosoftware.galaxyforce.flightpath.paths;
 
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
 import com.danosoftware.galaxyforce.flightpath.dto.BezierPathDTO;
+import com.danosoftware.galaxyforce.flightpath.dto.LinearPathDTO;
 import com.danosoftware.galaxyforce.flightpath.dto.PathDTO;
 import com.danosoftware.galaxyforce.flightpath.dto.PathListDTO;
 import com.danosoftware.galaxyforce.flightpath.generators.BezierCurveGenerator;
+import com.danosoftware.galaxyforce.flightpath.generators.LinearGenerator;
 import com.danosoftware.galaxyforce.flightpath.generators.PathGenerator;
-import com.danosoftware.galaxyforce.flightpath.new_refactor.Path2;
 import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
 
 import java.util.ArrayList;
@@ -14,15 +15,15 @@ import java.util.List;
 
 import static com.danosoftware.galaxyforce.flightpath.utilities.PathLoader.loadPaths;
 
-public final class PathFactory2
+public final class PathFactory
 {
 
-    private PathFactory2() {
+    private PathFactory() {
     }
 
-    public static List<Point2> createPath(Path2 path, PointTranslatorChain translators)
+    public static List<Point> createPath(Path path, PointTranslatorChain translators)
     {
-        List<Point2> alienPath = new ArrayList<>();
+        List<Point> alienPath = new ArrayList<>();
 
         // load path data from file
         PathListDTO pathData = loadPaths(path.getPathFile());
@@ -35,6 +36,9 @@ public final class PathFactory2
                     generator = new BezierCurveGenerator(bezierData, translators);
                     break;
                 case LINEAR:
+                    LinearPathDTO linearData = (LinearPathDTO) pathDTO;
+                    generator = new LinearGenerator(linearData, translators);
+                    break;
                 default:
                     throw new GalaxyForceException("Unknown path type: "+ pathDTO.getType().name());
             }

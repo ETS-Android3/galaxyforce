@@ -17,9 +17,9 @@ public class WaveCreator implements Runnable
     private final WaveManager waveManager;
 
     // factory to create waves
-    private final WaveFactory waveFactory;
+    private final WaveFactory2 waveFactory;
 
-    public WaveCreator(WaveManager waveManager, WaveFactory waveFactory, int waveNumber)
+    public WaveCreator(WaveManager waveManager, WaveFactory2 waveFactory, int waveNumber)
     {
         this.waveFactory = waveFactory;
         this.waveManager = waveManager;

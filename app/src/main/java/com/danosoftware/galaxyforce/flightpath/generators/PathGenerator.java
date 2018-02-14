@@ -1,6 +1,6 @@
 package com.danosoftware.galaxyforce.flightpath.generators;
 
-import com.danosoftware.galaxyforce.flightpath.Point2;
+import com.danosoftware.galaxyforce.flightpath.paths.Point;
 
 import java.util.List;
 
@@ -15,5 +15,5 @@ public interface PathGenerator {
      * returns a list of path points
      * @return points
      */
-    public List<Point2> path();
+    public List<Point> path();
 }

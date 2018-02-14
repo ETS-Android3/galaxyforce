@@ -1,4 +1,4 @@
-package com.danosoftware.galaxyforce.flightpath;
+package com.danosoftware.galaxyforce.flightpath.paths;
 
 import com.danosoftware.galaxyforce.flightpath.dto.PointDTO;
 
@@ -6,13 +6,13 @@ import com.danosoftware.galaxyforce.flightpath.dto.PointDTO;
  * Represents a point object (an x-y co-ordinate).
  * Normally used to represent a position on a path.
  */
-public class Point2
+public class Point
 {
 
     private final int x;
     private final int y;
 
-    public Point2(int x, int y)
+    public Point(int x, int y)
     {
         this.x = x;
         this.y = y;

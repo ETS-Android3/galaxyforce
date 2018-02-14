@@ -23,12 +23,12 @@ public class WaveManagerImpl implements WaveManager
     private Iterator<SubWave> iterator;
 
     // factory used to create waves
-    private final WaveFactory waveFactory;
+    private final WaveFactory2 waveFactory;
 
     // wave manager state
     private WaveManagerState state;
 
-    public WaveManagerImpl(WaveFactory waveFactory)
+    public WaveManagerImpl(WaveFactory2 waveFactory)
     {
         this.waveFactory = waveFactory;
 
