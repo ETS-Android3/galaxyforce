@@ -5,9 +5,11 @@ import com.danosoftware.galaxyforce.flightpath.dto.BezierPathDTO;
 import com.danosoftware.galaxyforce.flightpath.dto.LinearPathDTO;
 import com.danosoftware.galaxyforce.flightpath.dto.PathDTO;
 import com.danosoftware.galaxyforce.flightpath.dto.PathListDTO;
+import com.danosoftware.galaxyforce.flightpath.dto.PausePathDTO;
 import com.danosoftware.galaxyforce.flightpath.generators.BezierCurveGenerator;
 import com.danosoftware.galaxyforce.flightpath.generators.LinearGenerator;
 import com.danosoftware.galaxyforce.flightpath.generators.PathGenerator;
+import com.danosoftware.galaxyforce.flightpath.generators.PauseGenerator;
 import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
 
 import java.util.ArrayList;
@@ -38,6 +40,10 @@ public final class PathFactory
                 case LINEAR:
                     LinearPathDTO linearData = (LinearPathDTO) pathDTO;
                     generator = new LinearGenerator(linearData, translators);
+                    break;
+                case PAUSE:
+                    PausePathDTO pauseData = (PausePathDTO) pathDTO;
+                    generator = new PauseGenerator(pauseData, translators);
                     break;
                 default:
                     throw new GalaxyForceException("Unknown path type: "+ pathDTO.getType().name());
