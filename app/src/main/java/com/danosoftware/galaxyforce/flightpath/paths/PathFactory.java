@@ -2,11 +2,13 @@ package com.danosoftware.galaxyforce.flightpath.paths;
 
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
 import com.danosoftware.galaxyforce.flightpath.dto.BezierPathDTO;
+import com.danosoftware.galaxyforce.flightpath.dto.CircularPathDTO;
 import com.danosoftware.galaxyforce.flightpath.dto.LinearPathDTO;
 import com.danosoftware.galaxyforce.flightpath.dto.PathDTO;
 import com.danosoftware.galaxyforce.flightpath.dto.PathListDTO;
 import com.danosoftware.galaxyforce.flightpath.dto.PausePathDTO;
 import com.danosoftware.galaxyforce.flightpath.generators.BezierCurveGenerator;
+import com.danosoftware.galaxyforce.flightpath.generators.CircularGenerator;
 import com.danosoftware.galaxyforce.flightpath.generators.LinearGenerator;
 import com.danosoftware.galaxyforce.flightpath.generators.PathGenerator;
 import com.danosoftware.galaxyforce.flightpath.generators.PauseGenerator;
@@ -44,6 +46,10 @@ public final class PathFactory
                 case PAUSE:
                     PausePathDTO pauseData = (PausePathDTO) pathDTO;
                     generator = new PauseGenerator(pauseData, translators);
+                    break;
+                case CIRCULAR:
+                    CircularPathDTO circularData = (CircularPathDTO) pathDTO;
+                    generator = new CircularGenerator(circularData, translators);
                     break;
                 default:
                     throw new GalaxyForceException("Unknown path type: "+ pathDTO.getType().name());
