@@ -15,6 +15,12 @@
 
 package com.danosoftware.galaxyforce.billing;
 
+import android.text.TextUtils;
+import android.util.Log;
+
+import com.danosoftware.galaxyforce.BuildConfig;
+import com.danosoftware.galaxyforce.constants.GameConstants;
+
 import java.security.InvalidKeyException;
 import java.security.KeyFactory;
 import java.security.NoSuchAlgorithmException;
@@ -23,12 +29,6 @@ import java.security.Signature;
 import java.security.SignatureException;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
-
-import android.text.TextUtils;
-import android.util.Log;
-
-import com.danosoftware.galaxyforce.BuildConfig;
-import com.danosoftware.galaxyforce.constants.GameConstants;
 
 /**
  * Security-related methods. For a secure implementation, all of this code

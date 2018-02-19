@@ -1,13 +1,13 @@
 package com.danosoftware.galaxyforce.input;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.view.MotionEvent;
 import android.view.View;
 
 import com.danosoftware.galaxyforce.input.Pool.PoolObjectFactory;
 import com.danosoftware.galaxyforce.interfaces.Input.TouchEvent;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SingleTouchHandler implements TouchHandler
 {

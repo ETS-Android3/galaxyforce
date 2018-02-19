@@ -1,8 +1,5 @@
 package com.danosoftware.galaxyforce.sprites.game.factories;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.danosoftware.galaxyforce.enumerations.BaseMissileType;
 import com.danosoftware.galaxyforce.enumerations.Direction;
 import com.danosoftware.galaxyforce.game.beans.BaseMissileBean;
@@ -18,6 +15,9 @@ import com.danosoftware.galaxyforce.sprites.game.implementations.BaseMissileLase
 import com.danosoftware.galaxyforce.sprites.game.implementations.BaseMissileSimple;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteBase;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteBaseMissile;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BaseMissileFactory
 {

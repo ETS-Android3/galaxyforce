@@ -7,7 +7,6 @@ import org.junit.Test;
 import java.util.List;
 
 import static com.danosoftware.galaxyforce.flightpath.utilities.PauseMathematics.createPausePath;
-import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 

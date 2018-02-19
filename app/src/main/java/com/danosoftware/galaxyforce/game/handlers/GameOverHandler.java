@@ -1,8 +1,5 @@
 package com.danosoftware.galaxyforce.game.handlers;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.util.Log;
 
 import com.danosoftware.galaxyforce.buttons.interfaces.SpriteTextButton;
@@ -20,6 +17,9 @@ import com.danosoftware.galaxyforce.sprites.game.interfaces.Star;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameOverHandler implements PlayModel, MenuButtonModel
 {

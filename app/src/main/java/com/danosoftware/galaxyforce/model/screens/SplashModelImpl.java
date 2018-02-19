@@ -1,8 +1,5 @@
 package com.danosoftware.galaxyforce.model.screens;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.danosoftware.galaxyforce.buttons.impl.ScreenTouch;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controller.interfaces.Controller;
@@ -16,6 +13,9 @@ import com.danosoftware.galaxyforce.sprites.game.interfaces.SplashSprite;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.Sprite;
 import com.danosoftware.galaxyforce.sprites.properties.SplashSpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class SplashModelImpl implements TouchScreenModel
 {

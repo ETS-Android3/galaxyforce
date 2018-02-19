@@ -1,10 +1,10 @@
 package com.danosoftware.galaxyforce.input;
 
-import java.util.List;
-
 import android.view.View.OnTouchListener;
 
 import com.danosoftware.galaxyforce.interfaces.Input.TouchEvent;
+
+import java.util.List;
 
 public interface TouchHandler extends OnTouchListener
 {

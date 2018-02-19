@@ -1,8 +1,5 @@
 package com.danosoftware.galaxyforce.controller.game;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.util.Log;
 
 import com.danosoftware.galaxyforce.constants.GameConstants;
@@ -12,6 +9,9 @@ import com.danosoftware.galaxyforce.sprites.game.interfaces.JoystickArea;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.JoystickPoint;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.Sprite;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BaseJoystickModel implements TouchBaseControllerModel
 {

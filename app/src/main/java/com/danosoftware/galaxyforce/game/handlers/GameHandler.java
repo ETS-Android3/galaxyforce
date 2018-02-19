@@ -1,7 +1,5 @@
 package com.danosoftware.galaxyforce.game.handlers;
 
-import java.util.List;
-
 import com.danosoftware.galaxyforce.game.beans.AlienMissileBean;
 import com.danosoftware.galaxyforce.game.beans.BaseMissileBean;
 import com.danosoftware.galaxyforce.game.beans.PowerUpBean;
@@ -11,6 +9,8 @@ import com.danosoftware.galaxyforce.sprites.game.interfaces.Sprite;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlien;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteBase;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteShield;
+
+import java.util.List;
 
 public interface GameHandler extends PlayModel
 {

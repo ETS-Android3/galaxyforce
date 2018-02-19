@@ -1,11 +1,11 @@
 package com.danosoftware.galaxyforce.sprites.game.interfaces;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.enumerations.Direction;
 import com.danosoftware.galaxyforce.view.Animation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 

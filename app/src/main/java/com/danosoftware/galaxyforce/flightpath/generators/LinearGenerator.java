@@ -1,14 +1,11 @@
 package com.danosoftware.galaxyforce.flightpath.generators;
 
-import com.danosoftware.galaxyforce.flightpath.dto.BezierPathDTO;
 import com.danosoftware.galaxyforce.flightpath.dto.LinearPathDTO;
 import com.danosoftware.galaxyforce.flightpath.paths.Point;
 import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import static com.danosoftware.galaxyforce.flightpath.utilities.BezierMathematics.createBezierPath;
 import static com.danosoftware.galaxyforce.flightpath.utilities.LinearMathematics.createLinearPath;
 import static com.danosoftware.galaxyforce.flightpath.utilities.PointMathematics.convertAndTranslatePoint;
 

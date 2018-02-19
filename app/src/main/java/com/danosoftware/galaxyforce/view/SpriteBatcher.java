@@ -1,9 +1,9 @@
 package com.danosoftware.galaxyforce.view;
 
-import javax.microedition.khronos.opengles.GL10;
-
 import com.danosoftware.galaxyforce.textures.Texture;
 import com.danosoftware.galaxyforce.textures.TextureRegion;
+
+import javax.microedition.khronos.opengles.GL10;
 
 public class SpriteBatcher
 {

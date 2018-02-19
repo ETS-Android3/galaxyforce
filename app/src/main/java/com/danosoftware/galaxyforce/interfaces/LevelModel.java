@@ -1,9 +1,9 @@
 package com.danosoftware.galaxyforce.interfaces;
 
-import java.util.List;
-
 import com.danosoftware.galaxyforce.sprites.game.interfaces.Sprite;
 import com.danosoftware.galaxyforce.text.Text;
+
+import java.util.List;
 
 public interface LevelModel extends Model
 {

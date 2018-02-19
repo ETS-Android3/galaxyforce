@@ -1,8 +1,5 @@
 package com.danosoftware.galaxyforce.sprites.game.factories;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.util.Log;
 
 import com.danosoftware.galaxyforce.constants.GameConstants;
@@ -28,6 +25,9 @@ import com.danosoftware.galaxyforce.sprites.game.implementations.AlienSpawnedIns
 import com.danosoftware.galaxyforce.sprites.game.implementations.AlienStork;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlien;
 import com.danosoftware.galaxyforce.waves.AlienType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AlienFactory
 {

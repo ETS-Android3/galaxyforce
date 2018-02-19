@@ -1,10 +1,5 @@
 package com.danosoftware.galaxyforce.textures;
 
-import java.io.IOException;
-import java.io.InputStream;
-
-import javax.microedition.khronos.opengles.GL10;
-
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
@@ -13,6 +8,11 @@ import android.util.Log;
 import com.danosoftware.galaxyforce.interfaces.FileIO;
 import com.danosoftware.galaxyforce.interfaces.Game;
 import com.danosoftware.galaxyforce.view.GLGraphics;
+
+import java.io.IOException;
+import java.io.InputStream;
+
+import javax.microedition.khronos.opengles.GL10;
 
 public class Texture
 {

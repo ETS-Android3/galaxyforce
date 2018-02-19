@@ -1,9 +1,5 @@
 package com.danosoftware.galaxyforce.legacy.waves;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
 import com.danosoftware.galaxyforce.game.handlers.GameHandler;
 import com.danosoftware.galaxyforce.legacy.flightpath.PathFactory;
 import com.danosoftware.galaxyforce.legacy.flightpath.Point;
@@ -15,6 +11,10 @@ import com.danosoftware.galaxyforce.waves.AlienType;
 import com.danosoftware.galaxyforce.waves.SubWave;
 import com.danosoftware.galaxyforce.waves.SubWaveBuilderNoPath;
 import com.danosoftware.galaxyforce.waves.SubWavePropertyNoPath;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Creates a wave of aliens based on the provided wave number. Each wave

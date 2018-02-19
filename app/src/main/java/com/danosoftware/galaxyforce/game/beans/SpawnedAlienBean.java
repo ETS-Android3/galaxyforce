@@ -1,9 +1,9 @@
 package com.danosoftware.galaxyforce.game.beans;
 
-import java.util.List;
-
 import com.danosoftware.galaxyforce.sound.Sound;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlien;
+
+import java.util.List;
 
 /**
  * Spawned aliens bean holding the aliens and spawning sound effect.

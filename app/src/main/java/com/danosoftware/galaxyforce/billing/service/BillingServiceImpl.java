@@ -1,16 +1,6 @@
 package com.danosoftware.galaxyforce.billing.service;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.ConcurrentMap;
-
 import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.util.Log;
 
@@ -21,6 +11,15 @@ import com.danosoftware.galaxyforce.billing.IabResult;
 import com.danosoftware.galaxyforce.billing.Inventory;
 import com.danosoftware.galaxyforce.billing.Purchase;
 import com.danosoftware.galaxyforce.constants.GameConstants;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class BillingServiceImpl implements IBillingService
 {

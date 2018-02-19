@@ -1,7 +1,5 @@
 package com.danosoftware.galaxyforce.sprites.game.implementations;
 
-import java.util.List;
-
 import com.danosoftware.galaxyforce.enumerations.AlienMissileType;
 import com.danosoftware.galaxyforce.flightpath.paths.Point;
 import com.danosoftware.galaxyforce.game.handlers.GameHandler;
@@ -12,6 +10,8 @@ import com.danosoftware.galaxyforce.sprites.game.behaviours.SpawnDisabled;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlienWithPath;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.view.Animation;
+
+import java.util.List;
 
 public class AlienDroid extends SpriteAlienWithPath
 {

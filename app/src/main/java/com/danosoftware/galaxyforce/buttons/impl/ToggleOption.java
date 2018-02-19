@@ -1,12 +1,12 @@
 package com.danosoftware.galaxyforce.buttons.impl;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.danosoftware.galaxyforce.buttons.interfaces.Button;
 import com.danosoftware.galaxyforce.buttons.interfaces.ToggleButtonGroup;
 import com.danosoftware.galaxyforce.interfaces.OptionsModel;
 import com.danosoftware.galaxyforce.options.Option;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Represents a level selector. Level selector has a border, level number and

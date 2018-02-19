@@ -1,8 +1,5 @@
 package com.danosoftware.galaxyforce.sprites.game.implementations;
 
-import java.util.HashSet;
-import java.util.Set;
-
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.enumerations.Direction;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlien;
@@ -10,6 +7,9 @@ import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteBaseMissile;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteState;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+
+import java.util.HashSet;
+import java.util.Set;
 
 public class BaseMissileLaser extends SpriteBaseMissile
 {

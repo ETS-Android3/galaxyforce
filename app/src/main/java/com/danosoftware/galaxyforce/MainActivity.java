@@ -1,8 +1,5 @@
 package com.danosoftware.galaxyforce;
 
-import javax.microedition.khronos.egl.EGLConfig;
-import javax.microedition.khronos.opengles.GL10;
-
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -23,6 +20,9 @@ import com.danosoftware.galaxyforce.services.Games;
 import com.danosoftware.galaxyforce.services.PackageManagers;
 import com.danosoftware.galaxyforce.services.WindowManagers;
 import com.danosoftware.galaxyforce.view.GLGraphics;
+
+import javax.microedition.khronos.egl.EGLConfig;
+import javax.microedition.khronos.opengles.GL10;
 
 public class MainActivity extends Activity
 {

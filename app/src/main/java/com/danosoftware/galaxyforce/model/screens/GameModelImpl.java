@@ -1,8 +1,5 @@
 package com.danosoftware.galaxyforce.model.screens;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.util.Log;
 
 import com.danosoftware.galaxyforce.billing.service.IBillingService;
@@ -24,6 +21,9 @@ import com.danosoftware.galaxyforce.sprites.game.interfaces.Star;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.utilities.WaveUtilities;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * contains game model. Model includes game objects, fonts, screen size and game

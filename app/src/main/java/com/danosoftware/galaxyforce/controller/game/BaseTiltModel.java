@@ -1,11 +1,11 @@
 package com.danosoftware.galaxyforce.controller.game;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.danosoftware.galaxyforce.controller.interfaces.ControllerBase;
 import com.danosoftware.galaxyforce.controller.interfaces.TiltBaseControllerModel;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.Sprite;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Base move model for a tilt controller (i.e. accelerometer).

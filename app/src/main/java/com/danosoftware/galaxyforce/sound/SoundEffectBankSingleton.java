@@ -1,9 +1,9 @@
 package com.danosoftware.galaxyforce.sound;
 
+import com.danosoftware.galaxyforce.interfaces.Audio;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import com.danosoftware.galaxyforce.interfaces.Audio;
 
 public class SoundEffectBankSingleton implements SoundEffectBank
 {

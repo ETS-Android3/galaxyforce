@@ -1,8 +1,5 @@
 package com.danosoftware.galaxyforce.sprites.game.implementations;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.enumerations.BaseMissileType;
 import com.danosoftware.galaxyforce.enumerations.Direction;
@@ -23,6 +20,9 @@ import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 import com.danosoftware.galaxyforce.utilities.Rectangle;
 import com.danosoftware.galaxyforce.view.Animation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BaseMain extends SpriteBase
 {

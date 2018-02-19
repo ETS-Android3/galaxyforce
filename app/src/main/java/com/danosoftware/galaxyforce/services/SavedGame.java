@@ -1,9 +1,9 @@
 package com.danosoftware.galaxyforce.services;
 
+import com.danosoftware.galaxyforce.utilities.WaveUtilities;
+
 import java.util.HashMap;
 import java.util.Map;
-
-import com.danosoftware.galaxyforce.utilities.WaveUtilities;
 
 public class SavedGame
 {

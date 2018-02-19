@@ -1,8 +1,8 @@
 package com.danosoftware.galaxyforce.controller.interfaces;
 
-import java.util.List;
-
 import com.danosoftware.galaxyforce.sprites.game.interfaces.Sprite;
+
+import java.util.List;
 
 public interface BaseControllerModel
 {
