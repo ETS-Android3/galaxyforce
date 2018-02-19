@@ -1,7 +1,7 @@
 {
   "pathData" : [ {
     "type" : "linear",
-    "pathPoints" : 5,
+    "pathPoints" : 221,
     "start" : {
       "x" : -50,
       "y" : 37
@@ -12,7 +12,7 @@
     }
   }, {
     "type" : "linear",
-    "pathPoints" : 5,
+    "pathPoints" : 230,
     "start" : {
       "x" : 1055,
       "y" : 37
@@ -23,7 +23,7 @@
     }
   }, {
     "type" : "linear",
-    "pathPoints" : 5,
+    "pathPoints" : 239,
     "start" : {
       "x" : 54,
       "y" : 608

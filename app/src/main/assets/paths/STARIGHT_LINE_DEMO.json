@@ -1,7 +1,7 @@
 {
   "pathData" : [ {
     "type" : "linear",
-    "pathPoints" : 5,
+    "pathPoints" : 169,
     "start" : {
       "x" : 100,
       "y" : 100
@@ -12,7 +12,7 @@
     }
   }, {
     "type" : "linear",
-    "pathPoints" : 5,
+    "pathPoints" : 120,
     "start" : {
       "x" : 700,
       "y" : 700
@@ -23,7 +23,7 @@
     }
   }, {
     "type" : "linear",
-    "pathPoints" : 5,
+    "pathPoints" : 169,
     "start" : {
       "x" : 700,
       "y" : 100
@@ -34,7 +34,7 @@
     }
   }, {
     "type" : "linear",
-    "pathPoints" : 5,
+    "pathPoints" : 40,
     "start" : {
       "x" : 100,
       "y" : 700
@@ -45,7 +45,7 @@
     }
   }, {
     "type" : "linear",
-    "pathPoints" : 5,
+    "pathPoints" : 152,
     "start" : {
       "x" : 300,
       "y" : 700
@@ -56,7 +56,7 @@
     }
   }, {
     "type" : "linear",
-    "pathPoints" : 5,
+    "pathPoints" : 178,
     "start" : {
       "x" : 0,
       "y" : 0

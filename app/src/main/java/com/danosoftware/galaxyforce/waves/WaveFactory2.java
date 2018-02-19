@@ -179,16 +179,20 @@ public class WaveFactory2
      * adds a wanted number of aliens without a path. each alien is spaced by
      * the delay seconds specified.
      */
-    private List<SpriteAlien> addToPath(AlienType alienType, int numberOfAliens, List<Point> alienPath, float delayBetweenAliens,
-                                        float delayOffset, boolean restartImmediately)
+    private List<SpriteAlien> addToPath(
+            AlienType alienType,
+            int numberOfAliens,
+            List<Point> alienPath,
+            float delayBetweenAliens,
+            float delayOffset,
+            boolean restartImmediately)
     {
 
         List<SpriteAlien> aliensOnPath = new ArrayList<SpriteAlien>();
 
         for (int i = 0; i < numberOfAliens; i++)
         {
-            List<Point> alienPathOld = new ArrayList<>();
-            aliensOnPath.addAll(AlienFactory.createAlien(alienType, alienPathOld, (i * delayBetweenAliens) + delayOffset, model,
+            aliensOnPath.addAll(AlienFactory.createAlien(alienType, alienPath, (i * delayBetweenAliens) + delayOffset, model,
                     restartImmediately));
         }
 

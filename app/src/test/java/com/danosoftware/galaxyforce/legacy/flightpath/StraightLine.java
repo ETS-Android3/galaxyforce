@@ -58,8 +58,13 @@ public class StraightLine implements FlightPath
 
     @Override
     public PathDTO createDTO() {
+
+        double xDelta = finish.getX() - start.getX();
+        double yDelta = finish.getY() - start.getY();
+        double distance = Math.sqrt(Math.pow(xDelta, 2) + Math.pow(yDelta, 2));
+
         return new LinearPathDTO(
-                distancePerCycle,
+                (int)(distance / distancePerCycle),
                 new PointDTO(start.getX(),start.getY()),
                 new PointDTO(finish.getX(),finish.getY()));
     }

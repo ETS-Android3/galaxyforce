@@ -203,7 +203,9 @@ public enum SubWaveBuilder2
                     20,
                     0.3f,
                     0,
-                    false
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
             )
     ),
 
