@@ -1,8 +1,5 @@
 package com.danosoftware.galaxyforce.services;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.danosoftware.galaxyforce.options.OptionController;
 import com.danosoftware.galaxyforce.options.OptionMusic;
 import com.danosoftware.galaxyforce.options.OptionSound;
@@ -16,6 +13,9 @@ import com.danosoftware.galaxyforce.sound.SoundPlayerSingleton;
 import com.danosoftware.galaxyforce.vibration.VibrateTime;
 import com.danosoftware.galaxyforce.vibration.Vibration;
 import com.danosoftware.galaxyforce.vibration.VibrationSingleton;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class Configurations
 {

@@ -1,10 +1,5 @@
 package com.danosoftware.galaxyforce.model.screens;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import android.util.Log;
 
 import com.danosoftware.galaxyforce.billing.service.BillingObserver;
@@ -27,6 +22,11 @@ import com.danosoftware.galaxyforce.sprites.game.interfaces.Star;
 import com.danosoftware.galaxyforce.sprites.mainmenu.SwipeMenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, MenuButtonModel, BillingObserver
 {

@@ -1,8 +1,5 @@
 package com.danosoftware.galaxyforce.controller.game;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.danosoftware.galaxyforce.controller.interfaces.ControllerBase;
 import com.danosoftware.galaxyforce.controller.interfaces.TouchBaseControllerModel;
 import com.danosoftware.galaxyforce.enumerations.Direction;
@@ -12,6 +9,9 @@ import com.danosoftware.galaxyforce.sprites.game.interfaces.JoystickPoint;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.Sprite;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.view.Animation;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class BaseDragModel implements TouchBaseControllerModel, DirectionListener
 {

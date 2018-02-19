@@ -1,7 +1,5 @@
 package com.danosoftware.galaxyforce.flightpath.paths;
 
-import com.danosoftware.galaxyforce.flightpath.dto.PointDTO;
-
 /**
  * Represents a point object (an x-y co-ordinate).
  * Normally used to represent a position on a path.

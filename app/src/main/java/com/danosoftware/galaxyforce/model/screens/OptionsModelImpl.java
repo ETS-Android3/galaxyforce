@@ -1,8 +1,5 @@
 package com.danosoftware.galaxyforce.model.screens;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.util.Log;
 
 import com.danosoftware.galaxyforce.buttons.impl.OptionButton;
@@ -26,6 +23,9 @@ import com.danosoftware.galaxyforce.sprites.game.interfaces.Sprite;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.Star;
 import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OptionsModelImpl implements OptionsModel
 {

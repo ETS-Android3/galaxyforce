@@ -1,8 +1,5 @@
 package com.danosoftware.galaxyforce.model.screens;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageInfo;
@@ -31,6 +28,9 @@ import com.danosoftware.galaxyforce.sprites.game.interfaces.Sprite;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.Star;
 import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AboutModelImpl implements TouchScreenModel, AboutModel
 {

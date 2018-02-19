@@ -1,14 +1,14 @@
 package com.danosoftware.galaxyforce.controller.menus;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.danosoftware.galaxyforce.controller.interfaces.Controller;
 import com.danosoftware.galaxyforce.controller.interfaces.TouchController;
 import com.danosoftware.galaxyforce.interfaces.Input;
 import com.danosoftware.galaxyforce.interfaces.Input.TouchEvent;
 import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.Vector2;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class MenuController implements Controller
 {

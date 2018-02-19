@@ -1,12 +1,12 @@
 package com.danosoftware.galaxyforce.view;
 
-import java.io.IOException;
-
 import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.media.MediaPlayer.OnCompletionListener;
 
 import com.danosoftware.galaxyforce.interfaces.Music;
+
+import java.io.IOException;
 
 public class AndroidMusic implements Music, OnCompletionListener
 {

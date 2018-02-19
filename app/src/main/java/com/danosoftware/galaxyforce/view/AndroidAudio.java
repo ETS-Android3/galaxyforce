@@ -1,7 +1,5 @@
 package com.danosoftware.galaxyforce.view;
 
-import java.io.IOException;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
@@ -14,6 +12,8 @@ import com.danosoftware.galaxyforce.interfaces.Music;
 import com.danosoftware.galaxyforce.sound.AndroidSound;
 import com.danosoftware.galaxyforce.sound.Sound;
 import com.danosoftware.galaxyforce.sound.SoundEffect;
+
+import java.io.IOException;
 
 public class AndroidAudio implements Audio
 {

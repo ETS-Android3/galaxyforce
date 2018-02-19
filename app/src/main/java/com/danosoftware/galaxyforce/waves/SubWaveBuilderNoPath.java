@@ -1,11 +1,11 @@
 package com.danosoftware.galaxyforce.waves;
 
+import com.danosoftware.galaxyforce.constants.GameConstants;
+import com.danosoftware.galaxyforce.enumerations.Direction;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import com.danosoftware.galaxyforce.constants.GameConstants;
-import com.danosoftware.galaxyforce.enumerations.Direction;
 
 /**
  * Each sub-wave consists of one or more sub-wave properties. Each sub-wave

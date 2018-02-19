@@ -1,10 +1,5 @@
 package com.danosoftware.galaxyforce.game.handlers;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.concurrent.Executors;
-
 import android.util.Log;
 
 import com.danosoftware.galaxyforce.billing.service.IBillingService;
@@ -71,6 +66,11 @@ import com.danosoftware.galaxyforce.waves.SubWave;
 import com.danosoftware.galaxyforce.waves.WaveFactory;
 import com.danosoftware.galaxyforce.waves.WaveManager;
 import com.danosoftware.galaxyforce.waves.WaveManagerImpl;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+import java.util.concurrent.Executors;
 
 public class GamePlayHandler implements GameHandler
 {

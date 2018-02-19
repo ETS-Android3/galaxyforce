@@ -1,7 +1,5 @@
 package com.danosoftware.galaxyforce.screen;
 
-import javax.microedition.khronos.opengles.GL10;
-
 import android.util.Log;
 
 import com.danosoftware.galaxyforce.constants.GameConstants;
@@ -18,6 +16,8 @@ import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.Font;
 import com.danosoftware.galaxyforce.view.GLGraphics;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
+
+import javax.microedition.khronos.opengles.GL10;
 
 public abstract class AbstractScreen implements Screen
 {

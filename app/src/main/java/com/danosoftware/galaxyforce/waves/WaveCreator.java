@@ -1,8 +1,8 @@
 package com.danosoftware.galaxyforce.waves;
 
-import java.util.Collection;
-
 import com.danosoftware.galaxyforce.services.SavedGame;
+
+import java.util.Collection;
 
 /**
  * Class is run in a new tread and creates a new wave allowing the main thread

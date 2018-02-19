@@ -1,7 +1,5 @@
 package com.danosoftware.galaxyforce.screen;
 
-import javax.microedition.khronos.opengles.GL10;
-
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controller.interfaces.Controller;
 import com.danosoftware.galaxyforce.interfaces.LevelModel;
@@ -11,6 +9,8 @@ import com.danosoftware.galaxyforce.textures.TextureMap;
 import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLGraphics;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
+
+import javax.microedition.khronos.opengles.GL10;
 
 public class SelectLevelScreen extends AbstractScreen
 {

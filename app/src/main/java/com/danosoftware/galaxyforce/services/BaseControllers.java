@@ -1,10 +1,10 @@
 package com.danosoftware.galaxyforce.services;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import com.danosoftware.galaxyforce.controller.interfaces.BaseController;
 import com.danosoftware.galaxyforce.options.OptionController;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class BaseControllers
 {

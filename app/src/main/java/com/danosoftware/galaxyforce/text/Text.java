@@ -1,12 +1,12 @@
 package com.danosoftware.galaxyforce.text;
 
-import java.util.regex.Pattern;
-
 import android.util.Log;
 
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.enumerations.TextPositionX;
 import com.danosoftware.galaxyforce.enumerations.TextPositionY;
+
+import java.util.regex.Pattern;
 
 /* used to store any game text. contains a string of the actual text and the x, y position */
 public class Text

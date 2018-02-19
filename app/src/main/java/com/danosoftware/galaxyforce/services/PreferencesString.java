@@ -1,10 +1,10 @@
 package com.danosoftware.galaxyforce.services;
 
-import java.util.Map;
-
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import java.util.Map;
 
 public class PreferencesString implements IPreferences<String>
 {

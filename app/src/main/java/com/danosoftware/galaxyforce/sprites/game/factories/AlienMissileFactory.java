@@ -1,8 +1,5 @@
 package com.danosoftware.galaxyforce.sprites.game.factories;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.danosoftware.galaxyforce.enumerations.AlienMissileType;
 import com.danosoftware.galaxyforce.enumerations.Direction;
 import com.danosoftware.galaxyforce.game.beans.AlienMissileBean;
@@ -15,6 +12,9 @@ import com.danosoftware.galaxyforce.sprites.game.implementations.AlienMissileSim
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlien;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteBase;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AlienMissileFactory
 {

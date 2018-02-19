@@ -1,8 +1,5 @@
 package com.danosoftware.galaxyforce.controller.game;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.danosoftware.galaxyforce.controller.interfaces.BaseController;
 import com.danosoftware.galaxyforce.controller.interfaces.BaseControllerTilt;
 import com.danosoftware.galaxyforce.controller.interfaces.ControllerBase;
@@ -11,6 +8,9 @@ import com.danosoftware.galaxyforce.interfaces.Input;
 import com.danosoftware.galaxyforce.interfaces.Input.TouchEvent;
 import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.Vector2;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class ControllerGame implements ControllerBase
 {

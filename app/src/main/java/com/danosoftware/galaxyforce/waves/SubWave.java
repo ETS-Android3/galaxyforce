@@ -1,8 +1,8 @@
 package com.danosoftware.galaxyforce.waves;
 
-import java.util.List;
-
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlien;
+
+import java.util.List;
 
 /**
  * Represents a sub-wave. A wave represents a collection of sub-waves.

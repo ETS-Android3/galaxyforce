@@ -1,10 +1,10 @@
 package com.danosoftware.galaxyforce.sprites.game.interfaces;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Life extends Sprite
 {
