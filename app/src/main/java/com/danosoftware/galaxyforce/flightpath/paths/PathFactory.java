@@ -27,7 +27,7 @@ public final class PathFactory
 
     public static List<Point> createPath(Path path, PointTranslatorChain translators)
     {
-        List<Point> alienPath = new ArrayList<>();
+        List<Point> pathPoints = new ArrayList<>();
 
         // load path data from file
         PathListDTO pathData = loadPaths(path.getPathFile());
@@ -54,8 +54,8 @@ public final class PathFactory
                 default:
                     throw new GalaxyForceException("Unknown path type: "+ pathDTO.getType().name());
             }
-            alienPath.addAll(generator.path());
+            pathPoints.addAll(generator.path());
         }
-        return alienPath;
+        return pathPoints;
     }
 }

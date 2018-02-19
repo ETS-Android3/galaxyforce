@@ -3,7 +3,6 @@ package com.danosoftware.galaxyforce.waves;
 import android.util.Log;
 
 import com.danosoftware.galaxyforce.flightpath.dto.PathListDTO;
-import com.danosoftware.galaxyforce.flightpath.paths.PathFactoryTest;
 import com.danosoftware.galaxyforce.flightpath.utilities.PathLoader;
 import com.danosoftware.galaxyforce.game.handlers.GameHandler;
 import com.danosoftware.galaxyforce.sound.SoundEffectBank;
@@ -85,7 +84,7 @@ public class WaveFactoryTest {
         for (int wave = 1; wave <= MAX_WAVES; wave++) {
 
             GameHandler handler = mock(GameHandler.class);
-            WaveFactory2 waveFactory = new WaveFactory2(100, 100, handler);
+            WaveFactory waveFactory = new WaveFactory(100, 100, handler);
             Collection<SubWave> subWave = waveFactory.createWave(wave);
 
             assertThat(subWave.size() > 0, is(true));

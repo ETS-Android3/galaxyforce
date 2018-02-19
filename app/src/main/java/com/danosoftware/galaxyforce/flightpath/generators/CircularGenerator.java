@@ -10,7 +10,7 @@ import static com.danosoftware.galaxyforce.flightpath.utilities.CircularMathemat
 import static com.danosoftware.galaxyforce.flightpath.utilities.PointMathematics.convertAndTranslatePoint;
 
 /**
- * Create line from provided control points
+ * Create circular path from provided control points
  */
 public class CircularGenerator implements PathGenerator {
 
@@ -18,7 +18,7 @@ public class CircularGenerator implements PathGenerator {
     private final Double piMultiplier;
 
     /**
-     * Instantiate generator by extracting and converting the linear data points
+     * Instantiate generator by extracting and converting the circular data points
      * and then translating them to their new positions based on the provided
      * translators (e.g. x-axis flip).
      *

@@ -8,7 +8,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
  */
 public class CircularPathDTO extends PathDTO {
 
-
     private final PointDTO centre;
     private final Double piMultiplier;
 

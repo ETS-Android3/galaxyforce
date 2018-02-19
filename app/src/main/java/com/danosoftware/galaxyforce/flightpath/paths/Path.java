@@ -105,9 +105,7 @@ public enum Path {
     CIRCULAR_DEMO("CIRCULAR_DEMO.json");
 
 
-
-
-
+    
     // file name holding path data
     private final String pathFile;
 

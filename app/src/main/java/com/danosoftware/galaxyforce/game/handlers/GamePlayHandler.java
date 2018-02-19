@@ -68,7 +68,7 @@ import com.danosoftware.galaxyforce.vibration.Vibration;
 import com.danosoftware.galaxyforce.vibration.VibrationSingleton;
 import com.danosoftware.galaxyforce.view.FPSCounter;
 import com.danosoftware.galaxyforce.waves.SubWave;
-import com.danosoftware.galaxyforce.waves.WaveFactory2;
+import com.danosoftware.galaxyforce.waves.WaveFactory;
 import com.danosoftware.galaxyforce.waves.WaveManager;
 import com.danosoftware.galaxyforce.waves.WaveManagerImpl;
 
@@ -265,7 +265,7 @@ public class GamePlayHandler implements GameHandler
          * create wave factory and manager to create lists of aliens on each
          * wave
          */
-        WaveFactory2 waveFactory = new WaveFactory2(GameConstants.GAME_WIDTH, GameConstants.GAME_HEIGHT, this);
+        WaveFactory waveFactory = new WaveFactory(GameConstants.GAME_WIDTH, GameConstants.GAME_HEIGHT, this);
         waveManager = new WaveManagerImpl(waveFactory);
 
         /* counter used to report frames per second */
