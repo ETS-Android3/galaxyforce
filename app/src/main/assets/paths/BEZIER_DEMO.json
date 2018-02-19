@@ -1,0 +1,98 @@
+{
+  "pathData" : [ {
+    "type" : "bezier",
+    "pathPoints" : 200,
+    "start" : {
+      "x" : 100,
+      "y" : 100
+    },
+    "startControl" : {
+      "x" : 700,
+      "y" : 200
+    },
+    "finish" : {
+      "x" : 100,
+      "y" : 700
+    },
+    "finishControl" : {
+      "x" : 700,
+      "y" : 500
+    }
+  }, {
+    "type" : "bezier",
+    "pathPoints" : 200,
+    "start" : {
+      "x" : 100,
+      "y" : 700
+    },
+    "startControl" : {
+      "x" : 100,
+      "y" : 500
+    },
+    "finish" : {
+      "x" : 700,
+      "y" : 400
+    },
+    "finishControl" : {
+      "x" : 500,
+      "y" : 500
+    }
+  }, {
+    "type" : "bezier",
+    "pathPoints" : 200,
+    "start" : {
+      "x" : 700,
+      "y" : 400
+    },
+    "startControl" : {
+      "x" : 0,
+      "y" : 400
+    },
+    "finish" : {
+      "x" : 100,
+      "y" : 100
+    },
+    "finishControl" : {
+      "x" : 700,
+      "y" : 100
+    }
+  }, {
+    "type" : "bezier",
+    "pathPoints" : 200,
+    "start" : {
+      "x" : 0,
+      "y" : 800
+    },
+    "startControl" : {
+      "x" : 600,
+      "y" : 100
+    },
+    "finish" : {
+      "x" : 1200,
+      "y" : 800
+    },
+    "finishControl" : {
+      "x" : 600,
+      "y" : 100
+    }
+  }, {
+    "type" : "bezier",
+    "pathPoints" : 200,
+    "start" : {
+      "x" : 0,
+      "y" : 0
+    },
+    "startControl" : {
+      "x" : 1200,
+      "y" : 800
+    },
+    "finish" : {
+      "x" : 1200,
+      "y" : 800
+    },
+    "finishControl" : {
+      "x" : 0,
+      "y" : 0
+    }
+  } ]
+}

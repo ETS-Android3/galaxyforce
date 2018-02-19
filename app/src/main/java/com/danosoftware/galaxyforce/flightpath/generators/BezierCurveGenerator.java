@@ -1,32 +1,39 @@
 package com.danosoftware.galaxyforce.flightpath.generators;
 
-import com.danosoftware.galaxyforce.flightpath.Point;
-import com.danosoftware.galaxyforce.flightpath.Point2;
+import com.danosoftware.galaxyforce.flightpath.paths.Point;
 import com.danosoftware.galaxyforce.flightpath.dto.BezierPathDTO;
+import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
 
 import java.util.List;
 
 import static com.danosoftware.galaxyforce.flightpath.utilities.BezierMathematics.createBezierPath;
-import static com.danosoftware.galaxyforce.flightpath.utilities.PointMathematics.convertPoint;
+import static com.danosoftware.galaxyforce.flightpath.utilities.PointMathematics.convertAndTranslatePoint;
 
 /**
  * Create bezier curve from provided control points
  */
 public class BezierCurveGenerator implements PathGenerator
 {
-
-    private final Point2 start;
-    private final Point2 startControl;
-    private final Point2 finish;
-    private final Point2 finishControl;
+    private final Point start;
+    private final Point startControl;
+    private final Point finish;
+    private final Point finishControl;
     private final int pathPoints;
 
-    public BezierCurveGenerator(BezierPathDTO bezierData)
+    /**
+     * Instantiate generator by extracting and converting the bezier data points
+     * and then translating them to their new positions based on the provided
+     * translators (e.g. x-axis flip).
+     *
+     * @param bezierData
+     * @param translators
+     */
+    public BezierCurveGenerator(BezierPathDTO bezierData, PointTranslatorChain translators)
     {
-        this.start = convertPoint(bezierData.getStart());
-        this.startControl = convertPoint(bezierData.getStartControl());
-        this.finish = convertPoint(bezierData.getFinish());
-        this.finishControl = convertPoint(bezierData.getFinishControl());
+        this.start = convertAndTranslatePoint(bezierData.getStart(), translators);
+        this.startControl = convertAndTranslatePoint(bezierData.getStartControl(), translators);
+        this.finish = convertAndTranslatePoint(bezierData.getFinish(), translators);
+        this.finishControl = convertAndTranslatePoint(bezierData.getFinishControl(), translators);
         this.pathPoints = bezierData.getPathPoints();
     }
 
@@ -36,7 +43,7 @@ public class BezierCurveGenerator implements PathGenerator
      * @return array of points representing Bezier curve
      */
     @Override
-    public List<Point2> path()
+    public List<Point> path()
     {
         return createBezierPath(
                 start,

@@ -1,0 +1,19 @@
+{
+  "pathData" : [
+    {
+      "type": "circular",
+      "centre": {
+        "x": 500,
+        "y": 400
+      },
+      "piMultiplier": 10.0
+    },
+    {
+    "type": "circular",
+    "centre": {
+      "x": 500,
+      "y": 400
+    },
+    "piMultiplier" : 10.0
+  } ]
+}

@@ -1,7 +1,6 @@
 package com.danosoftware.galaxyforce.flightpath.utilities;
 
-import com.danosoftware.galaxyforce.flightpath.generators.BezierCurveGenerator;
-import com.danosoftware.galaxyforce.flightpath.Point2;
+import com.danosoftware.galaxyforce.flightpath.paths.Point;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,14 +26,14 @@ public final class BezierMathematics {
      * @param pathPoints
      * @return array of points representing Bezier curve
      */
-    public static List<Point2> createBezierPath(
-            final Point2 start,
-            final Point2 startControl,
-            final Point2 finish,
-            final Point2 finishControl,
+    public static List<Point> createBezierPath(
+            final Point start,
+            final Point startControl,
+            final Point finish,
+            final Point finishControl,
             final int pathPoints)
     {
-        List<Point2> path = new ArrayList<>();
+        List<Point> path = new ArrayList<>();
 
         /* calculate point for each segment and add to path */
         for (int i = 0; i <= pathPoints; i++)
@@ -63,11 +62,11 @@ public final class BezierMathematics {
      * @param t
      * @return current point on bezier curve
      */
-    private static Point2 calculateBezierPoint(final Point2 start,
-                                               final Point2 startControl,
-                                               final Point2 finish,
-                                               final Point2 finishControl,
-                                               double t)
+    private static Point calculateBezierPoint(final Point start,
+                                              final Point startControl,
+                                              final Point finish,
+                                              final Point finishControl,
+                                              double t)
     {
         double u = 1 - t;
         double tt = t * t;
@@ -76,13 +75,13 @@ public final class BezierMathematics {
         double ttt = tt * t;
 
         /* stage 1 - uuu * start */
-        Point2 stage1 = multiply(start, uuu);
+        Point stage1 = multiply(start, uuu);
 
         /* stage 2 - stage 1 + (3 * uu * t * startControl) */
-        Point2 stage2 = addition(stage1, multiply(startControl, (3 * uu * t)));
+        Point stage2 = addition(stage1, multiply(startControl, (3 * uu * t)));
 
         /* stage 3 - stage 2 + ( 3 * u * tt * finishControl) */
-        Point2 stage3 = addition(stage2, multiply(finishControl, (3 * u * tt)));
+        Point stage3 = addition(stage2, multiply(finishControl, (3 * u * tt)));
 
         /* stage 4 - stage 3 + (ttt * finish) */
         return addition(stage3, multiply(finish, ttt));

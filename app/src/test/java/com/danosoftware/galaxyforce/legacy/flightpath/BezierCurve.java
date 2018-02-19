@@ -1,4 +1,8 @@
-package com.danosoftware.galaxyforce.flightpath;
+package com.danosoftware.galaxyforce.legacy.flightpath;
+
+import com.danosoftware.galaxyforce.flightpath.dto.BezierPathDTO;
+import com.danosoftware.galaxyforce.flightpath.dto.PathDTO;
+import com.danosoftware.galaxyforce.flightpath.dto.PointDTO;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +47,16 @@ public class BezierCurve implements FlightPath
         }
 
         return path;
+    }
+
+    @Override
+    public PathDTO createDTO() {
+        return new BezierPathDTO(
+                segments,
+                new PointDTO(start.getX(),start.getY()),
+                new PointDTO(startControl.getX(),startControl.getY()),
+                new PointDTO(finish.getX(),finish.getY()),
+                new PointDTO(finishControl.getX(),finishControl.getY()));
     }
 
     /**

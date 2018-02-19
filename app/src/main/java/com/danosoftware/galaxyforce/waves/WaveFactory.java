@@ -1,16 +1,17 @@
 package com.danosoftware.galaxyforce.waves;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import com.danosoftware.galaxyforce.flightpath.PathFactory;
-import com.danosoftware.galaxyforce.flightpath.Point;
+import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
+import com.danosoftware.galaxyforce.flightpath.paths.PathFactory;
+import com.danosoftware.galaxyforce.flightpath.paths.Point;
 import com.danosoftware.galaxyforce.game.handlers.GameHandler;
 import com.danosoftware.galaxyforce.sprites.game.factories.AlienFactory;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlien;
 import com.danosoftware.galaxyforce.utilities.Reversed;
 import com.danosoftware.galaxyforce.utilities.WaveUtilities;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Creates a wave of aliens based on the provided wave number. Each wave
@@ -42,92 +43,92 @@ public class WaveFactory
     {
         if (!WaveUtilities.isValidWave(wave))
         {
-            throw new IllegalArgumentException("Wave not recognised '" + wave + "'.");
+            throw new GalaxyForceException("Wave not recognised '" + wave + "'.");
         }
 
-        List<SubWave> subWaves = new ArrayList<SubWave>();
+        List<SubWave> subWaves = new ArrayList<>();
 
         switch (wave)
         {
 
-        case 1:
-            subWaves.add(createWave(SubWaveBuilder.WAVE_TRIANGULAR));
-            subWaves.add(createWave(SubWaveBuilder.WAVE_03));
-            subWaves.add(createWave(SubWaveBuilder.VALLEY_DIVE));
-            break;
+            case 1:
+                subWaves.add(createWave(SubWaveBuilder.WAVE_TRIANGULAR));
+                subWaves.add(createWave(SubWaveBuilder.WAVE_03));
+                subWaves.add(createWave(SubWaveBuilder.VALLEY_DIVE));
+                break;
 
-        case 2:
-            subWaves.add(createWave(SubWaveBuilder.WAVE_03));
-            subWaves.add(createWave(SubWaveBuilder.VALLEY_DIVE));
-            subWaves.add(createWave(SubWaveBuilder.WAVE_02));
-            break;
+            case 2:
+                subWaves.add(createWave(SubWaveBuilder.WAVE_03));
+                subWaves.add(createWave(SubWaveBuilder.VALLEY_DIVE));
+                subWaves.add(createWave(SubWaveBuilder.WAVE_02));
+                break;
 
-        case 3:
-            subWaves.add(createWave(SubWaveBuilder.VALLEY_DIVE));
-            break;
+            case 3:
+                subWaves.add(createWave(SubWaveBuilder.VALLEY_DIVE));
+                break;
 
-        case 4:
-            subWaves.add(createWave(SubWaveBuilder.WAVE_02));
-            break;
+            case 4:
+                subWaves.add(createWave(SubWaveBuilder.WAVE_02));
+                break;
 
-        case 5:
-            subWaves.add(createWave(SubWaveBuilder.WAVE_MOTHERSHIP));
-            subWaves.add(createWave(SubWaveBuilder.WAVE_MOTHERSHIP));
-            break;
+            case 5:
+                subWaves.add(createWave(SubWaveBuilder.WAVE_MOTHERSHIP));
+                subWaves.add(createWave(SubWaveBuilder.WAVE_MOTHERSHIP));
+                break;
 
-        case 6:
-            subWaves.add(createWave(SubWaveBuilder.WAVEY_LINE));
-            break;
+            case 6:
+                subWaves.add(createWave(SubWaveBuilder.WAVEY_LINE));
+                break;
 
-        case 7:
-            subWaves.add(createWave(SubWaveBuilderNoPath.ASTEROIDS));
-            subWaves.add(createWave(SubWaveBuilderNoPath.ASTEROIDS_REVERSE));
-            break;
+            case 7:
+                subWaves.add(createWave(SubWaveBuilderNoPath.ASTEROIDS));
+                subWaves.add(createWave(SubWaveBuilderNoPath.ASTEROIDS_REVERSE));
+                break;
 
-        case 8:
-            subWaves.add(createWave(SubWaveBuilder.SPACE_INVADER));
-            subWaves.add(createWave(SubWaveBuilder.SPACE_INVADER_REVERSE));
-            break;
+            case 8:
+                subWaves.add(createWave(SubWaveBuilder.SPACE_INVADER));
+                subWaves.add(createWave(SubWaveBuilder.SPACE_INVADER_REVERSE));
+                break;
 
-        case 9:
-            subWaves.add(createWave(SubWaveBuilder.STAGGERED_BOUNCE_ATTACK));
-            break;
+            case 9:
+                subWaves.add(createWave(SubWaveBuilder.STAGGERED_BOUNCE_ATTACK));
+                break;
 
-        case 10:
-            subWaves.add(createWave(SubWaveBuilder.DRAGON_ATTACK));
-            break;
+            case 10:
+                subWaves.add(createWave(SubWaveBuilder.DRAGON_ATTACK));
+                break;
 
-        case 11:
-            subWaves.add(createWave(SubWaveBuilder.FIGURE_OF_EIGHT));
-            break;
+            case 11:
+                subWaves.add(createWave(SubWaveBuilder.FIGURE_OF_EIGHT));
+                break;
 
-        case 12:
-            subWaves.add(createWave(SubWaveBuilder.CROSSING_STEP_ATTACK));
-            break;
+            case 12:
+                subWaves.add(createWave(SubWaveBuilder.CROSSING_STEP_ATTACK));
+                break;
 
-        case 13:
-            subWaves.add(createWave(SubWaveBuilder.CROSSOVER_EXIT_ATTACK));
-            break;
+            case 13:
+                subWaves.add(createWave(SubWaveBuilder.CROSSOVER_EXIT_ATTACK));
+                break;
 
-        case 14:
-            subWaves.add(createWave(SubWaveBuilder.BELL_CURVE));
-            subWaves.add(createWave(SubWaveBuilder.DOUBLE_BELL_CURVE));
-            break;
+            case 14:
+                subWaves.add(createWave(SubWaveBuilder.BELL_CURVE));
+                subWaves.add(createWave(SubWaveBuilder.DOUBLE_BELL_CURVE));
+                break;
 
-        case 15:
-            subWaves.add(createWave(SubWaveBuilder.LOOPER_ATTACK));
-            break;
+            case 15:
+                subWaves.add(createWave(SubWaveBuilder.LOOPER_ATTACK));
+                break;
 
-        case 16:
-            subWaves.add(createWave(SubWaveBuilder.TEAR_DROP_ATTACK));
-            break;
+            case 16:
+                subWaves.add(createWave(SubWaveBuilder.TEAR_DROP_ATTACK));
+                break;
 
-        case 17:
-            subWaves.add(createWave(SubWaveBuilderNoPath.ASTEROID_FIELD));
-            break;
+            case 17:
+                subWaves.add(createWave(SubWaveBuilderNoPath.ASTEROID_FIELD));
+                break;
 
-        default:
-            throw new IllegalArgumentException("Wave not recognised '" + wave + "'.");
+            default:
+                throw new IllegalArgumentException("Wave not recognised '" + wave + "'.");
 
         }
 
@@ -142,15 +143,14 @@ public class WaveFactory
      */
     private SubWave createWave(SubWaveBuilder waveProperty)
     {
-        List<SpriteAlien> aliens = new ArrayList<SpriteAlien>();
+        List<SpriteAlien> aliens = new ArrayList<>();
 
         /* iterate through each wave in wave list and create/add aliens */
         for (SubWaveProperty wave : waveProperty.getWaveList())
         {
 
             // create current alien path
-            List<Point> alienPath = PathFactory.createPath(wave.getPath(), wave.isxInvert(), wave.isyInvert(), wave.getxOffset(),
-                    wave.getyOffset(), width, height);
+            List<Point> alienPath = PathFactory.createPath(wave.getPath(), wave.getTranslators());
 
             // create aliens using the current path
             aliens.addAll(addToPath(wave.getAlienType(), wave.getNumberOfAliens(), alienPath, wave.getDelayBetweenAliens(),
@@ -179,8 +179,13 @@ public class WaveFactory
      * adds a wanted number of aliens without a path. each alien is spaced by
      * the delay seconds specified.
      */
-    private List<SpriteAlien> addToPath(AlienType alienType, int numberOfAliens, List<Point> alienPath, float delayBetweenAliens,
-            float delayOffset, boolean restartImmediately)
+    private List<SpriteAlien> addToPath(
+            AlienType alienType,
+            int numberOfAliens,
+            List<Point> alienPath,
+            float delayBetweenAliens,
+            float delayOffset,
+            boolean restartImmediately)
     {
 
         List<SpriteAlien> aliensOnPath = new ArrayList<SpriteAlien>();

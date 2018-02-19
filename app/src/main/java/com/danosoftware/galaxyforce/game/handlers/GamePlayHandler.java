@@ -21,7 +21,7 @@ import com.danosoftware.galaxyforce.enumerations.Direction;
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.enumerations.TextPositionX;
 import com.danosoftware.galaxyforce.enumerations.TextPositionY;
-import com.danosoftware.galaxyforce.flightpath.Point;
+import com.danosoftware.galaxyforce.flightpath.paths.Point;
 import com.danosoftware.galaxyforce.game.beans.AlienMissileBean;
 import com.danosoftware.galaxyforce.game.beans.BaseMissileBean;
 import com.danosoftware.galaxyforce.game.beans.PowerUpBean;

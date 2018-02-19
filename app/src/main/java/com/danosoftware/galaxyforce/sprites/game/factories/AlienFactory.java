@@ -7,7 +7,7 @@ import android.util.Log;
 
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.enumerations.Direction;
-import com.danosoftware.galaxyforce.flightpath.Point;
+import com.danosoftware.galaxyforce.flightpath.paths.Point;
 import com.danosoftware.galaxyforce.game.beans.SpawnedAlienBean;
 import com.danosoftware.galaxyforce.game.handlers.GameHandler;
 import com.danosoftware.galaxyforce.sound.Sound;

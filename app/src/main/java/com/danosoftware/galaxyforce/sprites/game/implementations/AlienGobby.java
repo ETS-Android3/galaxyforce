@@ -1,7 +1,7 @@
 package com.danosoftware.galaxyforce.sprites.game.implementations;
 
 import com.danosoftware.galaxyforce.enumerations.AlienMissileType;
-import com.danosoftware.galaxyforce.flightpath.Point;
+import com.danosoftware.galaxyforce.flightpath.paths.Point;
 import com.danosoftware.galaxyforce.game.handlers.GameHandler;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.ExplodeBehaviourSimple;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.FireRandomDelay;

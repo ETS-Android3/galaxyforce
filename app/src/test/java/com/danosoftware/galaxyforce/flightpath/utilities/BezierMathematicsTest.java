@@ -1,9 +1,6 @@
 package com.danosoftware.galaxyforce.flightpath.utilities;
 
-import com.danosoftware.galaxyforce.flightpath.generators.BezierCurveGenerator;
-import com.danosoftware.galaxyforce.flightpath.Point2;
-import com.danosoftware.galaxyforce.flightpath.dto.BezierPathDTO;
-import com.danosoftware.galaxyforce.flightpath.dto.PointDTO;
+import com.danosoftware.galaxyforce.flightpath.paths.Point;
 
 import org.junit.Test;
 
@@ -23,13 +20,13 @@ public class BezierMathematicsTest {
 
         // create bezier control points
         final int pathPoints = 100;
-        final Point2 start = new Point2(10,20);
-        final Point2 finish = new Point2(30,40);
-        final Point2 startControl = new Point2(50,60);
-        final Point2 finishControl = new Point2(70,80);
+        final Point start = new Point(10,20);
+        final Point finish = new Point(30,40);
+        final Point startControl = new Point(50,60);
+        final Point finishControl = new Point(70,80);
 
         // create a bezier path from control points
-        final List<Point2> bezierPoints = createBezierPath(
+        final List<Point> bezierPoints = createBezierPath(
                 start,
                 startControl,
                 finish,

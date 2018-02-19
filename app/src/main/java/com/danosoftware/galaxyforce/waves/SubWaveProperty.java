@@ -1,99 +1,107 @@
 package com.danosoftware.galaxyforce.waves;
 
-import com.danosoftware.galaxyforce.flightpath.Path;
+import com.danosoftware.galaxyforce.flightpath.paths.Path;
+import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
 
 /*
  * Class references a sub-wave of aliens on a path
  */
 public class SubWaveProperty
 {
-    private AlienType alienType = null;
-    private Path path = null;
-    private boolean xInvert;
-    private boolean yInvert;
-    private int numberOfAliens;
-    private float delayBetweenAliens;
-    private float delayOffet;
-    private int xOffset;
-    private int yOffset;
-    private boolean restartImmediately;
+    private final AlienType alienType;
+    private final Path path;
+    private final int numberOfAliens;
+    private final float delayBetweenAliens;
+    private final float delayOffet;
+    private final boolean restartImmediately;
+    private final PointTranslatorChain translators;
+
 
     /**
-     * Create a new alien sub-wave using a supplied path, positional offsets and
+     * Create a new alien sub-wave using a supplied path and
      * delays in seconds.
-     * 
+     *
      * @param alienType
      * @param path
-     * @param xInvert
-     * @param yInvert
-     * @param xOffset
-     * @param yOffset
      * @param numberOfAliens
      * @param delayBetweenAliens
      * @param delayOffet
+     * @param restartImmediately
      */
-    public SubWaveProperty(AlienType alienType, Path path, boolean xInvert, boolean yInvert, int xOffset, int yOffset, int numberOfAliens,
-            float delayBetweenAliens, float delayOffet, boolean restartImmediately)
+    public SubWaveProperty(
+            final AlienType alienType,
+            final Path path,
+            final int numberOfAliens,
+            final float delayBetweenAliens,
+            final float delayOffet,
+            final boolean restartImmediately)
     {
         this.alienType = alienType;
         this.path = path;
-        this.xInvert = xInvert;
-        this.yInvert = yInvert;
-        this.xOffset = xOffset;
-        this.yOffset = yOffset;
         this.numberOfAliens = numberOfAliens;
         this.delayBetweenAliens = delayBetweenAliens;
         this.delayOffet = delayOffet;
         this.restartImmediately = restartImmediately;
+
+        // creates an empty translator chain
+        this.translators = new PointTranslatorChain();
     }
 
-    public AlienType getAlienType()
+    /**
+     * Create a new alien sub-wave using a supplied path and
+     * delays in seconds. Plus translators.
+     *
+     * @param alienType
+     * @param path
+     * @param numberOfAliens
+     * @param delayBetweenAliens
+     * @param delayOffet
+     * @param restartImmediately
+     * @param translators
+     */
+    public SubWaveProperty(
+            final AlienType alienType,
+            final Path path,
+            final int numberOfAliens,
+            final float delayBetweenAliens,
+            final float delayOffet,
+            final boolean restartImmediately,
+            final PointTranslatorChain translators)
     {
+        this.alienType = alienType;
+        this.path = path;
+        this.numberOfAliens = numberOfAliens;
+        this.delayBetweenAliens = delayBetweenAliens;
+        this.delayOffet = delayOffet;
+        this.restartImmediately = restartImmediately;
+        this.translators = translators;
+    }
+
+    public AlienType getAlienType() {
         return alienType;
     }
 
-    public Path getPath()
-    {
+    public Path getPath() {
         return path;
     }
 
-    public boolean isxInvert()
-    {
-        return xInvert;
-    }
-
-    public boolean isyInvert()
-    {
-        return yInvert;
-    }
-
-    public int getNumberOfAliens()
-    {
+    public int getNumberOfAliens() {
         return numberOfAliens;
     }
 
-    public float getDelayBetweenAliens()
-    {
+    public float getDelayBetweenAliens() {
         return delayBetweenAliens;
     }
 
-    public float getDelayOffet()
-    {
+    public float getDelayOffet() {
         return delayOffet;
     }
 
-    public int getxOffset()
-    {
-        return xOffset;
-    }
-
-    public int getyOffset()
-    {
-        return yOffset;
-    }
-
-    public boolean isRestartImmediately()
-    {
+    public boolean isRestartImmediately() {
         return restartImmediately;
+    }
+
+    public PointTranslatorChain getTranslators() {
+        return translators;
     }
 }

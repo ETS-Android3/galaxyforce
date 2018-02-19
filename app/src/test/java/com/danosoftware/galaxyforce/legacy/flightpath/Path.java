@@ -1,10 +1,10 @@
-package com.danosoftware.galaxyforce.flightpath;
+package com.danosoftware.galaxyforce.legacy.flightpath;
+
+import com.danosoftware.galaxyforce.constants.GameConstants;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
-import com.danosoftware.galaxyforce.constants.GameConstants;
 
 /**
  * enum containing all the possible flight paths for aliens.
@@ -93,20 +93,15 @@ public enum Path
      * on opposite right-side of screen.
      */
     EXIT_STAGE_RIGHT(
-
-    new StraightLine(5, new Point(GameConstants.SCREEN_LEFT_EDGE, GameConstants.SCREEN_TOP), new Point(GameConstants.SCREEN_LEFT_EDGE,
-            GameConstants.SCREEN_MID_Y)),
-
-    new FlightPause(0.5f, new Point(GameConstants.SCREEN_LEFT_EDGE, GameConstants.SCREEN_MID_Y)),
-
-    new BezierCurve(100, new Point(GameConstants.SCREEN_LEFT_EDGE, GameConstants.SCREEN_MID_Y),
-
-    new Point(GameConstants.SCREEN_LEFT + 150, GameConstants.SCREEN_BOTTOM + 150),
-
-    new Point(GameConstants.SCREEN_LEFT_EDGE, GameConstants.SCREEN_BOTTOM + 150),
-
-    new Point(GameConstants.SCREEN_RIGHT, GameConstants.SCREEN_BOTTOM_EDGE))
-
+            new StraightLine(5,
+                    new Point(GameConstants.SCREEN_LEFT_EDGE, GameConstants.SCREEN_TOP),
+                    new Point(GameConstants.SCREEN_LEFT_EDGE, GameConstants.SCREEN_MID_Y)),
+            new FlightPause(0.5f, new Point(GameConstants.SCREEN_LEFT_EDGE, GameConstants.SCREEN_MID_Y)),
+            new BezierCurve(100,
+                    new Point(GameConstants.SCREEN_LEFT_EDGE, GameConstants.SCREEN_MID_Y),
+                    new Point(GameConstants.SCREEN_LEFT + 150, GameConstants.SCREEN_BOTTOM + 150),
+                    new Point(GameConstants.SCREEN_LEFT_EDGE, GameConstants.SCREEN_BOTTOM + 150),
+                    new Point(GameConstants.SCREEN_RIGHT, GameConstants.SCREEN_BOTTOM_EDGE))
     ),
 
     /**

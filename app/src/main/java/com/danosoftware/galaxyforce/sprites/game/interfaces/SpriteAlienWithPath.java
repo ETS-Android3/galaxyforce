@@ -2,7 +2,7 @@ package com.danosoftware.galaxyforce.sprites.game.interfaces;
 
 import java.util.List;
 
-import com.danosoftware.galaxyforce.flightpath.Point;
+import com.danosoftware.galaxyforce.flightpath.paths.Point;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.ExplodeBehaviour;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.FireBehaviour;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.PowerUpBehaviour;
