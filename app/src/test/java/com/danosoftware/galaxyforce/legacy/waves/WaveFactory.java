@@ -9,8 +9,8 @@ import com.danosoftware.galaxyforce.utilities.Reversed;
 import com.danosoftware.galaxyforce.utilities.WaveUtilities;
 import com.danosoftware.galaxyforce.waves.AlienType;
 import com.danosoftware.galaxyforce.waves.SubWave;
-import com.danosoftware.galaxyforce.waves.SubWaveBuilderNoPath;
-import com.danosoftware.galaxyforce.waves.SubWavePropertyNoPath;
+import com.danosoftware.galaxyforce.waves.rules.SubWaveRule;
+import com.danosoftware.galaxyforce.waves.rules.SubWaveRuleProperties;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -84,8 +84,8 @@ public class WaveFactory
             break;
 
         case 7:
-            subWaves.add(createWave(SubWaveBuilderNoPath.ASTEROIDS));
-            subWaves.add(createWave(SubWaveBuilderNoPath.ASTEROIDS_REVERSE));
+            subWaves.add(createWave(SubWaveRule.ASTEROIDS));
+            subWaves.add(createWave(SubWaveRule.ASTEROIDS_REVERSE));
             break;
 
         case 8:
@@ -127,7 +127,7 @@ public class WaveFactory
             break;
 
         case 17:
-            subWaves.add(createWave(SubWaveBuilderNoPath.ASTEROID_FIELD));
+            subWaves.add(createWave(SubWaveRule.ASTEROID_FIELD));
             break;
 
         default:
@@ -205,12 +205,12 @@ public class WaveFactory
      * @param waveProperty
      * @return list of alien sprites
      */
-    private SubWave createWave(SubWaveBuilderNoPath waveProperty)
+    private SubWave createWave(SubWaveRule waveProperty)
     {
         List<SpriteAlien> aliens = new ArrayList<SpriteAlien>();
 
         /* iterate through each wave in wave list and create/add aliens */
-        for (SubWavePropertyNoPath wave : waveProperty.getWaveList())
+        for (SubWaveRuleProperties wave : waveProperty.getWaveList())
         {
 
             for (int i = 0; i < wave.getNumberOfAliens(); i++)

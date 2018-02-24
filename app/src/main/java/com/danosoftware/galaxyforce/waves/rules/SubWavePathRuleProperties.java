@@ -1,19 +1,30 @@
-package com.danosoftware.galaxyforce.waves;
+package com.danosoftware.galaxyforce.waves.rules;
 
 import com.danosoftware.galaxyforce.flightpath.paths.Path;
 import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
 
 /*
- * Class references a sub-wave of aliens on a path
+ * Holds a set of properties that describe a sub-wave (including a path).
  */
-public class SubWaveProperty
+public class SubWavePathRuleProperties
 {
-    private final AlienType alienType;
+    // the path the subwave aliens will follow
     private final Path path;
+
+    // total number of aliens in the sub-wave
     private final int numberOfAliens;
+
+    // timing delay between each adjacent alien
     private final float delayBetweenAliens;
+
+    // timing delay before sub-wave starts
     private final float delayOffet;
+
+    // restart alien immediately when it reaches the end of it's path?
+    // alternatively will wait until entire in-progress subwave finishes
     private final boolean restartImmediately;
+
+    // optional translators that can change the path (e.g. flip in x-axis)
     private final PointTranslatorChain translators;
 
 
@@ -21,22 +32,19 @@ public class SubWaveProperty
      * Create a new alien sub-wave using a supplied path and
      * delays in seconds.
      *
-     * @param alienType
      * @param path
      * @param numberOfAliens
      * @param delayBetweenAliens
      * @param delayOffet
      * @param restartImmediately
      */
-    public SubWaveProperty(
-            final AlienType alienType,
+    public SubWavePathRuleProperties(
             final Path path,
             final int numberOfAliens,
             final float delayBetweenAliens,
             final float delayOffet,
             final boolean restartImmediately)
     {
-        this.alienType = alienType;
         this.path = path;
         this.numberOfAliens = numberOfAliens;
         this.delayBetweenAliens = delayBetweenAliens;
@@ -51,7 +59,6 @@ public class SubWaveProperty
      * Create a new alien sub-wave using a supplied path and
      * delays in seconds. Plus translators.
      *
-     * @param alienType
      * @param path
      * @param numberOfAliens
      * @param delayBetweenAliens
@@ -59,8 +66,7 @@ public class SubWaveProperty
      * @param restartImmediately
      * @param translators
      */
-    public SubWaveProperty(
-            final AlienType alienType,
+    public SubWavePathRuleProperties(
             final Path path,
             final int numberOfAliens,
             final float delayBetweenAliens,
@@ -68,17 +74,12 @@ public class SubWaveProperty
             final boolean restartImmediately,
             final PointTranslatorChain translators)
     {
-        this.alienType = alienType;
         this.path = path;
         this.numberOfAliens = numberOfAliens;
         this.delayBetweenAliens = delayBetweenAliens;
         this.delayOffet = delayOffet;
         this.restartImmediately = restartImmediately;
         this.translators = translators;
-    }
-
-    public AlienType getAlienType() {
-        return alienType;
     }
 
     public Path getPath() {

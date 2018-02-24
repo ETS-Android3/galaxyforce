@@ -265,7 +265,7 @@ public class GamePlayHandler implements GameHandler
          * create wave factory and manager to create lists of aliens on each
          * wave
          */
-        WaveFactory waveFactory = new WaveFactory(GameConstants.GAME_WIDTH, GameConstants.GAME_HEIGHT, this);
+        WaveFactory waveFactory = new WaveFactory(this);
         waveManager = new WaveManagerImpl(waveFactory);
 
         /* counter used to report frames per second */

@@ -1,4 +1,4 @@
-package com.danosoftware.galaxyforce.waves;
+package com.danosoftware.galaxyforce.waves.rules;
 
 import com.danosoftware.galaxyforce.flightpath.paths.Path;
 import com.danosoftware.galaxyforce.flightpath.translators.FlipXPointTranslator;
@@ -6,6 +6,7 @@ import com.danosoftware.galaxyforce.flightpath.translators.FlipYPointTranslator;
 import com.danosoftware.galaxyforce.flightpath.translators.OffsetXPointTranslator;
 import com.danosoftware.galaxyforce.flightpath.translators.OffsetYPointTranslator;
 import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
+import com.danosoftware.galaxyforce.waves.AlienType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -19,21 +20,18 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
  * number of aliens, delay between each alien, delay offset and restart
  * immediately
  */
-public enum SubWaveBuilder
+public enum SubWavePathRule
 {
 
     WAVE_01(
-            true,
-            new SubWaveProperty(
-                    AlienType.OCTOPUS,
+            new SubWavePathRuleProperties(
                     Path.VALLEY_DROP,
                     10,
                     0.5f,
                     0,
                     false
             ),
-            new SubWaveProperty(
-                    AlienType.OCTOPUS,
+            new SubWavePathRuleProperties(
                     Path.VALLEY_DROP,
                     10,
                     0.5f,
@@ -49,9 +47,7 @@ public enum SubWaveBuilder
      * space invader style attack
      */
     SPACE_INVADER(
-            true,
-            new SubWaveProperty(
-                    AlienType.GOBBY,
+            new SubWavePathRuleProperties(
                     Path.SPACE_INVADER,
                     20,
                     0.3f,
@@ -64,9 +60,7 @@ public enum SubWaveBuilder
      * space invader attack in reverse (i.e. from bottom to top)
      */
     SPACE_INVADER_REVERSE(
-            true,
-            new SubWaveProperty(
-                    AlienType.GOBBY,
+            new SubWavePathRuleProperties(
                     Path.SPACE_INVADER,
                     20,
                     0.3f,
@@ -82,9 +76,7 @@ public enum SubWaveBuilder
      * figure of eight path
      */
     FIGURE_OF_EIGHT(
-            true,
-            new SubWaveProperty(
-                    AlienType.OCTOPUS,
+            new SubWavePathRuleProperties(
                     Path.FIGURE_OF_EIGHT,
                     20,
                     0.3f,
@@ -97,9 +89,7 @@ public enum SubWaveBuilder
      * bell curve attack
      */
     BELL_CURVE(
-            true,
-            new SubWaveProperty(
-                    AlienType.STORK,
+            new SubWavePathRuleProperties(
                     Path.BELL_CURVE,
                     20,
                     0.3f,
@@ -112,17 +102,14 @@ public enum SubWaveBuilder
      * bell curve attack from top and bottom
      */
     DOUBLE_BELL_CURVE(
-            true,
-            new SubWaveProperty(
-                    AlienType.STORK,
+            new SubWavePathRuleProperties(
                     Path.BELL_CURVE,
                     20,
                     0.3f,
                     0,
                     false
             ),
-            new SubWaveProperty(
-                    AlienType.STORK,
+            new SubWavePathRuleProperties(
                     Path.BELL_CURVE,
                     20,
                     0.3f,
@@ -137,9 +124,7 @@ public enum SubWaveBuilder
      * twisted loop attack
      */
     LOOPER_ATTACK(
-            true,
-            new SubWaveProperty(
-                    AlienType.DROID,
+            new SubWavePathRuleProperties(
                     Path.LOOPER,
                     20,
                     0.3f,
@@ -152,9 +137,7 @@ public enum SubWaveBuilder
      * multiple tear drop attacks
      */
     TEAR_DROP_ATTACK(
-            true,
-            new SubWaveProperty(
-                    AlienType.INSECT,
+            new SubWavePathRuleProperties(
                     Path.TEAR_DROP,
                     20,
                     0.3f,
@@ -163,16 +146,14 @@ public enum SubWaveBuilder
                     new PointTranslatorChain()
                             .add(new OffsetXPointTranslator(-200))
             ),
-            new SubWaveProperty(
-                    AlienType.INSECT,
+            new SubWavePathRuleProperties(
                     Path.TEAR_DROP,
                     20,
                     0.3f,
                     0,
                     false
             ),
-            new SubWaveProperty(
-                    AlienType.INSECT,
+            new SubWavePathRuleProperties(
                     Path.TEAR_DROP,
                     20,
                     0.3f,
@@ -188,17 +169,14 @@ public enum SubWaveBuilder
      * bottom
      */
     CROSSING_STEP_ATTACK(
-            true,
-            new SubWaveProperty(
-                    AlienType.OCTOPUS,
+            new SubWavePathRuleProperties(
                     Path.BEZIER_STEP_UP,
                     20,
                     0.3f,
                     0,
                     false
             ),
-            new SubWaveProperty(
-                    AlienType.OCTOPUS,
+            new SubWavePathRuleProperties(
                     Path.BEZIER_STEP_UP,
                     20,
                     0.3f,
@@ -214,17 +192,14 @@ public enum SubWaveBuilder
      * opposite side of screen
      */
     CROSSOVER_EXIT_ATTACK(
-            true,
-            new SubWaveProperty(
-                    AlienType.OCTOPUS,
+            new SubWavePathRuleProperties(
                     Path.EXIT_STAGE_RIGHT,
                     20,
                     0.3f,
                     0,
                     false
             ),
-            new SubWaveProperty(
-                    AlienType.OCTOPUS,
+            new SubWavePathRuleProperties(
                     Path.EXIT_STAGE_RIGHT,
                     20,
                     0.3f,
@@ -241,9 +216,7 @@ public enum SubWaveBuilder
      * delayed compared to the previous one.
      */
     STAGGERED_BOUNCE_ATTACK(
-            true,
-            new SubWaveProperty(
-                    AlienType.OCTOPUS,
+            new SubWavePathRuleProperties(
                     Path.BOUNCE_DOWN_AND_UP,
                     5,
                     0.3f,
@@ -252,8 +225,7 @@ public enum SubWaveBuilder
                     new PointTranslatorChain()
                             .add(new OffsetXPointTranslator(40))
             ),
-            new SubWaveProperty(
-                    AlienType.OCTOPUS,
+            new SubWavePathRuleProperties(
                     Path.BOUNCE_DOWN_AND_UP,
                     5,
                     0.3f,
@@ -262,8 +234,7 @@ public enum SubWaveBuilder
                     new PointTranslatorChain()
                             .add(new OffsetXPointTranslator(40 + 92))
             ),
-            new SubWaveProperty(
-                    AlienType.OCTOPUS,
+            new SubWavePathRuleProperties(
                     Path.BOUNCE_DOWN_AND_UP,
                     5,
                     0.3f,
@@ -272,8 +243,7 @@ public enum SubWaveBuilder
                     new PointTranslatorChain()
                             .add(new OffsetXPointTranslator(40 + (92 * 2)))
             ),
-            new SubWaveProperty(
-                    AlienType.OCTOPUS,
+            new SubWavePathRuleProperties(
                     Path.BOUNCE_DOWN_AND_UP,
                     5,
                     0.3f,
@@ -282,8 +252,7 @@ public enum SubWaveBuilder
                     new PointTranslatorChain()
                             .add(new OffsetXPointTranslator(40 + (92 * 3)))
             ),
-            new SubWaveProperty(
-                    AlienType.OCTOPUS,
+            new SubWavePathRuleProperties(
                     Path.BOUNCE_DOWN_AND_UP,
                     5,
                     0.3f,
@@ -292,8 +261,7 @@ public enum SubWaveBuilder
                     new PointTranslatorChain()
                             .add(new OffsetXPointTranslator(40 + (92 * 4)))
             ),
-            new SubWaveProperty(
-                    AlienType.OCTOPUS,
+            new SubWavePathRuleProperties(
                     Path.BOUNCE_DOWN_AND_UP,
                     5,
                     0.3f,
@@ -309,9 +277,7 @@ public enum SubWaveBuilder
      * by the head.
      */
     DRAGON_ATTACK(
-            true,
-            new SubWaveProperty(
-                    AlienType.DRAGON,
+            new SubWavePathRuleProperties(
                     Path.TRIANGLULAR_PATH,
                     1,
                     0f,
@@ -321,17 +287,14 @@ public enum SubWaveBuilder
     ),
 
     WAVEY_LINE(
-            true,
-            new SubWaveProperty(
-                    AlienType.OCTOPUS,
+            new SubWavePathRuleProperties(
                     Path.SINGLE_ARC,
                     10,
                     0.5f,
                     0,
                     false
             ),
-            new SubWaveProperty(
-                    AlienType.OCTOPUS,
+            new SubWavePathRuleProperties(
                     Path.SINGLE_ARC,
                     10,
                     0.5f,
@@ -344,17 +307,14 @@ public enum SubWaveBuilder
     ),
 
     WAVE_02(
-            true,
-            new SubWaveProperty(
-                    AlienType.OCTOPUS,
+            new SubWavePathRuleProperties(
                     Path.BEZIER_DEMO,
                     10,
                     0.5f,
                     0,
                     false
             ),
-            new SubWaveProperty(
-                    AlienType.OCTOPUS,
+            new SubWavePathRuleProperties(
                     Path.BEZIER_DEMO,
                     10,
                     0.5f,
@@ -366,17 +326,14 @@ public enum SubWaveBuilder
     ),
 
     WAVE_03(
-            true,
-            new SubWaveProperty(
-                    AlienType.OCTOPUS,
+            new SubWavePathRuleProperties(
                     Path.CIRCULAR_DEMO,
                     10,
                     0.5f,
                     0,
                     false
             ),
-            new SubWaveProperty(
-                    AlienType.OCTOPUS,
+            new SubWavePathRuleProperties(
                     Path.CIRCULAR_DEMO,
                     10,
                     0.5f,
@@ -388,21 +345,20 @@ public enum SubWaveBuilder
     ),
 
     /**
-     * Drops from top-left down to valley and up again to top right. Alternates
-     * alien types.
+     * Drops from top-left down to valley and up again to top right.
+     * Use interleaved version to interleave a different alien type.
      */
     VALLEY_DIVE(
-            true,
-            new SubWaveProperty(
-                    AlienType.OCTOPUS,
+            new SubWavePathRuleProperties(
                     Path.VALLEY_DROP,
                     10,
                     1f,
                     0,
                     false
-            ),
-            new SubWaveProperty(
-                    AlienType.MINION,
+            )
+    ),
+    VALLEY_DIVE_INTERLEAVED(
+            new SubWavePathRuleProperties(
                     Path.VALLEY_DROP,
                     10,
                     1f,
@@ -412,9 +368,7 @@ public enum SubWaveBuilder
     ),
 
     WAVE_MOTHERSHIP(
-            true,
-            new SubWaveProperty(
-                    AlienType.MOTHERSHIP,
+            new SubWavePathRuleProperties(
                     Path.WAVEY_HORIZONTAL,
                     1,
                     0,
@@ -427,9 +381,7 @@ public enum SubWaveBuilder
      * Triangular attack path
      */
     WAVE_TRIANGULAR(
-            true,
-            new SubWaveProperty(
-                    AlienType.OCTOPUS,
+            new SubWavePathRuleProperties(
                     Path.TRIANGLULAR_PATH,
                     10,
                     1f,
@@ -439,27 +391,18 @@ public enum SubWaveBuilder
     );
 
     /* references list of sub-waves */
-    private final List<SubWaveProperty> waveList;
-
-    /* repeat sub-wave until all destroyed */
-    private final boolean repeatSubWave;
+    private final List<SubWavePathRuleProperties> subWaveProps;
 
     /**
      * construct wave
      */
-    SubWaveBuilder(boolean repeatSubWave, SubWaveProperty... waveArray)
+    SubWavePathRule(SubWavePathRuleProperties... subWaveProps)
     {
-        this.waveList = Arrays.asList(waveArray);
-        this.repeatSubWave = repeatSubWave;
+        this.subWaveProps = Arrays.asList(subWaveProps);
     }
 
-    public List<SubWaveProperty> getWaveList()
+    public List<SubWavePathRuleProperties> subWaveProps()
     {
-        return waveList;
-    }
-
-    public boolean isRepeatSubWave()
-    {
-        return repeatSubWave;
+        return subWaveProps;
     }
 }
