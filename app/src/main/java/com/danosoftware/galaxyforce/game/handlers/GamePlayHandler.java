@@ -63,9 +63,9 @@ import com.danosoftware.galaxyforce.vibration.Vibration;
 import com.danosoftware.galaxyforce.vibration.VibrationSingleton;
 import com.danosoftware.galaxyforce.view.FPSCounter;
 import com.danosoftware.galaxyforce.waves.SubWave;
-import com.danosoftware.galaxyforce.waves.WaveFactory;
-import com.danosoftware.galaxyforce.waves.WaveManager;
-import com.danosoftware.galaxyforce.waves.WaveManagerImpl;
+import com.danosoftware.galaxyforce.waves.managers.WaveManager;
+import com.danosoftware.galaxyforce.waves.managers.WaveManagerImpl;
+import com.danosoftware.galaxyforce.waves.utilities.WaveFactory;
 
 import java.util.ArrayList;
 import java.util.Iterator;

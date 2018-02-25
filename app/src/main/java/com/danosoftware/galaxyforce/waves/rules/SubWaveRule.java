@@ -2,17 +2,16 @@ package com.danosoftware.galaxyforce.waves.rules;
 
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.enumerations.Direction;
-import com.danosoftware.galaxyforce.waves.AlienType;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 /**
- * Each sub-wave consists of one or more sub-wave properties. Each sub-wave
- * property has sprites, x-start random, y-start random, x-start position,
- * y-start position, number of aliens, delay between each alien, delay offset
- * and restart immediately
+ * Each sub-wave consists of one or more sub-wave properties.
+ *
+ * Each sub-wave property contains enough data to create a sub-wave
+ * of aliens that follow some rules.
  */
 public enum SubWaveRule
 {
@@ -56,25 +55,24 @@ public enum SubWaveRule
      */
     ASTEROID_FIELD(asteroidFieldSubWave());
 
-    /* references list of sub-waves */
+    // list of properties for a sub-wave
     private List<SubWaveRuleProperties> waveList;
 
-    /**
-     * construct sub-wave from array
-     */
     SubWaveRule(SubWaveRuleProperties... waveArray)
     {
         this.waveList = Arrays.asList(waveArray);
     }
 
-    /**
-     * construct sub-wave from list
-     */
     SubWaveRule(List<SubWaveRuleProperties> waveList)
     {
         this.waveList = waveList;
     }
 
+    /**
+     * Properties to create a sub-wave
+     *
+     * @return
+     */
     public List<SubWaveRuleProperties> subWaveProps()
     {
         return waveList;
@@ -88,7 +86,7 @@ public enum SubWaveRule
 
     private static List<SubWaveRuleProperties> asteroidFieldSubWave()
     {
-        List<SubWaveRuleProperties> subWaves = new ArrayList<SubWaveRuleProperties>();
+        List<SubWaveRuleProperties> subWaves = new ArrayList<>();
 
         // distance between asteroids on same row. 6 asteroids
         // per row so 5 gaps between asteroids.

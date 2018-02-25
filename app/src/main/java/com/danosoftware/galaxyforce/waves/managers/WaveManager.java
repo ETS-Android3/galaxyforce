@@ -1,7 +1,10 @@
-package com.danosoftware.galaxyforce.waves;
+package com.danosoftware.galaxyforce.waves.managers;
+
+import com.danosoftware.galaxyforce.waves.SubWave;
+import com.danosoftware.galaxyforce.waves.Wave;
 
 /**
- * Alien waves consist of a collection of sub-waves.
+ * Alien waves consist of a list of sub-waves.
  * 
  * A wave manager is responsible for co-ordinating the creation of waves. It
  * also provides each sub-wave to a client when requested until all sub-waves

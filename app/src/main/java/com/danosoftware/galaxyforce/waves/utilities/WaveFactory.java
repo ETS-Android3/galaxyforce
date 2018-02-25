@@ -1,25 +1,24 @@
-package com.danosoftware.galaxyforce.waves;
+package com.danosoftware.galaxyforce.waves.utilities;
 
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
-import com.danosoftware.galaxyforce.flightpath.paths.PathFactory;
-import com.danosoftware.galaxyforce.flightpath.paths.Point;
 import com.danosoftware.galaxyforce.game.handlers.GameHandler;
-import com.danosoftware.galaxyforce.sprites.game.factories.AlienFactory;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlien;
 import com.danosoftware.galaxyforce.utilities.Reversed;
 import com.danosoftware.galaxyforce.utilities.WaveUtilities;
+import com.danosoftware.galaxyforce.waves.AlienType;
+import com.danosoftware.galaxyforce.waves.SubWave;
 import com.danosoftware.galaxyforce.waves.config.SubWaveConfig;
+import com.danosoftware.galaxyforce.waves.config.SubWaveNoPathConfig;
 import com.danosoftware.galaxyforce.waves.config.SubWavePathConfig;
 import com.danosoftware.galaxyforce.waves.config.SubWaveRepeatMode;
 import com.danosoftware.galaxyforce.waves.rules.SubWavePathRule;
-import com.danosoftware.galaxyforce.waves.rules.SubWavePathRuleProperties;
 import com.danosoftware.galaxyforce.waves.rules.SubWaveRule;
-import com.danosoftware.galaxyforce.waves.rules.SubWaveRuleProperties;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.List;
+
+import static com.danosoftware.galaxyforce.waves.utilities.WaveCreationUtils.createNoPathAlienSubWave;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveCreationUtils.createPathAlienSubWave;
 
 /**
  * Creates a wave of aliens based on the provided wave number. Each wave
@@ -42,7 +41,7 @@ public class WaveFactory
      *            - wave number
      * @return collection of sub-waves
      */
-    public Collection<SubWave> createWave(int wave)
+    public List<SubWave> createWave(int wave)
     {
         if (!WaveUtilities.isValidWave(wave))
         {
@@ -194,7 +193,7 @@ public class WaveFactory
                 subWaves.add(
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                new SubWaveConfig(
+                                new SubWaveNoPathConfig(
                                         SubWaveRule.ASTEROIDS,
                                         AlienType.ASTEROID
                                 )
@@ -203,7 +202,7 @@ public class WaveFactory
                 subWaves.add(
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                new SubWaveConfig(
+                                new SubWaveNoPathConfig(
                                         SubWaveRule.ASTEROIDS_REVERSE,
                                         AlienType.ASTEROID
                                 )
@@ -351,7 +350,7 @@ public class WaveFactory
                 subWaves.add(
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                new SubWaveConfig(
+                                new SubWaveNoPathConfig(
                                         SubWaveRule.ASTEROID_FIELD,
                                         AlienType.ASTEROID_SIMPLE
                                 )
@@ -407,9 +406,17 @@ public class WaveFactory
                 subWaves.add(
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                new SubWaveConfig(
+                                new SubWavePathConfig(
+                                        SubWavePathRule.BELL_CURVE,
+                                        AlienType.STORK
+                                ),
+                                new SubWaveNoPathConfig(
                                         SubWaveRule.ASTEROID_FIELD,
                                         AlienType.ASTEROID_SIMPLE
+                                ),
+                                new SubWavePathConfig(
+                                        SubWavePathRule.LOOPER_ATTACK,
+                                        AlienType.DROID
                                 )
                         )
                 );
@@ -423,6 +430,7 @@ public class WaveFactory
         return subWaves;
     }
 
+
     /**
      * Creates a list of aliens on a path using the supplied wave property.
      *
@@ -432,26 +440,23 @@ public class WaveFactory
      */
     private SubWave createSubWave(
             final SubWaveRepeatMode repeatedMode,
-            final SubWavePathConfig... subWaveConfigs) {
+            final SubWaveConfig... subWaveConfigs) {
 
         List<SpriteAlien> aliens = new ArrayList<>();
 
-        for (SubWavePathConfig config : subWaveConfigs) {
-            final AlienType alienType = config.getAlien();
-            final SubWavePathRule rules = config.getSubWaveRule();
+        for (SubWaveConfig config : subWaveConfigs) {
 
-            for (SubWavePathRuleProperties props : rules.subWaveProps()) {
-
-                // create path points (that alien will follow) for sub-wave
-                List<Point> path = PathFactory.createPath(
-                        props.getPath(),
-                        props.getTranslators()
-                );
-
-                // create and add a sub-wave of aliens according to provided properties
-                aliens.addAll(
-                        createAliens(alienType, path, props)
-                );
+            switch (config.getType()) {
+                case PATH:
+                    SubWavePathConfig pathConfig = (SubWavePathConfig) config;
+                    aliens.addAll(createPathAlienSubWave(pathConfig, model));
+                    break;
+                case NO_PATH:
+                    SubWaveNoPathConfig noPathConfig = (SubWaveNoPathConfig) config;
+                    aliens.addAll(createNoPathAlienSubWave(noPathConfig, model));
+                    break;
+                default:
+                    throw new GalaxyForceException("Unknown sub-wave config type: "+ config.getType().name());
             }
         }
 
@@ -472,104 +477,6 @@ public class WaveFactory
 
         return subWave;
 
-        }
-
-        /**
-         * adds a wanted number of aliens without a path. each alien is spaced by
-         * the delay seconds specified.
-         */
-        private List<SpriteAlien> createAliens(
-                AlienType alienType,
-                List<Point> path,
-                SubWavePathRuleProperties props)
-        {
-
-            List<SpriteAlien> aliensOnPath = new ArrayList<SpriteAlien>();
-
-            for (int i = 0; i < props.getNumberOfAliens(); i++)
-            {
-                aliensOnPath.addAll(AlienFactory.createAlien(alienType, path, (i * props.getDelayBetweenAliens()) + props.getDelayOffet(), model,
-                        props.isRestartImmediately()));
-            }
-
-            return aliensOnPath;
-        }
-
-    /**
-     * adds a wanted number of aliens without a path. each alien is spaced by
-     * the delay seconds specified.
-     */
-    private List<SpriteAlien> createAliens(
-            AlienType alienType,
-            int numberOfAliens,
-            List<Point> alienPath,
-            float delayBetweenAliens,
-            float delayOffset,
-            boolean restartImmediately)
-    {
-
-        List<SpriteAlien> aliensOnPath = new ArrayList<SpriteAlien>();
-
-        for (int i = 0; i < numberOfAliens; i++)
-        {
-            aliensOnPath.addAll(AlienFactory.createAlien(alienType, alienPath, (i * delayBetweenAliens) + delayOffset, model,
-                    restartImmediately));
-        }
-
-        return aliensOnPath;
-    }
-
-    /**
-     * Creates a list of aliens using the supplied wave property.
-     * 
-     * @param waveProperty
-     * @return list of alien sprites
-     */
-    private SubWave createSubWave(final SubWaveRepeatMode repeatedMode,
-                                  final SubWaveConfig... subWaveConfigs)
-
-            //SubWaveRule waveProperty)
-    {
-        List<SpriteAlien> aliens = new ArrayList<SpriteAlien>();
-
-
-        for (SubWaveConfig config : subWaveConfigs) {
-
-            final AlienType alienType = config.getAlien();
-            final SubWaveRule rules = config.getSubWaveRule();
-
-            for (SubWaveRuleProperties props : rules.subWaveProps()) {
-                for (int i = 0; i < props.getNumberOfAliens(); i++) {
-                    aliens.addAll(AlienFactory.createAlien(
-                            alienType,
-                            props.isxRandom(),
-                            props.isyRandom(),
-                            props.getxStart(),
-                            props.getyStart(),
-                            (i * props.getDelayBetweenAliens()) + props.getDelayOffet(),
-                            model,
-                            props.isRestartImmediately(),
-                            props.getDirection()));
-                }
-            }
-        }
-
-        /*
-         * Reverse order of aliens.
-         * 
-         * Collision detection routines are required to iterate through aliens
-         * in reverse so aliens on top are hit first.
-         * 
-         * Any subsequent explosions on these aliens must also display on top so
-         * reversed order is important for how aliens sprites are displayed.
-         */
-        List<SpriteAlien> reversedAlienList = reverseAliens(aliens);
-
-        // create subwave from list of aliens and set whether wave should repeat
-        // until all destroyed
-        SubWave subWave = new SubWave(reversedAlienList, repeatedMode);
-
-        return subWave;
     }
 
     /**

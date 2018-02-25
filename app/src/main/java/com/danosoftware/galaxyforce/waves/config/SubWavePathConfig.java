@@ -4,9 +4,9 @@ import com.danosoftware.galaxyforce.waves.AlienType;
 import com.danosoftware.galaxyforce.waves.rules.SubWavePathRule;
 
 /**
- * Describes a subwave consisting of a set of path rules and an alien type
+ * Describes a sub-wave consisting of a set of path rules and an alien type
  */
-public class SubWavePathConfig {
+public class SubWavePathConfig extends SubWaveConfig {
 
     private final SubWavePathRule subWaveRule;
     private final AlienType alien;
@@ -14,6 +14,8 @@ public class SubWavePathConfig {
     public SubWavePathConfig(
             final SubWavePathRule subWaveRule,
             final AlienType alien) {
+
+        super(Type.PATH);
         this.subWaveRule = subWaveRule;
         this.alien = alien;
     }

@@ -1,28 +1,24 @@
 package com.danosoftware.galaxyforce.waves.config;
 
-import com.danosoftware.galaxyforce.waves.AlienType;
-import com.danosoftware.galaxyforce.waves.rules.SubWaveRule;
-
 /**
- * Describes a subwave consisting of a set of rules and an alien type
+ * Base class for different types of sub-wave configs
  */
-public class SubWaveConfig {
+public abstract class SubWaveConfig {
 
-    private final SubWaveRule subWaveRule;
-    private final AlienType alien;
+    private final Type type;
 
-    public SubWaveConfig(
-            final SubWaveRule subWaveRule,
-            final AlienType alien) {
-        this.subWaveRule = subWaveRule;
-        this.alien = alien;
+    protected SubWaveConfig(Type type) {
+        this.type = type;
     }
 
-    public SubWaveRule getSubWaveRule() {
-        return subWaveRule;
+    public Type getType() {
+        return type;
     }
 
-    public AlienType getAlien() {
-        return alien;
+    /**
+     * Type of sub-wave configs
+     */
+    public static enum Type {
+        PATH, NO_PATH;
     }
 }

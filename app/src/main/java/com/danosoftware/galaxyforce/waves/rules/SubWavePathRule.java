@@ -6,7 +6,6 @@ import com.danosoftware.galaxyforce.flightpath.translators.FlipYPointTranslator;
 import com.danosoftware.galaxyforce.flightpath.translators.OffsetXPointTranslator;
 import com.danosoftware.galaxyforce.flightpath.translators.OffsetYPointTranslator;
 import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
-import com.danosoftware.galaxyforce.waves.AlienType;
 
 import java.util.Arrays;
 import java.util.List;
@@ -15,10 +14,10 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
 
 /**
- * Each sub-wave consists of one or more sub-wave properties. Each sub-wave
- * property has sprites, paths, x-invert, y-invert, x-Offset, y-Offset,
- * number of aliens, delay between each alien, delay offset and restart
- * immediately
+ * Each sub-wave consists of one or more sub-wave properties.
+ *
+ * Each sub-wave property contains enough data to create a sub-wave
+ * of aliens that follow a path.
  */
 public enum SubWavePathRule
 {
@@ -390,17 +389,19 @@ public enum SubWavePathRule
             )
     );
 
-    /* references list of sub-waves */
+    // list of properties for a sub-wave
     private final List<SubWavePathRuleProperties> subWaveProps;
 
-    /**
-     * construct wave
-     */
     SubWavePathRule(SubWavePathRuleProperties... subWaveProps)
     {
         this.subWaveProps = Arrays.asList(subWaveProps);
     }
 
+    /**
+     * Properties to create a sub-wave
+     *
+     * @return
+     */
     public List<SubWavePathRuleProperties> subWaveProps()
     {
         return subWaveProps;

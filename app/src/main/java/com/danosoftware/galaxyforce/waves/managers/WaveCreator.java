@@ -1,8 +1,11 @@
-package com.danosoftware.galaxyforce.waves;
+package com.danosoftware.galaxyforce.waves.managers;
 
 import com.danosoftware.galaxyforce.services.SavedGame;
+import com.danosoftware.galaxyforce.waves.SubWave;
+import com.danosoftware.galaxyforce.waves.Wave;
+import com.danosoftware.galaxyforce.waves.utilities.WaveFactory;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
  * Class is run in a new tread and creates a new wave allowing the main thread
@@ -40,8 +43,8 @@ public class WaveCreator implements Runnable
             savedGame.persistSavedGame();
         }
 
-        // create wave - i.e. collection of sub-waves
-        Collection<SubWave> subWaves = waveFactory.createWave(waveNumber);
+        // create wave - i.e. list of sub-waves
+        List<SubWave> subWaves = waveFactory.createWave(waveNumber);
         Wave wave = new Wave(subWaves);
 
         // callback to wave manager with completed wave
