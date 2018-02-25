@@ -1,7 +1,11 @@
-package com.danosoftware.galaxyforce.waves;
+package com.danosoftware.galaxyforce.waves.managers;
 
-import java.util.Collection;
+import com.danosoftware.galaxyforce.waves.SubWave;
+import com.danosoftware.galaxyforce.waves.Wave;
+import com.danosoftware.galaxyforce.waves.utilities.WaveFactory;
+
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -16,8 +20,8 @@ public class WaveManagerImpl implements WaveManager
     // executor service for threads to create waves
     private final ExecutorService pool;
 
-    // collection of sub-waves in current wave
-    private Collection<SubWave> subWaves;
+    // list of sub-waves in current wave
+    private List<SubWave> subWaves;
 
     // iterator for sub-waves
     private Iterator<SubWave> iterator;

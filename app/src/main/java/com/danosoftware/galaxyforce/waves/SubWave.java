@@ -1,6 +1,7 @@
 package com.danosoftware.galaxyforce.waves;
 
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlien;
+import com.danosoftware.galaxyforce.waves.config.SubWaveRepeatMode;
 
 import java.util.List;
 
@@ -16,12 +17,14 @@ public class SubWave
     private final List<SpriteAlien> aliens;
 
     // should the sub-wave be repeated until all aliens are destroyed
-    private final boolean waveRepeated;
+    private final SubWaveRepeatMode waveRepeatedMode;
 
-    public SubWave(List<SpriteAlien> aliens, boolean repeatWave)
+    public SubWave(
+            final List<SpriteAlien> aliens,
+            final SubWaveRepeatMode waveRepeatedMode)
     {
         this.aliens = aliens;
-        this.waveRepeated = repeatWave;
+        this.waveRepeatedMode = waveRepeatedMode;
     }
 
     public List<SpriteAlien> getAliens()
@@ -31,6 +34,6 @@ public class SubWave
 
     public boolean isWaveRepeated()
     {
-        return waveRepeated;
+        return (waveRepeatedMode == SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED);
     }
 }

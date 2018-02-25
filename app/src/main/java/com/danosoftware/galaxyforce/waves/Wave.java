@@ -1,22 +1,25 @@
 package com.danosoftware.galaxyforce.waves;
 
-import java.util.Collection;
+import java.util.List;
 
 /**
- * Alien waves consist of a collection of sub-waves.
+ * Alien waves consist of a list of sub-waves.
+ *
+ * Each sub-wave completes before the next one starts.
+ * Once all sub-waves are completed, the wave is completed.
  */
 public class Wave
 {
 
-    // collection of subwaves in this wave
-    private final Collection<SubWave> subWaves;
+    // list of sub-waves in this wave
+    private final List<SubWave> subWaves;
 
-    public Wave(Collection<SubWave> subWaves)
+    public Wave(List<SubWave> subWaves)
     {
         this.subWaves = subWaves;
     }
 
-    public Collection<SubWave> getSubWaves()
+    public List<SubWave> getSubWaves()
     {
         return subWaves;
     }

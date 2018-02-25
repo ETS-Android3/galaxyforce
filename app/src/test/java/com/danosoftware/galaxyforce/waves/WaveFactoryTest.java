@@ -8,6 +8,7 @@ import com.danosoftware.galaxyforce.game.handlers.GameHandler;
 import com.danosoftware.galaxyforce.sound.SoundEffectBank;
 import com.danosoftware.galaxyforce.sound.SoundEffectBankSingleton;
 import com.danosoftware.galaxyforce.vibration.VibrationSingleton;
+import com.danosoftware.galaxyforce.waves.utilities.WaveFactory;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.Before;
@@ -23,6 +24,7 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 
 import static com.danosoftware.galaxyforce.constants.GameConstants.MAX_WAVES;
 import static com.danosoftware.galaxyforce.helpers.AssetHelpers.pathAsset;
@@ -84,8 +86,8 @@ public class WaveFactoryTest {
         for (int wave = 1; wave <= MAX_WAVES; wave++) {
 
             GameHandler handler = mock(GameHandler.class);
-            WaveFactory waveFactory = new WaveFactory(100, 100, handler);
-            Collection<SubWave> subWave = waveFactory.createWave(wave);
+            WaveFactory waveFactory = new WaveFactory(handler);
+            List<SubWave> subWave = waveFactory.createWave(wave);
 
             assertThat(subWave.size() > 0, is(true));
 
