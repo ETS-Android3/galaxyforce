@@ -12,6 +12,7 @@ import java.util.List;
 
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
+import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
 
 /**
  * Each sub-wave consists of one or more sub-wave properties.
@@ -21,26 +22,6 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
  */
 public enum SubWavePathRule
 {
-
-    WAVE_01(
-            new SubWavePathRuleProperties(
-                    Path.VALLEY_DROP,
-                    10,
-                    0.5f,
-                    0,
-                    false
-            ),
-            new SubWavePathRuleProperties(
-                    Path.VALLEY_DROP,
-                    10,
-                    0.5f,
-                    0,
-                    false,
-                    new PointTranslatorChain()
-                            .add(new FlipXPointTranslator(GAME_WIDTH))
-                            .add(new OffsetYPointTranslator(100))
-            )
-    ),
 
     /**
      * space invader style attack
@@ -277,7 +258,7 @@ public enum SubWavePathRule
      */
     DRAGON_ATTACK(
             new SubWavePathRuleProperties(
-                    Path.TRIANGLULAR_PATH,
+                    Path.TRIANGULAR,
                     1,
                     0f,
                     0f,
@@ -302,44 +283,6 @@ public enum SubWavePathRule
                     new PointTranslatorChain()
                             .add(new FlipXPointTranslator(GAME_WIDTH))
                             .add(new OffsetYPointTranslator(-200))
-            )
-    ),
-
-    WAVE_02(
-            new SubWavePathRuleProperties(
-                    Path.BEZIER_DEMO,
-                    10,
-                    0.5f,
-                    0,
-                    false
-            ),
-            new SubWavePathRuleProperties(
-                    Path.BEZIER_DEMO,
-                    10,
-                    0.5f,
-                    0,
-                    false,
-                    new PointTranslatorChain()
-                            .add(new FlipXPointTranslator(GAME_WIDTH))
-            )
-    ),
-
-    WAVE_03(
-            new SubWavePathRuleProperties(
-                    Path.CIRCULAR_DEMO,
-                    10,
-                    0.5f,
-                    0,
-                    false
-            ),
-            new SubWavePathRuleProperties(
-                    Path.CIRCULAR_DEMO,
-                    10,
-                    0.5f,
-                    0,
-                    false,
-                    new PointTranslatorChain()
-                            .add(new FlipXPointTranslator(GAME_WIDTH))
             )
     ),
 
@@ -368,7 +311,7 @@ public enum SubWavePathRule
 
     WAVE_MOTHERSHIP(
             new SubWavePathRuleProperties(
-                    Path.WAVEY_HORIZONTAL,
+                    Path.SINGLE_ARC,
                     1,
                     0,
                     0,
@@ -377,11 +320,48 @@ public enum SubWavePathRule
     ),
 
     /**
+     * One spiral path from top to bottom
+     */
+    SPIRAL(
+            new SubWavePathRuleProperties(
+                    Path.SPIRAL,
+                    10,
+                    1f,
+                    0,
+                    false
+            )
+    ),
+
+    /**
+     * Two side-by-side spiral path from top to bottom
+     */
+    DOUBLE_SPIRAL(
+            new SubWavePathRuleProperties(
+                    Path.SPIRAL,
+                    10,
+                    1f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetXPointTranslator(SCREEN_MID_X / 2))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.SPIRAL,
+                    10,
+                    1f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetXPointTranslator( - SCREEN_MID_X / 2))
+            )
+    ),
+
+    /**
      * Triangular attack path
      */
     WAVE_TRIANGULAR(
             new SubWavePathRuleProperties(
-                    Path.TRIANGLULAR_PATH,
+                    Path.TRIANGULAR,
                     10,
                     1f,
                     0f,

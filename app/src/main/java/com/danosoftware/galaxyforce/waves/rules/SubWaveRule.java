@@ -6,6 +6,7 @@ import com.danosoftware.galaxyforce.enumerations.Direction;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Each sub-wave consists of one or more sub-wave properties.
@@ -53,7 +54,18 @@ public enum SubWaveRule
     /**
      * Asteroids that form a path through an asteroid field.
      */
-    ASTEROID_FIELD(asteroidFieldSubWave());
+    ASTEROID_FIELD(asteroidFieldSubWave(10, 2)),
+
+    /**
+     * Asteroids maze that forms a random path through an asteroid field.
+     */
+    ASTEROID_MAZE(asteroidMazeSubWave(15, 2)),
+
+    /**
+     * Asteroids maze that forms a random path through an asteroid field with large gaps between rows.
+     */
+    ASTEROID_MAZE_EASY(asteroidMazeSubWave(15, 3));
+
 
     // list of properties for a sub-wave
     private List<SubWaveRuleProperties> waveList;
@@ -84,33 +96,69 @@ public enum SubWaveRule
      * ******************************************
      */
 
-    private static List<SubWaveRuleProperties> asteroidFieldSubWave()
+    // number of asteroids on a row
+    private static final int ASTEROIDS_PER_ROW = 6;
+
+    // distance between asteroids on same row
+    private static final int DISTANCE_BETWEEN_ASTEROIDS = (GameConstants.SCREEN_RIGHT_EDGE - GameConstants.SCREEN_LEFT_EDGE) / (ASTEROIDS_PER_ROW - 1);
+
+    /**
+     * Creates an asteroid field
+     */
+    private static List<SubWaveRuleProperties> asteroidFieldSubWave(int totalRows, int delayBetweenRows)
     {
         List<SubWaveRuleProperties> subWaves = new ArrayList<>();
 
-        // distance between asteroids on same row. 6 asteroids
-        // per row so 5 gaps between asteroids.
-        int distBetweenAsteroid = (GameConstants.SCREEN_RIGHT_EDGE - GameConstants.SCREEN_LEFT_EDGE) / 5;
-
-        for (int row = 0; row < 10; row++)
-        {
-            for (int col = 0; col < 6; col++)
-            {
-                subWaves.add(
-                        new SubWaveRuleProperties(
-                                false,
-                                false,
-                                GameConstants.SCREEN_LEFT_EDGE + (col * distBetweenAsteroid),
-                                GameConstants.SCREEN_TOP,
-                                1,
-                                0,
-                                row * 2,
-                                false,
-                                Direction.DOWN
-                        ));
+        for (int row = 0; row < totalRows; row++) {
+            for (int col = 0; col < ASTEROIDS_PER_ROW; col++) {
+                subWaves.add(createAsteroid(row, col, delayBetweenRows));
             }
         }
 
         return subWaves;
+    }
+
+    /**
+     * Creates an asteroid maze where a gap exists in each row
+     */
+    private static List<SubWaveRuleProperties> asteroidMazeSubWave(int totalRows, int delayBetweenRows)
+    {
+        List<SubWaveRuleProperties> subWaves = new ArrayList<>();
+
+        // random gap generator
+        final Random rand = new Random();
+
+
+        for (int row = 0; row < totalRows; row++) {
+
+            int gap = rand.nextInt(ASTEROIDS_PER_ROW);
+
+            for (int col = 0; col < 6; col++) {
+
+                // add asteroid if this is not a gap
+                if (col != gap) {
+                    subWaves.add(createAsteroid(row, col, delayBetweenRows));
+                }
+            }
+        }
+
+        return subWaves;
+    }
+
+    /**
+     * Create an asteroid at the wanted position
+     */
+    private static SubWaveRuleProperties createAsteroid(int row, int col, int delayBetweenRows) {
+        return new SubWaveRuleProperties(
+                false,
+                false,
+                GameConstants.SCREEN_LEFT_EDGE + (col * DISTANCE_BETWEEN_ASTEROIDS),
+                GameConstants.SCREEN_TOP,
+                1,
+                0,
+                row * delayBetweenRows,
+                false,
+                Direction.DOWN
+        );
     }
 }
