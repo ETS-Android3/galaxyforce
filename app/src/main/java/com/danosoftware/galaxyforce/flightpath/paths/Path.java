@@ -11,103 +11,80 @@ package com.danosoftware.galaxyforce.flightpath.paths;
  */
 public enum Path {
 
-    TEST("testPathData.json"),
-
     /*
     * Triangular path where aliens cross-over where the top of the triangle.
     */
-    TRIANGLULAR_PATH("TRIANGLULAR_PATH.json"),
+    TRIANGULAR("triangular.json"),
 
     /*
      * Path where aliens move from left to right in an arc. Aliens originally
      * rise as they move to right. At top of arc at mid-way point and then move
      * downwards in arc as they continue to move right.
      */
-    SINGLE_ARC("SINGLE_ARC.json"),
+    SINGLE_ARC("singleArc.json"),
 
     /**
      * space invader style attack - gradually moving across screen and then down
      */
-    SPACE_INVADER("SPACE_INVADER.json"),
+    SPACE_INVADER("spaceInvader.json"),
 
     /**
      * Figure of eight attack. Starting at top right looping round in figure
      * figure of eight and finishing at top right.
      */
-    FIGURE_OF_EIGHT("FIGURE_OF_EIGHT.json"),
+    FIGURE_OF_EIGHT("figureOfEight.json"),
 
     /**
      * Bezier curve from bottom left, crosses to right hand-side then leaves at
      * top right.
      */
-    BEZIER_STEP_UP("BEZIER_STEP_UP.json"),
+    BEZIER_STEP_UP("bezierStepUp.json"),
 
     /**
      * Alien starts at top left edge, moves straight down, pauses and then exit
      * on opposite right-side of screen.
      */
-    EXIT_STAGE_RIGHT("EXIT_STAGE_RIGHT.json"),
+    EXIT_STAGE_RIGHT("exitStageRight.json"),
 
     /**
      * straight line down screen from top to bottom. designed to be adjusted in
      * x-axis so any straight line path from top to bottom at any x-position can
      * be used.
      */
-    STRAIGHT_DOWN("STRAIGHT_DOWN.json"),
+    STRAIGHT_DOWN("straightDown.json"),
 
     /**
      * straight line down screen from top to near bottom then bounce up again.
      * designed to be adjusted in x-axis so any straight line path from top to
      * bottom at any x-position can be used.
      */
-    BOUNCE_DOWN_AND_UP("BOUNCE_DOWN_AND_UP.json"),
-
-    WAVEY_HORIZONTAL("WAVEY_HORIZONTAL.json"),
-
-    BEZIER_PATH_01("BEZIER_PATH_01.json"),
+    BOUNCE_DOWN_AND_UP("bounceDownAndUp.json"),
 
     /**
      * Drops from top-left down to valley and up again to top right.
      */
-    VALLEY_DROP("VALLEY_DROP.json"),
+    VALLEY_DROP("valleyDrop.json"),
 
     /*
      * Bell Curve path. Start bottom left, rises to peak in middle then drops to
      * bottom right.
      */
-    BELL_CURVE("BELL_CURVE.json"),
+    BELL_CURVE("bellCurve.json"),
+
     /*
      * Starts bottom left, twists around loop and exits top right
      */
-    LOOPER("LOOPER.json"),
+    LOOPER("looper.json"),
 
     /*
      * Tear drop shaped path starting from and ending at top middle.
      */
-    TEAR_DROP("TEAR_DROP.json"),
+    TEAR_DROP("tearDrop.json"),
 
     /*
      * Spirals down the screen from top to bottom
      */
-    SPIRAL("SPIRAL.json"),
-
-    BEZIER_DEMO("BEZIER_DEMO.json"),
-
-    STARIGHT_LINE_01("STARIGHT_LINE_01.json"),
-
-    STARIGHT_LINE_DEMO("STARIGHT_LINE_DEMO.json"),
-
-    ORIGINAL_ALIEN_PATH_01("ORIGINAL_ALIEN_PATH_01.json"),
-
-    ORIGINAL_ALIEN_PATH_02("ORIGINAL_ALIEN_PATH_02.json"),
-
-    ORIGINAL_ALIEN_PATH_03("ORIGINAL_ALIEN_PATH_03.json"),
-
-    ORIGINAL_ALIEN_PATH_04("ORIGINAL_ALIEN_PATH_04.json"),
-
-    ORIGINAL_ALIEN_PATH_05("ORIGINAL_ALIEN_PATH_05.json"),
-
-    CIRCULAR_DEMO("CIRCULAR_DEMO.json");
+    SPIRAL("spiral.json");
 
 
     

@@ -68,15 +68,6 @@ public class WaveFactory
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
                                 new SubWavePathConfig(
-                                        SubWavePathRule.WAVE_03,
-                                        AlienType.OCTOPUS
-                                )
-                        )
-                );
-                subWaves.add(
-                        createSubWave(
-                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                new SubWavePathConfig(
                                         SubWavePathRule.VALLEY_DIVE,
                                         AlienType.OCTOPUS
                                 ),
@@ -94,30 +85,12 @@ public class WaveFactory
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
                                 new SubWavePathConfig(
-                                        SubWavePathRule.WAVE_03,
-                                        AlienType.OCTOPUS
-                                )
-                        )
-                );
-                subWaves.add(
-                        createSubWave(
-                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                new SubWavePathConfig(
                                         SubWavePathRule.VALLEY_DIVE,
                                         AlienType.OCTOPUS
                                 ),
                                 new SubWavePathConfig(
                                         SubWavePathRule.VALLEY_DIVE_INTERLEAVED,
                                         AlienType.MINION
-                                )
-                        )
-                );
-                subWaves.add(
-                        createSubWave(
-                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                new SubWavePathConfig(
-                                        SubWavePathRule.WAVE_02,
-                                        AlienType.OCTOPUS
                                 )
                         )
                 );
@@ -146,7 +119,7 @@ public class WaveFactory
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
                                 new SubWavePathConfig(
-                                        SubWavePathRule.WAVE_02,
+                                        SubWavePathRule.SPIRAL,
                                         AlienType.OCTOPUS
                                 )
                         )
