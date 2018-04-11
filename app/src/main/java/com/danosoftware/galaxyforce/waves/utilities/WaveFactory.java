@@ -359,7 +359,49 @@ public class WaveFactory
                 break;
 
             case 18:
+
+                subWaves.add(
+                        createSubWave(
+                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
+                                new SubWavePathConfig(
+                                        SubWavePathRule.SPIRAL,
+                                        AlienType.DROID
+                                )
+                        )
+                );
+                subWaves.add(
+                        createSubWave(
+                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
+                                new SubWavePathConfig(
+                                        SubWavePathRule.DOUBLE_SPIRAL,
+                                        AlienType.DROID
+                                )
+                        )
+                );
+                break;
+
             case 19:
+
+                subWaves.add(
+                        createSubWave(
+                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
+                                new SubWaveNoPathConfig(
+                                        SubWaveRule.ASTEROID_MAZE_EASY,
+                                        AlienType.ASTEROID_SIMPLE
+                                )
+                        )
+                );
+                subWaves.add(
+                        createSubWave(
+                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
+                                new SubWaveNoPathConfig(
+                                        SubWaveRule.ASTEROID_MAZE,
+                                        AlienType.ASTEROID_SIMPLE
+                                )
+                        )
+                );
+                break;
+
             case 20:
             case 21:
             case 22:

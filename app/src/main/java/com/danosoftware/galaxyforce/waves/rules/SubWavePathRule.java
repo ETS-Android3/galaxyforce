@@ -12,6 +12,7 @@ import java.util.List;
 
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
+import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
 
 /**
  * Each sub-wave consists of one or more sub-wave properties.
@@ -373,6 +374,43 @@ public enum SubWavePathRule
                     0,
                     0,
                     true
+            )
+    ),
+
+    /**
+     * One spiral path from top to bottom
+     */
+    SPIRAL(
+            new SubWavePathRuleProperties(
+                    Path.SPIRAL,
+                    10,
+                    1f,
+                    0,
+                    false
+            )
+    ),
+
+    /**
+     * Two side-by-side spiral path from top to bottom
+     */
+    DOUBLE_SPIRAL(
+            new SubWavePathRuleProperties(
+                    Path.SPIRAL,
+                    10,
+                    1f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetXPointTranslator(SCREEN_MID_X / 2))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.SPIRAL,
+                    10,
+                    1f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetXPointTranslator( - SCREEN_MID_X / 2))
             )
     ),
 

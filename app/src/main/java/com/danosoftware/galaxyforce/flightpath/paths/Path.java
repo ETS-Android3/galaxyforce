@@ -86,6 +86,11 @@ public enum Path {
      */
     TEAR_DROP("TEAR_DROP.json"),
 
+    /*
+     * Spirals down the screen from top to bottom
+     */
+    SPIRAL("SPIRAL.json"),
+
     BEZIER_DEMO("BEZIER_DEMO.json"),
 
     STARIGHT_LINE_01("STARIGHT_LINE_01.json"),
