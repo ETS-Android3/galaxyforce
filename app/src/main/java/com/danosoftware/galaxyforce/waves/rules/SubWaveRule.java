@@ -64,7 +64,24 @@ public enum SubWaveRule
     /**
      * Asteroids maze that forms a random path through an asteroid field with large gaps between rows.
      */
-    ASTEROID_MAZE_EASY(asteroidMazeSubWave(15, 3));
+    ASTEROID_MAZE_EASY(asteroidMazeSubWave(15, 3)),
+
+    /**
+     * Asteroids that fall from top to bottom at random x positions and random
+     * speeds
+     */
+    HUNTER_PAIR(
+            new SubWaveRuleProperties(
+                    true,
+                    false,
+                    0,
+                    GameConstants.SCREEN_TOP,
+                    2,
+                    0.5f,
+                    0f,
+                    false,
+                    Direction.DOWN
+            )),;
 
 
     // list of properties for a sub-wave

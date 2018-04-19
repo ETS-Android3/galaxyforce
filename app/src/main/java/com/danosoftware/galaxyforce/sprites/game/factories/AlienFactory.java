@@ -17,6 +17,7 @@ import com.danosoftware.galaxyforce.sprites.game.implementations.AlienDragonBody
 import com.danosoftware.galaxyforce.sprites.game.implementations.AlienDragonHead;
 import com.danosoftware.galaxyforce.sprites.game.implementations.AlienDroid;
 import com.danosoftware.galaxyforce.sprites.game.implementations.AlienGobby;
+import com.danosoftware.galaxyforce.sprites.game.implementations.AlienHunter;
 import com.danosoftware.galaxyforce.sprites.game.implementations.AlienInsectPath;
 import com.danosoftware.galaxyforce.sprites.game.implementations.AlienMinion;
 import com.danosoftware.galaxyforce.sprites.game.implementations.AlienMothership;
@@ -198,6 +199,10 @@ public class AlienFactory
 
         case ASTEROID_SIMPLE:
             aliens.add(new AlienAsteroidSimple(xStartPos, yStartPos, delay, restartImmediately, direction, model));
+            break;
+
+        case HUNTER:
+            aliens.add(new AlienHunter(xStartPos, yStartPos, delay, model));
             break;
 
         default:

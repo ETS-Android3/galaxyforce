@@ -39,5 +39,8 @@ public enum AlienType
     SPAWNED_INSECT,
 
     // gobby alien
-    GOBBY;
+    GOBBY,
+
+    // hunter
+    HUNTER;
 }
