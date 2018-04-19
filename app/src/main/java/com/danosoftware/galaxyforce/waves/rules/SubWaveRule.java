@@ -80,7 +80,24 @@ public enum SubWaveRule
                     0f,
                     false,
                     Direction.DOWN
-            )),;
+            )),
+
+    /**
+     * Dragon that chases the base.
+     */
+    DRAGON_CHASE(
+            new SubWaveRuleProperties(
+                    true,
+                    false,
+                    0,
+                    GameConstants.SCREEN_TOP,
+                    1,
+                    0f,
+                    0f,
+                    false,
+                    Direction.DOWN
+            )
+    );
 
 
     // list of properties for a sub-wave

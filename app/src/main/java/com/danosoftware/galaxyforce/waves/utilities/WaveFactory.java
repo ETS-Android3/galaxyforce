@@ -25,33 +25,27 @@ import static com.danosoftware.galaxyforce.waves.utilities.WaveCreationUtils.cre
  * property can contain multiple sub-waves, each consisting of a number of
  * aliens following a path
  */
-public class WaveFactory
-{
+public class WaveFactory {
     private final GameHandler model;
 
-    public WaveFactory(GameHandler model)
-    {
+    public WaveFactory(GameHandler model) {
         this.model = model;
     }
 
     /**
      * Return a collection of sub-waves based on the current wave number
-     * 
-     * @param wave
-     *            - wave number
+     *
+     * @param wave - wave number
      * @return collection of sub-waves
      */
-    public List<SubWave> createWave(int wave)
-    {
-        if (!WaveUtilities.isValidWave(wave))
-        {
+    public List<SubWave> createWave(int wave) {
+        if (!WaveUtilities.isValidWave(wave)) {
             throw new GalaxyForceException("Wave not recognised '" + wave + "'.");
         }
 
         List<SubWave> subWaves = new ArrayList<>();
 
-        switch (wave)
-        {
+        switch (wave) {
 
             case 1:
 
@@ -223,8 +217,8 @@ public class WaveFactory
                 subWaves.add(
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                new SubWavePathConfig(
-                                        SubWavePathRule.DRAGON_ATTACK,
+                                new SubWaveNoPathConfig(
+                                        SubWaveRule.DRAGON_CHASE,
                                         AlienType.DRAGON
                                 )
                         )
@@ -483,7 +477,7 @@ public class WaveFactory
                     aliens.addAll(createNoPathAlienSubWave(noPathConfig, model));
                     break;
                 default:
-                    throw new GalaxyForceException("Unknown sub-wave config type: "+ config.getType().name());
+                    throw new GalaxyForceException("Unknown sub-wave config type: " + config.getType().name());
             }
         }
 
@@ -508,19 +502,17 @@ public class WaveFactory
 
     /**
      * Reverse order of aliens.
-     * 
+     * <p>
      * Collision detection routines are required to iterate through aliens in
      * reverse so aliens on top are hit first.
-     * 
+     * <p>
      * Any subsequent explosions on these aliens must also display on top so
      * reversed order is important for how aliens sprites are displayed.
      */
-    private List<SpriteAlien> reverseAliens(List<SpriteAlien> aliens)
-    {
+    private List<SpriteAlien> reverseAliens(List<SpriteAlien> aliens) {
         List<SpriteAlien> reversedAlienList = new ArrayList<SpriteAlien>();
 
-        for (SpriteAlien eachAlien : Reversed.reversed(aliens))
-        {
+        for (SpriteAlien eachAlien : Reversed.reversed(aliens)) {
             reversedAlienList.add(eachAlien);
         }
 

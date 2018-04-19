@@ -99,24 +99,6 @@ public class AlienFactory
             aliens.add(new AlienMothership(model, alienPath, delay, restartImmediately));
             break;
 
-        case DRAGON:
-
-            /*
-             * dragon consists of multiple body parts and a head. The head
-             * contains a reference to the body parts as all body parts will be
-             * destroyed when the head is destroyed.
-             */
-            List<SpriteAlien> dragonBodies = new ArrayList<SpriteAlien>();
-            for (int i = 0; i < 20; i++)
-            {
-                SpriteAlien dragonBody = new AlienDragonBody(model, alienPath, delay + (i * 0.08f) + 0.08f, restartImmediately);
-                dragonBodies.add(dragonBody);
-            }
-
-            aliens.add(new AlienDragonHead(model, alienPath, delay, restartImmediately, dragonBodies));
-            aliens.addAll(dragonBodies);
-            break;
-
         case STORK:
             aliens.add(new AlienStork(model, alienPath, delay, restartImmediately));
             break;
@@ -204,6 +186,24 @@ public class AlienFactory
         case HUNTER:
             aliens.add(new AlienHunter(xStartPos, yStartPos, delay, model));
             break;
+
+        case DRAGON:
+
+            /*
+             * dragon consists of multiple body parts and a head. The head
+             * contains a reference to the body parts as all body parts will be
+             * destroyed when the head is destroyed.
+             */
+                List<AlienDragonBody> dragonBodies = new ArrayList<AlienDragonBody>();
+                for (int i = 0; i < 20; i++)
+                {
+                    AlienDragonBody dragonBody = new AlienDragonBody(xStartPos, yStartPos, model);
+                    dragonBodies.add(dragonBody);
+                }
+
+                aliens.add(new AlienDragonHead(xStartPos, yStartPos, delay, model, dragonBodies));
+                aliens.addAll(dragonBodies);
+                break;
 
         default:
             String errorMessage = "Error: Unrecognised AlienType: '" + alienType + "'";
