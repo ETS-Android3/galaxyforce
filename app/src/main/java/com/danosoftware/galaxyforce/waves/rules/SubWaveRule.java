@@ -67,8 +67,7 @@ public enum SubWaveRule
     ASTEROID_MAZE_EASY(asteroidMazeSubWave(15, 3)),
 
     /**
-     * Asteroids that fall from top to bottom at random x positions and random
-     * speeds
+     * Hunters that start from top at random x positions and chase the base.
      */
     HUNTER_PAIR(
             new SubWaveRuleProperties(

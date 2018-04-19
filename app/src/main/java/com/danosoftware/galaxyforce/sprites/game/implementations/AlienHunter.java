@@ -157,20 +157,23 @@ public class AlienHunter extends SpriteAlien {
             float newAngle = (float) Math.atan2(base.getY() - getY(), base.getX() - getX());
 
             // if alien is off screen, return it back immediately (can get lost!).
-            // don't allow sudden changes of direction. limit to MAX radians.
-            // otherwise return calculated angle.
             if (getY() > GameConstants.GAME_HEIGHT + getHeight()
                     || getY() < 0 - getHeight()
                     || getX() > GameConstants.GAME_WIDTH + getWidth()
                     || getX() < 0 - getWidth()) {
                 return newAngle;
-            } else if ((newAngle - angle) > MAX_DIRECTION_CHANGE_ANGLE) {
-                return angle + MAX_DIRECTION_CHANGE_ANGLE;
-            } else if ((newAngle - angle) < MAX_DIRECTION_CHANGE_ANGLE) {
-                return angle - MAX_DIRECTION_CHANGE_ANGLE;
-            } else {
-                return newAngle;
             }
+
+            // don't allow sudden changes of direction. limit to MAX radians.
+            if ((newAngle - angle) > MAX_DIRECTION_CHANGE_ANGLE) {
+                return angle + MAX_DIRECTION_CHANGE_ANGLE;
+            }
+            if ((newAngle - angle) < MAX_DIRECTION_CHANGE_ANGLE) {
+                return angle - MAX_DIRECTION_CHANGE_ANGLE;
+            }
+
+            // otherwise return calculated angle.
+            return newAngle;
         }
 
         return angle;
