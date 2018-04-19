@@ -376,6 +376,18 @@ public class WaveFactory
                 break;
 
             case 20:
+
+                subWaves.add(
+                        createSubWave(
+                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
+                                new SubWaveNoPathConfig(
+                                        SubWaveRule.HUNTER_PAIR,
+                                        AlienType.HUNTER
+                                )
+                        )
+                );
+                break;
+
             case 21:
             case 22:
             case 23:
