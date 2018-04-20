@@ -1,21 +1,15 @@
 package com.danosoftware.galaxyforce.sprites.game.implementations;
 
-import android.util.Log;
-
 import com.danosoftware.galaxyforce.enumerations.AlienMissileType;
-import com.danosoftware.galaxyforce.flightpath.paths.Point;
 import com.danosoftware.galaxyforce.game.handlers.GameHandler;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.ExplodeBehaviourSimple;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.FireRandomDelay;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.PowerUpRandom;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.SpawnDisabled;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlien;
-import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlienWithPath;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteState;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.view.Animation;
-
-import java.util.List;
 
 public class AlienDragonBody extends SpriteAlien
 {
