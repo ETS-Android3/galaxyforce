@@ -60,7 +60,7 @@ public class AlienHunter extends SpriteAlien {
     private final GameHandler model;
 
     /**
-     * Create Alien Asteroid.
+     * Create Alien Hunter.
      *
      * @param xStart
      * @param yStart

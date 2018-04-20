@@ -252,20 +252,6 @@ public enum SubWavePathRule
             )
     ),
 
-    /**
-     * Dragon attack - only head needs to be created. body parts will be spawned
-     * by the head.
-     */
-    DRAGON_ATTACK(
-            new SubWavePathRuleProperties(
-                    Path.TRIANGULAR,
-                    1,
-                    0f,
-                    0f,
-                    false
-            )
-    ),
-
     WAVEY_LINE(
             new SubWavePathRuleProperties(
                     Path.SINGLE_ARC,
