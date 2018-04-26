@@ -32,9 +32,6 @@ public class PowerUpAllocator {
     // how many aliens remaining that will ask for power-up allocation
     private int aliensToAllocate;
 
-    // number of remaining power-ups not yet allocated
-    private int powerUpsRemaining;
-
     /**
      * Create an allocator responsible for allocating power-ups.
      *
@@ -55,11 +52,10 @@ public class PowerUpAllocator {
         }
 
         this.aliensToAllocate = aliens;
-        this.powerUpsRemaining = powerUps.size();
 
-        if(powerUpsRemaining > aliensToAllocate) {
+        if(powerUps.size() > aliensToAllocate) {
             throw new GalaxyForceException(
-                    "Attempted to allocate " + powerUpsRemaining + " power-ups to only " + aliensToAllocate + " aliens."
+                    "Attempted to allocate " + powerUps.size() + " power-ups to only " + aliensToAllocate + " aliens."
             );
         }
     }
@@ -78,15 +74,14 @@ public class PowerUpAllocator {
             );
         }
 
-        // ensure that chances of receiving a power-up are based on the power-ups remaining
+        // calculate chances of receiving a power-up based on the power-ups remaining
         // and number of aliens remaining.
         //
-        // if the number of aliens remaining equals the number of power-up remaining, then
-        // the chances of each receiving a power-up are 100%
-        float chanceOfAllocation = (float) powerUpsRemaining / aliensToAllocate;
+        // if the number of aliens remaining equals the number of power-ups remaining, then
+        // the chances of receiving a power-up are 100%
+        float chanceOfAllocation = (float) powerUps.size() / aliensToAllocate;
         if (rand.nextFloat() < chanceOfAllocation) {
             allocated = powerUps.pop();
-            powerUpsRemaining--;
         }
         aliensToAllocate--;
         return allocated;
