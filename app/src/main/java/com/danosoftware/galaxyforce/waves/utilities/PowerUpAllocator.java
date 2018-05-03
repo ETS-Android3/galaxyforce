@@ -4,10 +4,13 @@ import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
 
 import java.util.ArrayDeque;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Deque;
 import java.util.List;
 import java.util.Random;
+
+import static com.danosoftware.galaxyforce.constants.GameConstants.MAX_LIVES;
 
 /**
  * Responsible for allocating a list of power-ups to a wave of aliens.
@@ -39,21 +42,34 @@ public class PowerUpAllocator {
      * @param aliens - number of aliens in wave
      */
     public PowerUpAllocator(
-            List<PowerUpType> powerUps,
-            int aliens) {
+            final List<PowerUpType> powerUps,
+            final int aliens,
+            final int livesRemaining) {
+
+        // limit extra life power-ups to avoid exceeding max lives
+        int additionLivesAllowed = MAX_LIVES - livesRemaining;
+        List<PowerUpType> filteredPowerUps = new ArrayList<>();
+        for (PowerUpType powerUp : powerUps) {
+            if (powerUp != PowerUpType.LIFE || additionLivesAllowed > 0) {
+                filteredPowerUps.add(powerUp);
+                if (powerUp == PowerUpType.LIFE) {
+                    additionLivesAllowed--;
+                }
+            }
+        }
 
         // randomise list of power-ups
-        Collections.shuffle(powerUps);
+        Collections.shuffle(filteredPowerUps);
 
         // add power-ups to deque (stack)
         this.powerUps = new ArrayDeque();
-        for (PowerUpType powerUp : powerUps) {
+        for (PowerUpType powerUp : filteredPowerUps) {
             this.powerUps.push(powerUp);
         }
 
         this.aliensToAllocate = aliens;
 
-        if(powerUps.size() > aliensToAllocate) {
+        if(filteredPowerUps.size() > aliensToAllocate) {
             throw new GalaxyForceException(
                     "Attempted to allocate " + powerUps.size() + " power-ups to only " + aliensToAllocate + " aliens."
             );

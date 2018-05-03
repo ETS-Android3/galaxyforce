@@ -43,6 +43,10 @@ public class SpawnRandomDelay implements SpawnBehaviour
     // allocate power-ups to spawned aliens
     private final PowerUpAllocator powerUpAllocator;
 
+    // since we don't know how many aliens will be spawned, use
+    // a multiplier to guess the number of aliens for power-up allocation
+    private final static int POWER_UP_MULTIPLIER = 10;
+
     /**
      * 
      * @param model
@@ -73,7 +77,7 @@ public class SpawnRandomDelay implements SpawnBehaviour
          */
         timeSinceLastSpawn = (float) (delayUntilNextSpawn * Math.random());
 
-        this.powerUpAllocator = new PowerUpAllocator(powerUpTypes, powerUpTypes.size());
+        this.powerUpAllocator = new PowerUpAllocator(powerUpTypes, powerUpTypes.size() * POWER_UP_MULTIPLIER, model.getLives());
     }
 
     @Override

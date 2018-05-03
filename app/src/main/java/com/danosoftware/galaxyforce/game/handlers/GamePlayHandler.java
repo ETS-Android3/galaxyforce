@@ -72,6 +72,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Executors;
 
+import static com.danosoftware.galaxyforce.constants.GameConstants.MAX_LIVES;
+
 public class GamePlayHandler implements GameHandler
 {
 
@@ -91,9 +93,6 @@ public class GamePlayHandler implements GameHandler
 
     /* number of lives for new game */
     private static final int START_LIVES = 3;
-
-    /* maximum number of lives possible */
-    private static final int MAX_LIVES = 5;
 
     /* base's start y position */
     private static final int BASE_START_Y = 192;
@@ -813,6 +812,11 @@ public class GamePlayHandler implements GameHandler
 
         // refresh displayed sprites
         reBuildSprites = true;
+    }
+
+    @Override
+    public int getLives() {
+        return lives;
     }
 
     @Override

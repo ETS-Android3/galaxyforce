@@ -51,7 +51,8 @@ public final class WaveCreationUtils {
         }
         final PowerUpAllocator powerUpAllocator = new PowerUpAllocator(
                 config.getPowerUps(),
-                numberOfAliens);
+                numberOfAliens,
+                model.getLives());
 
 
         for (SubWavePathRuleProperties props : rules.subWaveProps()) {
@@ -95,7 +96,8 @@ public final class WaveCreationUtils {
         }
         final PowerUpAllocator powerUpAllocator = new PowerUpAllocator(
                 config.getPowerUps(),
-                numberOfAliens);
+                numberOfAliens,
+                model.getLives());
 
         for (SubWaveRuleProperties props : rules.subWaveProps()) {
 

@@ -101,4 +101,9 @@ public interface GameHandler extends PlayModel
      * e.g. a mothership that creates new aliens
      */
     public void spawnAliens(SpawnedAlienBean aliens);
+
+    /**
+     * Return number of lives remaining
+     */
+    public int getLives();
 }
