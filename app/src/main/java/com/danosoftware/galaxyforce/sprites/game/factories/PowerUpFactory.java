@@ -12,6 +12,8 @@ import com.danosoftware.galaxyforce.sprites.game.interfaces.SpritePowerUp;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 
+import java.util.List;
+
 public class PowerUpFactory
 {
     /* initialise sound effects */
@@ -111,5 +113,15 @@ public class PowerUpFactory
         SpritePowerUp powerUp = new PowerUpImpl(x, y, direction, powerUpType, spriteId);
 
         return new PowerUpBean(powerUp, sound);
+    }
+
+    /**
+     * Return a random power-up type from the supplied array of power-up types.
+     */
+    public static PowerUpType selectRandomPowerUpType(PowerUpType[] powerUps)
+    {
+        // select a random powerup type
+        int index = (int) (Math.random() * powerUps.length);
+        return powerUps[index];
     }
 }

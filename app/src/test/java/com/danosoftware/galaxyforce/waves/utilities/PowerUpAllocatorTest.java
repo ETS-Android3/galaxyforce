@@ -20,6 +20,7 @@ import java.util.List;
 import java.util.Map;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
@@ -97,10 +98,10 @@ public class PowerUpAllocatorTest {
     }
 
     /**
-     * Throw exception if attempting to call allocate() after all aliens have been allocated.
+     * Always return null if attempting to call allocate() even after all aliens have been allocated.
      */
-    @Test(expected = GalaxyForceException.class)
-    public void shouldThrowExceptionWhenAllocateCalledTooManyTimes() {
+    @Test
+    public void shouldReturnNullWhenAllocateCalledTooManyTimes() {
 
         // create one alien per power-up
         List<PowerUpType> powerUpTypes = Arrays.asList(PowerUpType.ENERGY, PowerUpType.ENERGY, PowerUpType.LIFE, PowerUpType.LIFE, PowerUpType.MISSILE_FAST);
@@ -109,8 +110,11 @@ public class PowerUpAllocatorTest {
 
         shouldAllocateExpectedPowerUps(numberOfAliens, powerUpTypes);
 
-        // attempt to allocate one more power-up - should trigger an exception
-        PowerUpType powerUp = powerUpAllocator.allocate();
+        // attempt to allocate more power-ups - should return null
+        for (int i = 0; i < 20; i++) {
+            PowerUpType powerUp = powerUpAllocator.allocate();
+            assertThat(powerUp, nullValue());
+        }
     }
 
     /**

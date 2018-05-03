@@ -1,11 +1,13 @@
 package com.danosoftware.galaxyforce.sprites.game.implementations;
 
 import com.danosoftware.galaxyforce.enumerations.AlienMissileType;
+import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.flightpath.paths.Point;
 import com.danosoftware.galaxyforce.game.handlers.GameHandler;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.ExplodeBehaviourSimple;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.FireRandomDelay;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.PowerUpRandom;
+import com.danosoftware.galaxyforce.sprites.game.behaviours.PowerUpSingle;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.SpawnDisabled;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlienWithPath;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
@@ -43,16 +45,16 @@ public class AlienGobby extends SpriteAlienWithPath
     /**
      * Create Alien Gobby that has rotated missiles and generates random
      * power-ups.
-     *
-     * @param model
-     * @param alienPath
-     * @param delayStart
-     * @param restartImmediately
      */
-    public AlienGobby(GameHandler model, List<Point> alienPath, float delayStart, boolean restartImmediately)
+    public AlienGobby(
+            final GameHandler model,
+            final PowerUpType powerUp,
+            final List<Point> alienPath,
+            final float delayStart,
+            final boolean restartImmediately)
     {
         super(new FireRandomDelay(model, AlienMissileType.ROTATED, MIN_MISSILE_DELAY, MISSILE_DELAY_RANDOM),
-                new PowerUpRandom(model, CHANCE_OF_POWER_UP),
+                new PowerUpSingle(model, powerUp),
                 new SpawnDisabled(),
                 new ExplodeBehaviourSimple(),
                 ANIMATION, alienPath, delayStart, ENERGY, HIT_ENERGY, restartImmediately);

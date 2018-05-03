@@ -68,10 +68,9 @@ public class PowerUpAllocator {
     public PowerUpType allocate() {
         PowerUpType allocated = null;
 
+        // if all expected aliens have been allocated, default to retuning nulls
         if (aliensToAllocate == 0) {
-            throw new GalaxyForceException(
-                    "Attempted to call allocate() after all aliens have requested power-up allocation."
-            );
+            return null;
         }
 
         // calculate chances of receiving a power-up based on the power-ups remaining

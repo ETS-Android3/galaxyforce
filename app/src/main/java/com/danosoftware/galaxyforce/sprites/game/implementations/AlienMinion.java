@@ -7,6 +7,7 @@ import com.danosoftware.galaxyforce.game.handlers.GameHandler;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.ExplodeBehaviourSimple;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.FireRandomDelay;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.PowerUpRandom;
+import com.danosoftware.galaxyforce.sprites.game.behaviours.PowerUpSingle;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.SpawnDisabled;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlienWithPath;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
@@ -59,16 +60,23 @@ public class AlienMinion extends SpriteAlienWithPath
      * @param delayStart
      * @param restartImmediately
      */
-    public AlienMinion(GameHandler model, List<Point> alienPath, float delayStart, boolean restartImmediately)
+    public AlienMinion(
+            final GameHandler model,
+            final PowerUpType powerUpType,
+            final List<Point> alienPath,
+            final float delayStart,
+            final boolean restartImmediately)
     {
-        super(new FireRandomDelay(model, AlienMissileType.SIMPLE, MIN_MISSILE_DELAY, MISSILE_DELAY_RANDOM),
-
-        new PowerUpRandom(model, CHANCE_OF_POWER_UP, PowerUpType.MISSILE_GUIDED),
-
-        new SpawnDisabled(),
-
-        new ExplodeBehaviourSimple(),
-
-        ANIMATION, alienPath, delayStart, ENERGY, HIT_ENERGY, restartImmediately);
+        super(
+                new FireRandomDelay(model, AlienMissileType.SIMPLE, MIN_MISSILE_DELAY, MISSILE_DELAY_RANDOM),
+                new PowerUpSingle(model, powerUpType),
+                new SpawnDisabled(),
+                new ExplodeBehaviourSimple(),
+                ANIMATION,
+                alienPath,
+                delayStart,
+                ENERGY,
+                HIT_ENERGY,
+                restartImmediately);
     }
 }

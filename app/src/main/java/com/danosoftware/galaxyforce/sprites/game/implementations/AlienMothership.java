@@ -5,13 +5,16 @@ import com.danosoftware.galaxyforce.flightpath.paths.Point;
 import com.danosoftware.galaxyforce.game.handlers.GameHandler;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.ExplodeBehaviourSimple;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.FireDisabled;
+import com.danosoftware.galaxyforce.sprites.game.behaviours.PowerUpRandom;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.PowerUpSimple;
+import com.danosoftware.galaxyforce.sprites.game.behaviours.PowerUpSingle;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.SpawnRandomDelay;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlienWithPath;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.view.Animation;
 import com.danosoftware.galaxyforce.waves.AlienType;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class AlienMothership extends SpriteAlienWithPath
@@ -48,16 +51,29 @@ public class AlienMothership extends SpriteAlienWithPath
      * @param delayStart
      * @param restartImmediately
      */
-    public AlienMothership(GameHandler model, List<Point> alienPath, float delayStart, boolean restartImmediately)
+    public AlienMothership(
+            final GameHandler model,
+            final PowerUpType powerUpType,
+            final List<PowerUpType> spwanPowerUpTypes,
+            final List<Point> alienPath,
+            final float delayStart,
+            final boolean restartImmediately)
     {
-        super(new FireDisabled(),
-
-        new PowerUpSimple(model, PowerUpType.ENERGY),
-
-        new SpawnRandomDelay(model, AlienType.SPAWNED_INSECT, MIN_SPAWN_DELAY, SPAWN_DELAY_RANDOM),
-
-        new ExplodeBehaviourSimple(),
-
-        ANIMATION, alienPath, delayStart, ENERGY, HIT_ENERGY, restartImmediately);
+        super(
+                new FireDisabled(),
+                new PowerUpSingle(model, powerUpType),
+                new SpawnRandomDelay(
+                        model,
+                        AlienType.SPAWNED_INSECT,
+                        spwanPowerUpTypes,
+                        MIN_SPAWN_DELAY,
+                        SPAWN_DELAY_RANDOM),
+                new ExplodeBehaviourSimple(),
+                ANIMATION,
+                alienPath,
+                delayStart,
+                ENERGY,
+                HIT_ENERGY,
+                restartImmediately);
     }
 }

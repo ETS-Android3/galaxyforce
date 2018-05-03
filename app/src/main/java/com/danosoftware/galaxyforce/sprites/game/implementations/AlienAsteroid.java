@@ -7,6 +7,7 @@ import com.danosoftware.galaxyforce.game.handlers.GameHandler;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.ExplodeBehaviourSimple;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.FireDisabled;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.PowerUpRandom;
+import com.danosoftware.galaxyforce.sprites.game.behaviours.PowerUpSingle;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.SpawnDisabled;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlien;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteState;
@@ -65,26 +66,28 @@ public class AlienAsteroid extends SpriteAlien
 
     /**
      * Create Alien Asteroid.
-     * 
-     * @param xStart
-     * @param yStart
-     * @param timeDelayStart
-     * @param restartImmediately
-     * @param direction
-     * @param model
      */
-    public AlienAsteroid(int xStart, int yStart, float timeDelayStart, boolean restartImmediately, Direction direction, GameHandler model)
+    public AlienAsteroid(
+            final PowerUpType powerUpType,
+            final int xStart,
+            final int yStart,
+            final float timeDelayStart,
+            final boolean restartImmediately,
+            final Direction direction,
+            final GameHandler model)
     {
         // default is that asteroids are initially invisible
-        super(new FireDisabled(),
-
-        new PowerUpRandom(model, CHANCE_OF_POWER_UP, PowerUpType.MISSILE_LASER, PowerUpType.ENERGY, PowerUpType.MISSILE_SPRAY),
-
-        new SpawnDisabled(),
-
-        new ExplodeBehaviourSimple(),
-
-        ANIMATION, xStart, yStart, ENERGY, HIT_ENERGY, false);
+        super(
+                new FireDisabled(),
+                new PowerUpSingle(model, powerUpType),
+                new SpawnDisabled(),
+                new ExplodeBehaviourSimple(),
+                ANIMATION,
+                xStart,
+                yStart,
+                ENERGY,
+                HIT_ENERGY,
+                false);
 
         setState(SpriteState.INACTIVE);
 

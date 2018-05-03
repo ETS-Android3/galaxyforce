@@ -2,10 +2,12 @@ package com.danosoftware.galaxyforce.sprites.game.implementations;
 
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.enumerations.AlienMissileType;
+import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.game.handlers.GameHandler;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.ExplodeBehaviourSimple;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.FireRandomDelay;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.PowerUpRandom;
+import com.danosoftware.galaxyforce.sprites.game.behaviours.PowerUpSingle;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.SpawnDisabled;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlien;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteBase;
@@ -76,17 +78,17 @@ public class AlienDragonHead extends SpriteAlien
      *
      */
     public AlienDragonHead(
-            int xStart,
-            int yStart,
-            float timeDelayStart,
-            GameHandler model,
-            List<AlienDragonBody> dragonBodies
-    )
-    {
+            final PowerUpType powerUpType,
+            final int xStart,
+            final int yStart,
+            final float timeDelayStart,
+            final GameHandler model,
+            final List<AlienDragonBody> dragonBodies
+    ) {
 
         super(
                 new FireRandomDelay(model, AlienMissileType.ROTATED, MIN_MISSILE_DELAY, MISSILE_DELAY_RANDOM),
-                new PowerUpRandom(model, CHANCE_OF_POWER_UP),
+                new PowerUpSingle(model, powerUpType),
                 new SpawnDisabled(),
                 new ExplodeBehaviourSimple(),
                 ANIMATION,
