@@ -44,6 +44,7 @@ public class SpawnRandomDelay implements SpawnBehaviour
 
     // since we don't know how many aliens will be spawned, use
     // a multiplier to guess the number of aliens for power-up allocation
+    // A value of 10 indicates 1 power-up for every 10 aliens spawned
     private final static int POWER_UP_MULTIPLIER = 10;
 
     /**

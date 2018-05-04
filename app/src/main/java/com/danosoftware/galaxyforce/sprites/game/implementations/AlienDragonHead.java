@@ -36,9 +36,6 @@ public class AlienDragonHead extends SpriteAlien
     /* how much energy will be lost by another sprite when this sprite hits it */
     private static final int HIT_ENERGY = 2;
 
-    /* chance that this alien will generate a power-up when destroyed */
-    private static final double CHANCE_OF_POWER_UP = 0.2D;
-
     /* distance alien can move each cycle in pixels each second */
     public static final int ALIEN_MOVE_PIXELS = 5 * 60;
 

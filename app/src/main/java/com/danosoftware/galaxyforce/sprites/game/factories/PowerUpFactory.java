@@ -112,14 +112,4 @@ public class PowerUpFactory
 
         return new PowerUpBean(powerUp, sound);
     }
-
-    /**
-     * Return a random power-up type from the supplied array of power-up types.
-     */
-    public static PowerUpType selectRandomPowerUpType(PowerUpType[] powerUps)
-    {
-        // select a random powerup type
-        int index = (int) (Math.random() * powerUps.length);
-        return powerUps[index];
-    }
 }
