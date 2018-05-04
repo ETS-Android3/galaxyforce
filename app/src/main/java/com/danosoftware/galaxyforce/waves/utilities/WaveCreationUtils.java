@@ -15,7 +15,6 @@ import com.danosoftware.galaxyforce.waves.rules.SubWaveRule;
 import com.danosoftware.galaxyforce.waves.rules.SubWaveRuleProperties;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**

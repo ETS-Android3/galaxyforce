@@ -5,8 +5,6 @@ import com.danosoftware.galaxyforce.flightpath.paths.Point;
 import com.danosoftware.galaxyforce.game.handlers.GameHandler;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.ExplodeBehaviourSimple;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.FireDisabled;
-import com.danosoftware.galaxyforce.sprites.game.behaviours.PowerUpRandom;
-import com.danosoftware.galaxyforce.sprites.game.behaviours.PowerUpSimple;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.PowerUpSingle;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.SpawnRandomDelay;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlienWithPath;
@@ -14,7 +12,6 @@ import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.view.Animation;
 import com.danosoftware.galaxyforce.waves.AlienType;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class AlienMothership extends SpriteAlienWithPath

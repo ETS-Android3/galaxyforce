@@ -12,7 +12,6 @@ import com.danosoftware.galaxyforce.sound.Sound;
 import com.danosoftware.galaxyforce.sound.SoundEffect;
 import com.danosoftware.galaxyforce.sound.SoundEffectBank;
 import com.danosoftware.galaxyforce.sound.SoundEffectBankSingleton;
-import com.danosoftware.galaxyforce.sprites.game.behaviours.PowerUpBehaviour;
 import com.danosoftware.galaxyforce.sprites.game.implementations.AlienAsteroid;
 import com.danosoftware.galaxyforce.sprites.game.implementations.AlienAsteroidSimple;
 import com.danosoftware.galaxyforce.sprites.game.implementations.AlienDragonBody;

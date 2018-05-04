@@ -12,8 +12,6 @@ import com.danosoftware.galaxyforce.sprites.game.interfaces.SpritePowerUp;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 
-import java.util.List;
-
 public class PowerUpFactory
 {
     /* initialise sound effects */

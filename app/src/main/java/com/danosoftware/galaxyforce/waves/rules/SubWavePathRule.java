@@ -1,6 +1,5 @@
 package com.danosoftware.galaxyforce.waves.rules;
 
-import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.flightpath.paths.Path;
 import com.danosoftware.galaxyforce.flightpath.translators.FlipXPointTranslator;
 import com.danosoftware.galaxyforce.flightpath.translators.FlipYPointTranslator;

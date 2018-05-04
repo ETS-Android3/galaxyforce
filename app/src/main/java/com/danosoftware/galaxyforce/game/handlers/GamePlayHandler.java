@@ -72,8 +72,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.Executors;
 
-import static com.danosoftware.galaxyforce.constants.GameConstants.MAX_LIVES;
-
 public class GamePlayHandler implements GameHandler
 {
 
@@ -1528,14 +1526,11 @@ public class GamePlayHandler implements GameHandler
         case LIFE:
 
             // add extra life
-            if (lives < MAX_LIVES)
-            {
-                lives++;
+            lives++;
 
-                // update lives
-                lifeSprites = Life.getLives(lives);
-                reBuildSprites = true;
-            }
+            // update lives
+            lifeSprites = Life.getLives(lives);
+            reBuildSprites = true;
 
             break;
 
