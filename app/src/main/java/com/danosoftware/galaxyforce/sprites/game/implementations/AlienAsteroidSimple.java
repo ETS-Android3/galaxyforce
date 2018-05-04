@@ -6,7 +6,7 @@ import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.game.handlers.GameHandler;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.ExplodeBehaviourSimple;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.FireDisabled;
-import com.danosoftware.galaxyforce.sprites.game.behaviours.PowerUpRandom;
+import com.danosoftware.galaxyforce.sprites.game.behaviours.PowerUpSingle;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.SpawnDisabled;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlien;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteState;
@@ -32,9 +32,6 @@ public class AlienAsteroidSimple extends SpriteAlien
 
     /* how much energy will be lost by another sprite when this sprite hits it */
     private static final int HIT_ENERGY = 2;
-
-    /* chance that this alien will generate a power-up when destroyed */
-    private static final double CHANCE_OF_POWER_UP = 0.2D;
 
     // alien animation
     private static final Animation ANIMATION = new Animation(0f, GameSpriteIdentifier.ASTEROID);
@@ -71,27 +68,28 @@ public class AlienAsteroidSimple extends SpriteAlien
 
     /**
      * Create Alien Asteroid.
-     * 
-     * @param xStart
-     * @param yStart
-     * @param timeDelayStart
-     * @param restartImmediately
-     * @param direction
-     * @param model
      */
-    public AlienAsteroidSimple(int xStart, int yStart, float timeDelayStart, boolean restartImmediately, Direction direction,
-            GameHandler model)
+    public AlienAsteroidSimple(
+            final PowerUpType powerUpType,
+            final int xStart,
+            final int yStart,
+            final float timeDelayStart,
+            final boolean restartImmediately,
+            final Direction direction,
+            final GameHandler model)
     {
         // default is that asteroids are initially invisible
-        super(new FireDisabled(),
-
-        new PowerUpRandom(model, CHANCE_OF_POWER_UP, PowerUpType.MISSILE_LASER, PowerUpType.ENERGY, PowerUpType.MISSILE_SPRAY),
-
-        new SpawnDisabled(),
-
-        new ExplodeBehaviourSimple(),
-
-        ANIMATION, xStart, yStart, ENERGY, HIT_ENERGY, false);
+        super(
+                new FireDisabled(),
+                new PowerUpSingle(model, powerUpType),
+                new SpawnDisabled(),
+                new ExplodeBehaviourSimple(),
+                ANIMATION,
+                xStart,
+                yStart,
+                ENERGY,
+                HIT_ENERGY,
+                false);
 
         setState(SpriteState.INACTIVE);
 

@@ -1,10 +1,14 @@
 package com.danosoftware.galaxyforce.sprites.game.behaviours;
 
+import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.game.beans.SpawnedAlienBean;
 import com.danosoftware.galaxyforce.game.handlers.GameHandler;
 import com.danosoftware.galaxyforce.sprites.game.factories.AlienFactory;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlien;
 import com.danosoftware.galaxyforce.waves.AlienType;
+import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocator;
+
+import java.util.List;
 
 public class SpawnRandomDelay implements SpawnBehaviour
 {
@@ -35,16 +39,29 @@ public class SpawnRandomDelay implements SpawnBehaviour
     /* variable to store time passed since last spawn */
     private float timeSinceLastSpawn = 0f;
 
+    // allocate power-ups to spawned aliens
+    private final PowerUpAllocator powerUpAllocator;
+
+    // since we don't know how many aliens will be spawned, use
+    // a multiplier to guess the number of aliens for power-up allocation
+    // A value of 10 indicates 1 power-up for every 10 aliens spawned
+    private final static int POWER_UP_MULTIPLIER = 10;
+
     /**
      * 
      * @param model
      * @param alienType
-     * @param minMissileDelay
-     *            - minimum delay between missile fires
-     * @param missleDelayRandom
-     *            - additional maximum random time before missile fires
+     * @param minSpawnDelay
+     *            - minimum delay between spawns
+     * @param spawnDelayRandom
+     *            - additional maximum random time before spawns
      */
-    public SpawnRandomDelay(GameHandler model, AlienType alienType, float minSpawnDelay, float spawnDelayRandom)
+    public SpawnRandomDelay(
+            final GameHandler model,
+            final AlienType alienType,
+            final List<PowerUpType> powerUpTypes,
+            final float minSpawnDelay,
+            final float spawnDelayRandom)
     {
         this.model = model;
         this.alienType = alienType;
@@ -59,6 +76,8 @@ public class SpawnRandomDelay implements SpawnBehaviour
          * random delay to further randomise each alien's firing delay
          */
         timeSinceLastSpawn = (float) (delayUntilNextSpawn * Math.random());
+
+        this.powerUpAllocator = new PowerUpAllocator(powerUpTypes, powerUpTypes.size() * POWER_UP_MULTIPLIER, model.getLives());
     }
 
     @Override
@@ -81,7 +100,7 @@ public class SpawnRandomDelay implements SpawnBehaviour
         delayUntilNextSpawn = minSpawnDelay + (spawnDelayRandom * Math.random());
 
         // create and send new alien bean
-        SpawnedAlienBean aliens = AlienFactory.createSpawnedAlien(alienType, alien.getX(), alien.getY() - alien.getHeight(), model);
+        SpawnedAlienBean aliens = AlienFactory.createSpawnedAlien(alienType, powerUpAllocator.allocate(), alien.getX(), alien.getY() - alien.getHeight(), model);
 
         model.spawnAliens(aliens);
     }

@@ -10,6 +10,9 @@ public class GameConstants
     public final static int WAVES_PER_ZONE = 12;
     public final static int MAX_WAVES = MAX_ZONES * WAVES_PER_ZONE;
 
+    /* maximum number of lives possible */
+    public final static int MAX_LIVES = 5;
+
     /*
      * maximum free zone. users must upgrade to play beyond this zone.
      */

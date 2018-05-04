@@ -1,11 +1,12 @@
 package com.danosoftware.galaxyforce.sprites.game.implementations;
 
 import com.danosoftware.galaxyforce.enumerations.AlienMissileType;
+import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.flightpath.paths.Point;
 import com.danosoftware.galaxyforce.game.handlers.GameHandler;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.ExplodeBehaviourSimple;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.FireRandomDelay;
-import com.danosoftware.galaxyforce.sprites.game.behaviours.PowerUpRandom;
+import com.danosoftware.galaxyforce.sprites.game.behaviours.PowerUpSingle;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.SpawnDisabled;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlienWithPath;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
@@ -33,31 +34,30 @@ public class AlienStork extends SpriteAlienWithPath
     /* how much energy will be lost by another sprite when this sprite hits it */
     private static final int HIT_ENERGY = 2;
 
-    /* chance that this alien will generate a power-up when destroyed */
-    private static final double CHANCE_OF_POWER_UP = 0.2D;
-
     // alien animation
     private static final Animation ANIMATION = new Animation(0.4f, GameSpriteIdentifier.STORK_1, GameSpriteIdentifier.STORK_2);
 
     /**
      * Create Alien Stork that has rotated missiles and generates random
      * power-ups.
-     * 
-     * @param model
-     * @param alienPath
-     * @param delayStart
-     * @param restartImmediately
      */
-    public AlienStork(GameHandler model, List<Point> alienPath, float delayStart, boolean restartImmediately)
+    public AlienStork(
+            final GameHandler model,
+            final PowerUpType powerUpType,
+            final List<Point> alienPath,
+            final float delayStart,
+            final boolean restartImmediately)
     {
-        super(new FireRandomDelay(model, AlienMissileType.ROTATED, MIN_MISSILE_DELAY, MISSILE_DELAY_RANDOM),
-
-        new PowerUpRandom(model, CHANCE_OF_POWER_UP),
-
-        new SpawnDisabled(),
-
-        new ExplodeBehaviourSimple(),
-
-        ANIMATION, alienPath, delayStart, ENERGY, HIT_ENERGY, restartImmediately);
+        super(
+                new FireRandomDelay(model, AlienMissileType.ROTATED, MIN_MISSILE_DELAY, MISSILE_DELAY_RANDOM),
+                new PowerUpSingle(model, powerUpType),
+                new SpawnDisabled(),
+                new ExplodeBehaviourSimple(),
+                ANIMATION,
+                alienPath,
+                delayStart,
+                ENERGY,
+                HIT_ENERGY,
+                restartImmediately);
     }
 }

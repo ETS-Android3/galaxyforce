@@ -92,9 +92,6 @@ public class GamePlayHandler implements GameHandler
     /* number of lives for new game */
     private static final int START_LIVES = 3;
 
-    /* maximum number of lives possible */
-    private static final int MAX_LIVES = 5;
-
     /* base's start y position */
     private static final int BASE_START_Y = 192;
 
@@ -816,6 +813,11 @@ public class GamePlayHandler implements GameHandler
     }
 
     @Override
+    public int getLives() {
+        return lives;
+    }
+
+    @Override
     public void flashText(Text text, boolean flashState)
     {
         if (flashState)
@@ -1524,14 +1526,11 @@ public class GamePlayHandler implements GameHandler
         case LIFE:
 
             // add extra life
-            if (lives < MAX_LIVES)
-            {
-                lives++;
+            lives++;
 
-                // update lives
-                lifeSprites = Life.getLives(lives);
-                reBuildSprites = true;
-            }
+            // update lives
+            lifeSprites = Life.getLives(lives);
+            reBuildSprites = true;
 
             break;
 

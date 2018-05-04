@@ -5,7 +5,7 @@ import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.game.handlers.GameHandler;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.ExplodeBehaviourSimple;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.FireRandomDelay;
-import com.danosoftware.galaxyforce.sprites.game.behaviours.PowerUpSimple;
+import com.danosoftware.galaxyforce.sprites.game.behaviours.PowerUpSingle;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.SpawnDisabled;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlien;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteState;
@@ -54,22 +54,24 @@ public class AlienSpawnedInsect extends SpriteAlien
 
     /**
      * Create spawned Alien Insect.
-     * 
-     * @param xStart
-     * @param yStart
-     * @param model
      */
-    public AlienSpawnedInsect(int xStart, int yStart, GameHandler model)
+    public AlienSpawnedInsect(
+            final PowerUpType powerUpType,
+            final int xStart,
+            final int yStart,
+            final GameHandler model)
     {
-        super(new FireRandomDelay(model, AlienMissileType.SIMPLE, MIN_MISSILE_DELAY, MISSILE_DELAY_RANDOM),
-
-        new PowerUpSimple(model, PowerUpType.ENERGY),
-
-        new SpawnDisabled(),
-
-        new ExplodeBehaviourSimple(),
-
-        ANIMATION, xStart, yStart, ENERGY, HIT_ENERGY, true);
+        super(
+                new FireRandomDelay(model, AlienMissileType.SIMPLE, MIN_MISSILE_DELAY, MISSILE_DELAY_RANDOM),
+                new PowerUpSingle(model, powerUpType),
+                new SpawnDisabled(),
+                new ExplodeBehaviourSimple(),
+                ANIMATION,
+                xStart,
+                yStart,
+                ENERGY,
+                HIT_ENERGY,
+                true);
 
         /* distance moved since spawned */
         this.distanceYMoved = 0f;

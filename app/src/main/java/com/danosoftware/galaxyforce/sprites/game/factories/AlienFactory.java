@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.enumerations.Direction;
+import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.flightpath.paths.Point;
 import com.danosoftware.galaxyforce.game.beans.SpawnedAlienBean;
 import com.danosoftware.galaxyforce.game.handlers.GameHandler;
@@ -26,8 +27,10 @@ import com.danosoftware.galaxyforce.sprites.game.implementations.AlienSpawnedIns
 import com.danosoftware.galaxyforce.sprites.game.implementations.AlienStork;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlien;
 import com.danosoftware.galaxyforce.waves.AlienType;
+import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocator;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class AlienFactory
@@ -48,24 +51,22 @@ public class AlienFactory
     /**
      * Creates an alien with a supplied path. Starting position will be based on
      * path.
-     * 
-     * @param alienType
-     * @param path
-     * @param delay
-     * @param model
-     * @param restartImmediately
-     * @return
      */
-    public static List<SpriteAlien> createAlien(AlienType alienType, List<Point> path, float delay, GameHandler model,
-            boolean restartImmediately)
+    public static List<SpriteAlien> createAlien(
+            final AlienType alienType,
+            final PowerUpType powerUp,
+            final List<Point> path,
+            final float delay,
+            final GameHandler model,
+            final boolean restartImmediately)
     {
-        List<SpriteAlien> aliens = new ArrayList<SpriteAlien>();
+        List<SpriteAlien> aliens = new ArrayList<>();
 
         /*
          * Create new path per alien as different aliens may modify paths
          * differently
          */
-        List<Point> alienPath = new ArrayList<Point>();
+        List<Point> alienPath = new ArrayList<>();
 
         /*
          * convert path so alien is positioned at centre of provided point. This
@@ -83,32 +84,37 @@ public class AlienFactory
         switch (alienType)
         {
         case OCTOPUS:
-            aliens.add(new AlienOctopus(model, alienPath, delay, restartImmediately));
+            aliens.add(new AlienOctopus(model, powerUp, alienPath, delay, restartImmediately));
             break;
 
         case GOBBY:
-            aliens.add(new AlienGobby(model, alienPath, delay, restartImmediately));
+            aliens.add(new AlienGobby(model, powerUp, alienPath, delay, restartImmediately));
             break;
 
         case MINION:
-            aliens.add(new AlienMinion(model, alienPath, delay, restartImmediately));
-
+            aliens.add(new AlienMinion(model, powerUp, alienPath, delay, restartImmediately));
             break;
 
         case MOTHERSHIP:
-            aliens.add(new AlienMothership(model, alienPath, delay, restartImmediately));
+            aliens.add(new AlienMothership(
+                    model,
+                    powerUp,
+                    Arrays.asList(PowerUpType.ENERGY, PowerUpType.MISSILE_FAST, PowerUpType.MISSILE_PARALLEL),
+                    alienPath,
+                    delay,
+                    restartImmediately));
             break;
 
         case STORK:
-            aliens.add(new AlienStork(model, alienPath, delay, restartImmediately));
+            aliens.add(new AlienStork(model, powerUp, alienPath, delay, restartImmediately));
             break;
 
         case DROID:
-            aliens.add(new AlienDroid(model, alienPath, delay, restartImmediately));
+            aliens.add(new AlienDroid(model, powerUp, alienPath, delay, restartImmediately));
             break;
 
         case INSECT:
-            aliens.add(new AlienInsectPath(model, alienPath, delay, restartImmediately));
+            aliens.add(new AlienInsectPath(model, powerUp, alienPath, delay, restartImmediately));
             break;
 
         default:
@@ -123,22 +129,21 @@ public class AlienFactory
 
     /**
      * Creates an alien with no path in the specified position.
-     * 
-     * @param alienType
-     * @param xRandom
-     * @param yRandom
-     * @param xStart
-     * @param yStart
-     * @param delay
-     * @param model
-     * @param restartImmediately
-     * @return
      */
-    public static List<SpriteAlien> createAlien(AlienType alienType, boolean xRandom, boolean yRandom, int xStart, int yStart, float delay,
-            GameHandler model, boolean restartImmediately, Direction direction)
+    public static List<SpriteAlien> createAlien(
+            final AlienType alienType,
+            final PowerUpType powerUp,
+            final boolean xRandom,
+            final boolean yRandom,
+            final int xStart,
+            final int yStart,
+            final float delay,
+            final GameHandler model,
+            final boolean restartImmediately,
+            final Direction direction)
     {
 
-        List<SpriteAlien> aliens = new ArrayList<SpriteAlien>();
+        List<SpriteAlien> aliens = new ArrayList<>();
 
         // choose a x start position
         int xStartPos;
@@ -176,15 +181,15 @@ public class AlienFactory
         switch (alienType)
         {
         case ASTEROID:
-            aliens.add(new AlienAsteroid(xStartPos, yStartPos, delay, restartImmediately, direction, model));
+            aliens.add(new AlienAsteroid(powerUp, xStartPos, yStartPos, delay, restartImmediately, direction, model));
             break;
 
         case ASTEROID_SIMPLE:
-            aliens.add(new AlienAsteroidSimple(xStartPos, yStartPos, delay, restartImmediately, direction, model));
+            aliens.add(new AlienAsteroidSimple(powerUp, xStartPos, yStartPos, delay, restartImmediately, direction, model));
             break;
 
         case HUNTER:
-            aliens.add(new AlienHunter(xStartPos, yStartPos, delay, model));
+            aliens.add(new AlienHunter(powerUp, xStartPos, yStartPos, delay, model));
             break;
 
         case DRAGON:
@@ -194,14 +199,17 @@ public class AlienFactory
              * contains a reference to the body parts as all body parts will be
              * destroyed when the head is destroyed.
              */
-                List<AlienDragonBody> dragonBodies = new ArrayList<AlienDragonBody>();
-                for (int i = 0; i < 20; i++)
+                List<AlienDragonBody> dragonBodies = new ArrayList<>();
+                int dragonBodyCount = 20;
+                List<PowerUpType> powerUpTypes = Arrays.asList(PowerUpType.MISSILE_GUIDED, PowerUpType.MISSILE_PARALLEL, PowerUpType.MISSILE_SPRAY);
+                PowerUpAllocator powerUpAllocator = new PowerUpAllocator(powerUpTypes, dragonBodyCount, model.getLives());
+                for (int i = 0; i < dragonBodyCount; i++)
                 {
-                    AlienDragonBody dragonBody = new AlienDragonBody(xStartPos, yStartPos, model);
+                    AlienDragonBody dragonBody = new AlienDragonBody(powerUpAllocator.allocate(), xStartPos, yStartPos, model);
                     dragonBodies.add(dragonBody);
                 }
 
-                aliens.add(new AlienDragonHead(xStartPos, yStartPos, delay, model, dragonBodies));
+                aliens.add(new AlienDragonHead(powerUp, xStartPos, yStartPos, delay, model, dragonBodies));
                 aliens.addAll(dragonBodies);
                 break;
 
@@ -219,22 +227,21 @@ public class AlienFactory
      * implementation that has no random elements or direction.
      * 
      * Returns spawned alien bean containing alien and sound effect.
-     * 
-     * @param alienType
-     * @param xStart
-     * @param yStart
-     * @param model
-     * @return
      */
-    public static SpawnedAlienBean createSpawnedAlien(AlienType alienType, int xStart, int yStart, GameHandler model)
+    public static SpawnedAlienBean createSpawnedAlien(
+            final AlienType alienType,
+            final PowerUpType powerUpType,
+            final int xStart,
+            final int yStart,
+            final GameHandler model)
     {
-        List<SpriteAlien> aliens = new ArrayList<SpriteAlien>();
+        List<SpriteAlien> aliens = new ArrayList<>();
         Sound soundEffect;
 
         switch (alienType)
         {
         case SPAWNED_INSECT:
-            aliens.add(new AlienSpawnedInsect(xStart, yStart, model));
+            aliens.add(new AlienSpawnedInsect(powerUpType, xStart, yStart, model));
             soundEffect = SPAWNED_ALIEN_SOUND;
             break;
 
