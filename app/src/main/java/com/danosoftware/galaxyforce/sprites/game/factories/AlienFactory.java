@@ -27,6 +27,7 @@ import com.danosoftware.galaxyforce.sprites.game.implementations.AlienSpawnedIns
 import com.danosoftware.galaxyforce.sprites.game.implementations.AlienStork;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlien;
 import com.danosoftware.galaxyforce.waves.AlienType;
+import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -199,9 +200,12 @@ public class AlienFactory
              * destroyed when the head is destroyed.
              */
                 List<AlienDragonBody> dragonBodies = new ArrayList<>();
-                for (int i = 0; i < 20; i++)
+                int dragonBodyCount = 20;
+                List<PowerUpType> powerUpTypes = Arrays.asList(PowerUpType.MISSILE_GUIDED, PowerUpType.MISSILE_PARALLEL, PowerUpType.MISSILE_SPRAY);
+                PowerUpAllocator powerUpAllocator = new PowerUpAllocator(powerUpTypes, dragonBodyCount, model.getLives());
+                for (int i = 0; i < dragonBodyCount; i++)
                 {
-                    AlienDragonBody dragonBody = new AlienDragonBody(xStartPos, yStartPos, model);
+                    AlienDragonBody dragonBody = new AlienDragonBody(powerUpAllocator.allocate(), xStartPos, yStartPos, model);
                     dragonBodies.add(dragonBody);
                 }
 
