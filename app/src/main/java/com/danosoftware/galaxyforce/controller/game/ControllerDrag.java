@@ -31,7 +31,7 @@ public class ControllerDrag implements BaseController, TouchController
 
         // on touch down: set drag pointer, set centre based on base's location,
         // update touch point
-        if (event.type == TouchEvent.TOUCH_DOWN)
+        if (event.type == TouchEvent.TOUCH_DOWN && DRAG_POINTER == -1)
         {
             DRAG_POINTER = pointerID;
             dragModel.setCentre(model.getBaseX(), model.getBaseY());

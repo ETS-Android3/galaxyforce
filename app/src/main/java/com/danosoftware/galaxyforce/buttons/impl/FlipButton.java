@@ -51,13 +51,13 @@ public class FlipButton implements SpriteButton
     public void buttonUp()
     {
         buttonSprite.setSpriteIdentifier(spriteButtonUp);
-        model.flipBase();
     }
 
     @Override
     public void buttonDown()
     {
         buttonSprite.setSpriteIdentifier(spriteButtonDown);
+        model.flipBase();
     }
 
     @Override

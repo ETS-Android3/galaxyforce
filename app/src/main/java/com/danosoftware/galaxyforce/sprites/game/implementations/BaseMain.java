@@ -84,7 +84,7 @@ public class BaseMain extends SpriteBase
     private Rectangle touchBounds = null;
 
     /*
-     * small buffer so that increases bounds is slightly outside sprite area.
+     * small buffer so that bounds is slightly outside sprite area.
      * helps if finger touch just misses sprite.
      */
     private static int BOUNDS_BUFFER = 20;
@@ -707,19 +707,14 @@ public class BaseMain extends SpriteBase
         return direction;
     }
 
-    // TODO - Removed methods below as no longer using touch bounds - remove
-    // permanently ??
-
-    // private void updateTouchBounds()
-    // {
-    // this.touchBounds = new Rectangle(getX() - getWidth() / 2, getY() -
-    // getHeight() / 2, getWidth() + BOUNDS_BUFFER, getHeight()
-    // + BOUNDS_BUFFER);
-    // }
-    //
-    // public Rectangle getTouchBounds()
-    // {
-    // return this.touchBounds;
-    // }
+    @Override
+     public Rectangle getTouchBounds()
+    {
+        return new Rectangle(
+                getX() - getWidth() / 2,
+                getY() - getHeight() / 2,
+                getWidth() + BOUNDS_BUFFER,
+                getHeight() + BOUNDS_BUFFER);
+     }
 
 }

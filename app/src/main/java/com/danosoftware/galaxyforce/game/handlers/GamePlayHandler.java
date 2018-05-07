@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.danosoftware.galaxyforce.billing.service.IBillingService;
 import com.danosoftware.galaxyforce.buttons.impl.FlipButton;
+import com.danosoftware.galaxyforce.buttons.impl.MovingBaseButton;
 import com.danosoftware.galaxyforce.buttons.impl.PauseButton;
 import com.danosoftware.galaxyforce.buttons.interfaces.Button;
 import com.danosoftware.galaxyforce.buttons.interfaces.SpriteButton;
@@ -58,6 +59,7 @@ import com.danosoftware.galaxyforce.sprites.game.interfaces.Star;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.utilities.OverlapTester;
+import com.danosoftware.galaxyforce.utilities.Rectangle;
 import com.danosoftware.galaxyforce.vibration.VibrateTime;
 import com.danosoftware.galaxyforce.vibration.Vibration;
 import com.danosoftware.galaxyforce.vibration.VibrationSingleton;
@@ -99,11 +101,11 @@ public class GamePlayHandler implements GameHandler
     private ModelState modelState;
 
     /*
-     * TODO remove!! dummy base bounds when base has been destroyed - avoids
+     * empty base bounds when base has been destroyed - avoids
      * null pointer exceptions when checking if in bounds
      */
-    // private static final Rectangle BASE_DUMMY_BOUNDS = new Rectangle(0, 0, 0,
-    // 0);
+     private static final Rectangle BASE_EMPTY_BOUNDS =
+            new Rectangle(0, 0, 0,0);
 
     /*
      * ******************************************************
@@ -322,7 +324,7 @@ public class GamePlayHandler implements GameHandler
         /* initialise base controllers and buttons */
         initialiseControllers();
 
-        // movingBaseButton = new MovingBaseButton(this, controller);
+        movingBaseButton = new MovingBaseButton(this, controller);
 
         /* creates base's energy bar */
         energyBar = new EnergyBar();
@@ -690,14 +692,12 @@ public class GamePlayHandler implements GameHandler
         }
     }
 
-    // TODO permanently remove touch bound method ??
-    // @Override
-    // public Rectangle getBaseTouchBounds()
-    // {
-    // // if base has been destroyed return a dummy bounds
-    // return (primaryBase == null ? BASE_DUMMY_BOUNDS :
-    // primaryBase.getTouchBounds());
-    // }
+     @Override
+     public Rectangle getBaseTouchBounds()
+     {
+         // if base has been destroyed return an empty bounds
+         return (primaryBase == null ? BASE_EMPTY_BOUNDS : primaryBase.getTouchBounds());
+     }
 
     /*
      * add a new direction listener to be notified following any direction

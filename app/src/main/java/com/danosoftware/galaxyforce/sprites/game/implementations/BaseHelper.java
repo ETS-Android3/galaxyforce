@@ -17,6 +17,7 @@ import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteBase;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteShield;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.utilities.Rectangle;
 import com.danosoftware.galaxyforce.view.Animation;
 
 public class BaseHelper extends SpriteBase
@@ -27,6 +28,13 @@ public class BaseHelper extends SpriteBase
 
     // default base missile sprite
     public static final BaseMissileType DEFAULT_MISSILE_TYPE = BaseMissileType.SIMPLE;
+
+    /*
+     * small buffer so that bounds is slightly outside sprite area.
+     * helps if finger touch just misses sprite.
+     */
+    private static final int BOUNDS_BUFFER = 20;
+
 
     /* how much energy will be lost by another sprite when this sprite hits it */
     private static final int HIT_ENERGY = 2;
@@ -286,6 +294,15 @@ public class BaseHelper extends SpriteBase
     public void deRegisterHelperBase(SpriteBase helperBase)
     {
         throw new IllegalAccessError("De-registration of Helper Base not permitted.");
+    }
+
+    @Override
+    public Rectangle getTouchBounds() {
+        return new Rectangle(
+                getX() - getWidth() / 2,
+                getY() - getHeight() / 2,
+                getWidth() + BOUNDS_BUFFER,
+                getHeight() + BOUNDS_BUFFER);
     }
 
     @Override

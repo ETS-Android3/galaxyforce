@@ -5,6 +5,7 @@ import com.danosoftware.galaxyforce.enumerations.Direction;
 import com.danosoftware.galaxyforce.game.beans.BaseMissileBean;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.ExplodeBehaviour;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.utilities.Rectangle;
 
 /*
  * To change this template, choose Tools | Templates
@@ -124,4 +125,8 @@ public abstract class SpriteBase extends ExplodingSprite
      */
     public abstract void deRegisterHelperBase(SpriteBase helperBase);
 
+    /**
+     * Touch bounds of the moving base. Changes as base moves.
+     */
+    public abstract Rectangle getTouchBounds();
 }
