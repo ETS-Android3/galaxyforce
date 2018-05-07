@@ -30,7 +30,7 @@ public class BaseHelper extends SpriteBase
     public static final BaseMissileType DEFAULT_MISSILE_TYPE = BaseMissileType.SIMPLE;
 
     /*
-     * small buffer so that increases bounds is slightly outside sprite area.
+     * small buffer so that bounds is slightly outside sprite area.
      * helps if finger touch just misses sprite.
      */
     private static final int BOUNDS_BUFFER = 20;

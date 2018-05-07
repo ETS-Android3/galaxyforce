@@ -84,7 +84,7 @@ public class BaseMain extends SpriteBase
     private Rectangle touchBounds = null;
 
     /*
-     * small buffer so that increases bounds is slightly outside sprite area.
+     * small buffer so that bounds is slightly outside sprite area.
      * helps if finger touch just misses sprite.
      */
     private static int BOUNDS_BUFFER = 20;

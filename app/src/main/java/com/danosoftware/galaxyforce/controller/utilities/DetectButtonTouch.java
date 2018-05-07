@@ -1,5 +1,7 @@
 package com.danosoftware.galaxyforce.controller.utilities;
 
+import android.util.Log;
+
 import com.danosoftware.galaxyforce.buttons.interfaces.Button;
 import com.danosoftware.galaxyforce.controller.interfaces.TouchController;
 import com.danosoftware.galaxyforce.interfaces.Input.TouchEvent;
@@ -66,6 +68,10 @@ public class DetectButtonTouch implements TouchController
             BUTTON_POINTER = -1;
             button.buttonReleased();
             processed = true;
+        }
+
+        if (processed) {
+            Log.i(button.toString(), "Event " + event + " touch " + touchPoint);
         }
 
         return processed;

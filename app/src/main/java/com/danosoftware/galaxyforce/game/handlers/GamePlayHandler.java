@@ -695,7 +695,7 @@ public class GamePlayHandler implements GameHandler
      @Override
      public Rectangle getBaseTouchBounds()
      {
-         // if base has been destroyed return a dummy bounds
+         // if base has been destroyed return an empty bounds
          return (primaryBase == null ? BASE_EMPTY_BOUNDS : primaryBase.getTouchBounds());
      }
 
