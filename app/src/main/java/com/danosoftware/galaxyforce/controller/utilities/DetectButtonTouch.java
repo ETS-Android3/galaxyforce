@@ -1,5 +1,7 @@
 package com.danosoftware.galaxyforce.controller.utilities;
 
+import android.util.Log;
+
 import com.danosoftware.galaxyforce.buttons.interfaces.Button;
 import com.danosoftware.galaxyforce.controller.interfaces.TouchController;
 import com.danosoftware.galaxyforce.interfaces.Input.TouchEvent;

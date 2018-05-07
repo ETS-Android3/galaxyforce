@@ -10,8 +10,6 @@ import com.danosoftware.galaxyforce.utilities.Rectangle;
  * Represents a button representing the moving base. When base is pressed, it
  * should flip. Calls game model when pressed.
  */
-
-// TO REMOVE WHOLE CLASS - NO LONGER USED ???
 public class MovingBaseButton implements Button
 {
     // reference to button's parent model
@@ -28,8 +26,7 @@ public class MovingBaseButton implements Button
     @Override
     public Rectangle getBounds()
     {
-        // return model.getBaseTouchBounds();
-        return null;
+        return model.getBaseTouchBounds();
     }
 
     @Override

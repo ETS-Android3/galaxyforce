@@ -707,19 +707,14 @@ public class BaseMain extends SpriteBase
         return direction;
     }
 
-    // TODO - Removed methods below as no longer using touch bounds - remove
-    // permanently ??
-
-    // private void updateTouchBounds()
-    // {
-    // this.touchBounds = new Rectangle(getX() - getWidth() / 2, getY() -
-    // getHeight() / 2, getWidth() + BOUNDS_BUFFER, getHeight()
-    // + BOUNDS_BUFFER);
-    // }
-    //
-    // public Rectangle getTouchBounds()
-    // {
-    // return this.touchBounds;
-    // }
+    @Override
+     public Rectangle getTouchBounds()
+    {
+        return new Rectangle(
+                getX() - getWidth() / 2,
+                getY() - getHeight() / 2,
+                getWidth() + BOUNDS_BUFFER,
+                getHeight() + BOUNDS_BUFFER);
+     }
 
 }

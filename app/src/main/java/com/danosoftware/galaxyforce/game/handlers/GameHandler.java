@@ -9,6 +9,7 @@ import com.danosoftware.galaxyforce.sprites.game.interfaces.Sprite;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlien;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteBase;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteShield;
+import com.danosoftware.galaxyforce.utilities.Rectangle;
 
 import java.util.List;
 
@@ -26,8 +27,7 @@ public interface GameHandler extends PlayModel
      * 
      * @return Rectangle representing the base's bounds area.
      */
-    // TODO permanently remove base touch bounds
-    // public Rectangle getBaseTouchBounds();
+    public Rectangle getBaseTouchBounds();
 
     public void flipBase();
 
