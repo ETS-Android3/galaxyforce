@@ -1,8 +1,5 @@
 package com.danosoftware.galaxyforce.controller.game;
 
-import android.util.Log;
-
-import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controller.interfaces.BaseController;
 import com.danosoftware.galaxyforce.controller.interfaces.TouchBaseControllerModel;
 import com.danosoftware.galaxyforce.controller.interfaces.TouchController;
@@ -31,7 +28,7 @@ public class ControllerDrag implements BaseController, TouchController
     public boolean processTouchEvent(TouchEvent event, Vector2 touchPoint, int pointerID, float deltaTime)
     {
         boolean processed = false;
-       
+
         // on touch down: set drag pointer, set centre based on base's location,
         // update touch point
         if (event.type == TouchEvent.TOUCH_DOWN && DRAG_POINTER == -1)
