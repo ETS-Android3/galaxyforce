@@ -48,7 +48,7 @@ public class GameConstants
     public final static String FONT_CHARACTER_MAP = "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789.,?!-#" + DOUBLE_QUOTES + "'&()@°+=*$£<>%¤¢¥Œœ";
 
     // time between transitions when changing direction
-    public final static float DIRECTION_CHANGE_TRANSITION_TIME = 0.1f;
+    public final static float DIRECTION_CHANGE_TRANSITION_TIME = 0.025f;
 
     // max transitions during a direction change
     public final static int DIRECTION_CHANGE_TRANSITIONS = 9;
