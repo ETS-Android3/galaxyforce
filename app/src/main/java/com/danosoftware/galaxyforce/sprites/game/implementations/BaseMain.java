@@ -333,6 +333,13 @@ public class BaseMain extends SpriteBase
             {
                 setExploding();
             }
+            else {
+                startHit();
+                for (SpriteBase aHelperBase : helperBases)
+                {
+                    aHelperBase.startHit();
+                }
+            }
         }
     }
 
