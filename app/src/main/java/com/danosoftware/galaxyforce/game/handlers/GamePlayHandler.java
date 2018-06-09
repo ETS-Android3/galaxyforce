@@ -1299,30 +1299,32 @@ public class GamePlayHandler implements GameHandler
                 for (SpriteBase eachBase : bases)
                 {
 
+                    // base and alien collide
                     if (eachBase.isActive() && checkCollision(eachAlien, eachBase))
                     {
                         // base and alien lose energy
-                        eachBase.loseEnergy(eachAlien.hitEnergy());
+                        eachBase.setExploding();
                         eachAlien.loseEnergy(eachBase.hitEnergy());
 
                         // base has lost energy. get energy sprites representing
                         // new energy bar level.
-                        energy = energyBar.getEnergyBar();
-                        reBuildSprites = true;
+//                        energy = energyBar.getEnergyBar();
+//                        reBuildSprites = true;
 
                         // find the collision point
-                        Point collisionPoint = collisionPoint(eachAlien, eachBase);
-
-                        // hit on base - show hit if base is still active
-                        baseHit(collisionPoint.getX(), collisionPoint.getY(), eachBase.isActive());
-
-                        // hit on alien - show hit if alien is still active
-                        alienHit(collisionPoint.getX(), collisionPoint.getY(), eachAlien.isActive());
+//                        Point collisionPoint = collisionPoint(eachAlien, eachBase);
+//
+//                        // hit on base - show hit if base is still active
+//                        baseHit(collisionPoint.getX(), collisionPoint.getY(), eachBase.isActive());
+//
+//                        // hit on alien - show hit if alien is still active
+//                        alienHit(collisionPoint.getX(), collisionPoint.getY(), eachAlien.isActive());
                     }
                 }
 
                 for (SpriteBaseMissile eachBaseMissile : baseMissiles)
                 {
+                    // base missile and alien collide
                     if (eachBaseMissile.isActive() && checkCollision(eachAlien, eachBaseMissile))
                     {
 
@@ -1339,11 +1341,11 @@ public class GamePlayHandler implements GameHandler
                             eachAlien.loseEnergy(eachBaseMissile.hitEnergy());
                             eachBaseMissile.loseEnergy(eachAlien.hitEnergy());
 
-                            // find the collision point
-                            Point collisionPoint = collisionPointBaseMissile(eachBaseMissile, eachAlien);
-
-                            // hit on alien - show hit if alien is still active
-                            alienHit(collisionPoint.getX(), collisionPoint.getY(), eachAlien.isActive());
+//                            // find the collision point
+//                            Point collisionPoint = collisionPointBaseMissile(eachBaseMissile, eachAlien);
+//
+//                            // hit on alien - show hit if alien is still active
+//                            alienHit(collisionPoint.getX(), collisionPoint.getY(), eachAlien.isActive());
                         }
 
                     }
@@ -1371,10 +1373,10 @@ public class GamePlayHandler implements GameHandler
                         eachAlienMissile.loseEnergy(eachBase.hitEnergy());
 
                         // find the collision point
-                        Point collisionPoint = collisionPointAlienMissile(eachAlienMissile, eachBase);
-
-                        // hit on base - show hit if base is still active
-                        baseHit(collisionPoint.getX(), collisionPoint.getY(), eachBase.isActive());
+//                        Point collisionPoint = collisionPointAlienMissile(eachAlienMissile, eachBase);
+//
+//                        // hit on base - show hit if base is still active
+//                        baseHit(collisionPoint.getX(), collisionPoint.getY(), eachBase.isActive());
 
                         // base has lost energy. get energy sprites
                         // representing

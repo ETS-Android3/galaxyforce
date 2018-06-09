@@ -8,7 +8,7 @@ import com.danosoftware.galaxyforce.sprites.game.interfaces.ExplodingSprite;
  */
 public class HitBehaviourFlash implements HitBehaviour {
 
-    private final static float FLASH_DELAY_INVERT = 0.1f;
+    private final static float FLASH_DELAY_INVERT = 0.15f;
     private final static float FLASH_DELAY_TOTAL = FLASH_DELAY_INVERT * 3f;
 
     private boolean hit;
