@@ -1,6 +1,8 @@
 package com.danosoftware.galaxyforce.sprites.game.interfaces;
 
 import com.danosoftware.galaxyforce.sprites.game.behaviours.ExplodeBehaviour;
+import com.danosoftware.galaxyforce.sprites.game.behaviours.HitBehaviour;
+import com.danosoftware.galaxyforce.sprites.game.behaviours.HitBehaviourFlash;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 
 public abstract class ExplodingSprite extends MovingSprite
@@ -11,12 +13,22 @@ public abstract class ExplodingSprite extends MovingSprite
     // explosion behaviour
     private final ExplodeBehaviour explodeBehaviour;
 
+    // hit behaviour
+    private final HitBehaviour hitBehaviour;
+
     public ExplodingSprite(int xStart, int yStart, ISpriteIdentifier spriteId, ExplodeBehaviour explodeBehaviour, int energy, int hitEnergy,
             boolean visible)
     {
-        super(xStart, yStart, spriteId, energy, hitEnergy, visible);
+        super(
+                xStart,
+                yStart,
+                spriteId,
+                energy,
+                hitEnergy,
+                visible);
 
         this.explodeBehaviour = explodeBehaviour;
+        this.hitBehaviour = new HitBehaviourFlash();
         this.energy = energy;
     }
 
@@ -32,6 +44,11 @@ public abstract class ExplodingSprite extends MovingSprite
             {
                 setState(SpriteState.DESTROYED);
             }
+        }
+
+        // if hit then continue sprite flash
+        if (hitBehaviour.isHit()) {
+            hitBehaviour.updateHit(this, deltaTime);
         }
     }
 
@@ -52,6 +69,8 @@ public abstract class ExplodingSprite extends MovingSprite
         if (energy <= 0)
         {
             setExploding();
+        } else {
+            startHit();
         }
     }
 
@@ -69,5 +88,10 @@ public abstract class ExplodingSprite extends MovingSprite
     public boolean isExploding()
     {
         return (state == SpriteState.EXPLODING);
+    }
+
+    public void startHit()
+    {
+        hitBehaviour.startHit(this);
     }
 }

@@ -76,15 +76,15 @@ android {
  * restricting which dependencies leak their APIs to other modules.
  */
 dependencies {
-    compile 'com.android.support:support-v4:27.0.2'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.9.4'
-    compile 'com.fasterxml.jackson.core:jackson-core:2.9.4'
-    compile 'com.fasterxml.jackson.core:jackson-annotations:2.9.4'
-    testCompile 'junit:junit:4.12'
-    testCompile 'org.mockito:mockito-core:2.8.0'
-    testCompile 'org.slf4j:slf4j-api:1.7.7'
-    testCompile 'ch.qos.logback:logback-classic:1.1.2'
-    testCompile 'ch.qos.logback:logback-core:1.1.2'
-    testCompile 'org.powermock:powermock-api-mockito2:1.7.3'
-    testCompile 'org.powermock:powermock-module-junit4:1.7.3'
+    implementation 'com.android.support:support-v4:27.0.2'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.4'
+    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.4'
+    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.4'
+    testImplementation 'junit:junit:4.12'
+    testImplementation 'org.mockito:mockito-core:2.8.0'
+    testImplementation 'org.slf4j:slf4j-api:1.7.7'
+    testImplementation 'ch.qos.logback:logback-classic:1.1.2'
+    testImplementation 'ch.qos.logback:logback-core:1.1.2'
+    testImplementation 'org.powermock:powermock-api-mockito2:1.7.3'
+    testImplementation 'org.powermock:powermock-module-junit4:1.7.3'
 }
