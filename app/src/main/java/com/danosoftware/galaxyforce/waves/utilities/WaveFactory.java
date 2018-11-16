@@ -3,7 +3,7 @@ package com.danosoftware.galaxyforce.waves.utilities;
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
 import com.danosoftware.galaxyforce.game.handlers.GameHandler;
-import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlien;
+import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.utilities.Reversed;
 import com.danosoftware.galaxyforce.utilities.WaveUtilities;
 import com.danosoftware.galaxyforce.waves.AlienType;
@@ -175,16 +175,6 @@ public class WaveFactory {
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
                                 new SubWaveNoPathConfig(
                                         SubWaveRule.ASTEROIDS,
-                                        AlienType.ASTEROID,
-                                        Arrays.asList(PowerUpType.ENERGY)
-                                )
-                        )
-                );
-                subWaves.add(
-                        createSubWave(
-                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                new SubWaveNoPathConfig(
-                                        SubWaveRule.ASTEROIDS_REVERSE,
                                         AlienType.ASTEROID,
                                         Arrays.asList(PowerUpType.ENERGY)
                                 )
@@ -498,7 +488,7 @@ public class WaveFactory {
             final SubWaveRepeatMode repeatedMode,
             final SubWaveConfig... subWaveConfigs) {
 
-        List<SpriteAlien> aliens = new ArrayList<>();
+        List<IAlien> aliens = new ArrayList<>();
 
         for (SubWaveConfig config : subWaveConfigs) {
 
@@ -525,7 +515,7 @@ public class WaveFactory {
          * Any subsequent explosions on these aliens must also display on top so
          * reversed order is important for how aliens sprites are displayed.
          */
-        List<SpriteAlien> reversedAlienList = reverseAliens(aliens);
+        List<IAlien> reversedAlienList = reverseAliens(aliens);
 
         // create subwave from list of aliens and set whether wave should repeat
         // until all destroyed
@@ -544,10 +534,10 @@ public class WaveFactory {
      * Any subsequent explosions on these aliens must also display on top so
      * reversed order is important for how aliens sprites are displayed.
      */
-    private List<SpriteAlien> reverseAliens(List<SpriteAlien> aliens) {
-        List<SpriteAlien> reversedAlienList = new ArrayList<SpriteAlien>();
+    private List<IAlien> reverseAliens(List<IAlien> aliens) {
+        List<IAlien> reversedAlienList = new ArrayList<>();
 
-        for (SpriteAlien eachAlien : Reversed.reversed(aliens)) {
+        for (IAlien eachAlien : Reversed.reversed(aliens)) {
             reversedAlienList.add(eachAlien);
         }
 

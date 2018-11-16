@@ -4,7 +4,7 @@ import android.util.Log;
 
 import com.danosoftware.galaxyforce.billing.service.IBillingService;
 import com.danosoftware.galaxyforce.constants.GameConstants;
-import com.danosoftware.galaxyforce.controller.interfaces.ControllerBase;
+import com.danosoftware.galaxyforce.controller.interfaces.Controller;
 import com.danosoftware.galaxyforce.enumerations.ModelState;
 import com.danosoftware.galaxyforce.game.handlers.GameHandler;
 import com.danosoftware.galaxyforce.game.handlers.GameOverHandler;
@@ -16,9 +16,9 @@ import com.danosoftware.galaxyforce.interfaces.Screen;
 import com.danosoftware.galaxyforce.screen.ScreenFactory;
 import com.danosoftware.galaxyforce.screen.ScreenFactory.ScreenType;
 import com.danosoftware.galaxyforce.services.Games;
-import com.danosoftware.galaxyforce.sprites.game.interfaces.Sprite;
 import com.danosoftware.galaxyforce.sprites.game.interfaces.Star;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.refactor.ISprite;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.utilities.WaveUtilities;
 
@@ -48,21 +48,21 @@ public class GameModelImpl implements GameModel
      */
 
     /* reference to current game state */
-    private ModelState modelState = null;
+    private ModelState modelState;
 
-    private ControllerBase controller = null;
+    private final Controller controller;
 
     /* current handler looking after the current state of game model */
-    private Model modelHandler = null;
+    private Model modelHandler;
 
     /*
      * temporary reference to a game handler when paused. used to reinstate
      * paused game.
      */
-    private Model pausedGameHandler = null;
+    private Model pausedGameHandler;
 
     /* stars sprites to be passed around handlers */
-    private List<Star> stars = null;
+    private final List<Star> stars;
 
     /* the wave we were playing before last game over */
     private int lastWave;
@@ -78,7 +78,7 @@ public class GameModelImpl implements GameModel
      * ******************************************************
      */
 
-    public GameModelImpl(ControllerBase controller, int wave, IBillingService billingService)
+    public GameModelImpl(Controller controller, int wave, IBillingService billingService)
     {
         this.controller = controller;
         this.billingService = billingService;
@@ -99,7 +99,7 @@ public class GameModelImpl implements GameModel
      */
 
     @Override
-    public List<Sprite> getSprites()
+    public List<ISprite> getSprites()
     {
         return modelHandler.getSprites();
     }
@@ -153,7 +153,7 @@ public class GameModelImpl implements GameModel
             pausedGameHandler = modelHandler;
 
             // get list of game sprites to show on pause screen
-            List<Sprite> pausedSprites = null;
+            List<ISprite> pausedSprites;
             if (modelHandler instanceof GameHandler)
             {
                 GameHandler gameHandler = (GameHandler) modelHandler;
@@ -162,7 +162,7 @@ public class GameModelImpl implements GameModel
             }
             else
             {
-                pausedSprites = new ArrayList<Sprite>();
+                pausedSprites = new ArrayList<>();
             }
 
             // create new pause handler

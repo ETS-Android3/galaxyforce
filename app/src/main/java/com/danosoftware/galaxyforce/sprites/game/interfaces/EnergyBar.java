@@ -2,23 +2,20 @@ package com.danosoftware.galaxyforce.sprites.game.interfaces;
 
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.refactor.ISprite;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class EnergyBar
-{
-    /* logger tag */
-    private static final String TAG = "EnergyBar";
+import static com.danosoftware.galaxyforce.constants.GameConstants.BASE_MAX_ENERGY_LEVEL;
 
-    // energy block height
-    private static final int ENERGY_HEIGHT = GameSpriteIdentifier.ENERGY_GREEN.getProperties().getHeight();
+public class EnergyBar {
 
-    // energy block width - add 4 pixels to allow 2 pixel gap at either end when
-    // displayed
-    private static final int ENERGY_WIDTH = GameSpriteIdentifier.ENERGY_GREEN.getProperties().getWidth() + 4;
+    // energy block width - add 4 pixels to allow 2 pixel gap at either end
+    private static final int ENERGY_HEIGHT = 32;
+    private static final int ENERGY_WIDTH = 28 + 4;
 
     // start x,y position of flags
     private static final int ENERGY_START_X = 142 + (ENERGY_WIDTH / 2);
@@ -36,82 +33,65 @@ public class EnergyBar
     private static final Integer WARNING_LEVEL = 4;
     private static final Integer GOOD_LEVEL = 6;
 
-    private static final Integer MAX_LEVEL = 8;
-
     // variable to hold the current energy level
     private int energyLevel;
 
+    // energy bar sprites
+    private List<ISprite> energyBar;
+
     // static map of energy levels to status
-    private static final Map<Integer, ISpriteIdentifier> energyMap = new TreeMap<Integer, ISpriteIdentifier>();
-    static
-    {
+    private static final Map<Integer, ISpriteIdentifier> energyMap = new TreeMap<>();
+
+    static {
         energyMap.put(GOOD_LEVEL, GOOD);
         energyMap.put(WARNING_LEVEL, WARNING);
         energyMap.put(DANGER_LEVEL, DANGER);
         energyMap.put(CRITICAL_LEVEL, CRITICAL);
     }
 
-    public EnergyBar()
-    {
+    public EnergyBar() {
         resetEnergy();
     }
 
     /**
      * Reset the energy levels to maximum.
      */
-    public int resetEnergy()
-    {
-        energyLevel = MAX_LEVEL;
-
-        return energyLevel;
+    public void resetEnergy() {
+        updateEnergy(BASE_MAX_ENERGY_LEVEL);
     }
 
     /**
-     * Decrease the energy levels by delta
+     * Set the current energy levels.
      */
-    public int decreaseEnergy(int delta)
-    {
-        energyLevel = energyLevel - delta;
-
-        if (energyLevel < 0)
-        {
+    public void updateEnergy(int newEnergyLevel) {
+        if (newEnergyLevel < 0) {
             energyLevel = 0;
+        } else if (newEnergyLevel > BASE_MAX_ENERGY_LEVEL) {
+            energyLevel = BASE_MAX_ENERGY_LEVEL;
+        } else {
+            energyLevel = newEnergyLevel;
         }
-
-        return energyLevel;
+        energyBar = buildEnergyBar();
     }
 
     /**
-     * Increase the energy levels by delta. Can't exceed maximum level.
+     * Returns the current energy bar.
      */
-    public int increaseEnergy(int delta)
-    {
-        energyLevel = energyLevel + delta;
-
-        if (energyLevel > MAX_LEVEL)
-        {
-            energyLevel = MAX_LEVEL;
-        }
-
-        return energyLevel;
+    public List<ISprite> getEnergyBar() {
+        return energyBar;
     }
 
     /**
      * Creates a list of energy bars of the appropriate colour using the current
      * number of energy bars remaining.
      */
-    public List<Energy> getEnergyBar()
-    {
-        List<Energy> energyBarList = new ArrayList<Energy>();
+    private List<ISprite> buildEnergyBar() {
+        List<ISprite> energyBarList = new ArrayList<>();
 
         // iterate through all energy levels in map and choose correct sprite
         ISpriteIdentifier energySprite = CRITICAL;
-        for (Integer mapEnergyLevel : energyMap.keySet())
-        {
-            // Log.i(TAG, "Energy Bars: " + mapEnergyLevel + " : " +
-            // energyMap.get(mapEnergyLevel));
-            if (this.energyLevel >= mapEnergyLevel)
-            {
+        for (Integer mapEnergyLevel : energyMap.keySet()) {
+            if (this.energyLevel >= mapEnergyLevel) {
                 energySprite = energyMap.get(mapEnergyLevel);
             }
         }
@@ -123,8 +103,7 @@ public class EnergyBar
         barXPosition += ENERGY_WIDTH;
 
         // add the energy bar outline
-        for (int i = 0; i < MAX_LEVEL - 2; i++)
-        {
+        for (int i = 0; i < BASE_MAX_ENERGY_LEVEL - 2; i++) {
             energyBarList.add(new Energy(barXPosition, ENERGY_START_Y, GameSpriteIdentifier.ENERGY_BAR_MIDDLE));
             barXPosition += ENERGY_WIDTH;
         }
@@ -135,9 +114,7 @@ public class EnergyBar
         int flagXPosition = ENERGY_START_X;
 
         // add the number of energy bars needed to the list
-        for (int i = 0; i < energyLevel; i++)
-        {
-            // Log.i(TAG, "Energy Bars: " + i + " : " + flagXPosition);
+        for (int i = 0; i < energyLevel; i++) {
             energyBarList.add(new Energy(flagXPosition, ENERGY_START_Y, energySprite));
             flagXPosition += ENERGY_WIDTH;
         }
