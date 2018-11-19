@@ -30,12 +30,6 @@ public class SubWavePathRuleProperties {
     /**
      * Create a new alien sub-wave using a supplied path and
      * delays in seconds.
-     *
-     * @param path
-     * @param numberOfAliens
-     * @param delayBetweenAliens
-     * @param delayOffet
-     * @param restartImmediately
      */
     public SubWavePathRuleProperties(
             final Path path,
@@ -56,13 +50,6 @@ public class SubWavePathRuleProperties {
     /**
      * Create a new alien sub-wave using a supplied path and
      * delays in seconds. Plus translators to alter the path.
-     *
-     * @param path
-     * @param numberOfAliens
-     * @param delayBetweenAliens
-     * @param delayOffet
-     * @param restartImmediately
-     * @param translators
      */
     public SubWavePathRuleProperties(
             final Path path,

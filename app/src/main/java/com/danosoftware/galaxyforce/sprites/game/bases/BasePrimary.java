@@ -3,7 +3,6 @@ package com.danosoftware.galaxyforce.sprites.game.bases;
 import android.util.Log;
 
 import com.danosoftware.galaxyforce.enumerations.BaseMissileType;
-import com.danosoftware.galaxyforce.enumerations.Direction;
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
 import com.danosoftware.galaxyforce.game.beans.BaseMissileBean;
@@ -98,7 +97,7 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
     private static final float DEFAULT_BASE_MISSILE_DELAY = 0.5f;
 
     /* variable to store current delay between missile fires */
-    private float baseMissileDelay = 0f;
+    private float baseMissileDelay;
 
     // default base missile sprite
     private static final BaseMissileType DEFAULT_MISSILE_TYPE = BaseMissileType.SIMPLE;
@@ -107,19 +106,16 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
     private int energy;
 
     /* variable to store time passed since base last fired */
-    private float timeSinceBaseLastFired = 0f;
+    private float timeSinceBaseLastFired;
 
     /* variable to store current base missile type */
-    private BaseMissileType baseMissileType = null;
-
-    /* references current direction of base */
-    private Direction direction;
+    private BaseMissileType baseMissileType;
 
     /*
      * variable to store time until missile should be reverted to default. Value
      * of zero indicates no change is needed.
      */
-    private float timeUntilDefaultMissile = 0f;
+    private float timeUntilDefaultMissile;
 
     /*
      * variable to store time until shield can be removed. Value of zero
@@ -267,10 +263,6 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
 
     /**
      * Moves base by the supplied weighting
-     *
-     * @param weightingX
-     * @param weightingY
-     * @param deltaTime
      */
     @Override
     public void moveBase(float weightingX, float weightingY, float deltaTime) {
@@ -453,10 +445,10 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
     }
 
 
-    /**
-     * ***********************
-     * PRIVATE HELPERS *
-     * ***********************
+    /*
+      ***********************
+      PRIVATE HELPERS *
+      ***********************
      */
 
     /**
@@ -491,10 +483,10 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
 //        return new com.danosoftware.galaxyforce.sprites.game.implementations.BaseMain(xStart, yStart, com.danosoftware.galaxyforce.sprites.game.implementations.BaseMain.BASE_SPRITE, width, height, energyBar, direction, model);
 //    }
 
-    /**
-     * ***********************
-     * MISSILE HELPERS *
-     * ***********************
+    /*
+      ***********************
+      MISSILE HELPERS *
+      ***********************
      */
 
     /**
@@ -506,7 +498,7 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
             List<BaseMissileBean> missiles = new ArrayList<BaseMissileBean>();
 
             // primary base fires
-            missiles.add(fire(direction));
+            missiles.add(fire());
 
             // any helper bases fire
             for (IBaseHelper aHelperBase : helpers.values()) {
@@ -559,7 +551,7 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
      *
      * @return current base missile
      */
-    private BaseMissileBean fire(Direction direction) {
+    private BaseMissileBean fire() {
         // reset timer since base last fired
         timeSinceBaseLastFired = 0f;
 

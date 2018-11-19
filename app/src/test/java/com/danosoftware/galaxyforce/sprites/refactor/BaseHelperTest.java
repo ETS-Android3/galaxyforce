@@ -80,7 +80,6 @@ public class BaseHelperTest {
         when(VibrationSingleton.getInstance()).thenReturn(vibration);
 
         final TextureDetail mockTextureDetail = new TextureDetail("mock", 0, 0, 0, 0);
-        Textures mockTextures = mock(Textures.class);
         mockStatic(Textures.class);
         when(Textures.getTextureDetail(any(String.class))).thenReturn(mockTextureDetail);
 

@@ -4,7 +4,7 @@ public enum OptionSound implements Option {
 
     ON("ON"), OFF("OFF");
 
-    private String text = null;
+    private String text;
 
     OptionSound(String text) {
         this.text = text;

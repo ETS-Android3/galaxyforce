@@ -24,7 +24,7 @@ public class PowerUpRandom implements PowerUpBehaviour {
     /**
      * Behaviour that will create a random power-up when alien is destroyed.
      *
-     * @param model
+     * @param model - game handler to receive power-up
      * @param powerUpChance - chance that this alien will generate a power-up when
      *                      destroyed
      */
@@ -39,7 +39,7 @@ public class PowerUpRandom implements PowerUpBehaviour {
      * Behaviour that will create a random power-up from a supplied list when
      * alien is destroyed.
      *
-     * @param model
+     * @param model - game handler to receive power-up
      * @param powerUpChance - chance that this alien will generate a power-up when
      *                      destroyed
      * @param powerUps      - list of power-ups to choose from

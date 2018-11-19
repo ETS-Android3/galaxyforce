@@ -46,7 +46,7 @@ public class PowerUpFactory {
      * Return a power-up using the supplied power-up type.
      */
     public static PowerUpBean newPowerUp(PowerUpType powerUpType, int x, int y) {
-        ISpriteIdentifier spriteId = null;
+        ISpriteIdentifier spriteId;
         Sound sound = POWER_UP_SOUND;
 
         switch (powerUpType) {

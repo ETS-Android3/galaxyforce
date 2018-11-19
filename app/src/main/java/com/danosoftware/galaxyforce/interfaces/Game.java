@@ -30,8 +30,6 @@ public interface Game {
      * Change to a screen that will eventually return back to this screen. A
      * subsequent call to screenReturn() will return back to the the previous
      * screen.
-     *
-     * @param gameScreen
      */
     void setReturningScreen(Screen gameScreen);
 

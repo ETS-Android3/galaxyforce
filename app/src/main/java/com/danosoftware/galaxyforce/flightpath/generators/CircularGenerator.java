@@ -21,9 +21,6 @@ public class CircularGenerator implements PathGenerator {
      * Instantiate generator by extracting and converting the circular data points
      * and then translating them to their new positions based on the provided
      * translators (e.g. x-axis flip).
-     *
-     * @param circularData
-     * @param translators
      */
     public CircularGenerator(final CircularPathDTO circularData, final PointTranslatorChain translators) {
         this.centre = convertAndTranslatePoint(circularData.getCentre(), translators);

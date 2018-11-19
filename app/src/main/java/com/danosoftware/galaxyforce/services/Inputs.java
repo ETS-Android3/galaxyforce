@@ -1,6 +1,5 @@
 package com.danosoftware.galaxyforce.services;
 
-import android.content.Context;
 import android.view.View;
 
 import com.danosoftware.galaxyforce.input.GameInput;
@@ -22,15 +21,13 @@ public class Inputs {
     }
 
     // static factory to create new game instance
-    public static void newInput(Context context, View view, float scaleX, float scaleY) {
-        if (context == null) {
-            throw new IllegalArgumentException("Supplied Context object can not be null.");
-        }
+    public static void newInput(View view, float scaleX, float scaleY) {
+
         if (view == null) {
             throw new IllegalArgumentException("Supplied View object can not be null.");
         }
 
-        input = new GameInput(context, view, scaleX, scaleY);
+        input = new GameInput(view, scaleX, scaleY);
     }
 
 }

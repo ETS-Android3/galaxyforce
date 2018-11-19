@@ -24,9 +24,6 @@ public class PathLoader {
 
     /**
      * Load path data JSON file and return as a list of Path DTOs
-     *
-     * @param jsonFile
-     * @return path DTOs
      */
     public static PathListDTO loadPaths(String jsonFile) {
         Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Loading JSON Path");

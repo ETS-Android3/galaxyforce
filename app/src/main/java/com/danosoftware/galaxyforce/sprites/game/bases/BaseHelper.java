@@ -97,7 +97,7 @@ public class BaseHelper extends AbstractCollidingSprite implements IBaseHelper {
      * - Creates new helper
      * - Registers helper with primary base
      */
-    public final static void createHelperBase(
+    public static void createHelperBase(
             final IBasePrimary primaryBase,
             final GameHandler model,
             final HelperSide side,
@@ -117,12 +117,6 @@ public class BaseHelper extends AbstractCollidingSprite implements IBaseHelper {
     /**
      * private BaseHelper constructor.
      * Use static helper creator to ensure helper base is registered with primary base.
-     *
-     * @param primaryBase
-     * @param model
-     * @param side
-     * @param shieldUp
-     * @param shieldSyncTime
      */
     private BaseHelper(
             final IBasePrimary primaryBase,

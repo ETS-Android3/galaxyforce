@@ -31,22 +31,9 @@ public class SubWaveRuleProperties {
     // alternatively will wait until entire in-progress subwave finishes
     private final boolean restartImmediately;
 
-    // alien direction up/down
-    private final Direction direction;
-
     /**
      * Properties to help create a new alien sub-wave using a supplied positions
      * (random or specified) and delays in seconds.
-     *
-     * @param xRandom
-     * @param yRandom
-     * @param xStart
-     * @param yStart
-     * @param numberOfAliens
-     * @param delayBetweenAliens
-     * @param delayOffet
-     * @param restartImmediately
-     * @param direction
      */
     public SubWaveRuleProperties(
             boolean xRandom,
@@ -66,7 +53,6 @@ public class SubWaveRuleProperties {
         this.delayBetweenAliens = delayBetweenAliens;
         this.delayOffet = delayOffet;
         this.restartImmediately = restartImmediately;
-        this.direction = direction;
     }
 
     public boolean isxRandom() {
@@ -99,9 +85,5 @@ public class SubWaveRuleProperties {
 
     public boolean isRestartImmediately() {
         return restartImmediately;
-    }
-
-    public Direction getDirection() {
-        return direction;
     }
 }

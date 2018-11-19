@@ -42,28 +42,25 @@ public class GameImpl implements Game {
     private final Context context;
 
     /* reference to GL graphics */
-    private GLGraphics glGraphics = null;
+    private GLGraphics glGraphics;
 
     /* reference to file input/output */
-    private FileIO fileIO = null;
+    private FileIO fileIO;
 
     /* reference to game input */
-    private Input input = null;
+    private Input input;
 
     /* reference to current screen */
-    private Screen screen = null;
+    private Screen screen;
 
     /* reference to current screen */
-    private Screen returningScreen = null;
+    private Screen returningScreen;
 
     /* reference to billing service */
     private final IBillingService billingService;
 
-    /* contains reference to game model */
-    boolean running = false;
-
     /* reference to game audio */
-    private Audio audio = null;
+    private Audio audio;
 
     public GameImpl(Context context, GLGraphics glGraphics, GLSurfaceView glView, IBillingService billingService) {
         this.context = context;
@@ -73,7 +70,7 @@ public class GameImpl implements Game {
         this.billingService = billingService;
 
         // create new input implementation
-        Inputs.newInput(context, glView, 1, 1);
+        Inputs.newInput(glView, 1, 1);
 
         /*
          * initialise sound effect bank singleton. initialise as early as

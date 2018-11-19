@@ -13,14 +13,15 @@ import java.util.List;
  * position.
  */
 public class ToggleOption implements ToggleButtonGroup {
+
     // reference to list of buttons
-    private List<Button> options = null;
+    private final List<Button> options;
 
     // reference to model
-    OptionsModel model = null;
+    private final OptionsModel model;
 
     // reference to the currently selected option
-    Option currentOption = null;
+    private Option currentOption;
 
     public ToggleOption(OptionsModel model, Option currentOption) {
         this.model = model;

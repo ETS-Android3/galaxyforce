@@ -13,11 +13,8 @@ public class AssetHelpers {
 
     /**
      * Return a paths assets file with the supplied filename.
-     *
-     * @param filename
-     * @return
      */
-    public final static File pathAsset(final String filename) {
+    public static File pathAsset(final String filename) {
         Path path = Paths.get(ASSET_PATH, "paths", filename);
         return path.toFile();
     }

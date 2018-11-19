@@ -9,9 +9,6 @@ public interface PointTranslator {
 
     /**
      * Return a converted version of the supplied point
-     *
-     * @param point
-     * @return converted point
      */
     Point convert(final Point point);
 }

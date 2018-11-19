@@ -32,12 +32,12 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, MenuB
     /* logger tag */
     private static final String LOCAL_TAG = "SelectLevelModelImpl";
 
-    private List<SelectLevel> levels = null;
+    private final List<SelectLevel> levels;
 
-    private SelectLevelSwipe swipe = null;
+    private SelectLevelSwipe swipe;
 
     // map of zone number to x position
-    private Map<Integer, Integer> zoneXPosition = null;
+    private Map<Integer, Integer> zoneXPosition;
 
     // current screen x position
     private float xPosition;
@@ -52,11 +52,11 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, MenuB
     private int zone;
 
     // references to stars
-    private List<Star> stars = null;
+    private List<Star> stars;
 
     // reference to all sprites in model
-    private List<ISprite> allSprites = null;
-    private List<ISprite> staticSprites = null;
+    private List<ISprite> allSprites;
+    private List<ISprite> staticSprites;
 
     // reference to all button sprites in model
     // private final List<Sprite> buttons;
@@ -64,11 +64,11 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, MenuB
     private ModelState modelState;
 
     // reference to all text objects in model
-    List<Text> allText = null;
-    List<Text> staticText = null;
+    List<Text> allText;
+    List<Text> staticText;
 
     /* reference to controller */
-    private Controller controller = null;
+    private final Controller controller;
 
     // reference to saved game singleton
     private final SavedGame savedGame;
@@ -209,8 +209,8 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, MenuB
         // add current zone and related x position to map
         zoneXPosition.put(zone, xPosition);
 
-        int column = 0;
-        int row = 0;
+        int column;
+        int row;
 
         int maxLevelUnlocked = savedGame.getGameLevel();
 
@@ -229,7 +229,7 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, MenuB
             row = 3 - (i / 3);
 
             // is level button unlocked?
-            SelectLevel.LockStatus lockedStatus = null;
+            SelectLevel.LockStatus lockedStatus;
             if ((i + levelStart) <= maxLevelUnlocked) {
                 lockedStatus = SelectLevel.LockStatus.UNLOCKED;
             } else {

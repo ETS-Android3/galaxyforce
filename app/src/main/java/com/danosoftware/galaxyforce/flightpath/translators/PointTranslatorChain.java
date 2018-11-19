@@ -21,9 +21,6 @@ public class PointTranslatorChain {
 
     /**
      * Add a new translator to the chain
-     *
-     * @param translator
-     * @return
      */
     public PointTranslatorChain add(final PointTranslator translator) {
         translators.add(translator);
@@ -32,9 +29,6 @@ public class PointTranslatorChain {
 
     /**
      * Translate the supplied point using the chain of translators
-     *
-     * @param point
-     * @return
      */
     public Point translate(final Point point) {
         Point convertedPoint = point;

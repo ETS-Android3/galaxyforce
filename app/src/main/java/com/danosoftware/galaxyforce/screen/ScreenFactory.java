@@ -38,7 +38,7 @@ public class ScreenFactory {
 
     public static Screen newScreen(ScreenType screenType) {
         // screen to be returned
-        Screen screen = null;
+        Screen screen;
 
         /* set-up view */
         Game game = Games.getGame();

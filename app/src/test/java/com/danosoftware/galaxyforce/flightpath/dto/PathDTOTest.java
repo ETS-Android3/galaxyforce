@@ -106,6 +106,7 @@ public class PathDTOTest {
             File file = pathAsset(path.getPathFile());
             ObjectMapper mapper = new ObjectMapper();
             PathListDTO pathData = mapper.readValue(file, PathListDTO.class);
+            assertThat(pathData, is(notNullValue()));
         }
         logger.info("All loaded successfully");
     }

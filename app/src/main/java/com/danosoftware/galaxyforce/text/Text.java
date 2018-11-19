@@ -42,11 +42,6 @@ public class Text {
         return new Text(text, 0, y, textPositionX, null);
     }
 
-    // static factory for text using relative position enum
-    public static Text newTextRelativePositionY(String text, int x, TextPositionY textPositionY) {
-        return new Text(text, x, 0, null, textPositionY);
-    }
-
     // private constructor as static factories are used
     private Text(String text, int x, int y, TextPositionX textPositionX, TextPositionY textPositionY) {
         this.text = removeInvalidCharacters(text);
@@ -80,9 +75,6 @@ public class Text {
      * Takes the original supplied text string and removes any invalid
      * characters. In this case, this will be any characters that don't exist in
      * the font character map.
-     *
-     * @param text
-     * @return
      */
     private String removeInvalidCharacters(String text) {
         // string that contains only valid characters

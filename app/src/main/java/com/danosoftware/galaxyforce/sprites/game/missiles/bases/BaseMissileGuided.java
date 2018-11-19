@@ -38,7 +38,7 @@ public class BaseMissileGuided extends AbstractBaseMissile {
     private float angle;
 
     /* variable to store time passed since last missile direction change */
-    private float timeSinceMissileDirectionChange = 0f;
+    private float timeSinceMissileDirectionChange;
 
     public BaseMissileGuided(int xStart, int yStart, GameHandler model) {
         super(SPRITE, xStart, yStart, HIT_ENERGY);

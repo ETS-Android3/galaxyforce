@@ -6,8 +6,6 @@ public interface ISpriteIdentifier {
     /**
      * Returns the sprite's properties (e.g. height or width). Properties will
      * not be available until after updateProperties() is called.
-     *
-     * @return
      */
     ISpriteProperties getProperties();
 
@@ -17,8 +15,6 @@ public interface ISpriteIdentifier {
      * This method must be called once a new texture is available or refreshed
      * after a resume. Sprite properties will not be available until this is
      * called.
-     *
-     * @param texture
      */
     void updateProperties(Texture texture);
 }

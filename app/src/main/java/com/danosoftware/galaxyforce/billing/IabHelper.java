@@ -104,7 +104,7 @@ public class IabHelper {
     String mPurchasingItemType;
 
     // Public key for verifying signature, in base64 encoding
-    String mSignatureBase64 = null;
+    String mSignatureBase64;
 
     // Billing response codes
     public static final int BILLING_RESPONSE_RESULT_OK = 0;
@@ -481,7 +481,7 @@ public class IabHelper {
                 return true;
             }
 
-            Purchase purchase = null;
+            Purchase purchase;
             try {
                 purchase = new Purchase(mPurchasingItemType, purchaseData, dataSignature);
                 String sku = purchase.getSku();
@@ -536,7 +536,7 @@ public class IabHelper {
      * Queries the inventory. This will query all owned items from the server,
      * as well as information on additional skus, if specified. This method may
      * block or take long to execute. Do not call from a UI thread. For that,
-     * use the non-blocking version {@link #refreshInventoryAsync}.
+     * use the non-blocking version refreshInventoryAsync.
      *
      * @param querySkuDetails if true, SKU details (price, description, etc) will be queried
      *                        as well as purchase information.
@@ -733,7 +733,7 @@ public class IabHelper {
     }
 
     /**
-     * Same as {@link consumeAsync}, but for multiple items at once.
+     * Same as consumeAsync but for multiple items at once.
      *
      * @param purchases The list of PurchaseInfo objects representing the purchases to
      *                  consume.

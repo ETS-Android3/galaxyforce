@@ -363,8 +363,6 @@ public enum SubWavePathRule {
 
     /**
      * Properties to create a sub-wave
-     *
-     * @return
      */
     public List<SubWavePathRuleProperties> subWaveProps() {
         return subWaveProps;

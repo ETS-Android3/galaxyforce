@@ -21,8 +21,6 @@ import com.danosoftware.galaxyforce.view.SpriteBatcher;
 import javax.microedition.khronos.opengles.GL10;
 
 public abstract class AbstractScreen implements Screen {
-    /* maximum number of sprites that can be displayed on screen at once */
-    private static final int MAX_SPRITES = 1000;
 
     /* logger tag */
     private static final String LOCAL_TAG = "Screen";

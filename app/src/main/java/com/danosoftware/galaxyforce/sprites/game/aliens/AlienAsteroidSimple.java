@@ -1,6 +1,5 @@
 package com.danosoftware.galaxyforce.sprites.game.aliens;
 
-import com.danosoftware.galaxyforce.enumerations.Direction;
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.game.handlers.GameHandler;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.explode.ExplodeSimple;
@@ -54,9 +53,6 @@ public class AlienAsteroidSimple extends AbstractAlien {
     /* how many seconds to delay before alien starts to follow path */
     private float timeDelayStart;
 
-    /* direction of asteroid */
-    private final Direction direction;
-
     /* restart asteroid as soon as it leaves screen? */
     private final boolean restartImmediately;
 
@@ -64,7 +60,7 @@ public class AlienAsteroidSimple extends AbstractAlien {
     private final int originalYPosition;
 
     /* variable to store how far alien has moved since spawned */
-    private float distanceYMoved = 0f;
+    private float distanceYMoved;
 
     /**
      * Create Alien Asteroid.
@@ -75,7 +71,6 @@ public class AlienAsteroidSimple extends AbstractAlien {
             final int yStart,
             final float timeDelayStart,
             final boolean restartImmediately,
-            final Direction direction,
             final GameHandler model) {
         // default is that asteroids are initially invisible
         super(
@@ -95,7 +90,6 @@ public class AlienAsteroidSimple extends AbstractAlien {
         this.timeDelayStart = timeDelayStart;
         this.originalYPosition = yStart;
         this.distanceYMoved = 0f;
-        this.direction = direction;
         this.restartImmediately = restartImmediately;
 
         // set random starting rotation angle

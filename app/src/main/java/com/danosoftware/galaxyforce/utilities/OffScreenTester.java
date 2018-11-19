@@ -14,7 +14,7 @@ public class OffScreenTester {
      * Tests if the sprite is completely off-screen by testing it's
      * position/dimensions against all screen edges.
      */
-    public static final boolean offScreenAnySide(ISprite sprite) {
+    public static boolean offScreenAnySide(ISprite sprite) {
         return (sprite.y() >= GAME_HEIGHT + sprite.halfHeight()
                 || sprite.y() <= 0 - sprite.halfHeight()
                 || sprite.x() >= GAME_WIDTH + sprite.halfWidth()
@@ -25,7 +25,7 @@ public class OffScreenTester {
      * Tests if the sprite is off top of screen by testing it's
      * position/dimensions against the top edge.
      */
-    public static final boolean offScreenTop(ISprite sprite) {
+    public static boolean offScreenTop(ISprite sprite) {
         return (sprite.y() >= (GAME_HEIGHT + sprite.halfHeight()));
     }
 
@@ -33,7 +33,7 @@ public class OffScreenTester {
      * Tests if the sprite is off bottom of screen by testing it's
      * position/dimensions against the bottom edge.
      */
-    public static final boolean offScreenBottom(ISprite sprite) {
+    public static boolean offScreenBottom(ISprite sprite) {
         return (sprite.y() <= 0 - sprite.halfHeight());
     }
 }

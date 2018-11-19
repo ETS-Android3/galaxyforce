@@ -129,24 +129,6 @@ public class BaseMissileFactory {
 
         }
 
-        // correct y position based on sprite height and direction
-        int correctedY;
-
-//        switch (direction)
-//        {
-//        case UP:
-//            correctedY = base.getY() + (base.getHeight() / 2) + (missile.getHeight() / 2) - FIRE_Y_OFFSET;
-//            break;
-//        case DOWN:
-//            correctedY = base.getY() - (base.getHeight() / 2) - (missile.getHeight() / 2) + FIRE_Y_OFFSET;
-//            break;
-//        default:
-//            throw new IllegalArgumentException("Unsupported Direction Type: '" + direction.name() + "'.");
-//        }
-
-//        missile.setY(correctedY);
-
-        // return new missile
         return missile;
     }
 }

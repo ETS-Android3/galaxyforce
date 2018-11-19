@@ -11,16 +11,11 @@ public interface ExplodeBehaviour {
 
     /**
      * Get the current explosion sprite.
-     *
-     * @param deltaTime
-     * @return
      */
     ISpriteIdentifier getExplosion(float deltaTime);
 
     /**
      * Has the explosion finished?
-     *
-     * @return
      */
     boolean finishedExploding();
 

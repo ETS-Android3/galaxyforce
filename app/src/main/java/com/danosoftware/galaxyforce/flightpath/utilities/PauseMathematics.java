@@ -17,10 +17,6 @@ public class PauseMathematics {
      * return the path points points for the current pause path.
      * a pause path represents an alien staying in the same position
      * for a set time.
-     *
-     * @param pausePosition
-     * @param pauseTime
-     * @return array of points representing Linear path
      */
     public static List<Point> createPausePath(
             final Point pausePosition,

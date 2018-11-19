@@ -110,8 +110,7 @@ public final class WaveCreationUtils {
                         props.getyStart(),
                         (i * props.getDelayBetweenAliens()) + props.getDelayOffet(),
                         model,
-                        props.isRestartImmediately(),
-                        props.getDirection()));
+                        props.isRestartImmediately()));
             }
         }
 

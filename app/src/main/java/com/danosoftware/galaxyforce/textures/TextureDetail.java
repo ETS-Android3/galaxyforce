@@ -27,7 +27,7 @@ public class TextureDetail {
     // converts string to int
     // returns 0 if NumberFormatException is thrown
     private static int convertNumeric(String str) {
-        int num = 0;
+        int num;
 
         try {
             num = Integer.parseInt(str);

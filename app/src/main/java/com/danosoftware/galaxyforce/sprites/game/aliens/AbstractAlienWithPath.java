@@ -144,8 +144,7 @@ public abstract class AbstractAlienWithPath extends AbstractAlien implements IAl
         return (state == FINISHED_PASS);
     }
 
-    @Override
-    public void endOfPass() {
+    protected void endOfPass() {
         state = FINISHED_PASS;
     }
 

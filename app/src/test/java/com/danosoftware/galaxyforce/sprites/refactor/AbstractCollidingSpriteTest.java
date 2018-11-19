@@ -39,8 +39,8 @@ public class AbstractCollidingSpriteTest {
 
     // test implementation of an abstract sprite
     private static class TestSprite extends AbstractCollidingSprite {
-        private TestSprite(ISpriteIdentifier spriteId, int x, int y, int rotation) {
-            super(spriteId, x, y, rotation);
+        private TestSprite(ISpriteIdentifier spriteId) {
+            super(spriteId, X, Y, 0);
         }
 
         @Override
@@ -64,7 +64,7 @@ public class AbstractCollidingSpriteTest {
     @Before
     public void setUp() {
         spriteId = mock(ISpriteIdentifier.class);
-        sprite = new TestSprite(spriteId, X, Y, 0);
+        sprite = new TestSprite(spriteId);
 
         props = mock(ISpriteProperties.class);
         when(props.getHeight()).thenReturn(HEIGHT);

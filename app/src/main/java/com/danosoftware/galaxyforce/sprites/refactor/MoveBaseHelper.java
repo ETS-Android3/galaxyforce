@@ -61,10 +61,6 @@ public class MoveBaseHelper {
 
     /**
      * Moves base by the supplied weighting
-     *
-     * @param weightingX
-     * @param weightingY
-     * @param deltaTime
      */
     public void moveBase(float weightingX, float weightingY, float deltaTime) {
 

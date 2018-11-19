@@ -4,7 +4,7 @@ public enum OptionMusic implements Option {
 
     ON("ON"), OFF("OFF");
 
-    private String text = null;
+    private String text;
 
     OptionMusic(String text) {
         this.text = text;

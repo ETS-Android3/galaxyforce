@@ -38,7 +38,6 @@ public class AlienManagerTest {
 
     private AlienManager alienMgr;
     private WaveManager mockWaveMgr;
-    private List<IAlien> aliens;
     private IAlienWithPath mockAlien;
 
     private static final int ALIEN_COUNT = 10;
@@ -54,7 +53,7 @@ public class AlienManagerTest {
         when(mockAlien.isDestroyed()).thenReturn(false);
         when(mockAlien.isEndOfPass()).thenReturn(false);
 
-        aliens = new ArrayList<>();
+        List<IAlien> aliens = new ArrayList<>();
         for (int i = 0; i < ALIEN_COUNT; i++) {
             aliens.add(mockAlien);
         }

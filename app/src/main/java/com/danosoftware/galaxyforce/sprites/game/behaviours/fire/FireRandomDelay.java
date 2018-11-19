@@ -14,10 +14,10 @@ public class FireRandomDelay implements FireBehaviour {
      */
 
     /* variable to store actual delay before alien can fire */
-    private double delayUntilNextFire = 0f;
+    private double delayUntilNextFire;
 
     /* variable to store time passed since alien last fired */
-    private float timeSinceLastFired = 0f;
+    private float timeSinceLastFired;
 
     /* reference to game model */
     private final GameHandler model;

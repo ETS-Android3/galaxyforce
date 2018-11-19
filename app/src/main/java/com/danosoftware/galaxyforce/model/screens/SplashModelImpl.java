@@ -1,8 +1,10 @@
 package com.danosoftware.galaxyforce.model.screens;
 
 import com.danosoftware.galaxyforce.buttons.impl.ScreenTouch;
+import com.danosoftware.galaxyforce.buttons.interfaces.Button;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controller.interfaces.Controller;
+import com.danosoftware.galaxyforce.controller.utilities.DetectButtonTouch;
 import com.danosoftware.galaxyforce.enumerations.ModelState;
 import com.danosoftware.galaxyforce.interfaces.Screen;
 import com.danosoftware.galaxyforce.interfaces.TouchScreenModel;
@@ -19,25 +21,15 @@ import java.util.List;
 
 public class SplashModelImpl implements TouchScreenModel {
 
-    private List<Text> textList;
-
-    // list of text items to display
-    Text title = null;
-    Text company = null;
-    Text copyright = null;
+    private final List<Text> textList;
 
     // list of sprites
-    private List<ISprite> allSprites = null;
-
-    /* reference to controller */
-    private Controller controller = null;
-
-    private ScreenTouch screenTouch = null;
+    private final List<ISprite> allSprites;
 
     private ModelState modelState = null;
 
     // how long splash screen has been displayed for so far (in seconds)
-    float splashScreenTime = 0f;
+    private float splashScreenTime = 0f;
 
     // how long splash screen should be displayed for (in seconds)
     private static final float SPLASH_SCREEN_WAIT = 4f;
@@ -47,31 +39,16 @@ public class SplashModelImpl implements TouchScreenModel {
         this.allSprites = new ArrayList<>();
         this.textList = new ArrayList<>();
 
-        this.controller = controller;
-
-        // add screen touch to trigger screenTouch method when user touches
-        // screen
-        this.screenTouch = new ScreenTouch(this, controller, 0, 0, GameConstants.GAME_WIDTH, GameConstants.GAME_HEIGHT);
+        // add button that covers the entire screen
+        Button screenTouch = new ScreenTouch(this);
+        controller.addTouchController(new DetectButtonTouch(screenTouch));
     }
 
     @Override
     public void initialise() {
-        // title = Text.newTextRelativePositionBoth("GALAXY FORCE",
-        // TextPositionX.CENTRE, TextPositionY.TOP);
-        // company = Text.newTextRelativePositionBoth("DANO SOFTWARE",
-        // TextPositionX.LEFT, TextPositionY.CENTRE);
-        // copyright = Text.newTextRelativePositionBoth("COPYRIGHT 2013-2014",
-        // TextPositionX.RIGHT, TextPositionY.BOTTOM);
-
-        // textList = new ArrayList<Text>();
-        // textList.add(title);
-        // textList.add(company);
-        // textList.add(copyright);
 
         allSprites.add(new SplashSprite(GameConstants.SCREEN_MID_X, GameConstants.SCREEN_MID_Y, SplashSpriteIdentifier.SPLASH_SCREEN));
-
         modelState = ModelState.INITIALISED;
-
         splashScreenTime = 0f;
     }
 
@@ -100,16 +77,10 @@ public class SplashModelImpl implements TouchScreenModel {
             Screen screen = ScreenFactory.newScreen(ScreenType.MAIN_MENU);
             Games.getGame().setScreen(screen);
         }
-
     }
 
     @Override
     public void dispose() {
-        this.textList = null;
-        this.title = null;
-        this.company = null;
-        this.copyright = null;
-        this.modelState = null;
     }
 
     @Override

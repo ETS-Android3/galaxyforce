@@ -25,7 +25,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, MenuB
     private static final String LOCAL_TAG = "UnlockFullVersionModel";
 
     // references to stars
-    private List<Star> stars = null;
+    private List<Star> stars;
 
     // reference to all sprites in model
     private final List<ISprite> allSprites;
@@ -36,7 +36,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, MenuB
     private final List<Text> allText;
 
     /* reference to controller */
-    private Controller controller = null;
+    private final Controller controller;
 
     // reference to the billing service
     private final IBillingService billingService;
@@ -144,10 +144,6 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, MenuB
 
     /**
      * add wanted menu button using the supplied row, label and type.
-     *
-     * @param row
-     * @param label
-     * @param buttonType
      */
     private void addNewMenuButton(int row, String label, ButtonType buttonType) {
         MenuButton button = new MenuButton(this, controller, GameConstants.GAME_WIDTH / 2, 100 + (row * 170), label, buttonType,

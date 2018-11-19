@@ -15,7 +15,7 @@ public class DetectButtonTouch implements TouchController {
     private Vector2 startTouchPoint = null;
 
     /* contains reference to parent button */
-    private Button button = null;
+    private final Button button;
 
     public DetectButtonTouch(Button button) {
         this.button = button;

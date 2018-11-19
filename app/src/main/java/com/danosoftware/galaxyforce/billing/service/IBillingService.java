@@ -6,16 +6,12 @@ public interface IBillingService {
     /**
      * Register observer for any product state refreshes. Normally called when a
      * observer is constructed.
-     *
-     * @param billingObserver
      */
     void registerProductObserver(BillingObserver billingObserver);
 
     /**
      * Unregister observer for any product state refreshes. Normally called when
      * a observer is disposed.
-     *
-     * @param billingObserver
      */
     void unregisterProductObserver(BillingObserver billingObserver);
 
@@ -32,8 +28,6 @@ public interface IBillingService {
      * A negative response does not necessarily mean the product has not been
      * purchased as the purchase state may be unknown. This can only be
      * confirmed by calling isNotPurchased().
-     *
-     * @param productId
      */
     boolean isPurchased(String productId);
 
@@ -43,8 +37,6 @@ public interface IBillingService {
      * A negative response does not necessarily mean the product has been
      * purchased as the purchase state may be unknown. This can only be
      * confirmed by calling isPurchased().
-     *
-     * @param productId
      */
     boolean isNotPurchased(String productId);
 
@@ -52,26 +44,17 @@ public interface IBillingService {
      * Get the price of the product Id.
      * <p>
      * May return null if price is not yet known.
-     *
-     * @param productId
-     * @return
      */
     String getPrice(String productId);
 
     /**
      * Purchase supplied product Id.
-     *
-     * @param productId
      */
     void purchase(String productId);
 
     /**
      * Process the results returned back to the billing service. Typically this
      * gets called with the results of a purchase request.
-     *
-     * @param requestCode
-     * @param resultCode
-     * @param data
      */
     boolean processActivityResult(int requestCode, int resultCode, Intent data);
 

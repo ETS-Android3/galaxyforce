@@ -89,8 +89,7 @@ public abstract class AbstractAlien extends AbstractCollidingSprite implements I
         }
     }
 
-    @Override
-    public boolean isExploding() {
+    protected boolean isExploding() {
         return state == EXPLODING;
     }
 
@@ -106,8 +105,7 @@ public abstract class AbstractAlien extends AbstractCollidingSprite implements I
         return (state == ACTIVE);
     }
 
-    @Override
-    public void activate() {
+    protected void activate() {
         state = ACTIVE;
     }
 
@@ -126,13 +124,11 @@ public abstract class AbstractAlien extends AbstractCollidingSprite implements I
         return (state == DESTROYED);
     }
 
-    @Override
-    public void waiting() {
+    protected void waiting() {
         state = WAITING;
     }
 
-    @Override
-    public boolean isWaiting() {
+    protected boolean isWaiting() {
         return (state == WAITING);
     }
 

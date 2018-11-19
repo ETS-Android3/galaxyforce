@@ -49,7 +49,7 @@ public class Textures {
         Game game = Games.getGame();
         storeTextureDetails(game.getFileIO(), textureXml);
 
-        Texture newTexture = null;
+        Texture newTexture;
 
         // if texture has been requested before retrieve from map.
         // if texture is new then create and add to map.

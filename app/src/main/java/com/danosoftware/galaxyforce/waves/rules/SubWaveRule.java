@@ -34,23 +34,6 @@ public enum SubWaveRule {
             )),
 
     /**
-     * Asteroids that fall from bottom to top at random x positions and random
-     * speeds
-     */
-    ASTEROIDS_REVERSE(
-            new SubWaveRuleProperties(
-                    true,
-                    false,
-                    0,
-                    GameConstants.SCREEN_BOTTOM,
-                    30,
-                    0.5f,
-                    0f,
-                    false,
-                    Direction.UP
-            )),
-
-    /**
      * Asteroids that form a path through an asteroid field.
      */
     ASTEROID_FIELD(asteroidFieldSubWave(10, 2)),
@@ -112,8 +95,6 @@ public enum SubWaveRule {
 
     /**
      * Properties to create a sub-wave
-     *
-     * @return
      */
     public List<SubWaveRuleProperties> subWaveProps() {
         return waveList;

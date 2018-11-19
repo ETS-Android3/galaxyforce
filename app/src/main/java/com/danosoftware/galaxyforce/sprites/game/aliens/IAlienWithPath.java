@@ -14,11 +14,6 @@ public interface IAlienWithPath extends IAlien {
     boolean isEndOfPass();
 
     /**
-     * alien has reached the end of the path
-     */
-    void endOfPass();
-
-    /**
      * Get the original time delay. Can be used to calculate a corrected time
      * delay offset.
      */

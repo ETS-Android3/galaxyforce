@@ -36,7 +36,7 @@ public class UnlockAllZonesModelImpl implements Model, BillingObserver, MenuButt
     private final List<Text> allText;
 
     /* reference to controller */
-    private Controller controller = null;
+    private final Controller controller;
 
     // reference to the billing service
     private final IBillingService billingService;
@@ -146,10 +146,6 @@ public class UnlockAllZonesModelImpl implements Model, BillingObserver, MenuButt
 
     /**
      * add wanted menu button using the supplied row, label and type.
-     *
-     * @param row
-     * @param label
-     * @param buttonType
      */
     private void addNewMenuButton(int row, String label, ButtonType buttonType) {
         MenuButton button = new MenuButton(this, controller, GameConstants.GAME_WIDTH / 2, 100 + (row * 170), label, buttonType,
