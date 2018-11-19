@@ -3,7 +3,6 @@ package com.danosoftware.galaxyforce.model.screens;
 import android.util.Log;
 
 import com.danosoftware.galaxyforce.buttons.impl.OptionButton;
-import com.danosoftware.galaxyforce.buttons.impl.ScreenTouch;
 import com.danosoftware.galaxyforce.buttons.impl.ToggleOption;
 import com.danosoftware.galaxyforce.buttons.interfaces.ToggleButtonGroup;
 import com.danosoftware.galaxyforce.constants.GameConstants;
@@ -32,21 +31,18 @@ public class OptionsModelImpl implements OptionsModel {
     private static final String TAG = "OptionsModelImpl";
 
     // references to stars
-    private List<Star> stars = null;
+    private List<Star> stars;
 
     // reference to all sprites in model
-    List<ISprite> allSprites = null;
+    private final List<ISprite> allSprites;
 
     private ModelState modelState;
 
     // reference to all text objects in model
-    List<Text> allText = null;
+    private final List<Text> allText;
 
     /* reference to controller */
-    private Controller controller = null;
-
-    /* reference to screen button */
-    private ScreenTouch screenTouch = null;
+    private final Controller controller;
 
     public OptionsModelImpl(Controller controller) {
         this.controller = controller;

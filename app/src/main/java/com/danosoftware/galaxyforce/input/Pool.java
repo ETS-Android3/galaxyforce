@@ -20,7 +20,7 @@ public class Pool<T> {
     }
 
     public T newObject() {
-        T object = null;
+        T object;
 
         if (freeObjects.isEmpty())
             object = factory.createObject();

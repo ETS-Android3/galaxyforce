@@ -4,8 +4,6 @@ public interface Sound {
 
     /**
      * Play sound at specified volume
-     *
-     * @param volume
      */
     void play(float volume);
 

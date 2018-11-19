@@ -19,9 +19,9 @@ public class TextureRegionXmlParser {
 
     public List<TextureDetail> readTextures(FileIO fileIO, String fileName) throws XmlPullParserException, IOException {
         TextureRegionXmlParser parser = new TextureRegionXmlParser();
-        List<TextureDetail> listOfTextureRegions = null;
+        List<TextureDetail> listOfTextureRegions;
 
-        InputStream in = null;
+        InputStream in;
 
         in = fileIO.readAsset(fileName);
         listOfTextureRegions = parser.parse(in);

@@ -213,7 +213,7 @@ public class MainActivity extends Activity {
 
         @Override
         public void onDrawFrame(GL10 gl) {
-            ActivityState stateCheck = null;
+            ActivityState stateCheck;
 
             synchronized (stateChanged) {
                 stateCheck = state;

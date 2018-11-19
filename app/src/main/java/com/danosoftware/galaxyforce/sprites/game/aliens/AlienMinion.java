@@ -47,11 +47,6 @@ public class AlienMinion extends AbstractAlienWithPath {
     /**
      * Create Alien Minion that has simple directional missiles and only
      * generates guided missile power-ups.
-     *
-     * @param model
-     * @param alienPath
-     * @param delayStart
-     * @param restartImmediately
      */
     public AlienMinion(
             final GameHandler model,

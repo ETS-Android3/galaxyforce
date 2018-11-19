@@ -479,10 +479,6 @@ public class WaveFactory {
 
     /**
      * Creates a list of aliens on a path using the supplied wave property.
-     *
-     * @param repeatedMode
-     * @param subWaveConfigs
-     * @return list of alien sprites
      */
     private SubWave createSubWave(
             final SubWaveRepeatMode repeatedMode,

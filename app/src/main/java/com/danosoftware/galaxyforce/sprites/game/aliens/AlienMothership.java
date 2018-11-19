@@ -40,11 +40,6 @@ public class AlienMothership extends AbstractAlienWithPath {
     /**
      * Create Alien Mothership that has rotated missiles and generates random
      * power-ups.
-     *
-     * @param model
-     * @param alienPath
-     * @param delayStart
-     * @param restartImmediately
      */
     public AlienMothership(
             final GameHandler model,

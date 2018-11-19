@@ -2,7 +2,6 @@ package com.danosoftware.galaxyforce.waves;
 
 import android.util.Log;
 
-import com.danosoftware.galaxyforce.enumerations.Direction;
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.flightpath.dto.PathListDTO;
 import com.danosoftware.galaxyforce.flightpath.utilities.PathLoader;
@@ -93,8 +92,7 @@ public class WaveFactoryTest {
                 any(Integer.class),
                 any(Float.class),
                 any(GameHandler.class),
-                any(Boolean.class),
-                any(Direction.class))).thenReturn(mockedAliens);
+                any(Boolean.class))).thenReturn(mockedAliens);
     }
 
     @Test

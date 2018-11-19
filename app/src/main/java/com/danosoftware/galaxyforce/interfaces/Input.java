@@ -36,11 +36,5 @@ public interface Input {
 
     int getTouchY(int pointer);
 
-    float getAccelX();
-
-    float getAccelY();
-
-    float getAccelZ();
-
     List<TouchEvent> getTouchEvents();
 }

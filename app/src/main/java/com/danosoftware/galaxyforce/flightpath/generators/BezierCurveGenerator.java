@@ -23,9 +23,6 @@ public class BezierCurveGenerator implements PathGenerator {
      * Instantiate generator by extracting and converting the bezier data points
      * and then translating them to their new positions based on the provided
      * translators (e.g. x-axis flip).
-     *
-     * @param bezierData
-     * @param translators
      */
     public BezierCurveGenerator(BezierPathDTO bezierData, PointTranslatorChain translators) {
         this.start = convertAndTranslatePoint(bezierData.getStart(), translators);

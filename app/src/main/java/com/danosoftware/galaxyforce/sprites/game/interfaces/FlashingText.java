@@ -10,8 +10,6 @@ public interface FlashingText {
      * Update the state of the flashing text instance. When the state changes,
      * the flashing text instance should callback the model using the
      * flashText() method.
-     *
-     * @param deltaTime
      */
     void update(float deltaTime);
 

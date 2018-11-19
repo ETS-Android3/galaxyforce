@@ -116,12 +116,12 @@ public class AlienManager implements IAlienManager {
 
     @Override
     public void setUpWave(int wave) {
-        /**
-         * asks wave manager to set-up next level. this is an asynchronous task
-         * that can be time-consuming so is run in the background.
-         *
-         * This method will return immediately but the wave will not be
-         * ready until waveManager.isWaveReady() responds with true.
+        /*
+          asks wave manager to set-up next level. this is an asynchronous task
+          that can be time-consuming so is run in the background.
+
+          This method will return immediately but the wave will not be
+          ready until waveManager.isWaveReady() responds with true.
          */
         waveManager.setUpWave(wave);
     }
@@ -203,8 +203,8 @@ public class AlienManager implements IAlienManager {
      * 3) Sets the state to WAVE_COMPLETE if all sub-waves are completed.
      */
     private void updateSubWaveState() {
-        /**
-         * if no aliens left then decide what action to take.
+        /*
+          if no aliens left then decide what action to take.
          */
         if (subWaveState == DESTROYED || subWaveState == END_OF_PASS) {
             /**

@@ -15,7 +15,7 @@ public class SwipeTouch implements TouchController {
     private Vector2 startTouchPoint = null;
 
     /* contains reference to parent swipe */
-    private Swipe swipe = null;
+    private final Swipe swipe;
 
     public SwipeTouch(Swipe swipe) {
         this.swipe = swipe;

@@ -1,8 +1,7 @@
 package com.danosoftware.galaxyforce.buttons.impl;
 
 import com.danosoftware.galaxyforce.buttons.interfaces.Button;
-import com.danosoftware.galaxyforce.controller.interfaces.Controller;
-import com.danosoftware.galaxyforce.controller.utilities.DetectButtonTouch;
+import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.interfaces.TouchScreenModel;
 import com.danosoftware.galaxyforce.utilities.Rectangle;
 
@@ -13,19 +12,14 @@ import com.danosoftware.galaxyforce.utilities.Rectangle;
 public class ScreenTouch implements Button {
 
     // reference to button's parent model
-    private TouchScreenModel model;
+    private final TouchScreenModel model;
 
-    // reference to button bounds
-    private Rectangle bounds;
+    // reference to button bounds that covers the entire screen
+    private final Rectangle bounds;
 
-    public ScreenTouch(TouchScreenModel model, Controller controller, int topLeftX, int topLeftY, int width, int height) {
+    public ScreenTouch(TouchScreenModel model) {
         this.model = model;
-
-        // create bounds using the supplied co-ordinates, width and height
-        this.bounds = new Rectangle(topLeftX, topLeftY, width, height);
-
-        // add a new menu button to controller's list of touch controllers
-        controller.addTouchController(new DetectButtonTouch(this));
+        this.bounds = new Rectangle(0, 0, GameConstants.GAME_WIDTH, GameConstants.GAME_HEIGHT);
     }
 
     @Override

@@ -33,10 +33,10 @@ public class SpawnRandomDelay implements SpawnBehaviour {
     private final AlienType alienType;
 
     /* variable to store actual delay before alien can spawn */
-    private double delayUntilNextSpawn = 0f;
+    private double delayUntilNextSpawn;
 
     /* variable to store time passed since last spawn */
-    private float timeSinceLastSpawn = 0f;
+    private float timeSinceLastSpawn;
 
     // allocate power-ups to spawned aliens
     private final PowerUpAllocator powerUpAllocator;
@@ -47,8 +47,8 @@ public class SpawnRandomDelay implements SpawnBehaviour {
     private final static int POWER_UP_MULTIPLIER = 10;
 
     /**
-     * @param model
-     * @param alienType
+     * @param model            - model to receive aliens
+     * @param alienType        - alien to spawn
      * @param minSpawnDelay    - minimum delay between spawns
      * @param spawnDelayRandom - additional maximum random time before spawns
      */

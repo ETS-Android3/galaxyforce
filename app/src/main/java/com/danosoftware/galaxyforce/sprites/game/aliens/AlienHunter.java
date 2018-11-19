@@ -50,7 +50,7 @@ public class AlienHunter extends AbstractAlien {
     private float timeDelayStart;
 
     /* variable to store time passed since last alien direction change */
-    private float timeSinceLastDirectionChange = 0f;
+    private float timeSinceLastDirectionChange;
 
     private final GameHandler model;
 

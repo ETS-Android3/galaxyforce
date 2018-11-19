@@ -18,13 +18,6 @@ public final class BezierMathematics {
 
     /**
      * return the bezier curve points for the current bezier curve path.
-     *
-     * @param start
-     * @param startControl
-     * @param finish
-     * @param finishControl
-     * @param pathPoints
-     * @return array of points representing Bezier curve
      */
     public static List<Point> createBezierPath(
             final Point start,

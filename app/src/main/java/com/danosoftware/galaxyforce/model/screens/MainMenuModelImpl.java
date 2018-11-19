@@ -35,13 +35,13 @@ public class MainMenuModelImpl implements Model, MenuButtonModel, BillingObserve
     private final List<ISprite> buttons;
 
     // reference to logo sprite
-    private ISprite logo = null;
+    private ISprite logo;
 
     // reference to all text objects in model
-    List<Text> allText = null;
+    List<Text> allText;
 
     /* reference to controller */
-    private Controller controller = null;
+    private final Controller controller;
 
     // reference to the billing service
     private final IBillingService billingService;
@@ -156,10 +156,6 @@ public class MainMenuModelImpl implements Model, MenuButtonModel, BillingObserve
 
     /**
      * add wanted menu button using the supplied row, label and type.
-     *
-     * @param row
-     * @param label
-     * @param buttonType
      */
     private void addNewMenuButton(int row, String label, ButtonType buttonType) {
         MenuButton button = new MenuButton(this, controller, GameConstants.GAME_WIDTH / 2, 100 + (row * 170), label, buttonType,

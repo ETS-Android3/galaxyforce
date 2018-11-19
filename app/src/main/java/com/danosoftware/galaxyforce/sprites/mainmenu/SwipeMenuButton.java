@@ -35,7 +35,7 @@ public class SwipeMenuButton implements SpriteTextButton {
     private final ISpriteIdentifier spriteButtonDown;
 
     // this button's type
-    ButtonType buttonType = null;
+    private final ButtonType buttonType;
 
     public SwipeMenuButton(MenuButtonModel model, LevelModel swipeModel, Controller controller, int xPos, int yPos, String text,
                            ButtonType buttonType, ISpriteIdentifier spriteButtonUp, ISpriteIdentifier spriteButtonDown) {

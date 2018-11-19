@@ -18,8 +18,6 @@ public interface WaveManager {
      * Setting up waves is an asynchronous task allowing the client to continue
      * while the wave is created. The client should call the isWaveReady()
      * method at some point later to check if the wave is ready to use.
-     *
-     * @param wave
      */
     void setUpWave(int wave);
 

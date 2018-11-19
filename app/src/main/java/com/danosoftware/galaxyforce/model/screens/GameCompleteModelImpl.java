@@ -6,9 +6,11 @@ import android.net.Uri;
 import android.util.Log;
 
 import com.danosoftware.galaxyforce.buttons.impl.ScreenTouch;
+import com.danosoftware.galaxyforce.buttons.interfaces.Button;
 import com.danosoftware.galaxyforce.buttons.interfaces.SpriteButton;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controller.interfaces.Controller;
+import com.danosoftware.galaxyforce.controller.utilities.DetectButtonTouch;
 import com.danosoftware.galaxyforce.enumerations.ModelState;
 import com.danosoftware.galaxyforce.enumerations.TextPositionX;
 import com.danosoftware.galaxyforce.interfaces.AboutModel;
@@ -50,9 +52,6 @@ public class GameCompleteModelImpl implements TouchScreenModel, AboutModel {
     private final Controller controller;
 
     /* reference to screen button */
-    private ScreenTouch screenTouch;
-
-    /* reference to screen button */
     private final Context context;
 
     public GameCompleteModelImpl(Controller controller, Context context) {
@@ -88,9 +87,9 @@ public class GameCompleteModelImpl implements TouchScreenModel, AboutModel {
         addNewMenuButton(1, ButtonType.TWITTER, MenuSpriteIdentifier.TWITTER, MenuSpriteIdentifier.TWITTER_PRESSED);
         addNewMenuButton(0, ButtonType.WEBSITE, MenuSpriteIdentifier.LEVEL_FRAME_LOCKED, MenuSpriteIdentifier.LEVEL_FRAME_LOCKED_PRESSED);
 
-        // add screen touch to trigger screenTouch method when user touches
-        // screen
-        this.screenTouch = new ScreenTouch(this, controller, 0, 0, GameConstants.GAME_WIDTH, GameConstants.GAME_HEIGHT);
+        // add button that covers the entire screen
+        Button screenTouch = new ScreenTouch(this);
+        controller.addTouchController(new DetectButtonTouch(screenTouch));
     }
 
     private void addNewMenuButton(int row, ButtonType buttonType, MenuSpriteIdentifier buttonUp, MenuSpriteIdentifier buttonDown) {

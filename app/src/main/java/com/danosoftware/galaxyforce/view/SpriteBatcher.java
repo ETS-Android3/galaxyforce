@@ -11,9 +11,6 @@ public class SpriteBatcher {
     final Vertices vertices;
     int numSprites;
 
-    /* logger tag */
-    private static final String TAG = "SpriteBatcher";
-
     public SpriteBatcher(GLGraphics glGraphics, int maxSprites) {
         this.verticesBuffer = new float[maxSprites * 4 * 4];
         this.vertices = new Vertices(glGraphics, maxSprites * 4, maxSprites * 6, false, true);

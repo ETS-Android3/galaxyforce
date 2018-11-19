@@ -32,7 +32,6 @@ import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.lang.reflect.Field;
 import java.util.Arrays;
-import java.util.List;
 import java.util.function.Predicate;
 
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
@@ -81,7 +80,6 @@ public class PrimaryBaseTest {
         mockStatic(VibrationSingleton.class);
         when(VibrationSingleton.getInstance()).thenReturn(vibration);
 
-        Textures mockTextures = mock(Textures.class);
         mockStatic(Textures.class);
         when(Textures.getTextureDetail(any(String.class))).thenReturn(mockTextureDetail);
 
@@ -364,13 +362,6 @@ public class PrimaryBaseTest {
         verify(rightHelper, atLeastOnce()).fire(any(BaseMissileType.class));
     }
 
-    // use reflection to get helper internal state
-    private List<IBaseHelper> helpers(IBasePrimary base) throws NoSuchFieldException, IllegalAccessException {
-        Field f = base.getClass().getDeclaredField("helpers");
-        f.setAccessible(true);
-        return (List) f.get(base);
-    }
-
     // use reflection to get base internal state
     private BaseState baseState(IBasePrimary helper) throws NoSuchFieldException, IllegalAccessException {
         Field f = helper.getClass().getDeclaredField("state");
@@ -391,20 +382,4 @@ public class PrimaryBaseTest {
         f.setAccessible(true);
         return (BaseMissileType) f.get(base);
     }
-
-    // use reflection to get helper internal state
-    private void verifyHelperState(IBasePrimary base, BaseState expectedState) throws NoSuchFieldException, IllegalAccessException {
-        Field f = base.getClass().getDeclaredField("helpers");
-        f.setAccessible(true);
-        List<IBaseHelper> helpers = (List) f.get(base);
-        assertThat(helpers.size(), is(2));
-        for (IBaseHelper helper : helpers) {
-            Field fh = helper.getClass().getDeclaredField("state");
-            fh.setAccessible(true);
-            BaseState state = (BaseState) fh.get(helper);
-            assertThat(state, is(expectedState));
-        }
-    }
-
-
 }

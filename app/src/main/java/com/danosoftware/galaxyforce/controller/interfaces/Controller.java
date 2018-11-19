@@ -8,8 +8,6 @@ public interface Controller {
 
     /**
      * add a touch controller to be monitored.
-     *
-     * @param touchController
      */
     void addTouchController(TouchController touchController);
 

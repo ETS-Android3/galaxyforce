@@ -10,7 +10,7 @@ public class VibrationSingleton implements Vibration {
     private final Vibrator vibrator;
 
     // does this device support vibration
-    private boolean supportsVibration = false;
+    private boolean supportsVibration;
 
     // is vibration currently enabled
     private boolean vibrationEnabled = false;

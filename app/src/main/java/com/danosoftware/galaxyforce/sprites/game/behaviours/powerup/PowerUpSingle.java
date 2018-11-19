@@ -21,9 +21,6 @@ public class PowerUpSingle implements PowerUpBehaviour {
     /**
      * Behaviour that will create the supplied power-up when
      * alien is destroyed.
-     *
-     * @param model
-     * @param powerUp
      */
     public PowerUpSingle(GameHandler model, PowerUpType powerUp) {
         this.model = model;

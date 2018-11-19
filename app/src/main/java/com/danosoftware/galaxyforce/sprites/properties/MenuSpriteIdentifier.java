@@ -63,8 +63,6 @@ public enum MenuSpriteIdentifier implements ISpriteIdentifier {
      * <p>
      * This method can be called once a texture is available or refreshed after
      * a resume.
-     *
-     * @param texture
      */
     @Override
     public void updateProperties(Texture texture) {

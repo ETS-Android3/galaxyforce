@@ -293,9 +293,6 @@ public class BillingServiceImpl implements IBillingService {
 
     /**
      * Consume the purchased product Id.
-     *
-     * @param purchase
-     * @param productId
      */
     private void consume(Purchase purchase, String productId) {
         IabHelper.OnConsumeFinishedListener mConsumeFinishedListener = new ConsumeFinishedListener(productId);

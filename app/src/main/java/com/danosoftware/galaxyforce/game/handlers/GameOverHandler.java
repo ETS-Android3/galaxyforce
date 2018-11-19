@@ -57,7 +57,7 @@ public class GameOverHandler implements PlayModel, MenuButtonModel {
     private final GameModel gameModel;
 
     /* stars sprites */
-    private List<Star> stars = null;
+    private List<Star> stars;
 
     /* reference to flashing game over text */
     private FlashingText flashingGameOverText;

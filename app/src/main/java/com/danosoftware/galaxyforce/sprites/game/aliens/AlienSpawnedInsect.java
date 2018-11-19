@@ -49,7 +49,7 @@ public class AlienSpawnedInsect extends AbstractAlien {
     private final int originalYPosition;
 
     /* variable to store how far alien has moved since spawned */
-    private float distanceYMoved = 0f;
+    private float distanceYMoved;
 
     /**
      * Create spawned Alien Insect.

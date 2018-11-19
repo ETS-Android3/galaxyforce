@@ -3,7 +3,6 @@ package com.danosoftware.galaxyforce.sprites.game.factories;
 import android.util.Log;
 
 import com.danosoftware.galaxyforce.constants.GameConstants;
-import com.danosoftware.galaxyforce.enumerations.Direction;
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.flightpath.paths.Point;
 import com.danosoftware.galaxyforce.game.beans.SpawnedAlienBean;
@@ -135,8 +134,7 @@ public class AlienFactory {
             final int yStart,
             final float delay,
             final GameHandler model,
-            final boolean restartImmediately,
-            final Direction direction) {
+            final boolean restartImmediately) {
 
         List<IAlien> aliens = new ArrayList<>();
 
@@ -169,11 +167,11 @@ public class AlienFactory {
         // create instance of the wanted alien
         switch (alienType) {
             case ASTEROID:
-                aliens.add(new AlienAsteroid(powerUp, xStartPos, yStartPos, delay, restartImmediately, direction, model));
+                aliens.add(new AlienAsteroid(powerUp, xStartPos, yStartPos, delay, restartImmediately, model));
                 break;
 
             case ASTEROID_SIMPLE:
-                aliens.add(new AlienAsteroidSimple(powerUp, xStartPos, yStartPos, delay, restartImmediately, direction, model));
+                aliens.add(new AlienAsteroidSimple(powerUp, xStartPos, yStartPos, delay, restartImmediately, model));
                 break;
 
             case HUNTER:
