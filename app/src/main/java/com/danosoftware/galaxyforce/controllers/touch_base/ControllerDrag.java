@@ -18,19 +18,19 @@ public class ControllerDrag implements BaseTouchController {
     }
 
     @Override
-    public boolean processTouchEvent(TouchEvent event, Vector2 touchPoint, int pointerID, float deltaTime) {
+    public boolean processTouchEvent(TouchEvent event, Vector2 touchPoint, int pointerID) {
         boolean processed = false;
 
         // on touch down: set drag pointer, update touch point
         if (event.type == TouchEvent.TOUCH_DOWN && dragPointer == -1) {
             dragPointer = pointerID;
-            model.updateTouchPoint(touchPoint.x, touchPoint.y, deltaTime);
+            model.updateTouchPoint(touchPoint.x, touchPoint.y);
             processed = true;
         }
 
         // on drag: update touch point
         if (event.type == TouchEvent.TOUCH_DRAGGED && pointerID == dragPointer) {
-            model.updateTouchPoint(touchPoint.x, touchPoint.y, deltaTime);
+            model.updateTouchPoint(touchPoint.x, touchPoint.y);
             processed = true;
         }
 
