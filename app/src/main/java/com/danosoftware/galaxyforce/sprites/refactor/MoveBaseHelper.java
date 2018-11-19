@@ -38,9 +38,6 @@ public class MoveBaseHelper {
     // is base currently turning left or right?
     private boolean baseTurning;
 
-    // half height/width of base in pixels
-    private final int halfWidth, halfHeight;
-
     // width/height of actual usable screen */
     private final int width, height;
 
@@ -55,8 +52,6 @@ public class MoveBaseHelper {
         this.height = height;
         this.baseTurnSteadyTime = 0f;
         this.baseTurning = false;
-        this.halfWidth = base.width() / 2;
-        this.halfHeight = base.height() / 2;
     }
 
     /**
@@ -74,23 +69,23 @@ public class MoveBaseHelper {
         int y = base.y() + (int) (maxDistanceMoved * weightingY);
 
         // don't allow base to go off screen left
-        if (x - halfWidth < 0) {
-            x = halfWidth;
+        if (x - base.halfWidth() < 0) {
+            x = base.halfWidth();
         }
 
         // don't allow base to go off screen right
-        if ((x + halfWidth) > width) {
-            x = (width - halfWidth);
+        if ((x + base.halfWidth()) > width) {
+            x = (width - base.halfWidth());
         }
 
         // don't allow base to go off screen bottom
-        if ((y - halfHeight) < 0) {
-            y = halfHeight;
+        if ((y - base.halfHeight()) < 0) {
+            y = base.halfHeight();
         }
 
         // don't allow base to go off screen top
-        if ((y + halfHeight) > height) {
-            y = (height - halfHeight);
+        if ((y + base.halfHeight()) > height) {
+            y = (height - base.halfHeight());
         }
 
         // move base to new position

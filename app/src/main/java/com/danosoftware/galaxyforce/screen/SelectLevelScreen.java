@@ -1,7 +1,7 @@
 package com.danosoftware.galaxyforce.screen;
 
 import com.danosoftware.galaxyforce.constants.GameConstants;
-import com.danosoftware.galaxyforce.controller.interfaces.Controller;
+import com.danosoftware.galaxyforce.controllers.common.Controller;
 import com.danosoftware.galaxyforce.interfaces.LevelModel;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteProperties;

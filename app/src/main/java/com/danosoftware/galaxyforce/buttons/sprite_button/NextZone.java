@@ -1,70 +1,68 @@
-package com.danosoftware.galaxyforce.sprites.about;
+package com.danosoftware.galaxyforce.buttons.sprite_button;
 
-import com.danosoftware.galaxyforce.buttons.sprite_button.SpriteButton;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
 import com.danosoftware.galaxyforce.controllers.touch.DetectButtonTouch;
-import com.danosoftware.galaxyforce.interfaces.AboutModel;
-import com.danosoftware.galaxyforce.model.screens.ButtonType;
+import com.danosoftware.galaxyforce.model.screens.SelectLevelModel;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.refactor.ButtonSprite;
 import com.danosoftware.galaxyforce.sprites.refactor.IButtonSprite;
 import com.danosoftware.galaxyforce.utilities.Rectangle;
 
-/**
- * Represents a level selector. Level selector has a border, level number and
- * position.
- */
-public class SocialButton implements SpriteButton {
+public class NextZone implements SpriteButton {
+
+    // wanted buffer around the button
+    private static final int BUFFER = 32;
 
     // reference to button's parent model
-    private final AboutModel model;
+    private final SelectLevelModel model;
+
+    // reference to button's parent zone
+    private final int zone;
 
     // reference to level selector button sprite
-    private final IButtonSprite buttonSprite;
+    private final IButtonSprite levelSprite;
 
     // sprites to be used for when button is up (not pressed) or down (pressed)
     private final ISpriteIdentifier spriteButtonUp;
     private final ISpriteIdentifier spriteButtonDown;
 
-    // this button's type
-    private final ButtonType buttonType;
-
-    public SocialButton(AboutModel model, Controller controller, int xPos, int yPos, ButtonType buttonType,
-                        ISpriteIdentifier spriteButtonUp, ISpriteIdentifier spriteButtonDown) {
+    public NextZone(SelectLevelModel model, Controller controller, int xPos, int yPos, int zone, ISpriteIdentifier spriteButtonUp,
+                    ISpriteIdentifier spriteButtonDown) {
         this.model = model;
-        this.buttonSprite = new ButtonSprite(spriteButtonUp, xPos, yPos);
-        this.buttonType = buttonType;
+        this.levelSprite = new ButtonSprite(spriteButtonUp, xPos, yPos, BUFFER);
         this.spriteButtonUp = spriteButtonUp;
         this.spriteButtonDown = spriteButtonDown;
+        this.zone = zone;
 
         // add a new menu button to controller's list of touch controllers
         controller.addTouchController(new DetectButtonTouch(this));
+
     }
 
     @Override
     public Rectangle getBounds() {
-        return buttonSprite.getBounds();
+        return levelSprite.getBounds();
     }
 
     @Override
     public void buttonUp() {
-        buttonSprite.changeType(spriteButtonUp);
-
-        model.processButton(buttonType);
+        levelSprite.changeType(spriteButtonUp);
+        model.changeZone(zone + 1);
     }
 
     @Override
     public void buttonDown() {
-        buttonSprite.changeType(spriteButtonDown);
+        levelSprite.changeType(spriteButtonDown);
     }
 
     @Override
     public void buttonReleased() {
-        buttonSprite.changeType(spriteButtonUp);
+        levelSprite.changeType(spriteButtonUp);
     }
 
     @Override
     public IButtonSprite getSprite() {
-        return buttonSprite;
+        return levelSprite;
     }
+
 }

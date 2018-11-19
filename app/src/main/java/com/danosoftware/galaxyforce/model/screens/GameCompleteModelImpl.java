@@ -5,12 +5,12 @@ import android.content.Intent;
 import android.net.Uri;
 import android.util.Log;
 
-import com.danosoftware.galaxyforce.buttons.impl.ScreenTouch;
-import com.danosoftware.galaxyforce.buttons.interfaces.Button;
-import com.danosoftware.galaxyforce.buttons.interfaces.SpriteButton;
+import com.danosoftware.galaxyforce.buttons.button.Button;
+import com.danosoftware.galaxyforce.buttons.button.ScreenTouch;
+import com.danosoftware.galaxyforce.buttons.sprite_button.SpriteButton;
 import com.danosoftware.galaxyforce.constants.GameConstants;
-import com.danosoftware.galaxyforce.controller.interfaces.Controller;
-import com.danosoftware.galaxyforce.controller.utilities.DetectButtonTouch;
+import com.danosoftware.galaxyforce.controllers.common.Controller;
+import com.danosoftware.galaxyforce.controllers.touch.DetectButtonTouch;
 import com.danosoftware.galaxyforce.enumerations.ModelState;
 import com.danosoftware.galaxyforce.enumerations.TextPositionX;
 import com.danosoftware.galaxyforce.interfaces.AboutModel;

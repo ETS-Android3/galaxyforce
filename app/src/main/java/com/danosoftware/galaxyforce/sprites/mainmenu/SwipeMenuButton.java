@@ -1,8 +1,8 @@
 package com.danosoftware.galaxyforce.sprites.mainmenu;
 
-import com.danosoftware.galaxyforce.buttons.interfaces.SpriteTextButton;
-import com.danosoftware.galaxyforce.controller.interfaces.Controller;
-import com.danosoftware.galaxyforce.controller.utilities.DetectButtonTouch;
+import com.danosoftware.galaxyforce.buttons.sprite_text_button.SpriteTextButton;
+import com.danosoftware.galaxyforce.controllers.common.Controller;
+import com.danosoftware.galaxyforce.controllers.touch.DetectButtonTouch;
 import com.danosoftware.galaxyforce.interfaces.LevelModel;
 import com.danosoftware.galaxyforce.model.screens.ButtonType;
 import com.danosoftware.galaxyforce.model.screens.MenuButtonModel;

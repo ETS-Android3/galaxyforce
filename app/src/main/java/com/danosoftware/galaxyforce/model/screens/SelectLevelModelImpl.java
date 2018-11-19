@@ -4,12 +4,12 @@ import android.util.Log;
 
 import com.danosoftware.galaxyforce.billing.service.BillingObserver;
 import com.danosoftware.galaxyforce.billing.service.IBillingService;
-import com.danosoftware.galaxyforce.buttons.impl.NextZone;
-import com.danosoftware.galaxyforce.buttons.impl.PreviousZone;
-import com.danosoftware.galaxyforce.buttons.impl.SelectLevel;
+import com.danosoftware.galaxyforce.buttons.sprite_button.NextZone;
+import com.danosoftware.galaxyforce.buttons.sprite_button.PreviousZone;
+import com.danosoftware.galaxyforce.buttons.sprite_text_button.SelectLevel;
 import com.danosoftware.galaxyforce.constants.GameConstants;
-import com.danosoftware.galaxyforce.controller.interfaces.Controller;
-import com.danosoftware.galaxyforce.controller.menus.SelectLevelSwipe;
+import com.danosoftware.galaxyforce.controllers.common.Controller;
+import com.danosoftware.galaxyforce.controllers.models.swipe.SelectLevelSwipe;
 import com.danosoftware.galaxyforce.enumerations.ModelState;
 import com.danosoftware.galaxyforce.interfaces.LevelModel;
 import com.danosoftware.galaxyforce.interfaces.Screen;

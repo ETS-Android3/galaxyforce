@@ -38,16 +38,10 @@ public class GameConstants {
     public final static int FONT_GLYPHS_HEIGHT = 38;
 
     /*
-     * double quotes character ". allows this character to be included in font
-     * character string without messy escape characters
-     */
-    private final static char DOUBLE_QUOTES = '"';
-
-    /*
      * font characters in map - displayed text will only support these
      * characters
      */
-    public final static String FONT_CHARACTER_MAP = "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789.,?!-#" + DOUBLE_QUOTES + "'&()@°+=*$£<>%¤¢¥Œœ";
+    public final static String FONT_CHARACTER_MAP = "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789.,?!-#\"'&()@°+=*$£<>%¤¢¥Œœ";
 
     /* constants to set screen width and height */
 

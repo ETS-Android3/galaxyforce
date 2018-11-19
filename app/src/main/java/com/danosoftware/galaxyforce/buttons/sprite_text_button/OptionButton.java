@@ -1,10 +1,9 @@
-package com.danosoftware.galaxyforce.sprites.mainmenu;
+package com.danosoftware.galaxyforce.buttons.sprite_text_button;
 
-import com.danosoftware.galaxyforce.buttons.sprite_text_button.SpriteTextButton;
+import com.danosoftware.galaxyforce.buttons.toggle_group.ToggleButtonGroup;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
 import com.danosoftware.galaxyforce.controllers.touch.DetectButtonTouch;
-import com.danosoftware.galaxyforce.model.screens.ButtonType;
-import com.danosoftware.galaxyforce.model.screens.MenuButtonModel;
+import com.danosoftware.galaxyforce.options.Option;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.refactor.ButtonSprite;
 import com.danosoftware.galaxyforce.sprites.refactor.IButtonSprite;
@@ -15,31 +14,31 @@ import com.danosoftware.galaxyforce.utilities.Rectangle;
  * Represents a level selector. Level selector has a border, level number and
  * position.
  */
-public class MenuButton implements SpriteTextButton {
+public class OptionButton implements SpriteTextButton {
     // reference to Text representing level number
     private final Text text;
 
-    // reference to button's parent model
-    private final MenuButtonModel model;
-
     // reference to level selector button sprite
-    private final IButtonSprite buttonSprite;
+    private final IButtonSprite levelSprite;
 
     // sprites to be used for when button is up (not pressed) or down (pressed)
     private final ISpriteIdentifier spriteButtonUp;
     private final ISpriteIdentifier spriteButtonDown;
 
-    // this button's type
-    ButtonType buttonType;
+    // parent toggle button group
+    private final ToggleButtonGroup toggleButtonGroup;
 
-    public MenuButton(MenuButtonModel model, Controller controller, int xPos, int yPos, String text, ButtonType buttonType,
-                      ISpriteIdentifier spriteButtonUp, ISpriteIdentifier spriteButtonDown) {
-        this.model = model;
-        this.buttonSprite = new ButtonSprite(spriteButtonUp, xPos, yPos);
-        this.buttonType = buttonType;
+    // option type associated with button
+    Option optionType;
+
+    public OptionButton(Controller controller, int xPos, int yPos, Option optionType, ISpriteIdentifier spriteButtonUp,
+                        ISpriteIdentifier spriteButtonDown, ToggleButtonGroup toggleButtonGroup) {
+        this.levelSprite = new ButtonSprite(spriteButtonUp, xPos, yPos);
         this.spriteButtonUp = spriteButtonUp;
         this.spriteButtonDown = spriteButtonDown;
-        this.text = Text.newTextAbsolutePosition(text, xPos, yPos);
+        this.text = Text.newTextAbsolutePosition(optionType.getText(), xPos, yPos);
+        this.toggleButtonGroup = toggleButtonGroup;
+        this.optionType = optionType;
 
         // add a new menu button to controller's list of touch controllers
         controller.addTouchController(new DetectButtonTouch(this));
@@ -47,29 +46,33 @@ public class MenuButton implements SpriteTextButton {
 
     @Override
     public Rectangle getBounds() {
-        return buttonSprite.getBounds();
+        return levelSprite.getBounds();
     }
 
     @Override
     public void buttonUp() {
-        buttonSprite.changeType(spriteButtonUp);
-
-        model.processButton(buttonType);
+        toggleButtonGroup.optionSelected(this, optionType);
     }
 
     @Override
     public void buttonDown() {
-        buttonSprite.changeType(spriteButtonDown);
+        levelSprite.changeType(spriteButtonDown);
     }
 
     @Override
     public void buttonReleased() {
-        buttonSprite.changeType(spriteButtonUp);
+        // only release button if current button is not the current option
+        // selected. Stops the currently selected controller from being
+        // accidently
+        // unselected leaving nothing selected.
+        if (optionType != toggleButtonGroup.getSelectedOption()) {
+            levelSprite.changeType(spriteButtonUp);
+        }
     }
 
     @Override
     public IButtonSprite getSprite() {
-        return buttonSprite;
+        return levelSprite;
     }
 
     @Override

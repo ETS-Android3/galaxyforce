@@ -1,9 +1,8 @@
 package com.danosoftware.galaxyforce.screen;
 
 import com.danosoftware.galaxyforce.constants.GameConstants;
-import com.danosoftware.galaxyforce.controller.game.ControllerGame;
-import com.danosoftware.galaxyforce.controller.interfaces.Controller;
-import com.danosoftware.galaxyforce.controller.menus.MenuController;
+import com.danosoftware.galaxyforce.controllers.common.Controller;
+import com.danosoftware.galaxyforce.controllers.common.ControllerImpl;
 import com.danosoftware.galaxyforce.interfaces.Game;
 import com.danosoftware.galaxyforce.interfaces.Input;
 import com.danosoftware.galaxyforce.interfaces.LevelModel;
@@ -62,7 +61,7 @@ public class ScreenFactory {
                 textureMap = TextureMap.SPLASH;
 
                 /* set-up controller */
-                controller = new MenuController(input, camera);
+                controller = new ControllerImpl(input, camera);
 
                 /* set-up model */
                 model = new SplashModelImpl(controller);
@@ -78,7 +77,7 @@ public class ScreenFactory {
                 textureMap = TextureMap.MENU;
 
                 /* set-up controller */
-                controller = new MenuController(input, camera);
+                controller = new ControllerImpl(input, camera);
 
                 /* set-up model */
                 model = new MainMenuModelImpl(controller, game.getBillingService());
@@ -94,7 +93,7 @@ public class ScreenFactory {
                 textureMap = TextureMap.MENU;
 
                 /* set-up controller */
-                controller = new MenuController(input, camera);
+                controller = new ControllerImpl(input, camera);
 
                 /* set-up model */
                 model = new OptionsModelImpl(controller);
@@ -110,7 +109,7 @@ public class ScreenFactory {
                 textureMap = TextureMap.MENU;
 
                 /* set-up controller */
-                controller = new MenuController(input, camera);
+                controller = new ControllerImpl(input, camera);
 
                 /* set-up model */
                 model = new AboutModelImpl(controller, game.getContext());
@@ -126,7 +125,7 @@ public class ScreenFactory {
                 textureMap = TextureMap.MENU;
 
                 /* set-up controller */
-                controller = new MenuController(input, camera);
+                controller = new ControllerImpl(input, camera);
 
                 /* set-up model */
                 LevelModel levelModel = new SelectLevelModelImpl(controller, game.getBillingService());
@@ -142,7 +141,7 @@ public class ScreenFactory {
                 textureMap = TextureMap.MENU;
 
                 /* set-up controller */
-                controller = new MenuController(input, camera);
+                controller = new ControllerImpl(input, camera);
 
                 /* set-up model */
                 model = new UnlockFullVersionModelImpl(controller, game.getBillingService());
@@ -158,7 +157,7 @@ public class ScreenFactory {
                 textureMap = TextureMap.MENU;
 
                 /* set-up controller */
-                controller = new MenuController(input, camera);
+                controller = new ControllerImpl(input, camera);
 
                 /* set-up model */
                 model = new UnlockAllZonesModelImpl(controller, game.getBillingService());
@@ -174,7 +173,7 @@ public class ScreenFactory {
                 textureMap = TextureMap.MENU;
 
                 /* set-up controller */
-                controller = new MenuController(input, camera);
+                controller = new ControllerImpl(input, camera);
 
                 /* set-up model */
                 model = new GameCompleteModelImpl(controller, game.getContext());
@@ -206,7 +205,7 @@ public class ScreenFactory {
 
         /* set-up controller */
         Input input = Inputs.getInput();
-        Controller controller = new ControllerGame(input, camera);
+        Controller controller = new ControllerImpl(input, camera);
 //        Controller controller = controllerBase;
 
         /* set-up model */
