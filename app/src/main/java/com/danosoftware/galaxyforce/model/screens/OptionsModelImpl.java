@@ -2,11 +2,11 @@ package com.danosoftware.galaxyforce.model.screens;
 
 import android.util.Log;
 
-import com.danosoftware.galaxyforce.buttons.impl.OptionButton;
-import com.danosoftware.galaxyforce.buttons.impl.ToggleOption;
-import com.danosoftware.galaxyforce.buttons.interfaces.ToggleButtonGroup;
+import com.danosoftware.galaxyforce.buttons.sprite_text_button.OptionButton;
+import com.danosoftware.galaxyforce.buttons.toggle_group.ToggleButtonGroup;
+import com.danosoftware.galaxyforce.buttons.toggle_group.ToggleOption;
 import com.danosoftware.galaxyforce.constants.GameConstants;
-import com.danosoftware.galaxyforce.controller.interfaces.Controller;
+import com.danosoftware.galaxyforce.controllers.common.Controller;
 import com.danosoftware.galaxyforce.enumerations.ModelState;
 import com.danosoftware.galaxyforce.enumerations.TextPositionX;
 import com.danosoftware.galaxyforce.interfaces.OptionsModel;

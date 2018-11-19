@@ -1,10 +1,10 @@
 package com.danosoftware.galaxyforce.model.screens;
 
-import com.danosoftware.galaxyforce.buttons.impl.ScreenTouch;
-import com.danosoftware.galaxyforce.buttons.interfaces.Button;
+import com.danosoftware.galaxyforce.buttons.button.Button;
+import com.danosoftware.galaxyforce.buttons.button.ScreenTouch;
 import com.danosoftware.galaxyforce.constants.GameConstants;
-import com.danosoftware.galaxyforce.controller.interfaces.Controller;
-import com.danosoftware.galaxyforce.controller.utilities.DetectButtonTouch;
+import com.danosoftware.galaxyforce.controllers.common.Controller;
+import com.danosoftware.galaxyforce.controllers.touch.DetectButtonTouch;
 import com.danosoftware.galaxyforce.enumerations.ModelState;
 import com.danosoftware.galaxyforce.interfaces.Screen;
 import com.danosoftware.galaxyforce.interfaces.TouchScreenModel;

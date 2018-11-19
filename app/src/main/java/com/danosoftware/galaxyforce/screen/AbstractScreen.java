@@ -3,7 +3,7 @@ package com.danosoftware.galaxyforce.screen;
 import android.util.Log;
 
 import com.danosoftware.galaxyforce.constants.GameConstants;
-import com.danosoftware.galaxyforce.controller.interfaces.Controller;
+import com.danosoftware.galaxyforce.controllers.common.Controller;
 import com.danosoftware.galaxyforce.interfaces.Model;
 import com.danosoftware.galaxyforce.interfaces.Screen;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
