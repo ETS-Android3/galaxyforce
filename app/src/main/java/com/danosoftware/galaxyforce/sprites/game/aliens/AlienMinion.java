@@ -3,7 +3,9 @@ package com.danosoftware.galaxyforce.sprites.game.aliens;
 import com.danosoftware.galaxyforce.enumerations.AlienMissileType;
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.flightpath.paths.Point;
-import com.danosoftware.galaxyforce.game.handlers.GameHandler;
+import com.danosoftware.galaxyforce.models.screens.game.handlers.IGameHandler;
+import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
+import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.explode.ExplodeSimple;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.fire.FireRandomDelay;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.hit.HitDisabled;
@@ -49,7 +51,9 @@ public class AlienMinion extends AbstractAlienWithPath {
      * generates guided missile power-ups.
      */
     public AlienMinion(
-            final GameHandler model,
+            final IGameHandler model,
+            final SoundPlayerService sounds,
+            final VibrationService vibrator,
             final PowerUpType powerUpType,
             final List<Point> alienPath,
             final float delayStart,
@@ -64,7 +68,7 @@ public class AlienMinion extends AbstractAlienWithPath {
                 new PowerUpSingle(model, powerUpType),
                 new SpawnDisabled(),
                 new HitDisabled(),
-                new ExplodeSimple(),
+                new ExplodeSimple(sounds, vibrator),
                 alienPath,
                 delayStart,
                 ENERGY,

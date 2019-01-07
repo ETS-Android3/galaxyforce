@@ -2,7 +2,6 @@ package com.danosoftware.galaxyforce;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
@@ -15,11 +14,8 @@ import android.view.WindowManager;
 import com.danosoftware.galaxyforce.billing.service.BillingServiceImpl;
 import com.danosoftware.galaxyforce.billing.service.IBillingService;
 import com.danosoftware.galaxyforce.constants.GameConstants;
-import com.danosoftware.galaxyforce.enumerations.ActivityState;
-import com.danosoftware.galaxyforce.interfaces.Game;
-import com.danosoftware.galaxyforce.services.Games;
-import com.danosoftware.galaxyforce.services.PackageManagers;
-import com.danosoftware.galaxyforce.services.WindowManagers;
+import com.danosoftware.galaxyforce.games.Game;
+import com.danosoftware.galaxyforce.games.GameImpl;
 import com.danosoftware.galaxyforce.view.GLGraphics;
 
 import javax.microedition.khronos.egl.EGLConfig;
@@ -27,23 +23,27 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class MainActivity extends Activity {
 
+    private enum ActivityState {
+        INITIALISED, RUNNING, PAUSED, FINISHED, IDLE
+    }
+
     /* logger tag */
     private static final String ACTIVITY_TAG = "MainActivity";
 
     /* reference to game instance */
-    private Game game = null;
+    private Game game;
 
     /* used for state synchronisation */
-    private Object stateChanged = new Object();
+    private final Object stateChanged = new Object();
 
     /* application state */
     private ActivityState state = ActivityState.INITIALISED;
 
     /* GL Graphics reference */
-    private GLGraphics glGraphics = null;
+    private GLGraphics glGraphics;
 
     /* GL Surface View reference */
-    private GLSurfaceView glView = null;
+    private GLSurfaceView glView;
 
     /* Billing Service for In-App Billing Requests */
     private IBillingService billingService;
@@ -71,18 +71,8 @@ public class MainActivity extends Activity {
 
         this.billingService = new BillingServiceImpl(this);
 
-        // set-up window manager service
-        WindowManager windowMgr = (WindowManager) this.getSystemService(Activity.WINDOW_SERVICE);
-        WindowManagers.newWindowMgr(windowMgr);
-
-        // set-up package manager service
-        PackageManager packageMgr = this.getPackageManager();
-        String packageName = this.getPackageName();
-        PackageManagers.newPackageMgr(packageMgr, packageName);
-
         // create instance of game
-        Games.newGame(this, glGraphics, glView, billingService);
-        game = Games.getGame();
+        game = new GameImpl(this, glGraphics, glView, billingService);
     }
 
     /* runs after onCreate or resuming after being paused */
@@ -102,8 +92,6 @@ public class MainActivity extends Activity {
         if (billingService != null) {
             billingService.refreshProductStates();
         }
-
-        // game.resume();
     }
 
     /* runs when application is paused */
@@ -157,7 +145,7 @@ public class MainActivity extends Activity {
         }
 
         // uses superclass methods if not handled
-        if (processed == false) {
+        if (!processed) {
             Log.d(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Pass activity result to superclass.");
             super.onActivityResult(requestCode, resultCode, data);
         }

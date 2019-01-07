@@ -1,36 +1,39 @@
 package com.danosoftware.galaxyforce.games;
 
 import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 
 import com.danosoftware.galaxyforce.billing.service.IBillingService;
 import com.danosoftware.galaxyforce.constants.GameConstants;
-import com.danosoftware.galaxyforce.interfaces.Audio;
-import com.danosoftware.galaxyforce.interfaces.FileIO;
-import com.danosoftware.galaxyforce.interfaces.Game;
-import com.danosoftware.galaxyforce.interfaces.Input;
-import com.danosoftware.galaxyforce.interfaces.Screen;
-import com.danosoftware.galaxyforce.screen.ScreenFactory;
-import com.danosoftware.galaxyforce.screen.ScreenFactory.ScreenType;
-import com.danosoftware.galaxyforce.services.Configurations;
-import com.danosoftware.galaxyforce.services.IPreferences;
-import com.danosoftware.galaxyforce.services.Inputs;
-import com.danosoftware.galaxyforce.services.PreferencesInteger;
-import com.danosoftware.galaxyforce.services.PreferencesString;
-import com.danosoftware.galaxyforce.services.SavedGame;
-import com.danosoftware.galaxyforce.sound.SoundEffectBankSingleton;
-import com.danosoftware.galaxyforce.sound.SoundPlayer;
-import com.danosoftware.galaxyforce.sound.SoundPlayerSingleton;
-import com.danosoftware.galaxyforce.vibration.Vibration;
-import com.danosoftware.galaxyforce.vibration.VibrationSingleton;
-import com.danosoftware.galaxyforce.view.AndroidAudio;
+import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
+import com.danosoftware.galaxyforce.input.GameInput;
+import com.danosoftware.galaxyforce.input.Input;
+import com.danosoftware.galaxyforce.options.OptionSound;
+import com.danosoftware.galaxyforce.options.OptionVibration;
+import com.danosoftware.galaxyforce.screen.IScreen;
+import com.danosoftware.galaxyforce.screen.enums.ScreenType;
+import com.danosoftware.galaxyforce.screen.factories.ScreenFactory;
+import com.danosoftware.galaxyforce.services.configurations.ConfigurationService;
+import com.danosoftware.galaxyforce.services.configurations.ConfigurationServiceImpl;
+import com.danosoftware.galaxyforce.services.file.FileIO;
+import com.danosoftware.galaxyforce.services.file.GameFileIO;
+import com.danosoftware.galaxyforce.services.music.AndroidAudio;
+import com.danosoftware.galaxyforce.services.music.Audio;
+import com.danosoftware.galaxyforce.services.preferences.IPreferences;
+import com.danosoftware.galaxyforce.services.preferences.PreferencesInteger;
+import com.danosoftware.galaxyforce.services.preferences.PreferencesString;
+import com.danosoftware.galaxyforce.services.savedgame.SavedGame;
+import com.danosoftware.galaxyforce.services.savedgame.SavedGameImpl;
+import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
+import com.danosoftware.galaxyforce.services.sound.SoundPlayerServiceImpl;
+import com.danosoftware.galaxyforce.services.vibration.VibrationService;
+import com.danosoftware.galaxyforce.services.vibration.VibrationServiceImpl;
 import com.danosoftware.galaxyforce.view.GLGraphics;
-import com.danosoftware.galaxyforce.view.GameFileIO;
 
 /**
- * @author Danny
- * <p>
  * Initialises model, controller and view for game. Handles the main
  * game loop using the controller, model and view.
  */
@@ -38,191 +41,129 @@ public class GameImpl implements Game {
 
     private static final String LOCAL_TAG = "GameImpl";
 
-    /* references the static application context */
-    private final Context context;
+    // reference to current screen
+    private IScreen screen;
 
-    /* reference to GL graphics */
-    private GLGraphics glGraphics;
+    // reference to screen to return to.
+    // used in cases where we temporarily go to one
+    // screen but expect to return to where we came from.
+    // e.g. returning from an options screen back to the main game
+    private IScreen returningScreen;
 
-    /* reference to file input/output */
-    private FileIO fileIO;
+    // factory used to create new screens
+    private final ScreenFactory screenFactory;
 
-    /* reference to game input */
-    private Input input;
+    private final SoundPlayerService sounds;
 
-    /* reference to current screen */
-    private Screen screen;
+    public GameImpl(
+            Context context,
+            GLGraphics glGraphics,
+            GLSurfaceView glView,
+            IBillingService billingService) {
 
-    /* reference to current screen */
-    private Screen returningScreen;
+        FileIO fileIO = new GameFileIO(context);
+        Input input = new GameInput(glView, 1, 1);
+        Audio audio = new AndroidAudio(context);
+        String versionName = versionName(context);
 
-    /* reference to billing service */
-    private final IBillingService billingService;
+        // set-up configuration service that uses shared preferences
+        // for persisting configuration
+        IPreferences<String> configPreferences = new PreferencesString(context);
+        ConfigurationService configurationService = new ConfigurationServiceImpl(configPreferences);
 
-    /* reference to game audio */
-    private Audio audio;
+        boolean enableSounds = (configurationService.getSoundOption() == OptionSound.ON);
+        this.sounds = new SoundPlayerServiceImpl(context, enableSounds);
 
-    public GameImpl(Context context, GLGraphics glGraphics, GLSurfaceView glView, IBillingService billingService) {
-        this.context = context;
-        this.fileIO = new GameFileIO(context);
-        this.audio = new AndroidAudio(context);
-        this.glGraphics = glGraphics;
-        this.billingService = billingService;
+        boolean enableVibrator = (configurationService.getVibrationOption() == OptionVibration.ON);
+        VibrationService vibrator = new VibrationServiceImpl(context, enableVibrator);
 
-        // create new input implementation
-        Inputs.newInput(glView, 1, 1);
+        IPreferences<Integer> savedGamePreferences = new PreferencesInteger(context);
+        SavedGame savedGame = new SavedGameImpl(savedGamePreferences);
 
-        /*
-         * initialise sound effect bank singleton. initialise as early as
-         * possible to ensure sound effects are available when needed.
-         */
-        if (!SoundEffectBankSingleton.isInitialised()) {
-            // initialise configuration
-            SoundEffectBankSingleton.initialise(audio);
-        }
-
-        /* initialise configuration singleton */
-        if (!Configurations.isInitialised()) {
-            // set-up reference to shared preference.
-            // used for persisting configuration
-            IPreferences<String> configPreferences = new PreferencesString(context);
-
-            // initialise configuration
-            Configurations.initialise(configPreferences);
-        }
-
-        /* initialise vibrator singleton */
-        if (!VibrationSingleton.isInitialised()) {
-            // initialise vibration
-            VibrationSingleton.initialise(context);
-        }
-
-        Configurations configurations = Configurations.getInstance();
-
-        // enable or disable vibrator depending current configuration
-        Vibration vibrator = VibrationSingleton.getInstance();
-        vibrator.setVibrationEnabled(configurations.getVibrationOption());
-
-        // enable or disable sound depending current configuration
-        SoundPlayer soundPlayer = SoundPlayerSingleton.getInstance();
-        soundPlayer.setSoundEnabled(configurations.getSoundOption());
-
-        /* initialise saved game singleton */
-        if (!SavedGame.isInitialised()) {
-            // set-up reference to shared preference.
-            // used for persisting saved games
-            IPreferences<Integer> savedGamePreferences = new PreferencesInteger(context);
-
-            // initialise configuration
-            SavedGame.initialise(savedGamePreferences);
-        }
+        this.screenFactory = new ScreenFactory(
+                glGraphics,
+                fileIO,
+                billingService,
+                configurationService,
+                sounds,
+                vibrator,
+                savedGame,
+                this,
+                input,
+                versionName);
     }
 
     @Override
     public void start() {
         Log.i(GameConstants.LOG_TAG, LOCAL_TAG + ": Start Game");
-
-        this.screen = ScreenFactory.newScreen(ScreenType.SPLASH);
+        this.screen = screenFactory.newScreen(ScreenType.SPLASH);
     }
 
     @Override
-    public Context getContext() {
-        return context;
+    public void changeToScreen(ScreenType screenType) {
+
+        changeScreen(
+                screenFactory.newScreen(screenType));
     }
 
     @Override
-    public GLGraphics getGlGraphics() {
-        return glGraphics;
+    public void changeToGameScreen(int wave) {
+
+        changeScreen(
+                screenFactory.newGameScreen(wave));
     }
 
-    @Override
-    public FileIO getFileIO() {
-        return fileIO;
-    }
-
-    @Override
-    public Screen getScreen() {
-        return screen;
-    }
-
-    @Override
-    public void setScreen(Screen screen) {
-        if (screen == null)
-            throw new IllegalArgumentException("Screen must not be null");
+    private void changeScreen(IScreen newScreen) {
 
         // pause and dispose current screen
         this.screen.pause();
         this.screen.dispose();
 
         // resume and update new screen
-        screen.resume();
-        screen.update(0);
-
-        // set current screen
-        this.screen = screen;
-
-        // clear returning screen if needed.
-        this.returningScreen = null;
+        this.screen = newScreen;
+        this.screen.resume();
+        this.screen.update(0);
     }
 
     @Override
-    public void setReturningScreen(Screen gameScreen) {
-        Screen currentScreen = this.screen;
-
-        // call normal set screen method to change screens
-        setScreen(gameScreen);
+    public void changeToReturningScreen(ScreenType gameScreen) {
 
         // set returning screen to current screen
-        this.returningScreen = currentScreen;
+        this.returningScreen = this.screen;
+
+        // call normal set screen method to change screens
+        changeToScreen(gameScreen);
     }
 
     @Override
     public void screenReturn() {
         if (returningScreen == null)
-            throw new IllegalArgumentException("Returning Screen must not be null");
+            throw new GalaxyForceException("Returning Screen must not be null");
 
         // return back to previous screens
-        setScreen(returningScreen);
+        changeScreen(returningScreen);
+
+        // clear returning screen
+        this.returningScreen = null;
     }
 
     @Override
     public void resume() {
-
         Log.i(GameConstants.LOG_TAG, LOCAL_TAG + ": Resume Game");
-
-        // check if screen exists as resume is also called onCreate before
-        // screen exists
-        if (screen != null) {
-            screen.resume();
-        }
-
-        // glView.onResume();
-
-        // what state do we use?
-        // maybe separate pause/resume from other states
-        // model.setState(State.PAUSED);
+        screen.resume();
     }
 
     @Override
     public void pause() {
-
         Log.i(GameConstants.LOG_TAG, LOCAL_TAG + ": Pause Game");
-
         screen.pause();
-
-        // glView.onPause();
-
-        // what state do we use?
-        // maybe separate pause/resume from other states
-
-        // model.setState(State.PAUSED);
     }
 
     @Override
     public void dispose() {
         Log.i(GameConstants.LOG_TAG, LOCAL_TAG + ": Dispose Game");
-
         screen.dispose();
+        sounds.dispose();
     }
 
     @Override
@@ -240,14 +181,24 @@ public class GameImpl implements Game {
         return screen.handleBackButton();
     }
 
-    @Override
-    public Audio getAudio() {
-        return audio;
-    }
+    /**
+     * Retrieve version name of this package.
+     * Can return null if version name can not be found.
+     */
+    private String versionName(Context context) {
+        PackageManager packageMgr = context.getPackageManager();
+        String packageName = context.getPackageName();
 
-    @Override
-    public IBillingService getBillingService() {
-        return billingService;
+        if (packageMgr != null && packageName != null) {
+            try {
+                PackageInfo info = packageMgr.getPackageInfo(packageName, 0);
+                if (info != null) {
+                    return info.versionName;
+                }
+            } catch (PackageManager.NameNotFoundException e) {
+                return null;
+            }
+        }
+        return null;
     }
-
 }

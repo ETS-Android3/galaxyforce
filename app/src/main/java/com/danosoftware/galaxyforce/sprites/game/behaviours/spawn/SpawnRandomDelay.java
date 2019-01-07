@@ -2,7 +2,7 @@ package com.danosoftware.galaxyforce.sprites.game.behaviours.spawn;
 
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.game.beans.SpawnedAlienBean;
-import com.danosoftware.galaxyforce.game.handlers.GameHandler;
+import com.danosoftware.galaxyforce.models.screens.game.handlers.IGameHandler;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.factories.AlienFactory;
 import com.danosoftware.galaxyforce.waves.AlienType;
@@ -18,7 +18,7 @@ public class SpawnRandomDelay implements SpawnBehaviour {
      */
 
     /* reference to game model */
-    private final GameHandler model;
+    private final IGameHandler model;
 
     /* minimum delay between alien spqwning in seconds */
     private final float minSpawnDelay;
@@ -46,18 +46,23 @@ public class SpawnRandomDelay implements SpawnBehaviour {
     // A value of 10 indicates 1 power-up for every 10 aliens spawned
     private final static int POWER_UP_MULTIPLIER = 10;
 
+    private final AlienFactory alienFactory;
+
     /**
+     * @param alienFactory     - factory to create aliens
      * @param model            - model to receive aliens
      * @param alienType        - alien to spawn
      * @param minSpawnDelay    - minimum delay between spawns
      * @param spawnDelayRandom - additional maximum random time before spawns
      */
     public SpawnRandomDelay(
-            final GameHandler model,
+            final AlienFactory alienFactory,
+            final IGameHandler model,
             final AlienType alienType,
             final List<PowerUpType> powerUpTypes,
             final float minSpawnDelay,
             final float spawnDelayRandom) {
+        this.alienFactory = alienFactory;
         this.model = model;
         this.alienType = alienType;
         this.minSpawnDelay = minSpawnDelay;
@@ -93,7 +98,7 @@ public class SpawnRandomDelay implements SpawnBehaviour {
         delayUntilNextSpawn = minSpawnDelay + (spawnDelayRandom * Math.random());
 
         // create and send new alien bean
-        SpawnedAlienBean aliens = AlienFactory.createSpawnedAlien(alienType, powerUpAllocator.allocate(), alien.x(), alien.y() - alien.height(), model);
+        SpawnedAlienBean aliens = alienFactory.createSpawnedAlien(alienType, powerUpAllocator.allocate(), alien.x(), alien.y() - alien.height());
 
         model.spawnAliens(aliens);
     }

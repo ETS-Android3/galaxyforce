@@ -5,9 +5,9 @@ import android.util.Log;
 import com.danosoftware.galaxyforce.enumerations.BaseMissileType;
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.game.beans.BaseMissileBean;
-import com.danosoftware.galaxyforce.game.handlers.GameHandler;
-import com.danosoftware.galaxyforce.sound.SoundEffectBank;
-import com.danosoftware.galaxyforce.sound.SoundEffectBankSingleton;
+import com.danosoftware.galaxyforce.models.screens.game.handlers.IGameHandler;
+import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
+import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.bases.BasePrimary;
 import com.danosoftware.galaxyforce.sprites.game.bases.IBaseHelper;
@@ -20,7 +20,6 @@ import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.textures.Texture;
 import com.danosoftware.galaxyforce.textures.TextureDetail;
 import com.danosoftware.galaxyforce.textures.Textures;
-import com.danosoftware.galaxyforce.vibration.VibrationSingleton;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,7 +30,7 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
 import java.lang.reflect.Field;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.function.Predicate;
 
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
@@ -54,31 +53,25 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Log.class, SoundEffectBankSingleton.class, VibrationSingleton.class, Textures.class})
+@PrepareForTest({Log.class, Textures.class})
 public class PrimaryBaseTest {
 
-    TextureDetail mockTextureDetail = new TextureDetail("mock", 0, 0, 0, 0);
+    private TextureDetail mockTextureDetail = new TextureDetail("mock", 0, 0, 0, 0);
 
     private IBasePrimary primaryBase;
     private IBasePrimary primaryBaseSpy;
     private IBaseHelper leftHelper;
     private IBaseHelper rightHelper;
 
-    private GameHandler model;
+    private IGameHandler model;
+    private SoundPlayerService sounds;
+    private VibrationService vibrator;
 
 
     @Before
     public void setUp() {
         // mock any static android logging
         mockStatic(Log.class);
-
-        SoundEffectBank soundEffectBank = mock(SoundEffectBank.class);
-        mockStatic(SoundEffectBankSingleton.class);
-        when(SoundEffectBankSingleton.getInstance()).thenReturn(soundEffectBank);
-
-        VibrationSingleton vibration = mock(VibrationSingleton.class);
-        mockStatic(VibrationSingleton.class);
-        when(VibrationSingleton.getInstance()).thenReturn(vibration);
 
         mockStatic(Textures.class);
         when(Textures.getTextureDetail(any(String.class))).thenReturn(mockTextureDetail);
@@ -88,8 +81,11 @@ public class PrimaryBaseTest {
             spriteId.updateProperties(mockTexture);
         }
 
-        model = mock(GameHandler.class);
-        primaryBase = new BasePrimary(model);
+        model = mock(IGameHandler.class);
+        sounds = mock(SoundPlayerService.class);
+        vibrator = mock(VibrationService.class);
+
+        primaryBase = new BasePrimary(model, sounds, vibrator);
         primaryBaseSpy = spy(primaryBase);
 
         leftHelper = mock(IBaseHelper.class);
@@ -251,8 +247,8 @@ public class PrimaryBaseTest {
     public void helperBasesShouldBeDestroyedWithPrimaryBase() {
 
         // return list containing helper base when allSprites() is called on each one
-        when(leftHelper.allSprites()).thenReturn(Arrays.asList((ISprite) leftHelper));
-        when(rightHelper.allSprites()).thenReturn(Arrays.asList((ISprite) rightHelper));
+        when(leftHelper.allSprites()).thenReturn(Collections.singletonList((ISprite) leftHelper));
+        when(rightHelper.allSprites()).thenReturn(Collections.singletonList((ISprite) rightHelper));
 
         // call primaryBase.helperExploding() when mock helpers are destroyed
         doAnswer(new Answer() {

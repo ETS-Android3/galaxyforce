@@ -1,7 +1,9 @@
 package com.danosoftware.galaxyforce.sprites.game.aliens;
 
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
-import com.danosoftware.galaxyforce.game.handlers.GameHandler;
+import com.danosoftware.galaxyforce.models.screens.game.handlers.IGameHandler;
+import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
+import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.sprites.game.bases.IBasePrimary;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.explode.ExplodeSimple;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.fire.FireDisabled;
@@ -52,7 +54,7 @@ public class AlienHunter extends AbstractAlien {
     /* variable to store time passed since last alien direction change */
     private float timeSinceLastDirectionChange;
 
-    private final GameHandler model;
+    private final IGameHandler model;
 
     /**
      * Create Alien Hunter.
@@ -62,7 +64,9 @@ public class AlienHunter extends AbstractAlien {
             final int xStart,
             final int yStart,
             final float timeDelayStart,
-            final GameHandler model) {
+            final IGameHandler model,
+            final SoundPlayerService sounds,
+            final VibrationService vibrator) {
 
         // default is that asteroids are initially invisible
         super(
@@ -74,7 +78,7 @@ public class AlienHunter extends AbstractAlien {
                 new PowerUpSingle(model, powerUpType),
                 new SpawnDisabled(),
                 new HitDisabled(),
-                new ExplodeSimple());
+                new ExplodeSimple(sounds, vibrator));
 
         waiting();
 

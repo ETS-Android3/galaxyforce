@@ -2,7 +2,8 @@ package com.danosoftware.galaxyforce.screen;
 
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
-import com.danosoftware.galaxyforce.interfaces.LevelModel;
+import com.danosoftware.galaxyforce.models.screens.level.LevelModel;
+import com.danosoftware.galaxyforce.services.file.FileIO;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteProperties;
 import com.danosoftware.galaxyforce.sprites.refactor.ISprite;
@@ -15,18 +16,26 @@ import com.danosoftware.galaxyforce.view.SpriteBatcher;
 import javax.microedition.khronos.opengles.GL10;
 
 public class SelectLevelScreen extends AbstractScreen {
+
+    private static final float SCREEN_CENTRE = GameConstants.GAME_WIDTH / 2;
+
     /*
      * contains reference to level model needed for local override. This a
      * version of a model that has extra methods required for this screen.
      */
     private final LevelModel levelModel;
 
-    public SelectLevelScreen(LevelModel model, Controller controller, TextureMap textureMap, GLGraphics glGraphics, Camera2D camera,
-                             SpriteBatcher batcher) {
-        /* use superclass constructor to create screen */
-        super(model, controller, textureMap, glGraphics, camera, batcher);
+    public SelectLevelScreen(
+            LevelModel model,
+            Controller controller,
+            TextureMap textureMap,
+            GLGraphics glGraphics,
+            FileIO fileIO,
+            Camera2D camera,
+            SpriteBatcher batcher) {
 
-        levelModel = model;
+        super(model, controller, textureMap, glGraphics, fileIO, camera, batcher);
+        this.levelModel = model;
     }
 
     /*
@@ -40,8 +49,9 @@ public class SelectLevelScreen extends AbstractScreen {
         /* clear colour buffer */
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
-        // scroll screen by model's current scroll speed
-        camera.position.x = (GameConstants.GAME_WIDTH / 2) + levelModel.getScrollPosition();
+        // move camera's x position on screen by model's current scroll speed
+        float cameraOffset = levelModel.getScrollPosition();
+        camera.moveX(SCREEN_CENTRE + cameraOffset);
 
         camera.setViewportAndMatrices();
         gl.glEnable(GL10.GL_TEXTURE_2D);
@@ -54,7 +64,6 @@ public class SelectLevelScreen extends AbstractScreen {
          * gets static sprites from model (e.g. stars) - these sprites must not
          * scroll with other elements so offset stars by current camera offset.
          */
-        float cameraOffset = levelModel.getScrollPosition();
         for (ISprite sprite : levelModel.getStaticSprites()) {
             ISpriteIdentifier spriteId = sprite.spriteId();
             ISpriteProperties props = spriteId.getProperties();
@@ -105,5 +114,13 @@ public class SelectLevelScreen extends AbstractScreen {
 
         batcher.endBatch();
         gl.glDisable(GL10.GL_BLEND);
+    }
+
+    @Override
+    public void dispose() {
+        super.dispose();
+
+        // reset camera position
+        camera.resetPosition();
     }
 }
