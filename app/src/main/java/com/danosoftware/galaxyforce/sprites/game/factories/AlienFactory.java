@@ -11,21 +11,21 @@ import com.danosoftware.galaxyforce.models.screens.game.GameModel;
 import com.danosoftware.galaxyforce.services.sound.SoundEffect;
 import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
-import com.danosoftware.galaxyforce.sprites.game.aliens.AlienAsteroid;
-import com.danosoftware.galaxyforce.sprites.game.aliens.AlienAsteroidSimple;
-import com.danosoftware.galaxyforce.sprites.game.aliens.AlienDragonBody;
-import com.danosoftware.galaxyforce.sprites.game.aliens.AlienDragonHead;
-import com.danosoftware.galaxyforce.sprites.game.aliens.AlienDroid;
-import com.danosoftware.galaxyforce.sprites.game.aliens.AlienGobby;
-import com.danosoftware.galaxyforce.sprites.game.aliens.AlienHunter;
-import com.danosoftware.galaxyforce.sprites.game.aliens.AlienInsectPath;
-import com.danosoftware.galaxyforce.sprites.game.aliens.AlienMinion;
-import com.danosoftware.galaxyforce.sprites.game.aliens.AlienMothership;
-import com.danosoftware.galaxyforce.sprites.game.aliens.AlienOctopus;
-import com.danosoftware.galaxyforce.sprites.game.aliens.AlienSpawnedInsect;
-import com.danosoftware.galaxyforce.sprites.game.aliens.AlienStork;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlienFollower;
+import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienAsteroid;
+import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienAsteroidSimple;
+import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienDragonBody;
+import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienDragonHead;
+import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienDroid;
+import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienGobby;
+import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienHunter;
+import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienInsectPath;
+import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienMinion;
+import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienMothership;
+import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienOctopus;
+import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienSpawnedInsect;
+import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienStork;
 import com.danosoftware.galaxyforce.waves.AlienType;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocator;
 
@@ -57,28 +57,11 @@ public class AlienFactory {
     public List<IAlien> createAlien(
             final AlienType alienType,
             final PowerUpType powerUp,
-            final List<Point> path,
+            final List<Point> alienPath,
             final float delay,
             final boolean restartImmediately) {
 
         List<IAlien> aliens = new ArrayList<>();
-
-        /*
-         * Create new path per alien as different aliens may modify paths
-         * differently
-         */
-        List<Point> alienPath = new ArrayList<>();
-
-        /*
-         * convert path so alien is positioned at centre of provided point. This
-         * is dependent on sprite size.
-         */
-        for (Point currentPoint : path) {
-            int x = currentPoint.getX();
-            int y = currentPoint.getY();
-
-            alienPath.add(new Point(x, y));
-        }
 
         // create instance of the wanted alien
         switch (alienType) {
