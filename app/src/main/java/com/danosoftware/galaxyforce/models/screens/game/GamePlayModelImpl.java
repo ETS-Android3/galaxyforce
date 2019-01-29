@@ -3,7 +3,8 @@ package com.danosoftware.galaxyforce.models.screens.game;
 import android.content.res.AssetManager;
 import android.util.Log;
 
-import com.danosoftware.galaxyforce.billing.service.IBillingService;
+import com.danosoftware.galaxyforce.billing.BillingService;
+import com.danosoftware.galaxyforce.billing.PurchaseState;
 import com.danosoftware.galaxyforce.buttons.sprite_button.PauseButton;
 import com.danosoftware.galaxyforce.buttons.sprite_button.SpriteButton;
 import com.danosoftware.galaxyforce.constants.GameConstants;
@@ -16,15 +17,15 @@ import com.danosoftware.galaxyforce.controllers.touch_base.ControllerDrag;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
 import com.danosoftware.galaxyforce.flightpath.paths.PathFactory;
 import com.danosoftware.galaxyforce.flightpath.utilities.PathLoader;
-import com.danosoftware.galaxyforce.game.beans.AlienMissileBean;
-import com.danosoftware.galaxyforce.game.beans.BaseMissileBean;
-import com.danosoftware.galaxyforce.game.beans.PowerUpBean;
-import com.danosoftware.galaxyforce.game.beans.SpawnedAlienBean;
 import com.danosoftware.galaxyforce.games.Game;
 import com.danosoftware.galaxyforce.models.aliens.AlienManager;
 import com.danosoftware.galaxyforce.models.aliens.IAlienManager;
+import com.danosoftware.galaxyforce.models.assets.AlienMissilesDto;
+import com.danosoftware.galaxyforce.models.assets.BaseMissilesDto;
 import com.danosoftware.galaxyforce.models.assets.GamePlayAssetsManager;
 import com.danosoftware.galaxyforce.models.assets.IGamePlayAssetsManager;
+import com.danosoftware.galaxyforce.models.assets.PowerUpsDto;
+import com.danosoftware.galaxyforce.models.assets.SpawnedAliensDto;
 import com.danosoftware.galaxyforce.models.screens.Model;
 import com.danosoftware.galaxyforce.models.screens.flashing.FlashingText;
 import com.danosoftware.galaxyforce.models.screens.flashing.FlashingTextImpl;
@@ -118,7 +119,7 @@ public class GamePlayModelImpl implements Model, GameModel {
     private final IGamePlayAssetsManager assets;
 
     // reference to the billing service
-    private final IBillingService billingService;
+    private final BillingService billingService;
 
     // saved game service
     private final SavedGame savedGame;
@@ -147,7 +148,7 @@ public class GamePlayModelImpl implements Model, GameModel {
             Controller controller,
             List<Star> stars,
             int wave,
-            IBillingService billingService,
+            BillingService billingService,
             SoundPlayerService sounds,
             VibrationService vibrator,
             SavedGame savedGame,
@@ -331,25 +332,25 @@ public class GamePlayModelImpl implements Model, GameModel {
     }
 
     @Override
-    public void spawnAliens(SpawnedAlienBean spawnedAliens) {
+    public void spawnAliens(SpawnedAliensDto spawnedAliens) {
         alienManager.spawnAliens(spawnedAliens.getAliens());
         sounds.play(spawnedAliens.getSoundEffect());
     }
 
     @Override
-    public void addPowerUp(PowerUpBean powerUp) {
+    public void addPowerUp(PowerUpsDto powerUp) {
         assets.addPowerUp(powerUp);
         sounds.play(powerUp.getSoundEffect());
     }
 
     @Override
-    public void fireBaseMissiles(BaseMissileBean missiles) {
+    public void fireBaseMissiles(BaseMissilesDto missiles) {
         assets.fireBaseMissiles(missiles);
         sounds.play(missiles.getSoundEffect());
     }
 
     @Override
-    public void fireAlienMissiles(AlienMissileBean missiles) {
+    public void fireAlienMissiles(AlienMissilesDto missiles) {
         assets.fireAlienMissiles(missiles);
         sounds.play(missiles.getSoundEffect());
     }
@@ -387,7 +388,9 @@ public class GamePlayModelImpl implements Model, GameModel {
         if (alienManager.isWaveComplete()) {
 
             // check user is allowed to play next wave
-            if (wave >= GameConstants.MAX_FREE_ZONE && billingService.isNotPurchased(GameConstants.FULL_GAME_PRODUCT_ID)) {
+            if (wave >= GameConstants.MAX_FREE_WAVE
+                    && (billingService.getFullGamePurchaseState() == PurchaseState.NOT_PURCHASED
+                    || billingService.getFullGamePurchaseState() == PurchaseState.NOT_READY)) {
                 Log.i(TAG, "Exceeded maximum free zone. Must upgrade.");
                 game.changeToReturningScreen(ScreenType.UPGRADE_FULL_VERSION);
 

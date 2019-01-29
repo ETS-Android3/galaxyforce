@@ -6,7 +6,7 @@ import android.content.pm.PackageManager;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 
-import com.danosoftware.galaxyforce.billing.service.IBillingService;
+import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
 import com.danosoftware.galaxyforce.input.GameInput;
@@ -61,7 +61,7 @@ public class GameImpl implements Game {
             Context context,
             GLGraphics glGraphics,
             GLSurfaceView glView,
-            IBillingService billingService) {
+            BillingService billingService) {
 
         this.returningScreens = new ArrayDeque<>();
 
@@ -139,6 +139,10 @@ public class GameImpl implements Game {
             throw new GalaxyForceException("Returning Screen stack is empty. No Screen to return to.");
         }
 
+        // pause and dispose current screen
+        this.screen.pause();
+        this.screen.dispose();
+
         // switch back to previous screen on top of the stack
         switchScreen(returningScreens.pop());
     }
@@ -181,11 +185,6 @@ public class GameImpl implements Game {
      * Discard the current screen and switch to a new screen.
      */
     private void switchScreen(IScreen newScreen) {
-
-        // pause and dispose current screen
-        this.screen.pause();
-        this.screen.dispose();
-
         // resume and update new screen
         this.screen = newScreen;
         this.screen.resume();
@@ -197,8 +196,15 @@ public class GameImpl implements Game {
      */
     private void switchScreenWithoutReturn(IScreen newScreen) {
 
+        // pause and dispose current screen
+        this.screen.pause();
+        this.screen.dispose();
+
         // we should also discard any previously stacked returning screens
-        returningScreens.clear();
+        while (!returningScreens.isEmpty()) {
+            IScreen stackedScreen = returningScreens.pop();
+            stackedScreen.dispose();
+        }
 
         switchScreen(newScreen);
     }
@@ -207,6 +213,10 @@ public class GameImpl implements Game {
      * Change to a new screen that may return back to the current screen.
      */
     private void switchScreenWithReturn(IScreen newScreen) {
+
+        // pause current screen.
+        // we do not dispose screen and we expect to return to it later
+        this.screen.pause();
 
         // push current screen onto the returning screens stack
         returningScreens.push(this.screen);

@@ -2,7 +2,7 @@ package com.danosoftware.galaxyforce.screen.factories;
 
 import android.content.res.AssetManager;
 
-import com.danosoftware.galaxyforce.billing.service.IBillingService;
+import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
 import com.danosoftware.galaxyforce.controllers.common.ControllerImpl;
@@ -13,7 +13,6 @@ import com.danosoftware.galaxyforce.models.screens.GameCompleteModelImpl;
 import com.danosoftware.galaxyforce.models.screens.MainMenuModelImpl;
 import com.danosoftware.galaxyforce.models.screens.Model;
 import com.danosoftware.galaxyforce.models.screens.SplashModelImpl;
-import com.danosoftware.galaxyforce.models.screens.UnlockAllZonesModelImpl;
 import com.danosoftware.galaxyforce.models.screens.UnlockFullVersionModelImpl;
 import com.danosoftware.galaxyforce.models.screens.game.GameOverModelImpl;
 import com.danosoftware.galaxyforce.models.screens.game.GamePausedModelImpl;
@@ -51,7 +50,7 @@ public class ScreenFactory {
     private final Camera2D camera;
     private final GLGraphics glGraphics;
     private final FileIO fileIO;
-    private final IBillingService billingService;
+    private final BillingService billingService;
     private final ConfigurationService configurationService;
     private final SoundPlayerService sounds;
     private final VibrationService vibrator;
@@ -65,7 +64,7 @@ public class ScreenFactory {
     public ScreenFactory(
             GLGraphics glGraphics,
             FileIO fileIO,
-            IBillingService billingService,
+            BillingService billingService,
             ConfigurationService configurationService,
             SoundPlayerService sounds,
             VibrationService vibrator,
@@ -101,7 +100,7 @@ public class ScreenFactory {
 
             case SPLASH:
                 return new ExitingScreen(
-                        new SplashModelImpl(game, controller),
+                        new SplashModelImpl(game, controller, billingService, versionName),
                         controller,
                         TextureMap.SPLASH,
                         glGraphics,
@@ -152,16 +151,6 @@ public class ScreenFactory {
             case UPGRADE_FULL_VERSION:
                 return new Screen(
                         new UnlockFullVersionModelImpl(game, controller, billingService),
-                        controller,
-                        TextureMap.MENU,
-                        glGraphics,
-                        fileIO,
-                        camera,
-                        batcher);
-
-            case UPGRADE_ALL_ZONES:
-                return new Screen(
-                        new UnlockAllZonesModelImpl(game, controller, billingService),
                         controller,
                         TextureMap.MENU,
                         glGraphics,
