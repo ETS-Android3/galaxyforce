@@ -9,9 +9,10 @@ import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
 import com.danosoftware.galaxyforce.controllers.touch.DetectButtonTouch;
 import com.danosoftware.galaxyforce.games.Game;
+import com.danosoftware.galaxyforce.models.buttons.ButtonModel;
+import com.danosoftware.galaxyforce.models.buttons.ButtonType;
 import com.danosoftware.galaxyforce.models.screens.ModelState;
 import com.danosoftware.galaxyforce.options.Option;
-import com.danosoftware.galaxyforce.options.OptionController;
 import com.danosoftware.galaxyforce.options.OptionMusic;
 import com.danosoftware.galaxyforce.options.OptionSound;
 import com.danosoftware.galaxyforce.options.OptionVibration;
@@ -23,6 +24,7 @@ import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
 import com.danosoftware.galaxyforce.sprites.game.starfield.Star;
+import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
@@ -30,7 +32,7 @@ import com.danosoftware.galaxyforce.text.TextPositionX;
 import java.util.ArrayList;
 import java.util.List;
 
-public class OptionsModelImpl implements OptionsModel {
+public class OptionsModelImpl implements OptionsModel, ButtonModel {
 
     /* logger tag */
     private static final String TAG = "OptionsModelImpl";
@@ -73,51 +75,24 @@ public class OptionsModelImpl implements OptionsModel {
         allSprites.addAll(stars);
         allSprites.add(new SplashSprite(GameConstants.SCREEN_MID_X, 817, MenuSpriteIdentifier.GALAXY_FORCE));
 
-        allText.add(Text.newTextRelativePositionX("MOVEMENT", TextPositionX.CENTRE, 175 + (3 * 170)));
-
-        ToggleButtonGroup controllerToggleGroup = new ToggleOption(
-                this,
-                configurationService.getControllerType());
-        addOptionsButton(
-                controller,
-                3,
-                0,
-                OptionController.DRAG,
-                controllerToggleGroup,
-                0);
-        addOptionsButton(
-                controller,
-                3,
-                1,
-                OptionController.JOYSTICK,
-                controllerToggleGroup,
-                0);
-        addOptionsButton(
-                controller,
-                3,
-                2,
-                OptionController.ACCELEROMETER,
-                controllerToggleGroup,
-                0);
-
         allText.add(Text.newTextRelativePositionX(
                 "SOUND EFFECTS",
                 TextPositionX.CENTRE,
-                175 + (2 * 170)));
+                175 + (3 * 170)));
 
         ToggleButtonGroup soundToggleGroup = new ToggleOption(
                 this,
                 configurationService.getSoundOption());
         addOptionsButton(
                 controller,
-                2,
+                3,
                 0,
                 OptionSound.ON,
                 soundToggleGroup,
                 90);
         addOptionsButton(
                 controller,
-                2,
+                3,
                 1,
                 OptionSound.OFF,
                 soundToggleGroup,
@@ -126,21 +101,21 @@ public class OptionsModelImpl implements OptionsModel {
         allText.add(Text.newTextRelativePositionX(
                 "MUSIC",
                 TextPositionX.CENTRE,
-                175 + (170)));
+                175 + (2 * 170)));
 
         ToggleButtonGroup musicToggleGroup = new ToggleOption(
                 this,
                 configurationService.getMusicOption());
         addOptionsButton(
                 controller,
-                1,
+                2,
                 0,
                 OptionMusic.ON,
                 musicToggleGroup,
                 90);
         addOptionsButton(
                 controller,
-                1,
+                2,
                 1,
                 OptionMusic.OFF,
                 musicToggleGroup,
@@ -149,25 +124,27 @@ public class OptionsModelImpl implements OptionsModel {
         allText.add(Text.newTextRelativePositionX(
                 "VIBRATION",
                 TextPositionX.CENTRE,
-                175));
+                175 + (1 * 170)));
 
         ToggleButtonGroup vibrationToggleGroup = new ToggleOption(
                 this,
                 configurationService.getVibrationOption());
         addOptionsButton(
                 controller,
-                0,
+                1,
                 0,
                 OptionVibration.ON,
                 vibrationToggleGroup,
                 90);
         addOptionsButton(
                 controller,
-                0,
+                1,
                 1,
                 OptionVibration.OFF,
                 vibrationToggleGroup,
                 90);
+
+        addNewMenuButton(controller, 0, "BACK", ButtonType.EXIT);
     }
 
     @Override
@@ -228,14 +205,35 @@ public class OptionsModelImpl implements OptionsModel {
         toggleGroup.addOption(button, optionType);
     }
 
+    /**
+     * add wanted menu button using the supplied row, label and type.
+     */
+    private void addNewMenuButton(
+            Controller controller,
+            int row,
+            String label,
+            ButtonType buttonType) {
+
+        // create button
+        MenuButton button = new MenuButton(
+                this,
+                GameConstants.GAME_WIDTH / 2,
+                100 + (row * 170),
+                label,
+                buttonType,
+                MenuSpriteIdentifier.MAIN_MENU,
+                MenuSpriteIdentifier.MAIN_MENU_PRESSED);
+
+        // add a new menu button to controller's list of touch controllers
+        controller.addTouchController(new DetectButtonTouch(button));
+
+        /// add new button
+        allSprites.add(button.getSprite());
+        allText.add(button.getText());
+    }
+
     @Override
     public void optionSelected(Option optionSelected) {
-
-        if (optionSelected instanceof OptionController) {
-            OptionController controllerType = (OptionController) optionSelected;
-            Log.d(TAG, "Controller Option Selected: " + controllerType.getText());
-            configurationService.newControllerType(controllerType);
-        }
 
         if (optionSelected instanceof OptionSound) {
             OptionSound soundType = (OptionSound) optionSelected;
@@ -284,5 +282,18 @@ public class OptionsModelImpl implements OptionsModel {
     @Override
     public void pause() {
         // no action for this model
+    }
+
+    @Override
+    public void processButton(ButtonType buttonType) {
+        switch (buttonType) {
+            case EXIT:
+                Log.d(GameConstants.LOG_TAG, "Exit Options.");
+                goBack();
+                break;
+            default:
+                Log.e(GameConstants.LOG_TAG, "Unsupported button: '" + buttonType + "'.");
+                break;
+        }
     }
 }
