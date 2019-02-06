@@ -5,8 +5,7 @@ import android.graphics.BitmapFactory;
 import android.opengl.GLUtils;
 import android.util.Log;
 
-import com.danosoftware.galaxyforce.interfaces.FileIO;
-import com.danosoftware.galaxyforce.interfaces.Game;
+import com.danosoftware.galaxyforce.services.file.FileIO;
 import com.danosoftware.galaxyforce.view.GLGraphics;
 
 import java.io.IOException;
@@ -14,75 +13,63 @@ import java.io.InputStream;
 
 import javax.microedition.khronos.opengles.GL10;
 
-public class Texture
-{
-    GLGraphics glGraphics;
-    FileIO fileIO;
-    String fileName;
-    int textureId;
-    int minFilter;
-    int magFilter;
-    int width;
-    int height;
+public class Texture {
+    private final GLGraphics glGraphics;
+    private final FileIO fileIO;
+    private final String fileName;
+
+    private int textureId;
+    private int minFilter;
+    private int magFilter;
+    private int width;
+    private int height;
 
     private static final String TAG = "Texture";
 
-    public Texture(Game game, String fileName)
-    {
-        this.glGraphics = game.getGlGraphics();
-        this.fileIO = game.getFileIO();
+    public Texture(GLGraphics glGraphics, FileIO fileIO, String fileName) {
+        this.glGraphics = glGraphics;
+        this.fileIO = fileIO;
         this.fileName = fileName;
         load();
     }
 
-    private void load()
-    {
+    private void load() {
         GL10 gl = glGraphics.getGl();
         int[] textureIds = new int[1];
         gl.glGenTextures(1, textureIds, 0);
         textureId = textureIds[0];
 
         InputStream in = null;
-        try
-        {
+        try {
             in = fileIO.readAsset(fileName);
             Bitmap bitmap = BitmapFactory.decodeStream(in);
-            width = bitmap.getWidth();
-            height = bitmap.getHeight();
+            this.width = bitmap.getWidth();
+            this.height = bitmap.getHeight();
             gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
             GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
             setFilters(GL10.GL_NEAREST, GL10.GL_NEAREST);
             gl.glBindTexture(GL10.GL_TEXTURE_2D, 0);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             throw new RuntimeException("Couldn't load texture '" + fileName + "'", e);
-        }
-        finally
-        {
+        } finally {
             if (in != null)
-                try
-                {
+                try {
                     in.close();
-                }
-                catch (IOException e)
-                {
+                } catch (IOException e) {
                 }
         }
 
         Log.d(TAG, "Loaded texture. Id: " + textureId + ". Filename: " + fileName + ".");
     }
 
-    public void reload()
-    {
+    public void reload() {
         load();
         bind();
         setFilters(minFilter, magFilter);
         glGraphics.getGl().glBindTexture(GL10.GL_TEXTURE_2D, 0);
     }
 
-    public void setFilters(int minFilter, int magFilter)
-    {
+    private void setFilters(int minFilter, int magFilter) {
         this.minFilter = minFilter;
         this.magFilter = magFilter;
         GL10 gl = glGraphics.getGl();
@@ -90,20 +77,26 @@ public class Texture
         gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, magFilter);
     }
 
-    public void bind()
-    {
+    public void bind() {
         GL10 gl = glGraphics.getGl();
         gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
     }
 
-    public void dispose()
-    {
+    public void dispose() {
         GL10 gl = glGraphics.getGl();
         gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
         int[] textureIds =
-        { textureId };
+                {textureId};
         gl.glDeleteTextures(1, textureIds, 0);
 
         Log.d(TAG, "Disposed texture. Id: " + textureId + ". Filename: " + fileName + ".");
+    }
+
+    public int width() {
+        return width;
+    }
+
+    public int height() {
+        return height;
     }
 }

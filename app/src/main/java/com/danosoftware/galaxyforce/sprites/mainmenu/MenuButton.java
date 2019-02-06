@@ -1,86 +1,79 @@
 package com.danosoftware.galaxyforce.sprites.mainmenu;
 
-import com.danosoftware.galaxyforce.buttons.interfaces.SpriteTextButton;
-import com.danosoftware.galaxyforce.controller.interfaces.Controller;
-import com.danosoftware.galaxyforce.controller.utilities.DetectButtonTouch;
-import com.danosoftware.galaxyforce.model.screens.ButtonType;
-import com.danosoftware.galaxyforce.model.screens.MenuButtonModel;
-import com.danosoftware.galaxyforce.sprites.game.interfaces.ButtonRectangle;
+import com.danosoftware.galaxyforce.buttons.sprite_text_button.SpriteTextButton;
+import com.danosoftware.galaxyforce.models.buttons.ButtonModel;
+import com.danosoftware.galaxyforce.models.buttons.ButtonType;
+import com.danosoftware.galaxyforce.sprites.buttons.ButtonSprite;
+import com.danosoftware.galaxyforce.sprites.buttons.IButtonSprite;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.utilities.Rectangle;
 
 /**
- * Represents a level selector. Level selector has a border, level number and
- * position.
+ * Represents a menu button with text.
  */
-public class MenuButton implements SpriteTextButton
-{
+public class MenuButton implements SpriteTextButton {
+
     // reference to Text representing level number
     private final Text text;
 
     // reference to button's parent model
-    private final MenuButtonModel model;
+    private final ButtonModel model;
 
     // reference to level selector button sprite
-    private final ButtonRectangle buttonSprite;
+    private final IButtonSprite buttonSprite;
 
     // sprites to be used for when button is up (not pressed) or down (pressed)
     private final ISpriteIdentifier spriteButtonUp;
     private final ISpriteIdentifier spriteButtonDown;
 
     // this button's type
-    ButtonType buttonType = null;
+    private final ButtonType buttonType;
 
-    public MenuButton(MenuButtonModel model, Controller controller, int xPos, int yPos, String text, ButtonType buttonType,
-            ISpriteIdentifier spriteButtonUp, ISpriteIdentifier spriteButtonDown)
-    {
+    public MenuButton(
+            ButtonModel model,
+            int xPos,
+            int yPos,
+            String text,
+            ButtonType buttonType,
+            ISpriteIdentifier spriteButtonUp,
+            ISpriteIdentifier spriteButtonDown) {
         this.model = model;
-        this.buttonSprite = new ButtonRectangle(xPos, yPos, spriteButtonUp);
+        this.buttonSprite = new ButtonSprite(spriteButtonUp, xPos, yPos);
         this.buttonType = buttonType;
         this.spriteButtonUp = spriteButtonUp;
         this.spriteButtonDown = spriteButtonDown;
         this.text = Text.newTextAbsolutePosition(text, xPos, yPos);
-
-        // add a new menu button to controller's list of touch controllers
-        controller.addTouchController(new DetectButtonTouch(this));
     }
 
     @Override
-    public Rectangle getBounds()
-    {
+    public Rectangle getBounds() {
         return buttonSprite.getBounds();
     }
 
     @Override
-    public void buttonUp()
-    {
-        buttonSprite.setSpriteIdentifier(spriteButtonUp);
-
+    public void buttonUp() {
+        buttonSprite.changeType(spriteButtonUp);
         model.processButton(buttonType);
     }
 
     @Override
-    public void buttonDown()
-    {
-        buttonSprite.setSpriteIdentifier(spriteButtonDown);
+    public void buttonDown() {
+        buttonSprite.changeType(spriteButtonDown);
     }
 
     @Override
-    public void buttonReleased()
-    {
-        buttonSprite.setSpriteIdentifier(spriteButtonUp);
+    public void buttonReleased() {
+        buttonSprite.changeType(spriteButtonUp);
     }
 
     @Override
-    public ButtonRectangle getSprite()
-    {
+    public IButtonSprite getSprite() {
         return buttonSprite;
     }
 
     @Override
-    public Text getText()
-    {
+    public Text getText() {
         return text;
     }
 }

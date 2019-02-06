@@ -5,18 +5,13 @@ import com.danosoftware.galaxyforce.textures.TextureRegion;
 
 import javax.microedition.khronos.opengles.GL10;
 
-public class SpriteBatcher
-{
-    final float[] verticesBuffer;
-    int bufferIndex;
-    final Vertices vertices;
-    int numSprites;
+public class SpriteBatcher {
+    private final float[] verticesBuffer;
+    private int bufferIndex;
+    private final Vertices vertices;
+    private int numSprites;
 
-    /* logger tag */
-    private static final String TAG = "SpriteBatcher";
-
-    public SpriteBatcher(GLGraphics glGraphics, int maxSprites)
-    {
+    public SpriteBatcher(GLGraphics glGraphics, int maxSprites) {
         this.verticesBuffer = new float[maxSprites * 4 * 4];
         this.vertices = new Vertices(glGraphics, maxSprites * 4, maxSprites * 6, false, true);
         this.bufferIndex = 0;
@@ -25,27 +20,24 @@ public class SpriteBatcher
         short[] indices = new short[maxSprites * 6];
         int len = indices.length;
         short j = 0;
-        for (int i = 0; i < len; i += 6, j += 4)
-        {
-            indices[i + 0] = (short) (j + 0);
+        for (int i = 0; i < len; i += 6, j += 4) {
+            indices[i] = (short) (j);
             indices[i + 1] = (short) (j + 1);
             indices[i + 2] = (short) (j + 2);
             indices[i + 3] = (short) (j + 2);
             indices[i + 4] = (short) (j + 3);
-            indices[i + 5] = (short) (j + 0);
+            indices[i + 5] = (short) (j);
         }
         vertices.setIndices(indices, 0, indices.length);
     }
 
-    public void beginBatch(Texture texture)
-    {
+    public void beginBatch(Texture texture) {
         texture.bind();
         numSprites = 0;
         bufferIndex = 0;
     }
 
-    public void endBatch()
-    {
+    public void endBatch() {
         vertices.setVertices(verticesBuffer, 0, bufferIndex);
         vertices.bind();
         vertices.draw(GL10.GL_TRIANGLES, 0, numSprites * 6);
@@ -54,8 +46,7 @@ public class SpriteBatcher
         // Log.d(TAG, "Sprites in batch: " + numSprites);
     }
 
-    public void drawSprite(float x, float y, float width, float height, TextureRegion region)
-    {
+    public void drawSprite(float x, float y, float width, float height, TextureRegion region) {
         float halfWidth = width / 2;
         float halfHeight = height / 2;
         float x1 = x - halfWidth;
@@ -86,8 +77,7 @@ public class SpriteBatcher
         numSprites++;
     }
 
-    public void drawSprite(float x, float y, float width, float height, float angle, TextureRegion region)
-    {
+    public void drawSprite(float x, float y, float width, float height, float angle, TextureRegion region) {
         float halfWidth = width / 2;
         float halfHeight = height / 2;
 

@@ -7,7 +7,7 @@ public abstract class SubWaveConfig {
 
     private final Type type;
 
-    protected SubWaveConfig(Type type) {
+    SubWaveConfig(Type type) {
         this.type = type;
     }
 
@@ -18,7 +18,7 @@ public abstract class SubWaveConfig {
     /**
      * Type of sub-wave configs
      */
-    public static enum Type {
-        PATH, NO_PATH;
+    public enum Type {
+        PATH, NO_PATH
     }
 }

@@ -19,11 +19,6 @@ public final class LinearMathematics {
 
     /**
      * return the path points points for the current linear path.
-     *
-     * @param start
-     * @param finish
-     * @param pathPoints
-     * @return array of points representing Linear path
      */
     public static List<Point> createLinearPath(
             final Point start,

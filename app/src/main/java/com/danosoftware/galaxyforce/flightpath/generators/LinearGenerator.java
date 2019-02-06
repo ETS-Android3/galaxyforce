@@ -22,12 +22,8 @@ public class LinearGenerator implements PathGenerator {
      * Instantiate generator by extracting and converting the linear data points
      * and then translating them to their new positions based on the provided
      * translators (e.g. x-axis flip).
-     *
-     * @param linearData
-     * @param translators
      */
-    public LinearGenerator(LinearPathDTO linearData, PointTranslatorChain translators)
-    {
+    public LinearGenerator(LinearPathDTO linearData, PointTranslatorChain translators) {
         this.start = convertAndTranslatePoint(linearData.getStart(), translators);
         this.finish = convertAndTranslatePoint(linearData.getFinish(), translators);
         this.pathPoints = linearData.getPathPoints();
@@ -39,8 +35,7 @@ public class LinearGenerator implements PathGenerator {
      * @return array of points representing line
      */
     @Override
-    public List<Point> path()
-    {
+    public List<Point> path() {
         return createLinearPath(start, finish, pathPoints);
     }
 }

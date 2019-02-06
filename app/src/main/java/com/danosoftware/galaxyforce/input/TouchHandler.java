@@ -2,17 +2,16 @@ package com.danosoftware.galaxyforce.input;
 
 import android.view.View.OnTouchListener;
 
-import com.danosoftware.galaxyforce.interfaces.Input.TouchEvent;
+import com.danosoftware.galaxyforce.input.Input.TouchEvent;
 
 import java.util.List;
 
-public interface TouchHandler extends OnTouchListener
-{
-    public boolean isTouchDown(int pointer);
+interface TouchHandler extends OnTouchListener {
+    boolean isTouchDown(int pointer);
 
-    public int getTouchX(int pointer);
+    int getTouchX(int pointer);
 
-    public int getTouchY(int pointer);
+    int getTouchY(int pointer);
 
-    public List<TouchEvent> getTouchEvents();
+    List<TouchEvent> getTouchEvents();
 }

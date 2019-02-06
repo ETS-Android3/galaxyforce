@@ -2,17 +2,16 @@ package com.danosoftware.galaxyforce.sprites.properties;
 
 import com.danosoftware.galaxyforce.textures.TextureRegion;
 
-public interface ISpriteProperties
-{
+public interface ISpriteProperties {
 
-    public int getWidth();
+    int getWidth();
 
-    public int getHeight();
+    int getHeight();
 
-    public int getxPos();
+    int getxPos();
 
-    public int getyPos();
+    int getyPos();
 
-    public TextureRegion getTextureRegion();
+    TextureRegion getTextureRegion();
 
 }

@@ -1,87 +1,53 @@
 package com.danosoftware.galaxyforce.sprites.game.factories;
 
 import com.danosoftware.galaxyforce.enumerations.AlienMissileType;
-import com.danosoftware.galaxyforce.enumerations.Direction;
-import com.danosoftware.galaxyforce.game.beans.AlienMissileBean;
-import com.danosoftware.galaxyforce.sound.Sound;
-import com.danosoftware.galaxyforce.sound.SoundEffect;
-import com.danosoftware.galaxyforce.sound.SoundEffectBank;
-import com.danosoftware.galaxyforce.sound.SoundEffectBankSingleton;
-import com.danosoftware.galaxyforce.sprites.game.implementations.AlienMissileRotated;
-import com.danosoftware.galaxyforce.sprites.game.implementations.AlienMissileSimple;
-import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlien;
-import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteAlienMissile;
-import com.danosoftware.galaxyforce.sprites.game.interfaces.SpriteBase;
+import com.danosoftware.galaxyforce.models.assets.AlienMissilesDto;
+import com.danosoftware.galaxyforce.services.sound.SoundEffect;
+import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
+import com.danosoftware.galaxyforce.sprites.game.bases.IBasePrimary;
+import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.AlienMissileRotated;
+import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.AlienMissileSimple;
+import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class AlienMissileFactory
-{
-    /* initialise sound effects */
-    private final static Sound SIMPLE_MISSILE_SOUND;
-
-    static
-    {
-        /* create reference to sound effects */
-        SoundEffectBank soundBank = SoundEffectBankSingleton.getInstance();
-        SIMPLE_MISSILE_SOUND = soundBank.get(SoundEffect.ALIEN_FIRE);
-    }
+public class AlienMissileFactory {
 
     /**
      * Return a list of missiles based on the type. Missile initial position
      * will be based on the base's position. Direction will be used to determine
      * initial position and direction of travel.
-     * 
-     * @param base
-     * @param baseMissileType
-     * @param direction
-     * @param model
-     * @return
      */
-    public static AlienMissileBean createAlienMissile(SpriteBase base, SpriteAlien alien, AlienMissileType missileType)
-    {
+    public static AlienMissilesDto createAlienMissile(IBasePrimary base, IAlien alien, AlienMissileType missileType) {
 
-        List<SpriteAlienMissile> missiles = new ArrayList<SpriteAlienMissile>();
-        Sound soundEffect;
-
-        /*
-         * if base is null or alien is above base then fire downwards else fire
-         * upwards
-         */
-        Direction direction = (base == null || base.getY() >= alien.getY()) ? Direction.DOWN : Direction.UP;
+        List<IAlienMissile> missiles = new ArrayList<>();
 
         /*
          * create missile's starting x and y positions based on alien position
          * and direction
          */
-        int x = alien.getX();
-        int y = direction == Direction.DOWN ? alien.getY() + (alien.getHeight() / 2) : alien.getY() - (alien.getHeight() / 2);
+        int x = alien.x();
+        int y = alien.y() + (alien.height() / 2);
 
         /*
          * Create new missiles
          */
-        switch (missileType)
-        {
+        switch (missileType) {
 
-        case SIMPLE:
+            case SIMPLE:
 
-            missiles.add(AlienMissileSimple.newMissile(x, y, direction));
-            soundEffect = SIMPLE_MISSILE_SOUND;
-            break;
+                missiles.add(new AlienMissileSimple(x, y));
+                return new AlienMissilesDto(missiles, SoundEffect.ALIEN_FIRE);
 
-        case ROTATED:
+            case ROTATED:
 
-            missiles.add(AlienMissileRotated.newMissile(x, y, base));
-            soundEffect = SIMPLE_MISSILE_SOUND;
-            break;
+                missiles.add(new AlienMissileRotated(x, y, base));
+                return new AlienMissilesDto(missiles, SoundEffect.ALIEN_FIRE);
 
-        default:
+            default:
 
-            throw new IllegalStateException("Unsupported missile type '" + missileType.name() + "'.");
+                throw new IllegalStateException("Unsupported missile type '" + missileType.name() + "'.");
         }
-
-        // create bean of missiles and sound effect
-        return new AlienMissileBean(missiles, soundEffect);
     }
 }

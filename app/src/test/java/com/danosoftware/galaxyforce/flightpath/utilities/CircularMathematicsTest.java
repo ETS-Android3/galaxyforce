@@ -20,7 +20,7 @@ public class CircularMathematicsTest {
 
         // create circular control points
         final double piMultiplier = 1;
-        final Point centre = new Point(0,0);
+        final Point centre = new Point(0, 0);
 
         // create a linear path from control points
         final List<Point> linearPoints = createCircularPath(
@@ -33,7 +33,7 @@ public class CircularMathematicsTest {
 
         // assert start/end path points match provided control points
         assertThat(linearPoints.get(0).getX(), is(centre.getX() + 300));
-        assertThat(linearPoints.get(0).getY(), is(centre.getY() + 0));
+        assertThat(linearPoints.get(0).getY(), is(centre.getY()));
         assertThat(linearPoints.get(pathLength - 1).getX(), is(centre.getX() - 195));
         assertThat(linearPoints.get(pathLength - 1).getY(), is(centre.getY() - 1));
     }

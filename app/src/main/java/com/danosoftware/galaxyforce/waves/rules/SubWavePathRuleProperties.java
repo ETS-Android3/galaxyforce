@@ -6,8 +6,7 @@ import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
 /*
  * Holds a set of properties that describe a sub-wave (including a path).
  */
-public class SubWavePathRuleProperties
-{
+public class SubWavePathRuleProperties {
     // the path the subwave aliens will follow
     private final Path path;
 
@@ -31,20 +30,13 @@ public class SubWavePathRuleProperties
     /**
      * Create a new alien sub-wave using a supplied path and
      * delays in seconds.
-     *
-     * @param path
-     * @param numberOfAliens
-     * @param delayBetweenAliens
-     * @param delayOffet
-     * @param restartImmediately
      */
     public SubWavePathRuleProperties(
             final Path path,
             final int numberOfAliens,
             final float delayBetweenAliens,
             final float delayOffet,
-            final boolean restartImmediately)
-    {
+            final boolean restartImmediately) {
         this.path = path;
         this.numberOfAliens = numberOfAliens;
         this.delayBetweenAliens = delayBetweenAliens;
@@ -58,13 +50,6 @@ public class SubWavePathRuleProperties
     /**
      * Create a new alien sub-wave using a supplied path and
      * delays in seconds. Plus translators to alter the path.
-     *
-     * @param path
-     * @param numberOfAliens
-     * @param delayBetweenAliens
-     * @param delayOffet
-     * @param restartImmediately
-     * @param translators
      */
     public SubWavePathRuleProperties(
             final Path path,
@@ -72,8 +57,7 @@ public class SubWavePathRuleProperties
             final float delayBetweenAliens,
             final float delayOffet,
             final boolean restartImmediately,
-            final PointTranslatorChain translators)
-    {
+            final PointTranslatorChain translators) {
         this.path = path;
         this.numberOfAliens = numberOfAliens;
         this.delayBetweenAliens = delayBetweenAliens;

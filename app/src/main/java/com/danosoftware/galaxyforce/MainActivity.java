@@ -1,8 +1,6 @@
 package com.danosoftware.galaxyforce;
 
 import android.app.Activity;
-import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
@@ -12,47 +10,48 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.danosoftware.galaxyforce.billing.service.BillingServiceImpl;
-import com.danosoftware.galaxyforce.billing.service.IBillingService;
+import com.android.billingclient.api.BillingClient;
+import com.danosoftware.galaxyforce.billing.BillingManager;
+import com.danosoftware.galaxyforce.billing.BillingService;
+import com.danosoftware.galaxyforce.billing.BillingServiceImpl;
 import com.danosoftware.galaxyforce.constants.GameConstants;
-import com.danosoftware.galaxyforce.enumerations.ActivityState;
-import com.danosoftware.galaxyforce.interfaces.Game;
-import com.danosoftware.galaxyforce.services.Games;
-import com.danosoftware.galaxyforce.services.PackageManagers;
-import com.danosoftware.galaxyforce.services.WindowManagers;
+import com.danosoftware.galaxyforce.games.Game;
+import com.danosoftware.galaxyforce.games.GameImpl;
 import com.danosoftware.galaxyforce.view.GLGraphics;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-public class MainActivity extends Activity
-{
+public class MainActivity extends Activity {
+
+    private enum ActivityState {
+        INITIALISED, RUNNING, PAUSED, FINISHED, IDLE
+    }
 
     /* logger tag */
     private static final String ACTIVITY_TAG = "MainActivity";
 
     /* reference to game instance */
-    private Game game = null;
+    private Game game;
 
     /* used for state synchronisation */
-    private Object stateChanged = new Object();
+    private final Object stateChanged = new Object();
 
     /* application state */
     private ActivityState state = ActivityState.INITIALISED;
 
     /* GL Graphics reference */
-    private GLGraphics glGraphics = null;
+    private GLGraphics glGraphics;
 
     /* GL Surface View reference */
-    private GLSurfaceView glView = null;
+    private GLSurfaceView glView;
 
-    /* Billing Service for In-App Billing Requests */
-    private IBillingService billingService;
+    /* Billing Manager for In-App Billing Requests */
+    private BillingManager mBillingManager;
 
     /* runs when application initially starts */
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Create Application");
@@ -71,73 +70,51 @@ public class MainActivity extends Activity
         setContentView(glView);
         this.glGraphics = new GLGraphics(glView);
 
-        this.billingService = new BillingServiceImpl(this);
-
-        // set-up window manager service
-        WindowManager windowMgr = (WindowManager) this.getSystemService(Activity.WINDOW_SERVICE);
-        WindowManagers.newWindowMgr(windowMgr);
-
-        // set-up package manager service
-        PackageManager packageMgr = this.getPackageManager();
-        String packageName = this.getPackageName();
-        PackageManagers.newPackageMgr(packageMgr, packageName);
+        // Create and initialize billing
+        BillingService billingService = new BillingServiceImpl();
+        BillingManager.BillingUpdatesListener billingListener = (BillingManager.BillingUpdatesListener) billingService;
+        this.mBillingManager = new BillingManager(this, billingListener);
 
         // create instance of game
-        Games.newGame(this, glGraphics, glView, billingService);
-        game = Games.getGame();
+        game = new GameImpl(this, glGraphics, glView, billingService);
     }
 
-    /* runs after onCreate or resuming after being paused */
+    /* runs after onCreate or resuming after being in background */
     @Override
-    protected void onResume()
-    {
+    protected void onResume() {
 
         Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Resume Application");
         super.onResume();
         glView.onResume();
 
-        /*
-         * refresh billing service product states. will initialise product
-         * states on start-up and refresh states on application resume. onresume
-         * also called after product purchases and so will refresh any product
-         * state changes.
-         */
-        if (billingService != null)
-        {
-            billingService.refreshProductStates();
+        // Note: We query purchases in onResume() to handle purchases completed while the activity
+        // is inactive. For example, this can happen if the activity is destroyed during the
+        // purchase flow. This ensures that when the activity is resumed it reflects the user's
+        // current purchases.
+        if (mBillingManager != null
+                && mBillingManager.getBillingClientResponseCode() == BillingClient.BillingResponse.OK) {
+            mBillingManager.queryPurchases();
         }
-
-        // game.resume();
     }
 
     /* runs when application is paused */
     @Override
-    protected void onPause()
-    {
+    protected void onPause() {
         Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Pause Application");
 
-        synchronized (stateChanged)
-        {
-            if (isFinishing())
-            {
+        synchronized (stateChanged) {
+            if (isFinishing()) {
                 Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Finish Application");
                 state = ActivityState.FINISHED;
-
-            }
-            else
-            {
+            } else {
                 state = ActivityState.PAUSED;
             }
 
-            while (true)
-            {
-                try
-                {
+            while (true) {
+                try {
                     stateChanged.wait();
                     break;
-                }
-                catch (InterruptedException e)
-                {
+                } catch (InterruptedException e) {
 
                 }
             }
@@ -149,48 +126,23 @@ public class MainActivity extends Activity
     }
 
     @Override
-    protected void onDestroy()
-    {
+    protected void onDestroy() {
         super.onDestroy();
 
-        // destroy billing service on activity destroy to avoid degrading device
-        billingService.destroy();
-    }
-
-    /**
-     * Handles the results of any results sent back to the activity.
-     */
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
-        Log.d(GameConstants.LOG_TAG, ACTIVITY_TAG + ": onActivityResult(" + requestCode + "," + resultCode + "," + data + ").");
-
-        // Pass on the activity result to the billing service for handling
-        boolean processed = false;
-        if (billingService != null && requestCode == GameConstants.BILLING_REQUEST)
-        {
-            processed = billingService.processActivityResult(requestCode, resultCode, data);
-        }
-
-        // uses superclass methods if not handled
-        if (processed == false)
-        {
-            Log.d(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Pass activity result to superclass.");
-            super.onActivityResult(requestCode, resultCode, data);
+        Log.i(ACTIVITY_TAG, "Destroying Billing Manager.");
+        if (mBillingManager != null) {
+            mBillingManager.destroy();
         }
     }
 
     @Override
-    public boolean onKeyDown(int keyCode, KeyEvent event)
-    {
-        if (keyCode == KeyEvent.KEYCODE_BACK)
-        {
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
             Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Back Button Pressed");
 
             // if back button is handled internally then don't use normal
             // superclass's method
-            if (game.handleBackButton())
-            {
+            if (game.handleBackButton()) {
                 return true;
             }
         }
@@ -226,24 +178,20 @@ public class MainActivity extends Activity
     /**
      * Inner class to handle graphics
      */
-    private class GLRenderer implements Renderer
-    {
+    private class GLRenderer implements Renderer {
 
         private static final String LOCAL_TAG = "GLRenderer";
         long startTime;
 
         @Override
-        public void onDrawFrame(GL10 gl)
-        {
-            ActivityState stateCheck = null;
+        public void onDrawFrame(GL10 gl) {
+            ActivityState stateCheck;
 
-            synchronized (stateChanged)
-            {
+            synchronized (stateChanged) {
                 stateCheck = state;
             }
 
-            if (stateCheck == ActivityState.RUNNING)
-            {
+            if (stateCheck == ActivityState.RUNNING) {
                 float deltaTime = (System.nanoTime() - startTime) / 1000000000.0f;
                 startTime = System.nanoTime();
 
@@ -251,24 +199,20 @@ public class MainActivity extends Activity
                 game.draw(deltaTime);
             }
 
-            if (stateCheck == ActivityState.PAUSED)
-            {
+            if (stateCheck == ActivityState.PAUSED) {
                 game.pause();
 
-                synchronized (stateChanged)
-                {
+                synchronized (stateChanged) {
                     state = ActivityState.IDLE;
                     stateChanged.notifyAll();
                 }
             }
 
-            if (stateCheck == ActivityState.FINISHED)
-            {
+            if (stateCheck == ActivityState.FINISHED) {
                 game.pause();
                 game.dispose();
 
-                synchronized (stateChanged)
-                {
+                synchronized (stateChanged) {
                     state = ActivityState.IDLE;
                     stateChanged.notifyAll();
                 }
@@ -276,22 +220,18 @@ public class MainActivity extends Activity
         }
 
         @Override
-        public void onSurfaceChanged(GL10 gl, int width, int height)
-        {
+        public void onSurfaceChanged(GL10 gl, int width, int height) {
             Log.i(GameConstants.LOG_TAG, LOCAL_TAG + ": onSurfaceChanged. width: " + width + ". height: " + height + ".");
         }
 
         @Override
-        public void onSurfaceCreated(GL10 gl, EGLConfig config)
-        {
+        public void onSurfaceCreated(GL10 gl, EGLConfig config) {
             Log.i(GameConstants.LOG_TAG, LOCAL_TAG + ": onSurfaceCreated");
 
             glGraphics.setGl(gl);
 
-            synchronized (stateChanged)
-            {
-                if (state == ActivityState.INITIALISED)
-                {
+            synchronized (stateChanged) {
+                if (state == ActivityState.INITIALISED) {
                     game.start();
                 }
                 state = ActivityState.RUNNING;

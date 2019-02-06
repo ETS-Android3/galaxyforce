@@ -1,7 +1,6 @@
 package com.danosoftware.galaxyforce.waves.rules;
 
 import com.danosoftware.galaxyforce.constants.GameConstants;
-import com.danosoftware.galaxyforce.enumerations.Direction;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -10,12 +9,11 @@ import java.util.Random;
 
 /**
  * Each sub-wave consists of one or more sub-wave properties.
- *
+ * <p>
  * Each sub-wave property contains enough data to create a sub-wave
  * of aliens that follow some rules.
  */
-public enum SubWaveRule
-{
+public enum SubWaveRule {
 
     /**
      * Asteroids that fall from top to bottom at random x positions and random
@@ -30,25 +28,7 @@ public enum SubWaveRule
                     30,
                     0.5f,
                     0f,
-                    false,
-                    Direction.DOWN
-            )),
-
-    /**
-     * Asteroids that fall from bottom to top at random x positions and random
-     * speeds
-     */
-    ASTEROIDS_REVERSE(
-            new SubWaveRuleProperties(
-                    true,
-                    false,
-                    0,
-                    GameConstants.SCREEN_BOTTOM,
-                    30,
-                    0.5f,
-                    0f,
-                    false,
-                    Direction.UP
+                    false
             )),
 
     /**
@@ -78,8 +58,7 @@ public enum SubWaveRule
                     2,
                     0.5f,
                     0f,
-                    false,
-                    Direction.DOWN
+                    false
             )),
 
     /**
@@ -94,32 +73,26 @@ public enum SubWaveRule
                     1,
                     0f,
                     0f,
-                    false,
-                    Direction.DOWN
+                    false
             )
     );
 
 
     // list of properties for a sub-wave
-    private List<SubWaveRuleProperties> waveList;
+    private final List<SubWaveRuleProperties> waveList;
 
-    SubWaveRule(SubWaveRuleProperties... waveArray)
-    {
+    SubWaveRule(SubWaveRuleProperties... waveArray) {
         this.waveList = Arrays.asList(waveArray);
     }
 
-    SubWaveRule(List<SubWaveRuleProperties> waveList)
-    {
+    SubWaveRule(List<SubWaveRuleProperties> waveList) {
         this.waveList = waveList;
     }
 
     /**
      * Properties to create a sub-wave
-     *
-     * @return
      */
-    public List<SubWaveRuleProperties> subWaveProps()
-    {
+    public List<SubWaveRuleProperties> subWaveProps() {
         return waveList;
     }
 
@@ -138,8 +111,7 @@ public enum SubWaveRule
     /**
      * Creates an asteroid field
      */
-    private static List<SubWaveRuleProperties> asteroidFieldSubWave(int totalRows, int delayBetweenRows)
-    {
+    private static List<SubWaveRuleProperties> asteroidFieldSubWave(int totalRows, int delayBetweenRows) {
         List<SubWaveRuleProperties> subWaves = new ArrayList<>();
 
         for (int row = 0; row < totalRows; row++) {
@@ -154,8 +126,7 @@ public enum SubWaveRule
     /**
      * Creates an asteroid maze where a gap exists in each row
      */
-    private static List<SubWaveRuleProperties> asteroidMazeSubWave(int totalRows, int delayBetweenRows)
-    {
+    private static List<SubWaveRuleProperties> asteroidMazeSubWave(int totalRows, int delayBetweenRows) {
         List<SubWaveRuleProperties> subWaves = new ArrayList<>();
 
         // random gap generator
@@ -190,8 +161,7 @@ public enum SubWaveRule
                 1,
                 0,
                 row * delayBetweenRows,
-                false,
-                Direction.DOWN
+                false
         );
     }
 }

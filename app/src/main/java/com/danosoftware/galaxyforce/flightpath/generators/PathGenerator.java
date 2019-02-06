@@ -6,14 +6,15 @@ import java.util.List;
 
 /**
  * Implementations provide a path consisting of a list of points.
- *
+ * <p>
  * These paths can be chained together to form complex paths.
  */
 public interface PathGenerator {
 
     /**
      * returns a list of path points
+     *
      * @return points
      */
-    public List<Point> path();
+    List<Point> path();
 }

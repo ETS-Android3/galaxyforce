@@ -24,7 +24,7 @@ import static org.junit.Assert.assertThat;
  */
 public class PathDTOTest {
 
-    final static Logger logger = LoggerFactory.getLogger(PathDTOTest.class);
+    private final static Logger logger = LoggerFactory.getLogger(PathDTOTest.class);
 
     @Test
     public void shouldLoadBezierPaths() throws IOException {
@@ -106,6 +106,7 @@ public class PathDTOTest {
             File file = pathAsset(path.getPathFile());
             ObjectMapper mapper = new ObjectMapper();
             PathListDTO pathData = mapper.readValue(file, PathListDTO.class);
+            assertThat(pathData, is(notNullValue()));
         }
         logger.info("All loaded successfully");
     }

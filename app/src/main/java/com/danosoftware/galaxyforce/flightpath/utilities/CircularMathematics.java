@@ -15,10 +15,6 @@ public final class CircularMathematics {
 
     /**
      * return the points for the current circular path.
-     *
-     * @param centre
-     * @param piMultiplier
-     * @return array of points representing Circular path
      */
     public static List<Point> createCircularPath(
             final Point centre,

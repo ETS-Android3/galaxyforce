@@ -3,10 +3,10 @@ package com.danosoftware.galaxyforce.input;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Pool<T> {
-	
+class Pool<T> {
+
     public interface PoolObjectFactory<T> {
-        public T createObject();
+        T createObject();
     }
 
     private final List<T> freeObjects;
@@ -16,11 +16,11 @@ public class Pool<T> {
     public Pool(PoolObjectFactory<T> factory, int maxSize) {
         this.factory = factory;
         this.maxSize = maxSize;
-        this.freeObjects = new ArrayList<T>(maxSize);
+        this.freeObjects = new ArrayList<>(maxSize);
     }
 
     public T newObject() {
-        T object = null;
+        T object;
 
         if (freeObjects.isEmpty())
             object = factory.createObject();

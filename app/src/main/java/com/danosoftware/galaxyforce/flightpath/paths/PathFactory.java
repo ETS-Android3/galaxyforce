@@ -13,26 +13,26 @@ import com.danosoftware.galaxyforce.flightpath.generators.LinearGenerator;
 import com.danosoftware.galaxyforce.flightpath.generators.PathGenerator;
 import com.danosoftware.galaxyforce.flightpath.generators.PauseGenerator;
 import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
+import com.danosoftware.galaxyforce.flightpath.utilities.PathLoader;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.danosoftware.galaxyforce.flightpath.utilities.PathLoader.loadPaths;
+public final class PathFactory {
 
-public final class PathFactory
-{
+    private final PathLoader loader;
 
-    private PathFactory() {
+    public PathFactory(PathLoader loader) {
+        this.loader = loader;
     }
 
-    public static List<Point> createPath(Path path, PointTranslatorChain translators)
-    {
+    public List<Point> createPath(Path path, PointTranslatorChain translators) {
         List<Point> pathPoints = new ArrayList<>();
 
         // load path data from file
-        PathListDTO pathData = loadPaths(path.getPathFile());
+        PathListDTO pathData = loader.loadPaths(path.getPathFile());
 
-        for (PathDTO pathDTO: pathData.getPathList()) {
+        for (PathDTO pathDTO : pathData.getPathList()) {
             final PathGenerator generator;
             switch (pathDTO.getType()) {
                 case BEZIER:
@@ -52,7 +52,7 @@ public final class PathFactory
                     generator = new CircularGenerator(circularData, translators);
                     break;
                 default:
-                    throw new GalaxyForceException("Unknown path type: "+ pathDTO.getType().name());
+                    throw new GalaxyForceException("Unknown path type: " + pathDTO.getType().name());
             }
             pathPoints.addAll(generator.path());
         }

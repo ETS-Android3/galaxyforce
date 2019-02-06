@@ -1,12 +1,11 @@
 package com.danosoftware.galaxyforce.sprites.mainmenu;
 
-import com.danosoftware.galaxyforce.buttons.interfaces.SpriteTextButton;
-import com.danosoftware.galaxyforce.controller.interfaces.Controller;
-import com.danosoftware.galaxyforce.controller.utilities.DetectButtonTouch;
-import com.danosoftware.galaxyforce.interfaces.LevelModel;
-import com.danosoftware.galaxyforce.model.screens.ButtonType;
-import com.danosoftware.galaxyforce.model.screens.MenuButtonModel;
-import com.danosoftware.galaxyforce.sprites.game.interfaces.ButtonRectangle;
+import com.danosoftware.galaxyforce.buttons.sprite_text_button.SpriteTextButton;
+import com.danosoftware.galaxyforce.models.buttons.ButtonModel;
+import com.danosoftware.galaxyforce.models.buttons.ButtonType;
+import com.danosoftware.galaxyforce.models.screens.level.LevelModel;
+import com.danosoftware.galaxyforce.sprites.buttons.ButtonSprite;
+import com.danosoftware.galaxyforce.sprites.buttons.IButtonSprite;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.utilities.Rectangle;
@@ -16,45 +15,47 @@ import com.danosoftware.galaxyforce.utilities.Rectangle;
  * screen even if the user is swiping. This is achieved by shifting the button's
  * getBounds() by the current swipe offset.
  */
-public class SwipeMenuButton implements SpriteTextButton
-{
+public class SwipeMenuButton implements SpriteTextButton {
+
     // reference to Text representing level number
     private final Text text;
 
     // reference to button's parent model
-    private final MenuButtonModel model;
+    private final ButtonModel model;
 
     // reference to model that allows us to determine screen swipe offset
     private final LevelModel swipeModel;
 
     // reference to level selector button sprite
-    private final ButtonRectangle buttonSprite;
+    private final IButtonSprite buttonSprite;
 
     // sprites to be used for when button is up (not pressed) or down (pressed)
     private final ISpriteIdentifier spriteButtonUp;
     private final ISpriteIdentifier spriteButtonDown;
 
     // this button's type
-    ButtonType buttonType = null;
+    private final ButtonType buttonType;
 
-    public SwipeMenuButton(MenuButtonModel model, LevelModel swipeModel, Controller controller, int xPos, int yPos, String text,
-            ButtonType buttonType, ISpriteIdentifier spriteButtonUp, ISpriteIdentifier spriteButtonDown)
-    {
+    public SwipeMenuButton(
+            ButtonModel model,
+            LevelModel swipeModel,
+            int xPos,
+            int yPos,
+            String text,
+            ButtonType buttonType,
+            ISpriteIdentifier spriteButtonUp,
+            ISpriteIdentifier spriteButtonDown) {
         this.model = model;
         this.swipeModel = swipeModel;
-        this.buttonSprite = new ButtonRectangle(xPos, yPos, spriteButtonUp);
+        this.buttonSprite = new ButtonSprite(spriteButtonUp, xPos, yPos);
         this.buttonType = buttonType;
         this.spriteButtonUp = spriteButtonUp;
         this.spriteButtonDown = spriteButtonDown;
         this.text = Text.newTextAbsolutePosition(text, xPos, yPos);
-
-        // add a new menu button to controller's list of touch controllers
-        controller.addTouchController(new DetectButtonTouch(this));
     }
 
     @Override
-    public Rectangle getBounds()
-    {
+    public Rectangle getBounds() {
         // get the current swipe offset
         float swipeOffset = swipeModel.getScrollPosition();
 
@@ -63,41 +64,37 @@ public class SwipeMenuButton implements SpriteTextButton
          * the swipe offset. We don't want to create a new button as we'll lose
          * the existing button's state.
          */
-        Rectangle swipedBounds = new Rectangle(swipeOffset + buttonSprite.getX() - buttonSprite.getWidth() / 2, buttonSprite.getY()
-                - buttonSprite.getHeight() / 2, buttonSprite.getWidth(), buttonSprite.getHeight());
-
-        return swipedBounds;
+        return new Rectangle(
+                swipeOffset + buttonSprite.x() - buttonSprite.width() / 2,
+                buttonSprite.y() - buttonSprite.height() / 2,
+                buttonSprite.width(),
+                buttonSprite.height());
     }
 
     @Override
-    public void buttonUp()
-    {
-        buttonSprite.setSpriteIdentifier(spriteButtonUp);
+    public void buttonUp() {
+        buttonSprite.changeType(spriteButtonUp);
 
         model.processButton(buttonType);
     }
 
     @Override
-    public void buttonDown()
-    {
-        buttonSprite.setSpriteIdentifier(spriteButtonDown);
+    public void buttonDown() {
+        buttonSprite.changeType(spriteButtonDown);
     }
 
     @Override
-    public void buttonReleased()
-    {
-        buttonSprite.setSpriteIdentifier(spriteButtonUp);
+    public void buttonReleased() {
+        buttonSprite.changeType(spriteButtonUp);
     }
 
     @Override
-    public ButtonRectangle getSprite()
-    {
+    public IButtonSprite getSprite() {
         return buttonSprite;
     }
 
     @Override
-    public Text getText()
-    {
+    public Text getText() {
         return text;
     }
 }

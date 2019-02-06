@@ -32,7 +32,7 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 @PrepareForTest(Log.class)
 public class PowerUpAllocatorTest {
 
-    final static Logger logger = LoggerFactory.getLogger(PowerUpAllocatorTest.class);
+    private final static Logger logger = LoggerFactory.getLogger(PowerUpAllocatorTest.class);
 
     private PowerUpAllocator powerUpAllocator;
 
@@ -144,7 +144,7 @@ public class PowerUpAllocatorTest {
      * Check that all supplied power-ups were allocated to the aliens in the wave.
      *
      * @param numberOfAliens - number of aliens in wave
-     * @param powerUpTypes - list of power-ups to be allocated across aliens
+     * @param powerUpTypes   - list of power-ups to be allocated across aliens
      */
     private void shouldAllocateExpectedPowerUps(
             final int numberOfAliens,

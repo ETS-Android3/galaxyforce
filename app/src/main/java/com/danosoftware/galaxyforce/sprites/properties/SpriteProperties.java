@@ -3,13 +3,13 @@ package com.danosoftware.galaxyforce.sprites.properties;
 import android.util.Log;
 
 import com.danosoftware.galaxyforce.constants.GameConstants;
+import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
 import com.danosoftware.galaxyforce.textures.Texture;
 import com.danosoftware.galaxyforce.textures.TextureDetail;
 import com.danosoftware.galaxyforce.textures.TextureRegion;
 import com.danosoftware.galaxyforce.textures.Textures;
 
-public class SpriteProperties implements ISpriteProperties
-{
+public class SpriteProperties implements ISpriteProperties {
     private static final String TAG = "SpriteProperty";
 
     // details for texture region
@@ -22,22 +22,18 @@ public class SpriteProperties implements ISpriteProperties
 
     /**
      * Create a sprite property from the supplied sprite name and texture map.
-     * 
-     * @param name
-     *            - name of sprite
-     * @param texture
-     *            - texture map containing sprite
+     *
+     * @param name    - name of sprite
+     * @param texture - texture map containing sprite
      */
-    public SpriteProperties(String name, Texture texture)
-    {
+    public SpriteProperties(String name, Texture texture) {
         // get texture details
         TextureDetail textureDetails = Textures.getTextureDetail(name);
 
-        if (textureDetails == null)
-        {
+        if (textureDetails == null) {
             String errorMessage = TAG + ": Error: No texture details have been returned for name: '" + name + "'.";
             Log.e(GameConstants.LOG_TAG, errorMessage);
-            throw new IllegalArgumentException(errorMessage);
+            throw new GalaxyForceException(errorMessage);
         }
 
         // populate details
@@ -53,32 +49,27 @@ public class SpriteProperties implements ISpriteProperties
     }
 
     @Override
-    public int getWidth()
-    {
+    public int getWidth() {
         return width;
     }
 
     @Override
-    public int getHeight()
-    {
+    public int getHeight() {
         return height;
     }
 
     @Override
-    public int getxPos()
-    {
+    public int getxPos() {
         return xPos;
     }
 
     @Override
-    public int getyPos()
-    {
+    public int getyPos() {
         return yPos;
     }
 
     @Override
-    public TextureRegion getTextureRegion()
-    {
+    public TextureRegion getTextureRegion() {
         return textureRegion;
     }
 }

@@ -23,12 +23,8 @@ public class PauseGenerator implements PathGenerator {
      * Instantiate generator by extracting and converting the data point
      * and then translating to it's new position based on the provided
      * translators (e.g. x-axis flip).
-     *
-     * @param pauseData
-     * @param translators
      */
-    public PauseGenerator(PausePathDTO pauseData, PointTranslatorChain translators)
-    {
+    public PauseGenerator(PausePathDTO pauseData, PointTranslatorChain translators) {
         this.pausePosition = convertAndTranslatePoint(pauseData.getPosition(), translators);
         this.pauseTime = pauseData.getPauseTime();
     }

@@ -18,26 +18,17 @@ public final class BezierMathematics {
 
     /**
      * return the bezier curve points for the current bezier curve path.
-     *
-     * @param start
-     * @param startControl
-     * @param finish
-     * @param finishControl
-     * @param pathPoints
-     * @return array of points representing Bezier curve
      */
     public static List<Point> createBezierPath(
             final Point start,
             final Point startControl,
             final Point finish,
             final Point finishControl,
-            final int pathPoints)
-    {
+            final int pathPoints) {
         List<Point> path = new ArrayList<>();
 
         /* calculate point for each segment and add to path */
-        for (int i = 0; i <= pathPoints; i++)
-        {
+        for (int i = 0; i <= pathPoints; i++) {
             double t = (double) i / pathPoints;
             path.add(
                     calculateBezierPoint(
@@ -55,19 +46,13 @@ public final class BezierMathematics {
     /**
      * calculate current point on bezier curve based control points and on parameter t
      *
-     * @param start
-     * @param startControl
-     * @param finish
-     * @param finishControl
-     * @param t
      * @return current point on bezier curve
      */
     private static Point calculateBezierPoint(final Point start,
                                               final Point startControl,
                                               final Point finish,
                                               final Point finishControl,
-                                              double t)
-    {
+                                              double t) {
         double u = 1 - t;
         double tt = t * t;
         double uu = u * u;

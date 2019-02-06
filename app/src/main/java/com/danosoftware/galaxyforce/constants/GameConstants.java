@@ -1,7 +1,6 @@
 package com.danosoftware.galaxyforce.constants;
 
-public class GameConstants
-{
+public class GameConstants {
     // global logging tag
     public final static String LOG_TAG = "GalaxyForce";
 
@@ -10,21 +9,19 @@ public class GameConstants
     public final static int WAVES_PER_ZONE = 12;
     public final static int MAX_WAVES = MAX_ZONES * WAVES_PER_ZONE;
 
+    /*
+     * maximum free wave. users must upgrade to play beyond this wave.
+     */
+    public final static int MAX_FREE_WAVE = 5;
+
     /* maximum number of lives possible */
     public final static int MAX_LIVES = 5;
 
-    /*
-     * maximum free zone. users must upgrade to play beyond this zone.
-     */
-    // public final static int MAX_FREE_ZONE = 12;
-    public final static int MAX_FREE_ZONE = 100;
+    // should we show the FPS counter
+    public static final boolean SHOW_FPS = true;
 
-    // request code sent with billing requests
-    public final static int BILLING_REQUEST = 10001;
+    public final static Integer BASE_MAX_ENERGY_LEVEL = 8;
 
-    /* billing product IDs */
-    public static final String FULL_GAME_PRODUCT_ID = "galaxy_force_full_game_unlock";
-    public static final String ALL_LEVELS_PRODUCT_ID = "galaxy_force_all_levels_unlock";
 
     // font glyphs per row - i.e. characters in a row within texture map
     public final static int FONT_GLYPHS_PER_ROW = 8;
@@ -36,22 +33,10 @@ public class GameConstants
     public final static int FONT_GLYPHS_HEIGHT = 38;
 
     /*
-     * double quotes character ". allows this character to be included in font
-     * character string without messy escape characters
-     */
-    private final static char DOUBLE_QUOTES = '"';
-
-    /*
      * font characters in map - displayed text will only support these
      * characters
      */
-    public final static String FONT_CHARACTER_MAP = "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789.,?!-#" + DOUBLE_QUOTES + "'&()@°+=*$£<>%¤¢¥Œœ";
-
-    // time between transitions when changing direction
-    public final static float DIRECTION_CHANGE_TRANSITION_TIME = 0.025f;
-
-    // max transitions during a direction change
-    public final static int DIRECTION_CHANGE_TRANSITIONS = 9;
+    public final static String FONT_CHARACTER_MAP = "ABCDEFGHIJKLMNOPQRSTUVWXYZ 0123456789.,?!-#\"'&()@°+=*$£<>%¤¢¥Œœ";
 
     /* constants to set screen width and height */
 
@@ -91,8 +76,8 @@ public class GameConstants
 
     // fixed points that keep alien-flight paths on screens
     public static final int SCREEN_TOP_EDGE = GameConstants.GAME_HEIGHT - (MAX_SPRITE_WIDTH / 2);
-    public static final int SCREEN_BOTTOM_EDGE = 0 + (MAX_SPRITE_HEIGHT / 2);
-    public static final int SCREEN_LEFT_EDGE = 0 + (MAX_SPRITE_WIDTH / 2);
+    public static final int SCREEN_BOTTOM_EDGE = (MAX_SPRITE_HEIGHT / 2);
+    public static final int SCREEN_LEFT_EDGE = (MAX_SPRITE_WIDTH / 2);
     public static final int SCREEN_RIGHT_EDGE = GameConstants.GAME_WIDTH - (MAX_SPRITE_HEIGHT / 2);
 
 }
