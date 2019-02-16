@@ -3,12 +3,12 @@ package com.danosoftware.galaxyforce.screen;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
 import com.danosoftware.galaxyforce.models.screens.level.LevelModel;
-import com.danosoftware.galaxyforce.services.file.FileIO;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteProperties;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.textures.TextureMap;
+import com.danosoftware.galaxyforce.textures.TextureService;
 import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLGraphics;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
@@ -28,13 +28,13 @@ public class SelectLevelScreen extends AbstractScreen {
     public SelectLevelScreen(
             LevelModel model,
             Controller controller,
+            TextureService textureService,
             TextureMap textureMap,
             GLGraphics glGraphics,
-            FileIO fileIO,
             Camera2D camera,
             SpriteBatcher batcher) {
 
-        super(model, controller, textureMap, glGraphics, fileIO, camera, batcher);
+        super(model, controller, textureService, textureMap, glGraphics, camera, batcher);
         this.levelModel = model;
     }
 
@@ -72,7 +72,7 @@ public class SelectLevelScreen extends AbstractScreen {
                     sprite.y(),
                     props.getWidth(),
                     props.getHeight(),
-                    props.getTextureRegion());
+                    textureRegions.get(spriteId));
         }
 
         // gets sprites from model
@@ -84,7 +84,7 @@ public class SelectLevelScreen extends AbstractScreen {
                     sprite.y(),
                     props.getWidth(),
                     props.getHeight(),
-                    props.getTextureRegion());
+                    textureRegions.get(spriteId));
         }
 
         /*

@@ -9,6 +9,10 @@ public class GameConstants {
     public final static int WAVES_PER_ZONE = 12;
     public final static int MAX_WAVES = MAX_ZONES * WAVES_PER_ZONE;
 
+    // sprite positions
+    public final static int LOGO_Y_POS = 817;
+    public final static int PLANET_Y_POS = 100;
+
     /*
      * maximum free wave. users must upgrade to play beyond this wave.
      */
@@ -19,15 +23,6 @@ public class GameConstants {
 
     // should we show the FPS counter
     public static final boolean SHOW_FPS = true;
-
-    // font glyphs per row - i.e. characters in a row within texture map
-    public final static int FONT_GLYPHS_PER_ROW = 8;
-
-    // font glyphs width - i.e. width of individual character
-    public final static int FONT_GLYPHS_WIDTH = 30;
-
-    // font glyphs height - i.e. height of individual character
-    public final static int FONT_GLYPHS_HEIGHT = 38;
 
     /*
      * font characters in map - displayed text will only support these
