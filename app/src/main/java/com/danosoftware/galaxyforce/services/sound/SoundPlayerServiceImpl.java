@@ -53,6 +53,16 @@ public class SoundPlayerServiceImpl implements SoundPlayerService, SoundPool.OnL
     }
 
     @Override
+    public void pause() {
+        soundPool.autoPause();
+    }
+
+    @Override
+    public void resume() {
+        soundPool.autoResume();
+    }
+
+    @Override
     public void setSoundEnabled(boolean soundEnabled) {
         this.soundEnabled = soundEnabled;
     }
@@ -87,7 +97,7 @@ public class SoundPlayerServiceImpl implements SoundPlayerService, SoundPool.OnL
         String filename = soundEffect.getFileName();
 
         try {
-            AssetFileDescriptor assetDescriptor = assets.openFd(filename);
+            AssetFileDescriptor assetDescriptor = assets.openFd("sounds/" + filename);
             soundPool.setOnLoadCompleteListener(this);
             int sampleId = soundPool.load(assetDescriptor, 0);
             effectsBank.put(soundEffect, sampleId);
