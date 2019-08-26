@@ -3,19 +3,48 @@ package com.danosoftware.galaxyforce.sprites.properties;
 import com.danosoftware.galaxyforce.textures.Texture;
 
 public enum GameSpriteIdentifier implements ISpriteIdentifier {
-    /* Alien sprites */
-
-    ALIEN_OCTOPUS_LEFT("alienOctoLeft_64px"), ALIEN_OCTOPUS_RIGHT("alienOctoRight_64px"),
 
     // octopus
-    OCTOPUS_LEFT("octopusBigLeft"), OCTOPUS_RIGHT("octopusBigRight"),
-    OCTOPUS_LEFT_HIT("octopusBigHitLeft"), OCTOPUS_RIGHT_HIT("octopusBigHitRight"),
+    OCTOPUS_LEFT("octopusLeft"),
+    OCTOPUS_RIGHT("octopusRight"),
+    OCTOPUS_LEFT_HIT("octopusLeftHit"),
+    OCTOPUS_RIGHT_HIT("octopusRightHit"),
 
-    ALIEN_MINION_NORMAL("Yellow_64px"), ALIEN_MINION_FUZZ1("YellowB_64px"), ALIEN_MINION_FUZZ2("YellowC_64px"),
+    // yellow minion
+    MINION("minion"),
+    MINION_HIT("minionHit"),
 
-    // meaney
-    MEANEY("yellowMeany"),
-    MEANEY_HIT("yellowMeanyHit"),
+    // green ball spinner
+    SPINNER_GREEN_01("spinnerGreen01"),
+    SPINNER_GREEN_02("spinnerGreen02"),
+    SPINNER_GREEN_03("spinnerGreen03"),
+    SPINNER_GREEN_01_HIT("spinnerGreenHit01"),
+    SPINNER_GREEN_02_HIT("spinnerGreenHit02"),
+    SPINNER_GREEN_03_HIT("spinnerGreenHit03"),
+
+    // pulsating green ball spinner
+    SPINNER_PULSE_GREEN_01("spinnerPulseGreen01"),
+    SPINNER_PULSE_GREEN_02("spinnerPulseGreen02"),
+    SPINNER_PULSE_GREEN_03("spinnerPulseGreen03"),
+    SPINNER_PULSE_GREEN_01_HIT("spinnerPulseGreenHit01"),
+    SPINNER_PULSE_GREEN_02_HIT("spinnerPulseGreenHit02"),
+    SPINNER_PULSE_GREEN_03_HIT("spinnerPulseGreenHit03"),
+
+    // molecule
+    MOLECULE("molecule"),
+    MOLECULE_HIT("moleculeHit"),
+
+    // big boss
+    BIG_BOSS_01("bigBoss01"),
+    BIG_BOSS_02("bigBoss02"),
+    BIG_BOSS_01_HIT("bigBossHit01"),
+    BIG_BOSS_02_HIT("bigBossHit02"),
+
+    // flapping lady bird
+    LADYBIRD_01("ladyBird01"),
+    LADYBIRD_02("ladyBird02"),
+    LADYBIRD_01_HIT("ladyBirdHit01"),
+    LADYBIRD_02_HIT("ladyBirdHit02"),
 
     // zogg
     ZOGG_UP("zogg01"),
@@ -24,7 +53,8 @@ public enum GameSpriteIdentifier implements ISpriteIdentifier {
     ZOGG_DOWN_HIT("zoggHit02"),
 
     // asteroid
-    ASTEROID("asteroid"), ASTEROID_HIT("asteroidHit"),
+    ASTEROID("asteroid"),
+    ASTEROID_HIT("asteroidHit"),
 
     // dragon - head and body
     DRAGON_HEAD_LEFT("dragonLeft"),
@@ -33,8 +63,6 @@ public enum GameSpriteIdentifier implements ISpriteIdentifier {
     DRAGON_HEAD_RIGHT_HIT("dragonHitRight"),
     DRAGON_BODY("dragonBody"),
     DRAGON_BODY_HIT("dragonBodyHit"),
-
-    STORK_1("Stork1"), STORK_2("Stork2"),
 
     // buzzer - small flying insect
     INSECT_WINGS_UP("buzzerWingsUp"),
@@ -99,12 +127,18 @@ public enum GameSpriteIdentifier implements ISpriteIdentifier {
     CIRCUIT_RIGHT_HIT("circuit02Hit"),
 
     // smokey
-    SMOKEY_FLAME_SMALL("smokey01"),
-    SMOKEY_FLAME_BIG("smokey02"),
+    SMOKEY_FLAME_BIG("smokey01"),
+    SMOKEY_FLAME_SMALL("smokey02"),
     SMOKEY_FLAME_NONE("smokey03"),
-    SMOKEY_FLAME_SMALL_HIT("smokeyHit01"),
-    SMOKEY_FLAME_BIG_HIT("smokeyHit02"),
+    SMOKEY_FLAME_BIG_HIT("smokeyHit01"),
+    SMOKEY_FLAME_SMALL_HIT("smokeyHit02"),
     SMOKEY_FLAME_NONE_HIT("smokeyHit03"),
+
+    // telly
+    TELLY_FUZZ_ONE("telly01"),
+    TELLY_FUZZ_TWO("telly02"),
+    TELLY_FUZZ_ONE_HIT("tellyHit01"),
+    TELLY_FUZZ_TWO_HIT("tellyHit02"),
 
     // cloud
     CLOUD("cloud"),
@@ -114,15 +148,13 @@ public enum GameSpriteIdentifier implements ISpriteIdentifier {
     HELMET("helmet"),
     HELMET_HIT("helmetHit"),
 
+    // skull alien
+    SKULL("skull"),
+    SKULL_HIT("skullHit"),
+
     // droid alien
-    DROID("skull"),
-    DROID_HIT("skullHit"),
-
-    ALIEN_PEARL("alienPearl48px"),
-
-    ALIEN_HELMET("alienHelmet64px"),
-
-    ALIEN_GOBBY_LEFT("alienGobbyLeft48px"), ALIEN_GOBBY_RIGHT("alienGobbyRight48px"),
+    DROID("droid"),
+    DROID_HIT("droidHit"),
 
     // bases
     BASE("base"),
@@ -131,28 +163,28 @@ public enum GameSpriteIdentifier implements ISpriteIdentifier {
     HELPER("baseHelper"),
 
     // pulsing shield when base stationary
-    BASE_SHIELD_ONE("shieldOutlineOne"),
-    BASE_SHIELD_TWO("shieldOutlineTwo"),
-    BASE_SHIELD_THREE("shieldOutlineThree"),
-    BASE_SHIELD_FOUR("shieldOutlineFour"),
+    BASE_SHIELD_ONE("baseShieldOutline01"),
+    BASE_SHIELD_TWO("baseShieldOutline02"),
+    BASE_SHIELD_THREE("baseShieldOutline03"),
+    BASE_SHIELD_FOUR("baseShieldOutline04"),
 
     // pulsing shield when base turning left
-    BASE_LEFT_SHIELD_ONE("leftShieldOutlineOne"),
-    BASE_LEFT_SHIELD_TWO("leftShieldOutlineTwo"),
-    BASE_LEFT_SHIELD_THREE("leftShieldOutlineThree"),
-    BASE_LEFT_SHIELD_FOUR("leftShieldOutlineFour"),
+    BASE_LEFT_SHIELD_ONE("baseShieldLeftOutline01"),
+    BASE_LEFT_SHIELD_TWO("baseShieldLeftOutline02"),
+    BASE_LEFT_SHIELD_THREE("baseShieldLeftOutline03"),
+    BASE_LEFT_SHIELD_FOUR("baseShieldLeftOutline04"),
 
     // pulsing shield when base turning right
-    BASE_RIGHT_SHIELD_ONE("rightShieldOutlineOne"),
-    BASE_RIGHT_SHIELD_TWO("rightShieldOutlineTwo"),
-    BASE_RIGHT_SHIELD_THREE("rightShieldOutlineThree"),
-    BASE_RIGHT_SHIELD_FOUR("rightShieldOutlineFour"),
+    BASE_RIGHT_SHIELD_ONE("baseShieldRightOutline01"),
+    BASE_RIGHT_SHIELD_TWO("baseShieldRightOutline02"),
+    BASE_RIGHT_SHIELD_THREE("baseShieldRightOutline03"),
+    BASE_RIGHT_SHIELD_FOUR("baseShieldRightOutline04"),
 
     // pulsing shield for helper base
-    HELPER_SHIELD_ONE("shieldOutlineHelperOne"),
-    HELPER_SHIELD_TWO("shieldOutlineHelperTwo"),
-    HELPER_SHIELD_THREE("shieldOutlineHelperThree"),
-    HELPER_SHIELD_FOUR("shieldOutlineHelperFour"),
+    HELPER_SHIELD_ONE("baseHelperShieldOutline01"),
+    HELPER_SHIELD_TWO("baseHelperShieldOutline02"),
+    HELPER_SHIELD_THREE("baseHelperShieldOutline03"),
+    HELPER_SHIELD_FOUR("baseHelperShieldOutline04"),
 
     // power ups
     POWERUP_LIFE("pwrUpLife34px"),
@@ -165,9 +197,14 @@ public enum GameSpriteIdentifier implements ISpriteIdentifier {
     POWERUP_SHIELD("pwrUpShield34px"),
     POWERUP_HELPER_BASES("pwrUpHelper34px"),
 
-    // lasers
-    LASER_ALIEN("laserInvaderGreen9pxTip"),
-    LASER_BASE("laserHeroNew9pxTip"),
+    // base missiles
+    BASE_MISSILE("baseMissile"),
+    BASE_MISSILE_LASER("baseMissileLaser"),
+    BASE_MISSILE_ROCKET("baseMissileRocket"),
+    BASE_MISSILE_BLAST("baseMissileBlast"),
+
+    // alien laser
+    ALIEN_LASER("alienLaser"),
 
     // fireball
     FIREBALL01("fireBall01"),
@@ -212,7 +249,8 @@ public enum GameSpriteIdentifier implements ISpriteIdentifier {
     STAR_SPARKLE("StarSPARKLE"),
 
     // pause buttons
-    PAUSE_BUTTON_UP("PauseButtonUp100pxMasked"), PAUSE_BUTTON_DOWN("PauseButtonDown100pxMasked"),
+    PAUSE_BUTTON_UP("pauseButtonUp"),
+    PAUSE_BUTTON_DOWN("pauseButtonDown"),
 
     // wave flags
     FLAG_1("Flag_1"),
@@ -221,8 +259,8 @@ public enum GameSpriteIdentifier implements ISpriteIdentifier {
     FLAG_50("Flag_50"),
 
     // menu buttons
-    MENU_BUTTON_UP("BlueButton360px"),
-    MENU_BUTTON_DOWN("BlueButton360pxPressed"),
+    MENU_BUTTON_UP("blueButtonUp"),
+    MENU_BUTTON_DOWN("blueButtonDown"),
 
     // lives remaining
     LIVES("Life_32px"),
