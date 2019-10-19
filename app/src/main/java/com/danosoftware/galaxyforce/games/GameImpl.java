@@ -18,13 +18,12 @@ import com.danosoftware.galaxyforce.screen.IScreen;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.screen.factories.ScreenFactory;
 import com.danosoftware.galaxyforce.services.configurations.ConfigurationService;
-import com.danosoftware.galaxyforce.services.configurations.ConfigurationServiceImpl;
+import com.danosoftware.galaxyforce.services.googleplay.GooglePlayServices;
 import com.danosoftware.galaxyforce.services.music.Music;
 import com.danosoftware.galaxyforce.services.music.MusicPlayerService;
 import com.danosoftware.galaxyforce.services.music.MusicPlayerServiceImpl;
 import com.danosoftware.galaxyforce.services.preferences.IPreferences;
 import com.danosoftware.galaxyforce.services.preferences.PreferencesInteger;
-import com.danosoftware.galaxyforce.services.preferences.PreferencesString;
 import com.danosoftware.galaxyforce.services.savedgame.SavedGame;
 import com.danosoftware.galaxyforce.services.savedgame.SavedGameImpl;
 import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
@@ -65,17 +64,14 @@ public class GameImpl implements Game {
             Context context,
             GLGraphics glGraphics,
             GLSurfaceView glView,
-            BillingService billingService) {
+            BillingService billingService,
+            GooglePlayServices playService,
+            ConfigurationService configurationService) {
 
         this.returningScreens = new ArrayDeque<>();
 
         Input input = new GameInput(glView, 1, 1);
         String versionName = versionName(context);
-
-        // set-up configuration service that uses shared preferences
-        // for persisting configuration
-        IPreferences<String> configPreferences = new PreferencesString(context);
-        ConfigurationService configurationService = new ConfigurationServiceImpl(configPreferences);
 
         boolean enableSounds = (configurationService.getSoundOption() == OptionSound.ON);
         this.sounds = new SoundPlayerServiceImpl(context, enableSounds);
@@ -89,7 +85,7 @@ public class GameImpl implements Game {
         this.music.play();
 
         IPreferences<Integer> savedGamePreferences = new PreferencesInteger(context);
-        SavedGame savedGame = new SavedGameImpl(savedGamePreferences);
+        SavedGame savedGame = new SavedGameImpl(savedGamePreferences, playService);
 
         this.screenFactory = new ScreenFactory(
                 glGraphics,
@@ -98,6 +94,7 @@ public class GameImpl implements Game {
                 sounds,
                 music,
                 vibrator,
+                playService,
                 savedGame,
                 context.getAssets(),
                 this,

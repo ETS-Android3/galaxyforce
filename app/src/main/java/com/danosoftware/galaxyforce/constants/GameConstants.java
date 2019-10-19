@@ -6,6 +6,12 @@ public class GameConstants {
     // global logging tag
     public final static String LOG_TAG = "GalaxyForce";
 
+    // Request code used to invoke Google Play sign-in user interactions.
+    public static final int RC_SIGN_IN = 9001;
+
+    // Saved Game name
+    public static final String SAVED_GAME_FILENAME = "SavedGame";
+
     // maximum waves
     public final static int MAX_ZONES = 5;
     public final static int WAVES_PER_ZONE = 12;

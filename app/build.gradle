@@ -13,6 +13,29 @@ apply plugin: 'com.android.application'
 android {
 
     /**
+     * This signings config allows the application to be signed when developing
+     * on a local device in debug mode. This is essential to test Google Play Services.
+     * To avoid adding these key details into our source code, the key-values can be
+     * stored within gradle.properties.
+     *
+     * These properties are optional to allow builds to succeed without them.
+     * This also allows builds to succeed on Circle CI.
+     *
+     * We do not include "release" signing configs as release builds are normally
+     * built from Android Studio, where key details must be supplied manually.
+     */
+    if(project.hasProperty("KEYSTORE_FILE")) {
+        signingConfigs {
+            debug {
+                storeFile file("$KEYSTORE_FILE")
+                storePassword "$KEYSTORE_PASSWORD"
+                keyAlias = "$KEY_ALIAS"
+                keyPassword "$KEY_PASSWORD"
+            }
+        }
+    }
+
+    /**
      * compileSdkVersion specifies the Android API level Gradle should use to
      * compile your app. This means your app can use the API features included in
      * this API level and lower.
@@ -41,10 +64,10 @@ android {
         targetSdkVersion 28
 
         // Defines the version number of your app.
-        versionCode 14
+        versionCode 23
 
         // Defines a user-friendly version name for your app.
-        versionName "0.14"
+        versionName "0.23"
     }
 
     /**
@@ -107,10 +130,21 @@ android {
  */
 dependencies {
     implementation 'com.android.billingclient:billing:1.2'
+    implementation 'com.google.android.gms:play-services-games:18.0.1'
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation('com.google.apis:google-api-services-drive:v3-rev173-1.25.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.4'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.9.4'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.4'
     implementation 'androidx.annotation:annotation:1.1.0'
+
+    // dependency below stops build parcelable error on release builds.
+    // play-services libraries bring in an earlier version (with a bug) of this library.
+    // see: https://stackoverflow.com/questions/57601897/android-studio-3-5-warning-the-rule-keep-public-class-extends-androidx-vers
+    implementation "androidx.versionedparcelable:versionedparcelable:1.1.0"
+
     compileOnly 'org.projectlombok:lombok:1.18.8'
     annotationProcessor 'org.projectlombok:lombok:1.18.8'
     testImplementation 'junit:junit:4.12'
