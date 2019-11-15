@@ -15,7 +15,6 @@ import com.danosoftware.galaxyforce.waves.config.SubWaveConfig;
 import com.danosoftware.galaxyforce.waves.config.SubWaveNoPathConfig;
 import com.danosoftware.galaxyforce.waves.config.SubWavePathConfig;
 import com.danosoftware.galaxyforce.waves.config.SubWaveRepeatMode;
-import com.danosoftware.galaxyforce.waves.config.aliens.exploding.ExplosionConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.exploding.MultiExplosionConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.exploding.SpawningExplosionConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.missiles.MissileFiringConfig;
@@ -43,6 +42,11 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.HALF_PI;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.NO_POWER_UPS;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.QUARTER_PI;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.createAsteroidField;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.createMiniDirectionalAsteroid;
 
 
 /**
@@ -51,8 +55,6 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
  * aliens following a path
  */
 public class WaveFactory {
-
-    private static final List<PowerUpType> NO_POWER_UPS = Collections.emptyList();
 
     private final WaveCreationUtils creationUtils;
     private final PowerUpAllocatorFactory powerUpAllocatorFactory;
@@ -531,17 +533,10 @@ public class WaveFactory {
                                                                                         NO_POWER_UPS)
                                                                                 .spawnedAlienConfig(SplitterConfig
                                                                                         .builder()
-                                                                                        .alienCharacter(AlienCharacter.ASTEROID_MINI)
-                                                                                        .energy(1)
-                                                                                        .speed(AlienSpeed.MEDIUM)
-                                                                                        .spinningConfig(
-                                                                                                SpinningBySpeedConfig
-                                                                                                        .builder()
-                                                                                                        .build())
-                                                                                        .angles(
+                                                                                        .alienConfigs(
                                                                                                 Arrays.asList(
-                                                                                                        (float) Math.atan2(-1, -1),
-                                                                                                        (float) Math.atan2(-1, 1)))
+                                                                                                        createMiniDirectionalAsteroid(-HALF_PI - QUARTER_PI, AlienSpeed.MEDIUM),
+                                                                                                        createMiniDirectionalAsteroid(-HALF_PI + QUARTER_PI, AlienSpeed.MEDIUM)))
                                                                                         .build())
                                                                                 .build())
                                                                 .build()
@@ -571,17 +566,10 @@ public class WaveFactory {
                                                                                         NO_POWER_UPS)
                                                                                 .spawnedAlienConfig(SplitterConfig
                                                                                         .builder()
-                                                                                        .alienCharacter(AlienCharacter.ASTEROID_MINI)
-                                                                                        .energy(1)
-                                                                                        .speed(AlienSpeed.VERY_FAST)
-                                                                                        .spinningConfig(
-                                                                                                SpinningBySpeedConfig
-                                                                                                        .builder()
-                                                                                                        .build())
-                                                                                        .angles(
+                                                                                        .alienConfigs(
                                                                                                 Arrays.asList(
-                                                                                                        (float) Math.atan2(-1, -1),
-                                                                                                        (float) Math.atan2(-1, 1)))
+                                                                                                        createMiniDirectionalAsteroid(-HALF_PI - QUARTER_PI, AlienSpeed.VERY_FAST),
+                                                                                                        createMiniDirectionalAsteroid(-HALF_PI + QUARTER_PI, AlienSpeed.VERY_FAST)))
                                                                                         .build())
                                                                                 .build())
                                                                 .build()
@@ -1589,6 +1577,16 @@ public class WaveFactory {
                 );
                 break;
             case 30:
+                subWaves.add(
+                        createSubWave(
+                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
+                                createAsteroidField(Arrays.asList(
+                                        PowerUpType.MISSILE_GUIDED,
+                                        PowerUpType.MISSILE_FAST,
+                                        PowerUpType.MISSILE_LASER))
+                        )
+                );
+                break;
             case 31:
             case 32:
             case 33:
@@ -1736,7 +1734,7 @@ public class WaveFactory {
      * Any subsequent explosions on these aliens must also display on top so
      * reversed order is important for how aliens sprites are displayed.
      */
-    private List<IAlien> reverseAliens(List<IAlien> aliens) {
+    private static List<IAlien> reverseAliens(List<IAlien> aliens) {
         List<IAlien> reversedAlienList = new ArrayList<>();
 
         for (IAlien eachAlien : Reversed.reversed(aliens)) {
