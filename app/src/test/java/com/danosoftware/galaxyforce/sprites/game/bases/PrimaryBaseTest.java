@@ -17,7 +17,7 @@ import com.danosoftware.galaxyforce.sprites.game.powerups.PowerUp;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.textures.Texture;
 import com.danosoftware.galaxyforce.textures.TextureDetail;
-import com.danosoftware.galaxyforce.textures.Textures;
+import com.danosoftware.galaxyforce.textures.TextureService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -33,6 +33,8 @@ import java.util.function.Predicate;
 
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
+import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
+import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_Y;
 import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.EXPLODING;
 import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.LEFT;
 import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.RIGHT;
@@ -51,10 +53,10 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Log.class, Textures.class})
+@PrepareForTest({Log.class, TextureService.class})
 public class PrimaryBaseTest {
 
-    private final TextureDetail mockTextureDetail = new TextureDetail("mock", 0, 0, 0, 0);
+    private final TextureDetail mockTextureDetail = new TextureDetail("mock", "0", "0", "100", "100");
 
     private IBasePrimary primaryBase;
     private IBasePrimary primaryBaseSpy;
@@ -62,26 +64,21 @@ public class PrimaryBaseTest {
     private IBaseHelper rightHelper;
 
     private GameModel model;
-    private SoundPlayerService sounds;
-    private VibrationService vibrator;
-
 
     @Before
     public void setUp() {
         // mock any static android logging
         mockStatic(Log.class);
 
-        mockStatic(Textures.class);
-        when(Textures.getTextureDetail(any(String.class))).thenReturn(mockTextureDetail);
-
         Texture mockTexture = mock(Texture.class);
+        when(mockTexture.getTextureDetail(any(String.class))).thenReturn(mockTextureDetail);
         for (GameSpriteIdentifier spriteId : GameSpriteIdentifier.values()) {
             spriteId.updateProperties(mockTexture);
         }
 
         model = mock(GameModel.class);
-        sounds = mock(SoundPlayerService.class);
-        vibrator = mock(VibrationService.class);
+        SoundPlayerService sounds = mock(SoundPlayerService.class);
+        VibrationService vibrator = mock(VibrationService.class);
 
         primaryBase = new BasePrimary(model, sounds, vibrator);
         primaryBaseSpy = spy(primaryBase);
@@ -98,8 +95,11 @@ public class PrimaryBaseTest {
 
     @Test()
     public void shouldMoveBaseX() {
+        // launch base
+        primaryBase.move(SCREEN_MID_X, SCREEN_MID_Y);
+        primaryBase.animate(10f);
+
         // move x left to right
-        primaryBase.move(0, 0);
         primaryBase.moveTarget(300, 0);
         primaryBase.animate(10f);
         assertThat(primaryBase.x(), is(300));
@@ -115,8 +115,11 @@ public class PrimaryBaseTest {
 
     @Test()
     public void shouldMoveBaseY() {
+        // launch base
+        primaryBase.move(SCREEN_MID_X, SCREEN_MID_Y);
+        primaryBase.animate(10f);
+
         // move y bottom to top
-        primaryBase.move(0, 0);
         primaryBase.moveTarget(0, 300);
         primaryBase.animate(10f);
         assertThat(primaryBase.x(), is(0));
@@ -152,11 +155,10 @@ public class PrimaryBaseTest {
     }
 
     @Test()
-    public void baseShouldBeDestroyedWhenHitByPowerfulMissile() throws NoSuchFieldException, IllegalAccessException {
+    public void baseShouldBeDestroyedWhenHitByMissile() throws NoSuchFieldException, IllegalAccessException {
         removeShield(primaryBase);
         IBasePrimary baseSpy = spy(primaryBase);
         IAlienMissile missile = mock(IAlienMissile.class);
-        when(missile.energyDamage()).thenReturn(100);
         baseSpy.onHitBy(missile);
         verify(baseSpy, times(1)).destroy();
     }
@@ -166,33 +168,8 @@ public class PrimaryBaseTest {
         IPowerUp shieldPowerUp = new PowerUp(GameSpriteIdentifier.POWERUP_SHIELD, 0, 0, PowerUpType.SHIELD);
         primaryBaseSpy.collectPowerUp(shieldPowerUp);
         IAlienMissile missile = mock(IAlienMissile.class);
-        when(missile.energyDamage()).thenReturn(100);
         primaryBaseSpy.onHitBy(missile);
         verify(primaryBaseSpy, times(0)).destroy();
-    }
-
-    @Test()
-    public void baseShouldRemainActiveWhenHitByWeakMissile() throws NoSuchFieldException, IllegalAccessException {
-        removeShield(primaryBase);
-        IBasePrimary baseSpy = spy(primaryBase);
-        IAlienMissile missile = mock(IAlienMissile.class);
-        when(missile.energyDamage()).thenReturn(1);
-        baseSpy.onHitBy(missile);
-        verify(baseSpy, times(0)).destroy();
-    }
-
-    @Test()
-    public void baseShouldBeDestroyedAfterEightHits() throws NoSuchFieldException, IllegalAccessException {
-        removeShield(primaryBase);
-        IBasePrimary baseSpy = spy(primaryBase);
-        IAlienMissile missile = mock(IAlienMissile.class);
-        when(missile.energyDamage()).thenReturn(1);
-        for (int i = 0; i < 7; i++) {
-            baseSpy.onHitBy(missile);
-            verify(baseSpy, times(0)).destroy();
-        }
-        baseSpy.onHitBy(missile);
-        verify(baseSpy, times(1)).destroy();
     }
 
     @Test()
@@ -301,14 +278,14 @@ public class PrimaryBaseTest {
         primaryBase.collectPowerUp(shieldPowerUp);
 
         // verify helper bases were also given shields
-        verify(leftHelper, times(1)).addShield(any(float.class));
-        verify(rightHelper, times(1)).addShield(any(float.class));
+        verify(leftHelper, times(1)).addSynchronisedShield(any(float.class));
+        verify(rightHelper, times(1)).addSynchronisedShield(any(float.class));
 
         // count number of primary base shields
         Long shields = primaryBase.allSprites().stream().filter(new Predicate<ISprite>() {
             @Override
             public boolean test(ISprite iSprite) {
-                return iSprite instanceof BaseShield;
+                return iSprite instanceof BaseShieldPrimary;
             }
         }).count();
         assertThat(shields, is(1L));
@@ -334,7 +311,7 @@ public class PrimaryBaseTest {
         Long shields = primaryBase.allSprites().stream().filter(new Predicate<ISprite>() {
             @Override
             public boolean test(ISprite iSprite) {
-                return iSprite instanceof BaseShield;
+                return iSprite instanceof BaseShieldPrimary;
             }
         }).count();
         assertThat(shields, is(0L));

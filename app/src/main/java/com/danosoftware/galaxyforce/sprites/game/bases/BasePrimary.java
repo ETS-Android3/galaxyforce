@@ -6,24 +6,23 @@ import com.danosoftware.galaxyforce.enumerations.BaseMissileType;
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
 import com.danosoftware.galaxyforce.models.assets.BaseMissilesDto;
+import com.danosoftware.galaxyforce.models.screens.background.BackgroundFlash;
+import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.models.screens.game.GameModel;
-import com.danosoftware.galaxyforce.services.sound.SoundEffect;
 import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.sprites.common.AbstractCollidingSprite;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
+import com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseLean;
 import com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState;
 import com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide;
-import com.danosoftware.galaxyforce.sprites.game.behaviours.explode.ExplodeBehaviour;
-import com.danosoftware.galaxyforce.sprites.game.behaviours.explode.ExplodeSimple;
-import com.danosoftware.galaxyforce.sprites.game.behaviours.hit.HitAnimation;
-import com.danosoftware.galaxyforce.sprites.game.behaviours.hit.HitBehaviour;
+import com.danosoftware.galaxyforce.sprites.game.bases.explode.BaseMultiExploder;
+import com.danosoftware.galaxyforce.sprites.game.bases.explode.IBaseMultiExploder;
 import com.danosoftware.galaxyforce.sprites.game.factories.BaseMissileFactory;
 import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 import com.danosoftware.galaxyforce.utilities.MoveBaseHelper;
 import com.danosoftware.galaxyforce.view.Animation;
 
@@ -32,7 +31,7 @@ import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 
-import static com.danosoftware.galaxyforce.constants.GameConstants.BASE_MAX_ENERGY_LEVEL;
+import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_BOTTOM;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
 import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.ACTIVE;
@@ -41,25 +40,15 @@ import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.EX
 import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.LEFT;
 import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.RIGHT;
 import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.BASE;
-import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.BASE_FLIP;
+import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.BASE_LEFT;
+import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.BASE_RIGHT;
 
 public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary {
 
-    // shield animation that pulses every 0.5 seconds
-    private static final Animation SHIELD_PULSE = new Animation(0.5f, GameSpriteIdentifier.CONTROL, GameSpriteIdentifier.JOYSTICK);
-
-    private static final ISpriteIdentifier BASE_SPRITE = BASE;
-
     private static final String TAG = "BasePrimary";
 
-    // base's start y position when ready
-    private static final int BASE_START_Y = 192;
-
     // explosion behaviour
-    private final ExplodeBehaviour explosion;
-
-    // hit behaviour
-    private final HitBehaviour hit;
+    private final IBaseMultiExploder explosion;
 
     // all sprites
     // cached as an optimisation to improve performance
@@ -84,7 +73,6 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
     // helper class to handle base movement and animation
     private final MoveBaseHelper moveHelper;
 
-
     /* delay between firing missiles in seconds */
     private static final float DEFAULT_BASE_MISSILE_DELAY = 0.5f;
 
@@ -92,10 +80,7 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
     private float baseMissileDelay;
 
     // default base missile sprite
-    private static final BaseMissileType DEFAULT_MISSILE_TYPE = BaseMissileType.SIMPLE;
-
-    // energy of this base
-    private int energy;
+    private static final BaseMissileType DEFAULT_MISSILE_TYPE = BaseMissileType.NORMAL;
 
     /* variable to store time passed since base last fired */
     private float timeSinceBaseLastFired;
@@ -115,9 +100,11 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
      */
     private float timeUntilShieldRemoved = 0f;
 
-
     /* does base have shield */
     private boolean shielded = false;
+
+    /* current lean of the base (Left, Right, None) */
+    private BaseLean lean;
 
     /* reference to model */
     private final GameModel model;
@@ -128,23 +115,41 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
     // reference to vibrator
     private final VibrationService vibrator;
 
+    // provides the background flash colour - used when base is exploding
+    private final BackgroundFlash backgroundFlash;
+
     public BasePrimary(
             final GameModel model,
             final SoundPlayerService sounds,
             final VibrationService vibrator) {
 
-        super(BASE_SPRITE, SCREEN_MID_X, SCREEN_BOTTOM);
+        super(BASE, SCREEN_MID_X, SCREEN_BOTTOM);
         this.state = ACTIVE;
         this.helpers = new EnumMap<>(HelperSide.class);
         this.activeHelpers = new EnumMap<>(HelperSide.class);
         this.allSprites = buildAllSprites();
         this.activeBases = buildActiveBases();
+        this.lean = BaseLean.NONE;
         this.moveHelper = new MoveBaseHelper(this);
-        moveHelper.updateTarget(SCREEN_MID_X, BASE_START_Y);
+        this.backgroundFlash = new BackgroundFlash();
 
-        this.explosion = new ExplodeSimple(sounds, vibrator);
-        this.hit = new HitAnimation(new Animation(0.25f, BASE_SPRITE, BASE_FLIP));
-
+        this.explosion = new BaseMultiExploder(
+                this,
+                sounds,
+                vibrator,
+                new Animation(
+                        0.05f,
+                        GameSpriteIdentifier.BASE_EXPLODE_01,
+                        GameSpriteIdentifier.BASE_EXPLODE_02,
+                        GameSpriteIdentifier.BASE_EXPLODE_03,
+                        GameSpriteIdentifier.BASE_EXPLODE_04,
+                        GameSpriteIdentifier.BASE_EXPLODE_05,
+                        GameSpriteIdentifier.BASE_EXPLODE_06,
+                        GameSpriteIdentifier.BASE_EXPLODE_07,
+                        GameSpriteIdentifier.BASE_EXPLODE_08,
+                        GameSpriteIdentifier.BASE_EXPLODE_09,
+                        GameSpriteIdentifier.BASE_EXPLODE_10,
+                        GameSpriteIdentifier.BASE_EXPLODE_11));
         this.model = model;
         this.sounds = sounds;
         this.vibrator = vibrator;
@@ -154,13 +159,6 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
         this.baseMissileDelay = DEFAULT_BASE_MISSILE_DELAY;
         timeUntilDefaultMissile = 0f;
         timeSinceBaseLastFired = 0f;
-
-        // new base starts as shielded to avoid being immediately destroyed
-        addShield(2f, 0f);
-
-        // reset energy bar to maximum. new energy level returned.
-        this.energy = BASE_MAX_ENERGY_LEVEL;
-        model.energyUpdate(energy);
     }
 
     /**
@@ -181,6 +179,10 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
 
         for (IBaseHelper helper : helpers.values()) {
             sprites.addAll(helper.allSprites());
+        }
+
+        if (isExploding()) {
+            sprites.addAll(explosion.getMultiExplosion());
         }
 
         return sprites;
@@ -215,40 +217,38 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
             // move and animate base
             moveHelper.moveBase(deltaTime);
 
-            if (shielded) {
-                shield.move(x(), y());
-            }
-
             // move helper bases using built in offset from this primary base
             for (IBaseHelper helper : helpers.values()) {
                 helper.move(x(), y());
             }
-        }
 
-        if (state == ACTIVE) {
-            // if shielded then check when shield should be removed
             if (shielded) {
+                // check when shield should be removed
                 timeUntilShieldRemoved -= deltaTime;
                 if (timeUntilShieldRemoved <= 0) {
                     removeShield();
+                } else {
+                    shield.move(x(), y());
+                    shield.animate(deltaTime);
                 }
-            }
-
-            // if hit then continue hit animation
-            if (hit.isHit()) {
-                changeType(hit.getHit(deltaTime));
             }
         }
 
         // if exploding then animate or set destroyed once finished
         if (state == EXPLODING) {
+            backgroundFlash.update(deltaTime);
             if (explosion.finishedExploding()) {
                 state = DESTROYED;
-                this.allSprites = buildAllSprites();
                 this.activeBases = buildActiveBases();
             } else {
                 changeType(explosion.getExplosion(deltaTime));
             }
+            this.allSprites = buildAllSprites();
+        }
+
+        // animate helper bases
+        for (IBaseHelper helper : helpers.values()) {
+            helper.animate(deltaTime);
         }
 
         // check to see if base (and any helpers) should fire their missiles
@@ -284,14 +284,7 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
 
         // can only be hit if not shielded
         if (!shielded) {
-            energy -= missile.energyDamage();
-            model.energyUpdate(energy);
-
-            if (energy <= 0) {
-                destroy();
-            } else {
-                hit.startHit(0f);
-            }
+            destroy();
         }
         missile.destroy();
     }
@@ -301,9 +294,6 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
 
         explosion.startExplosion();
         state = EXPLODING;
-
-        // play explosion sound effect
-        sounds.play(SoundEffect.EXPLOSION);
 
         // if primary base explodes - all helper bases must also explode.
         for (IBaseHelper aHelperBase : helpers.values()) {
@@ -325,12 +315,6 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
         Log.i(TAG, "Power-Up: '" + powerUpType.name() + "'.");
 
         switch (powerUpType) {
-            // add energy to base
-            case ENERGY:
-                energy += 2;
-                model.energyUpdate(energy);
-                break;
-
             // add extra life
             case LIFE:
                 model.addLife();
@@ -368,7 +352,7 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
 
             // add shield for set time
             case SHIELD:
-                addShield(10f, 0f);
+                addShield(10f);
                 break;
 
             // add helper bases for set time
@@ -394,6 +378,28 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
     @Override
     public List<IBase> activeBases() {
         return activeBases;
+    }
+
+    @Override
+    public BaseLean getLean() {
+        return lean;
+    }
+
+    @Override
+    public void setLean(BaseLean lean) {
+        this.lean = lean;
+
+        switch (lean) {
+            case LEFT:
+                changeType(BASE_LEFT);
+                break;
+            case RIGHT:
+                changeType(BASE_RIGHT);
+                break;
+            case NONE:
+                changeType(BASE);
+                break;
+        }
     }
 
     /**
@@ -433,6 +439,28 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
         this.activeBases = buildActiveBases();
     }
 
+    @Override
+    public void addShield(float timeActive) {
+        final float syncTime = 0f;
+
+        // reset the shield timer.
+        // will extend shield time if already shielded.
+        timeUntilShieldRemoved = timeActive;
+
+        // only create new shields if we are not shielded
+        if (!shielded) {
+            shielded = true;
+            shield = new BaseShieldPrimary(this, sounds, vibrator, x(), y(), syncTime);
+        }
+
+        // add shield for any helper bases
+        for (IBaseHelper aHelperBase : helpers.values()) {
+            aHelperBase.addSynchronisedShield(syncTime);
+        }
+
+        // refresh list of sprites
+        this.allSprites = buildAllSprites();
+    }
 
     /*
       ***********************
@@ -496,19 +524,15 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
             // if base missile time now expired, change back to default missile
             if (timeUntilDefaultMissile <= 0) {
                 setBaseMissileType(DEFAULT_MISSILE_TYPE, DEFAULT_BASE_MISSILE_DELAY, 0f);
-
-                // baseMissileType = DEFAULT_MISSILE_TYPE;
-                // baseMissileDelay = DEFAULT_BASE_MISSILE_DELAY;
-                // timeUntilDefaultMissile = 0f;
             }
         }
 
         // increment timer referencing time since base last fired
         timeSinceBaseLastFired = timeSinceBaseLastFired + deltaTime;
 
-        // if missile timer has exceeded delay time and base is active - ready
-        // to fire!!
-        return (timeSinceBaseLastFired > baseMissileDelay && state == ACTIVE);
+        // if missile timer has exceeded delay time and base is active - ready to fire!!
+        return (timeSinceBaseLastFired > baseMissileDelay
+                && state == ACTIVE);
     }
 
     /**
@@ -532,27 +556,6 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
      * ***********************
      */
 
-    private void addShield(float timeActive, float syncTime) {
-
-        // reset the shield timer.
-        // will extend shield time if already shielded.
-        timeUntilShieldRemoved = timeActive;
-
-        // only create new shields if we are not shielded
-        if (!shielded) {
-            shielded = true;
-            shield = new BaseShield(x(), y(), SHIELD_PULSE, syncTime);
-        }
-
-        // add shield for any helper bases
-        for (IBaseHelper aHelperBase : helpers.values()) {
-            aHelperBase.addShield(syncTime);
-        }
-
-        // refresh list of sprites
-        this.allSprites = buildAllSprites();
-    }
-
     private void removeShield() {
         timeUntilShieldRemoved = 0f;
         shielded = false;
@@ -570,5 +573,23 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
     @Override
     public boolean isDestroyed() {
         return state == DESTROYED;
+    }
+
+    @Override
+    public boolean isActive() {
+        return state == ACTIVE;
+    }
+
+    @Override
+    public boolean isExploding() {
+        return state == EXPLODING;
+    }
+
+    @Override
+    public RgbColour background() {
+        if (isExploding()) {
+            return backgroundFlash.background();
+        }
+        return DEFAULT_BACKGROUND_COLOUR;
     }
 }

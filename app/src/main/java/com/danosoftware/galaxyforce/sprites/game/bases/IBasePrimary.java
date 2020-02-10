@@ -1,5 +1,7 @@
 package com.danosoftware.galaxyforce.sprites.game.bases;
 
+import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
+import com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseLean;
 import com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide;
 
 import java.util.List;
@@ -19,4 +21,14 @@ public interface IBasePrimary extends IBase {
     void helperCreated(HelperSide side, IBaseHelper helper);
 
     List<IBase> activeBases();
+
+    BaseLean getLean();
+
+    void setLean(BaseLean lean);
+
+    void addShield(float timeActive);
+
+    boolean isExploding();
+
+    RgbColour background();
 }

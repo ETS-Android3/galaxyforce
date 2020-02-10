@@ -1,12 +1,23 @@
 package com.danosoftware.galaxyforce.textures;
 
+import android.util.Log;
+
+import com.danosoftware.galaxyforce.constants.GameConstants;
+
+/**
+ * A TextureDetail property describes a texture region (representing a sprite) within a texture
+ * map.
+ * <p>
+ * The properties describe the name of the texture region, position within the texture map and
+ * dimensions.
+ */
 public class TextureDetail {
 
-    public final String name;
-    public final int xPos;
-    public final int yPos;
-    public final int width;
-    public final int height;
+    private final String name;
+    private final int xPos;
+    private final int yPos;
+    private final int width;
+    private final int height;
 
     public TextureDetail(String name, String xPos, String yPos, String width, String height) {
         this.name = name;
@@ -14,14 +25,6 @@ public class TextureDetail {
         this.yPos = convertNumeric(yPos);
         this.width = convertNumeric(width);
         this.height = convertNumeric(height);
-    }
-
-    public TextureDetail(String name, int xPos, int yPos, int width, int height) {
-        this.name = name;
-        this.xPos = xPos;
-        this.yPos = yPos;
-        this.width = width;
-        this.height = height;
     }
 
     // converts string to int
@@ -32,10 +35,30 @@ public class TextureDetail {
         try {
             num = Integer.parseInt(str);
         } catch (NumberFormatException nfe) {
+            Log.e(GameConstants.LOG_TAG, "Unable to convert Texture Region value '" + str + "' to a numeric value.", nfe);
             return 0;
         }
 
         return num;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public int getxPos() {
+        return xPos;
+    }
+
+    public int getyPos() {
+        return yPos;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
 }

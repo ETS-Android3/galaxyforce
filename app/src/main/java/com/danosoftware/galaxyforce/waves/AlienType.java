@@ -1,45 +1,46 @@
 package com.danosoftware.galaxyforce.waves;
 
 /**
- * Enum representing the different types of alien that can be created.
+ * Enum representing the different types of alien that can be created
+ * (with their associated behaviours).
  * <p>
- * Used by WaveFactory to create instances of the wanted alien.
+ * Used by AlienFactory to create instances of the wanted alien.
  */
 public enum AlienType {
 
-    // OctoAlien
-    OCTOPUS,
+    // alien that follows a pre-determined path
+    PATH,
 
-    // test alien
-    MINION,
+    // alien that hunts the base
+    HUNTER,
 
-    // test spawner
-    MOTHERSHIP,
+    // alien that hunts the base with followers
+    HUNTER_FOLLOWABLE,
 
-    // random speed, random rotation asteroid
-    ASTEROID,
+    // follower of a followable alien
+    FOLLOWER,
 
-    // constant speed asteroid
-    ASTEROID_SIMPLE,
+    // alien that follows a specific direction and is reset
+    DIRECTIONAL_RESETTABLE,
 
-    // dragon
-    DRAGON,
+    // alien that follows a specific direction and is destroyed
+    DIRECTIONAL_DESTROYABLE,
 
-    // stork
-    STORK,
+    // alien that drifts from one side of screen to another
+    DRIFTING,
 
-    // droid
-    DROID,
+    // alien that spins while executing it's underlying behaviour (e.g. SPINNING while DESCENDING)
+    SPINNING,
 
-    // flying insects
-    INSECT,
+    // alien that remains static and then explodes missiles
+    EXPLODING,
 
-    // spawned insects
-    SPAWNED_INSECT,
+    // alien that remains static
+    STATIC,
 
-    // gobby alien
-    GOBBY,
+    // explosion that remains static - normally used for multi-explosions
+    STATIC_EXPLOSION,
 
-    // hunter
-    HUNTER
+    // alien that splits in different directions
+    SPLITTER,
 }

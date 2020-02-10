@@ -1,9 +1,11 @@
 package com.danosoftware.galaxyforce.sprites.game.missiles.aliens;
 
+import com.danosoftware.galaxyforce.enumerations.AlienMissileSpeed;
 import com.danosoftware.galaxyforce.sprites.game.bases.IBasePrimary;
-import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.view.Animation;
 
+import static com.danosoftware.galaxyforce.sprites.game.missiles.aliens.AlienMissileRotater.calculateAngle;
+import static com.danosoftware.galaxyforce.sprites.game.missiles.aliens.AlienMissileRotater.calculateRotation;
 import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenAnySide;
 
 /**
@@ -19,44 +21,59 @@ import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenAn
  */
 public class AlienMissileRotated extends AbstractAlienMissile {
 
-    // how much energy will be lost by base when this missile hits it
-    private static final int HIT_ENERGY = 2;
-
-    // distance missile can move each cycle in pixels each second
-    private static final int ALIEN_MISSILE_MOVE_PIXELS = 5 * 60;
-
-    // Sprite id
-    private static final ISpriteIdentifier SPRITE = GameSpriteIdentifier.LASER_ALIEN;
+    private static final float DEGREES_PER_PI_RADIANS = (float) (180f / Math.PI);
 
     // offset applied to x and y every move
     private final int xDelta;
     private final int yDelta;
 
-    public AlienMissileRotated(int xStart, int yStart, IBasePrimary base) {
-        super(SPRITE, xStart, yStart, HIT_ENERGY);
+    // created rotated missile aimed at base
+    public AlienMissileRotated(
+            int xStart,
+            int yStart,
+            final Animation animation,
+            final AlienMissileSpeed missileSpeed,
+            final IBasePrimary base) {
+
+        super(
+                animation,
+                xStart,
+                yStart);
 
         // calculate angle from missile position to base
-        final float angle;
-        if (base != null) {
-            angle = (float) Math.atan2(
-                    base.y() - yStart,
-                    base.x() - xStart);
-        } else {
-            // if base is null fire downwards
-            angle = (float) Math.atan2(-1, 0);
-        }
-
-        // convert angle to degrees for sprite rotation.
-        // needs to be adjusted by 90 deg for correct rotation.
-        rotate((int) ((angle - Math.PI / 2f) * (180f / Math.PI)));
+        final AlienMissileRotateCalculation calculation = calculateAngle(this, base);
+        final float angle = calculation.getAngle();
+        rotate(calculation.getRotation());
 
         // calculate the deltas to be applied each move
-        this.xDelta = (int) (ALIEN_MISSILE_MOVE_PIXELS * (float) Math.cos(angle));
-        this.yDelta = (int) (ALIEN_MISSILE_MOVE_PIXELS * (float) Math.sin(angle));
+        this.xDelta = (int) (missileSpeed.getSpeed() * (float) Math.cos(angle));
+        this.yDelta = (int) (missileSpeed.getSpeed() * (float) Math.sin(angle));
+    }
+
+    // created rotated missile of supplied angle
+    public AlienMissileRotated(
+            int xStart,
+            int yStart,
+            final Animation animation,
+            final AlienMissileSpeed missileSpeed,
+            final float angle) {
+
+        super(
+                animation,
+                xStart,
+                yStart);
+
+        // calculate sprite rotation for wanted angle
+        rotate((calculateRotation(angle)));
+
+        // calculate the deltas to be applied each move
+        this.xDelta = (int) (missileSpeed.getSpeed() * (float) Math.cos(angle));
+        this.yDelta = (int) (missileSpeed.getSpeed() * (float) Math.sin(angle));
     }
 
     @Override
     public void animate(float deltaTime) {
+        super.animate(deltaTime);
 
         // move missile by calculated deltas
         moveByDelta(
@@ -67,6 +84,5 @@ public class AlienMissileRotated extends AbstractAlienMissile {
         if (offScreenAnySide(this)) {
             destroy();
         }
-
     }
 }

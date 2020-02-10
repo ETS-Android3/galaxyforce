@@ -4,6 +4,7 @@ import android.util.Log;
 
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
+import com.danosoftware.galaxyforce.models.screens.game.GameModel;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -22,6 +23,8 @@ import java.util.Map;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.nullValue;
 import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 /**
@@ -50,7 +53,7 @@ public class PowerUpAllocatorTest {
     public void shouldAllocateOnePowerUpPerAlien() {
 
         // create one alien per power-up
-        List<PowerUpType> powerUpTypes = Arrays.asList(PowerUpType.ENERGY, PowerUpType.ENERGY, PowerUpType.LIFE, PowerUpType.LIFE, PowerUpType.MISSILE_FAST);
+        List<PowerUpType> powerUpTypes = Arrays.asList(PowerUpType.MISSILE_PARALLEL, PowerUpType.MISSILE_PARALLEL, PowerUpType.LIFE, PowerUpType.LIFE, PowerUpType.MISSILE_FAST);
         int numberOfAliens = powerUpTypes.size();
         powerUpAllocator = new PowerUpAllocator(powerUpTypes, numberOfAliens, 3);
 
@@ -64,7 +67,7 @@ public class PowerUpAllocatorTest {
     public void shouldAllocateAllPowerUpsAcrossManyAliens() {
 
         // create twice as many aliens as power-ups
-        List<PowerUpType> powerUpTypes = Arrays.asList(PowerUpType.ENERGY, PowerUpType.ENERGY, PowerUpType.LIFE, PowerUpType.LIFE, PowerUpType.MISSILE_FAST);
+        List<PowerUpType> powerUpTypes = Arrays.asList(PowerUpType.MISSILE_PARALLEL, PowerUpType.MISSILE_PARALLEL, PowerUpType.LIFE, PowerUpType.LIFE, PowerUpType.MISSILE_FAST);
         int numberOfAliens = powerUpTypes.size() * 2;
         powerUpAllocator = new PowerUpAllocator(powerUpTypes, numberOfAliens, 3);
 
@@ -93,7 +96,7 @@ public class PowerUpAllocatorTest {
     public void shouldThrowExceptionWhenMorePowerUpsThanAliens() {
 
         // should fail when trying to allocate 5 power-ups across 4 aliens
-        List<PowerUpType> powerUpTypes = Arrays.asList(PowerUpType.ENERGY, PowerUpType.ENERGY, PowerUpType.LIFE, PowerUpType.LIFE, PowerUpType.MISSILE_FAST);
+        List<PowerUpType> powerUpTypes = Arrays.asList(PowerUpType.MISSILE_PARALLEL, PowerUpType.MISSILE_PARALLEL, PowerUpType.LIFE, PowerUpType.LIFE, PowerUpType.MISSILE_FAST);
         new PowerUpAllocator(powerUpTypes, 4, 3);
     }
 
@@ -104,7 +107,7 @@ public class PowerUpAllocatorTest {
     public void shouldReturnNullWhenAllocateCalledTooManyTimes() {
 
         // create one alien per power-up
-        List<PowerUpType> powerUpTypes = Arrays.asList(PowerUpType.ENERGY, PowerUpType.ENERGY, PowerUpType.LIFE, PowerUpType.LIFE, PowerUpType.MISSILE_FAST);
+        List<PowerUpType> powerUpTypes = Arrays.asList(PowerUpType.MISSILE_PARALLEL, PowerUpType.MISSILE_PARALLEL, PowerUpType.LIFE, PowerUpType.LIFE, PowerUpType.MISSILE_FAST);
         int numberOfAliens = powerUpTypes.size();
         powerUpAllocator = new PowerUpAllocator(powerUpTypes, numberOfAliens, 3);
 
@@ -137,7 +140,7 @@ public class PowerUpAllocatorTest {
                 assertThat(powerUp, equalTo(PowerUpType.LIFE));
             }
         }
-        assertThat(allAllocatedPowerUps.size(), equalTo(2));
+        assertThat(allAllocatedPowerUps.size(), equalTo(3));
     }
 
     /**
@@ -181,5 +184,49 @@ public class PowerUpAllocatorTest {
         }
 
         return powerUpCount;
+    }
+
+    /**
+     * Should only allocate lives up to a maximum across multiple allocators
+     */
+    @Test
+    public void allocatorFactoryShouldOnlyAllocateUpToMaximumLives() {
+
+        GameModel model = mock(GameModel.class);
+        when(model.getLives()).thenReturn(1);   // should allow 3 extra lives to be allocated
+        PowerUpAllocatorFactory factory = new PowerUpAllocatorFactory(model);
+        factory.newWave();
+
+        // create one alien per power-up
+        List<PowerUpType> powerUpTypes = Arrays.asList(PowerUpType.LIFE, PowerUpType.LIFE, PowerUpType.LIFE, PowerUpType.LIFE, PowerUpType.LIFE);
+        int numberOfAliens = powerUpTypes.size();
+
+        // try to allocate power-ups with first allocator
+        powerUpAllocator = factory.createAllocator(powerUpTypes, numberOfAliens);
+
+        // allocate power-ups to aliens - should allocate 3 (up to max allowed)
+        List<PowerUpType> allAllocatedPowerUps1 = new ArrayList<>();
+        for (int i = 0; i < numberOfAliens; i++) {
+            PowerUpType powerUp = powerUpAllocator.allocate();
+            if (powerUp != null) {
+                allAllocatedPowerUps1.add(powerUp);
+                assertThat(powerUp, equalTo(PowerUpType.LIFE));
+            }
+        }
+        assertThat(allAllocatedPowerUps1.size(), equalTo(3));
+
+        // try to allocate power-ups with second allocator
+        powerUpAllocator = factory.createAllocator(powerUpTypes, numberOfAliens);
+
+        // allocate power-ups to aliens - should allocate 0 (max live power-ups already allocated)
+        List<PowerUpType> allAllocatedPowerUps2 = new ArrayList<>();
+        for (int i = 0; i < numberOfAliens; i++) {
+            PowerUpType powerUp = powerUpAllocator.allocate();
+            if (powerUp != null) {
+                allAllocatedPowerUps2.add(powerUp);
+                assertThat(powerUp, equalTo(PowerUpType.LIFE));
+            }
+        }
+        assertThat(allAllocatedPowerUps2.size(), equalTo(0));
     }
 }

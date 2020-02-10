@@ -1,7 +1,8 @@
 package com.danosoftware.galaxyforce.flightpath.generators;
 
 import com.danosoftware.galaxyforce.flightpath.dto.BezierPathDTO;
-import com.danosoftware.galaxyforce.flightpath.paths.Point;
+import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
+import com.danosoftware.galaxyforce.flightpath.paths.PathSpeed;
 import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
 
 import java.util.List;
@@ -13,10 +14,10 @@ import static com.danosoftware.galaxyforce.flightpath.utilities.PointMathematics
  * Create bezier curve from provided control points
  */
 public class BezierCurveGenerator implements PathGenerator {
-    private final Point start;
-    private final Point startControl;
-    private final Point finish;
-    private final Point finishControl;
+    private final DoublePoint start;
+    private final DoublePoint startControl;
+    private final DoublePoint finish;
+    private final DoublePoint finishControl;
     private final int pathPoints;
 
     /**
@@ -24,12 +25,15 @@ public class BezierCurveGenerator implements PathGenerator {
      * and then translating them to their new positions based on the provided
      * translators (e.g. x-axis flip).
      */
-    public BezierCurveGenerator(BezierPathDTO bezierData, PointTranslatorChain translators) {
+    public BezierCurveGenerator(
+            BezierPathDTO bezierData,
+            PointTranslatorChain translators,
+            PathSpeed pathSpeed) {
         this.start = convertAndTranslatePoint(bezierData.getStart(), translators);
         this.startControl = convertAndTranslatePoint(bezierData.getStartControl(), translators);
         this.finish = convertAndTranslatePoint(bezierData.getFinish(), translators);
         this.finishControl = convertAndTranslatePoint(bezierData.getFinishControl(), translators);
-        this.pathPoints = bezierData.getPathPoints();
+        this.pathPoints = (int) (bezierData.getPathPoints() * pathSpeed.getMultiplier());
     }
 
     /**
@@ -38,7 +42,7 @@ public class BezierCurveGenerator implements PathGenerator {
      * @return array of points representing Bezier curve
      */
     @Override
-    public List<Point> path() {
+    public List<DoublePoint> path() {
         return createBezierPath(
                 start,
                 startControl,

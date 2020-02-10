@@ -1,12 +1,14 @@
 package com.danosoftware.galaxyforce.sprites.game.aliens;
 
-import com.danosoftware.galaxyforce.flightpath.paths.Point;
+import com.danosoftware.galaxyforce.flightpath.paths.PathPoint;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.explode.ExplodeBehaviour;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.fire.FireBehaviour;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.hit.HitBehaviour;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.powerup.PowerUpBehaviour;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.spawn.SpawnBehaviour;
+import com.danosoftware.galaxyforce.sprites.game.behaviours.spinner.SpinningBehaviour;
 import com.danosoftware.galaxyforce.view.Animation;
+import com.danosoftware.galaxyforce.waves.AlienCharacter;
 
 import java.util.List;
 
@@ -15,12 +17,12 @@ import static com.danosoftware.galaxyforce.sprites.game.aliens.enums.AlienState.
 /**
  * @author Danny
  */
-public abstract class AbstractAlienWithPath extends AbstractAlien implements IAlienWithPath {
+public abstract class AbstractAlienWithPath extends AbstractAlien implements IResettableAlien {
     /*
      * reference path this alien will follow in list of x,y co-ordinates (Point
      * objects)
      */
-    private final List<Point> alienPath;
+    private final List<PathPoint> alienPath;
 
     /* how many seconds to delay before alien starts to follow path */
     private float timeDelayStart;
@@ -37,20 +39,27 @@ public abstract class AbstractAlienWithPath extends AbstractAlien implements IAl
     /* should the alien restart it's path immediately when it reaches the end */
     private final boolean restartImmediately;
 
+    /* should the alien be rotated to follow it's path */
+    private final boolean rotated;
+
     protected AbstractAlienWithPath(
+            AlienCharacter character,
             Animation animation,
             FireBehaviour fireBehaviour,
             PowerUpBehaviour powerUpBehaviour,
             SpawnBehaviour spawnBehaviour,
             HitBehaviour hitBehaviour,
             ExplodeBehaviour explodeBehaviour,
-            List<Point> alienPath,
+            SpinningBehaviour spinningBehaviour,
+            List<PathPoint> alienPath,
             float delayStart,
             int energy,
-            boolean restartImmediately) {
+            boolean restartImmediately,
+            boolean angledToPath) {
         // default is that all aliens with paths start invisible at first
         // position
         super(
+                character,
                 animation,
                 alienPath.get(0).getX(),
                 alienPath.get(0).getY(),
@@ -59,12 +68,14 @@ public abstract class AbstractAlienWithPath extends AbstractAlien implements IAl
                 powerUpBehaviour,
                 spawnBehaviour,
                 hitBehaviour,
-                explodeBehaviour);
+                explodeBehaviour,
+                spinningBehaviour);
 
         this.alienPath = alienPath;
         this.maximumPathIndex = alienPath.size() - 1;
         this.originalTimeDelayStart = delayStart;
         this.restartImmediately = restartImmediately;
+        this.rotated = angledToPath;
 
         // reset timers and sets sprite inactive
         reset(0);
@@ -99,20 +110,23 @@ public abstract class AbstractAlienWithPath extends AbstractAlien implements IAl
                 }
             } else {
                 // set alien new position
-                Point position = alienPath.get(index);
+                PathPoint position = alienPath.get(index);
                 move(
                         position.getX(),
                         position.getY()
                 );
+                if (rotated) {
+                    rotate(position.getAngle());
+                }
             }
         } else if (isWaiting()) {
-            /* if delayStart still > 0 then count down delay */
-            if (timeDelayStart > 0) {
-                timeDelayStart -= deltaTime;
-            }
-            /* otherwise activate alien. */
-            else {
+            // countdown until activation time
+            timeDelayStart -= deltaTime;
+
+            // activate alien. can only happen once!
+            if (timeDelayStart <= 0) {
                 activate();
+                animate(0 - timeDelayStart);
             }
         }
     }
@@ -134,11 +148,14 @@ public abstract class AbstractAlienWithPath extends AbstractAlien implements IAl
          * reset back at start position - will be made visible and active before
          * recalculating it's position.
          */
-        Point position = alienPath.get(0);
+        PathPoint position = alienPath.get(0);
         move(
                 position.getX(),
                 position.getY()
         );
+        if (rotated) {
+            rotate(position.getAngle());
+        }
     }
 
     @Override
@@ -146,7 +163,8 @@ public abstract class AbstractAlienWithPath extends AbstractAlien implements IAl
         return (state == FINISHED_PASS);
     }
 
-    private void endOfPass() {
+    @Override
+    public void endOfPass() {
         state = FINISHED_PASS;
     }
 
@@ -154,6 +172,7 @@ public abstract class AbstractAlienWithPath extends AbstractAlien implements IAl
      * Get the original time delay. Can be used to calculate a corrected time
      * delay offset.
      */
+    @Override
     public float getTimeDelay() {
         return originalTimeDelayStart;
     }

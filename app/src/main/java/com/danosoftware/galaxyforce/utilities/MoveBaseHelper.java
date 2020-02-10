@@ -1,11 +1,11 @@
 package com.danosoftware.galaxyforce.utilities;
 
-import com.danosoftware.galaxyforce.sprites.game.bases.IBase;
+import com.danosoftware.galaxyforce.sprites.game.bases.IBasePrimary;
+import com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseLean;
 
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
-import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.BASE;
-import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.BASE_LEFT;
-import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.BASE_RIGHT;
+import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
+import static java.lang.Math.abs;
 
 /**
  * Helper class that moves the base around the screen and changes sprites depending
@@ -17,6 +17,9 @@ import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifi
  * every time a new base is created.
  */
 public class MoveBaseHelper {
+
+    // base's start y position when ready
+    private static final int BASE_START_Y = 192;
 
     private static final double HALF_PI = (float) Math.PI / 2f;
 
@@ -48,7 +51,7 @@ public class MoveBaseHelper {
     private static final float STEADY_DELAY = 0.1f;
 
     // base being animated
-    private final IBase base;
+    private final IBasePrimary base;
 
     // holds time base has been steady for (i.e. not turning left or right)
     private float baseTurnSteadyTime;
@@ -62,17 +65,21 @@ public class MoveBaseHelper {
     // current weighting of base movement
     private float weightingX, weightingY;
 
+    // is base currently launching (i.e. moving to start position)
+    private boolean isLaunching;
+
 
     public MoveBaseHelper(
-            final IBase base) {
+            final IBasePrimary base) {
 
         this.base = base;
         this.baseTurnSteadyTime = 0f;
         this.baseTurning = false;
         this.weightingX = 0f;
         this.weightingY = 0f;
-        this.targetX = base.x();
-        this.targetY = base.y();
+        this.targetX = SCREEN_MID_X;
+        this.targetY = BASE_START_Y;
+        this.isLaunching = true;
     }
 
     public void updateTarget(int targetX, int targetY) {
@@ -81,9 +88,21 @@ public class MoveBaseHelper {
     }
 
     /**
-     * Moves base by the supplied weighting
+     * Moves base
      */
     public void moveBase(float deltaTime) {
+
+        if (isLaunching) {
+            launchBase(deltaTime);
+        } else {
+            moveActiveBase(deltaTime);
+        }
+    }
+
+    /**
+     * Moves base by the supplied weighting
+     */
+    private void moveActiveBase(float deltaTime) {
 
         updateWeighting(
                 targetX - base.x(),
@@ -126,16 +145,16 @@ public class MoveBaseHelper {
          * un-turn.
          */
         if (weightingX > WEIGHTING_TURN) {
-            base.changeType(BASE_RIGHT);
+            base.setLean(BaseLean.RIGHT);
             baseTurnSteadyTime = 0f;
             baseTurning = true;
         }
         /*
-         * if base is going left then use base left turn sprite. reset time
+         * if base is going left then lean left. reset time
          * since base was steady so that base doesn't immediately un-turn.
          */
         else if (weightingX < -WEIGHTING_TURN) {
-            base.changeType(BASE_LEFT);
+            base.setLean(BaseLean.LEFT);
             baseTurnSteadyTime = 0f;
             baseTurning = true;
         }
@@ -147,12 +166,45 @@ public class MoveBaseHelper {
         else if (baseTurning && weightingX > -WEIGHTING_STEADY && weightingX < WEIGHTING_STEADY) {
             baseTurnSteadyTime = baseTurnSteadyTime + deltaTime;
             if (baseTurnSteadyTime > STEADY_DELAY) {
-                base.changeType(BASE);
+                base.setLean(BaseLean.NONE);
                 baseTurnSteadyTime = 0f;
                 baseTurning = false;
             }
         }
     }
+
+
+    /**
+     * Moves base to launch position
+     */
+    private void launchBase(float deltaTime) {
+
+        updateWeighting(
+                SCREEN_MID_X - base.x(),
+                BASE_START_Y - base.y());
+
+        /*
+         * can cause jittery movement if game is running very slowly as base
+         * can overshoot target but ensures that base movement doesn't slow
+         * down when game slows down.
+         */
+        float maxDistanceMoved = BASE_MOVE_PIXELS * deltaTime;
+        int x = base.x() + (int) (maxDistanceMoved * weightingX);
+        int y = base.y() + (int) (maxDistanceMoved * weightingY);
+
+        // has base reached launch target
+        if (abs(base.y() - BASE_START_Y) <= BASE_MOVE_RADIUS_LARGE
+                || base.y() >= BASE_START_Y) {
+            base.move(SCREEN_MID_X, BASE_START_Y);
+            isLaunching = false;
+        }
+        else {
+            // move base to new position
+            base.move(x, y);
+        }
+    }
+
+
 
     private void updateWeighting(float deltaX, float deltaY) {
 

@@ -1,6 +1,7 @@
 package com.danosoftware.galaxyforce.flightpath.utilities;
 
-import com.danosoftware.galaxyforce.flightpath.paths.Point;
+import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
+import com.danosoftware.galaxyforce.flightpath.paths.PathSpeed;
 
 import org.junit.Test;
 
@@ -20,12 +21,13 @@ public class CircularMathematicsTest {
 
         // create circular control points
         final double piMultiplier = 1;
-        final Point centre = new Point(0, 0);
+        final DoublePoint centre = new DoublePoint(0, 0);
 
         // create a linear path from control points
-        final List<Point> linearPoints = createCircularPath(
+        final List<DoublePoint> linearPoints = createCircularPath(
                 centre,
-                piMultiplier);
+                piMultiplier,
+                PathSpeed.NORMAL);
 
         // assert path length
         final int pathLength = linearPoints.size();
@@ -34,7 +36,10 @@ public class CircularMathematicsTest {
         // assert start/end path points match provided control points
         assertThat(linearPoints.get(0).getX(), is(centre.getX() + 300));
         assertThat(linearPoints.get(0).getY(), is(centre.getY()));
-        assertThat(linearPoints.get(pathLength - 1).getX(), is(centre.getX() - 195));
-        assertThat(linearPoints.get(pathLength - 1).getY(), is(centre.getY() - 1));
+        assertThat(
+                Math.round(linearPoints.get(pathLength - 1).getX()),
+                is(Math.round(centre.getX() - 195)));
+        assertThat(Math.round(linearPoints.get(pathLength - 1).getY()),
+                is(Math.round(centre.getY() - 1)));
     }
 }

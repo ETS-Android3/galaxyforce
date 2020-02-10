@@ -5,25 +5,41 @@ import android.util.Log;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
 import com.danosoftware.galaxyforce.models.screens.Model;
-import com.danosoftware.galaxyforce.services.file.FileIO;
+import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteProperties;
 import com.danosoftware.galaxyforce.text.Font;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.textures.Texture;
+import com.danosoftware.galaxyforce.textures.TextureDetail;
 import com.danosoftware.galaxyforce.textures.TextureMap;
-import com.danosoftware.galaxyforce.textures.Textures;
+import com.danosoftware.galaxyforce.textures.TextureRegion;
+import com.danosoftware.galaxyforce.textures.TextureService;
 import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLGraphics;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.microedition.khronos.opengles.GL10;
+
+import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_ALPHA;
 
 public abstract class AbstractScreen implements IScreen {
 
     /* logger tag */
     private static final String LOCAL_TAG = "Screen";
+
+    // font glyphs per row - i.e. characters in a row within texture map
+    private final static int FONT_GLYPHS_PER_ROW = 8;
+
+    // font glyphs width - i.e. width of individual character
+    private final static int FONT_GLYPHS_WIDTH = 30;
+
+    // font glyphs height - i.e. height of individual character
+    private final static int FONT_GLYPHS_HEIGHT = 38;
 
     /**
      * Reference to model and controller. Each screen will have different
@@ -41,7 +57,7 @@ public abstract class AbstractScreen implements IScreen {
     // reference to openGL graphics
     final GLGraphics glGraphics;
 
-    private final FileIO fileIO;
+    private final TextureService textureService;
 
     // reference to graphics texture map - set on resume
     Texture texture;
@@ -58,29 +74,38 @@ public abstract class AbstractScreen implements IScreen {
     // TextureState identifies the texture map being used
     private final TextureMap textureMap;
 
+    final Map<ISpriteIdentifier, TextureRegion> textureRegions;
+
     AbstractScreen(
             Model model,
             Controller controller,
+            TextureService textureService,
             TextureMap textureMap,
             GLGraphics glGraphics,
-            FileIO fileIO,
             Camera2D camera,
             SpriteBatcher batcher) {
 
+        this.textureService = textureService;
         this.textureMap = textureMap;
         this.glGraphics = glGraphics;
-        this.fileIO = fileIO;
         this.batcher = batcher;
         this.camera = camera;
         this.controller = controller;
         this.model = model;
+        this.textureRegions = new HashMap<>();
     }
 
     @Override
     public void draw(float deltaTime) {
         GL10 gl = glGraphics.getGl();
 
-        /* clear colour buffer */
+        // clear screen
+        final RgbColour backgroundColour = model.background();
+        gl.glClearColor(
+                backgroundColour.getRed(),
+                backgroundColour.getGreen(),
+                backgroundColour.getBlue(),
+                BACKGROUND_ALPHA);
         gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
         camera.setViewportAndMatrices();
@@ -103,7 +128,7 @@ public abstract class AbstractScreen implements IScreen {
                         props.getWidth(),
                         props.getHeight(),
                         sprite.rotation(),
-                        props.getTextureRegion());
+                        textureRegions.get(spriteId));
             } else {
                 // use normal sprite method
                 batcher.drawSprite(
@@ -111,7 +136,7 @@ public abstract class AbstractScreen implements IScreen {
                         sprite.y(),
                         props.getWidth(),
                         props.getHeight(),
-                        props.getTextureRegion());
+                        textureRegions.get(spriteId));
             }
         }
 
@@ -157,7 +182,7 @@ public abstract class AbstractScreen implements IScreen {
          * re-loaded. re-loading must happen each time screen is resumed as
          * textures can be disposed by OpenGL when the game is paused.
          */
-        this.texture = Textures.newTexture(glGraphics, fileIO, textureMap);
+        this.texture = textureService.getOrCreateTexture(textureMap);
 
         /*
          * create each sprite's individual properties (e.g. width, height) from
@@ -165,23 +190,31 @@ public abstract class AbstractScreen implements IScreen {
          * called after a new texture is re-loaded and before sprites can be
          * displayed.
          */
+        textureRegions.clear();
         for (ISpriteIdentifier sprite : textureMap.getSpriteIdentifiers()) {
             sprite.updateProperties(texture);
+            TextureDetail textureDetails = texture.getTextureDetail(sprite.getName());
+            textureRegions.put(
+                    sprite,
+                    new TextureRegion(
+                            texture,
+                            textureDetails.getxPos(),
+                            textureDetails.getyPos(),
+                            textureDetails.getWidth(),
+                            textureDetails.getHeight()));
         }
 
         // set-up fonts - can be null if sprite map has no fonts
         ISpriteIdentifier fontId = textureMap.getFontIdentifier();
-
-        if (fontId != null) {
-            this.gameFont = new Font(
-                    texture,
-                    fontId.getProperties().getxPos(),
-                    fontId.getProperties().getyPos(),
-                    GameConstants.FONT_GLYPHS_PER_ROW,
-                    GameConstants.FONT_GLYPHS_WIDTH,
-                    GameConstants.FONT_GLYPHS_HEIGHT,
-                    GameConstants.FONT_CHARACTER_MAP);
-        }
+        TextureDetail fontTextureDetails = texture.getTextureDetail(fontId.getName());
+        this.gameFont = new Font(
+                texture,
+                fontTextureDetails.getxPos(),
+                fontTextureDetails.getyPos(),
+                FONT_GLYPHS_PER_ROW,
+                FONT_GLYPHS_WIDTH,
+                FONT_GLYPHS_HEIGHT,
+                GameConstants.FONT_CHARACTER_MAP);
 
         model.resume();
     }

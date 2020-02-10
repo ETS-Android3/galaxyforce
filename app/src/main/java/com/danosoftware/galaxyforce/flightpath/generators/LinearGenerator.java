@@ -1,7 +1,8 @@
 package com.danosoftware.galaxyforce.flightpath.generators;
 
 import com.danosoftware.galaxyforce.flightpath.dto.LinearPathDTO;
-import com.danosoftware.galaxyforce.flightpath.paths.Point;
+import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
+import com.danosoftware.galaxyforce.flightpath.paths.PathSpeed;
 import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
 
 import java.util.List;
@@ -14,8 +15,8 @@ import static com.danosoftware.galaxyforce.flightpath.utilities.PointMathematics
  */
 public class LinearGenerator implements PathGenerator {
 
-    private final Point start;
-    private final Point finish;
+    private final DoublePoint start;
+    private final DoublePoint finish;
     private final int pathPoints;
 
     /**
@@ -23,10 +24,13 @@ public class LinearGenerator implements PathGenerator {
      * and then translating them to their new positions based on the provided
      * translators (e.g. x-axis flip).
      */
-    public LinearGenerator(LinearPathDTO linearData, PointTranslatorChain translators) {
+    public LinearGenerator(
+            LinearPathDTO linearData,
+            PointTranslatorChain translators,
+            PathSpeed pathSpeed) {
         this.start = convertAndTranslatePoint(linearData.getStart(), translators);
         this.finish = convertAndTranslatePoint(linearData.getFinish(), translators);
-        this.pathPoints = linearData.getPathPoints();
+        this.pathPoints = (int) (linearData.getPathPoints() * pathSpeed.getMultiplier());
     }
 
     /**
@@ -35,7 +39,7 @@ public class LinearGenerator implements PathGenerator {
      * @return array of points representing line
      */
     @Override
-    public List<Point> path() {
+    public List<DoublePoint> path() {
         return createLinearPath(start, finish, pathPoints);
     }
 }

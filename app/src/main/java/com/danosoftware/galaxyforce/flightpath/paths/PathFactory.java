@@ -20,14 +20,21 @@ import java.util.List;
 
 public final class PathFactory {
 
+    private final static double HALF_PI = Math.PI / 2d;
+    private final static double TWICE_PI = Math.PI * 2d;
+    private final static double TO_DEGREES = 180f / Math.PI;
+
     private final PathLoader loader;
 
     public PathFactory(PathLoader loader) {
         this.loader = loader;
     }
 
-    public List<Point> createPath(Path path, PointTranslatorChain translators) {
-        List<Point> pathPoints = new ArrayList<>();
+    public List<PathPoint> createPath(
+            Path path,
+            PointTranslatorChain translators,
+            PathSpeed pathSpeed) {
+        List<PathPoint> pathPoints = new ArrayList<>();
 
         // load path data from file
         PathListDTO pathData = loader.loadPaths(path.getPathFile());
@@ -37,11 +44,11 @@ public final class PathFactory {
             switch (pathDTO.getType()) {
                 case BEZIER:
                     BezierPathDTO bezierData = (BezierPathDTO) pathDTO;
-                    generator = new BezierCurveGenerator(bezierData, translators);
+                    generator = new BezierCurveGenerator(bezierData, translators, pathSpeed);
                     break;
                 case LINEAR:
                     LinearPathDTO linearData = (LinearPathDTO) pathDTO;
-                    generator = new LinearGenerator(linearData, translators);
+                    generator = new LinearGenerator(linearData, translators, pathSpeed);
                     break;
                 case PAUSE:
                     PausePathDTO pauseData = (PausePathDTO) pathDTO;
@@ -49,12 +56,66 @@ public final class PathFactory {
                     break;
                 case CIRCULAR:
                     CircularPathDTO circularData = (CircularPathDTO) pathDTO;
-                    generator = new CircularGenerator(circularData, translators);
+                    generator = new CircularGenerator(circularData, translators, pathSpeed);
                     break;
                 default:
                     throw new GalaxyForceException("Unknown path type: " + pathDTO.getType().name());
             }
-            pathPoints.addAll(generator.path());
+
+            pathPoints.addAll(
+                    createPathPoints(generator.path()));
+        }
+        return pathPoints;
+    }
+
+    // convert double path points into rounded integer points
+    private List<PathPoint> createPathPoints(List<DoublePoint> dblPoints) {
+        List<PathPoint> pathPoints = new ArrayList<>();
+        double lastAngle = 0d;
+        for (int idx = 0; idx < dblPoints.size(); idx++) {
+
+            DoublePoint current = dblPoints.get(idx);
+
+            if (idx == dblPoints.size() - 1) {
+                pathPoints.add(
+                        new PathPoint(
+                                (int) Math.round(current.getX()),
+                                (int) Math.round(current.getY()),
+                                (int) Math.round(lastAngle)));
+            } else {
+                DoublePoint next = dblPoints.get(idx + 1);
+
+                // use last angle in cases where alien hasn't moved
+                // would otherwise calculate an angle of zero
+                if (current.getX() == next.getX() && current.getY() == next.getY()) {
+                    pathPoints.add(
+                            new PathPoint(
+                                    (int) Math.round(current.getX()),
+                                    (int) Math.round(current.getY()),
+                                    (int) Math.round(lastAngle)));
+                } else {
+                    // calculate angle to next position
+                    double angleInRadians = Math.atan2(
+                            next.getY() - current.getY(),
+                            next.getX() - current.getX());
+
+                    // adjust angle so that a result more positive than PI/2
+                    // becomes a negative value.
+                    if (angleInRadians > HALF_PI) {
+                        angleInRadians -= TWICE_PI;
+                    }
+
+                    // calculate angle rotation
+                    final double angle =
+                            (angleInRadians + HALF_PI) * (TO_DEGREES);
+
+                    pathPoints.add(
+                            new PathPoint(
+                                    (int) Math.round(current.getX()),
+                                    (int) Math.round(current.getY()),
+                                    (int) Math.round(angle)));
+                }
+            }
         }
         return pathPoints;
     }

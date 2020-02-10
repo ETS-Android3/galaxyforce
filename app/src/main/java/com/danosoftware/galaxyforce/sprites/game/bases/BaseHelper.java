@@ -3,7 +3,6 @@ package com.danosoftware.galaxyforce.sprites.game.bases;
 import com.danosoftware.galaxyforce.enumerations.BaseMissileType;
 import com.danosoftware.galaxyforce.models.assets.BaseMissilesDto;
 import com.danosoftware.galaxyforce.models.screens.game.GameModel;
-import com.danosoftware.galaxyforce.services.sound.SoundEffect;
 import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.sprites.common.AbstractCollidingSprite;
@@ -11,8 +10,8 @@ import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState;
 import com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide;
-import com.danosoftware.galaxyforce.sprites.game.behaviours.explode.ExplodeBehaviour;
-import com.danosoftware.galaxyforce.sprites.game.behaviours.explode.ExplodeSimple;
+import com.danosoftware.galaxyforce.sprites.game.bases.explode.BaseExploderSimple;
+import com.danosoftware.galaxyforce.sprites.game.bases.explode.IBaseExploder;
 import com.danosoftware.galaxyforce.sprites.game.factories.BaseMissileFactory;
 import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
@@ -52,8 +51,11 @@ import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifi
  */
 public class BaseHelper extends AbstractCollidingSprite implements IBaseHelper {
 
-    // helper's x position (in pixels) from primary base
+    // helper's x position offset (in pixels) from primary base
     private static final int X_OFFSET_FROM_PRIMARY_BASE = 64;
+
+    // helper's y position offset (in pixels) from primary base
+    private static final int Y_OFFSET_FROM_PRIMARY_BASE = 18;
 
     // helper base x offset from primary base's position
     private final int xOffset;
@@ -63,9 +65,6 @@ public class BaseHelper extends AbstractCollidingSprite implements IBaseHelper {
 
     // helper base's shield
     private IBaseShield shield;
-
-    // shield animation that pulses every 0.5 seconds
-    private static final Animation SHIELD_PULSE = new Animation(0.5f, GameSpriteIdentifier.CONTROL, GameSpriteIdentifier.JOYSTICK);
 
     // reference to primary base
     private final IBasePrimary primaryBase;
@@ -77,7 +76,7 @@ public class BaseHelper extends AbstractCollidingSprite implements IBaseHelper {
     private final SoundPlayerService sounds;
 
     // explosion behaviour
-    private final ExplodeBehaviour explosion;
+    private final IBaseExploder explosion;
 
     // base state
     private BaseState state;
@@ -91,7 +90,7 @@ public class BaseHelper extends AbstractCollidingSprite implements IBaseHelper {
      * - Creates new helper
      * - Registers helper with primary base
      */
-    public static void createHelperBase(
+    static void createHelperBase(
             final IBasePrimary primaryBase,
             final GameModel model,
             final SoundPlayerService sounds,
@@ -128,7 +127,7 @@ public class BaseHelper extends AbstractCollidingSprite implements IBaseHelper {
                 HELPER,
                 primaryBase.x() +
                         (side == LEFT ? -X_OFFSET_FROM_PRIMARY_BASE : +X_OFFSET_FROM_PRIMARY_BASE),
-                primaryBase.y()
+                primaryBase.y() + Y_OFFSET_FROM_PRIMARY_BASE
         );
         this.model = model;
         this.sounds = sounds;
@@ -136,10 +135,19 @@ public class BaseHelper extends AbstractCollidingSprite implements IBaseHelper {
         this.state = ACTIVE;
         this.side = side;
         this.xOffset = (side == LEFT ? -X_OFFSET_FROM_PRIMARY_BASE : +X_OFFSET_FROM_PRIMARY_BASE);
-        this.explosion = new ExplodeSimple(sounds, vibrator);
+        this.explosion = new BaseExploderSimple(
+                sounds,
+                vibrator,
+                new Animation(
+                        0.075f,
+                        GameSpriteIdentifier.EXPLODE_01,
+                        GameSpriteIdentifier.EXPLODE_02,
+                        GameSpriteIdentifier.EXPLODE_03,
+                        GameSpriteIdentifier.EXPLODE_04,
+                        GameSpriteIdentifier.EXPLODE_05));
 
         if (shieldUp) {
-            addShield(shieldSyncTime);
+            addSynchronisedShield(shieldSyncTime);
         } else {
             removeShield();
         }
@@ -158,13 +166,23 @@ public class BaseHelper extends AbstractCollidingSprite implements IBaseHelper {
 
     @Override
     public BaseMissilesDto fire(BaseMissileType baseMissileType) {
+
+        // helper bases should not fire parallel missiles.
+        // instead, use an equivalent single missile.
+        if (baseMissileType == BaseMissileType.PARALLEL) {
+            return BaseMissileFactory.createBaseMissile(this, BaseMissileType.NORMAL, model);
+        }
+        if (baseMissileType == BaseMissileType.SPRAY) {
+            return BaseMissileFactory.createBaseMissile(this, BaseMissileType.GUIDED, model);
+        }
+
         return BaseMissileFactory.createBaseMissile(this, baseMissileType, model);
     }
 
     @Override
-    public void addShield(float syncTime) {
+    public void addSynchronisedShield(float syncTime) {
         shielded = true;
-        shield = new BaseShield(x(), y(), SHIELD_PULSE, syncTime);
+        shield = new BaseShieldHelper(x(), y(), syncTime);
     }
 
     @Override
@@ -183,6 +201,10 @@ public class BaseHelper extends AbstractCollidingSprite implements IBaseHelper {
                 state = DESTROYED;
                 primaryBase.helperRemoved(side);
             }
+        }
+
+        if (shielded) {
+            shield.animate(deltaTime);
         }
     }
 
@@ -211,12 +233,16 @@ public class BaseHelper extends AbstractCollidingSprite implements IBaseHelper {
         this.state = EXPLODING;
         primaryBase.helperExploding(side);
         explosion.startExplosion();
-        sounds.play(SoundEffect.EXPLOSION);
     }
 
     @Override
     public boolean isDestroyed() {
         return state == DESTROYED;
+    }
+
+    @Override
+    public boolean isActive() {
+        return state == ACTIVE;
     }
 
     @Override
@@ -230,10 +256,10 @@ public class BaseHelper extends AbstractCollidingSprite implements IBaseHelper {
     @Override
     public void move(int x, int y) {
         if (state == ACTIVE) {
-            super.move(x + xOffset, y);
+            super.move(x + xOffset, y + Y_OFFSET_FROM_PRIMARY_BASE);
             // if base has a shield, move it with base
             if (shielded) {
-                shield.move(x + xOffset, y);
+                shield.move(x + xOffset, y + Y_OFFSET_FROM_PRIMARY_BASE);
             }
         }
     }

@@ -12,14 +12,14 @@ import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState;
 import com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide;
 import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
-import com.danosoftware.galaxyforce.sprites.game.missiles.bases.BaseMissileSimple;
+import com.danosoftware.galaxyforce.sprites.game.missiles.bases.BaseMissileUpwards;
 import com.danosoftware.galaxyforce.sprites.game.missiles.bases.IBaseMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
 import com.danosoftware.galaxyforce.sprites.game.powerups.PowerUp;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.textures.Texture;
 import com.danosoftware.galaxyforce.textures.TextureDetail;
-import com.danosoftware.galaxyforce.textures.Textures;
+import com.danosoftware.galaxyforce.textures.TextureService;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -32,7 +32,7 @@ import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-import static com.danosoftware.galaxyforce.enumerations.BaseMissileType.SIMPLE;
+import static com.danosoftware.galaxyforce.enumerations.BaseMissileType.NORMAL;
 import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.ACTIVE;
 import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.EXPLODING;
 import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.LEFT;
@@ -48,12 +48,13 @@ import static org.powermock.api.mockito.PowerMockito.when;
 
 
 @RunWith(PowerMockRunner.class)
-@PrepareForTest({Log.class, Textures.class})
+@PrepareForTest({Log.class, TextureService.class})
 public class BaseHelperTest {
 
     private static final int INITIAL_X = 100;
     private static final int INITIAL_Y = 200;
-    private static final int EXPECTED_OFFSET = 64;
+    private static final int EXPECTED_HELPER_X_OFFSET = 64;
+    private static final int EXPECTED_HELPER_Y_OFFSET = 18;
     private static final boolean SHIELD_UP = true;
     private static final boolean SHIELD_DOWN = false;
     private static final float SHIELD_SYNC_OFFSET = 0.5f;
@@ -70,11 +71,9 @@ public class BaseHelperTest {
         // mock any static android logging
         mockStatic(Log.class);
 
-        final TextureDetail mockTextureDetail = new TextureDetail("mock", 0, 0, 0, 0);
-        mockStatic(Textures.class);
-        when(Textures.getTextureDetail(any(String.class))).thenReturn(mockTextureDetail);
-
+        final TextureDetail mockTextureDetail = new TextureDetail("mock", "0", "0", "100", "100");
         Texture mockTexture = mock(Texture.class);
+        when(mockTexture.getTextureDetail(any(String.class))).thenReturn(mockTextureDetail);
         for (GameSpriteIdentifier spriteId : GameSpriteIdentifier.values()) {
             spriteId.updateProperties(mockTexture);
         }
@@ -95,31 +94,31 @@ public class BaseHelperTest {
     @Test()
     public void shouldConstructLeftBaseInExpectedPosition() {
         baseHelper = unShieldedHelper(LEFT);
-        assertThat(baseHelper.x(), is(INITIAL_X - EXPECTED_OFFSET));
-        assertThat(baseHelper.y(), is(INITIAL_Y));
+        assertThat(baseHelper.x(), is(INITIAL_X - EXPECTED_HELPER_X_OFFSET));
+        assertThat(baseHelper.y(), is(INITIAL_Y + EXPECTED_HELPER_Y_OFFSET));
     }
 
     @Test()
     public void shouldConstructRightBaseInExpectedPosition() {
         baseHelper = unShieldedHelper(RIGHT);
-        assertThat(baseHelper.x(), is(INITIAL_X + EXPECTED_OFFSET));
-        assertThat(baseHelper.y(), is(INITIAL_Y));
+        assertThat(baseHelper.x(), is(INITIAL_X + EXPECTED_HELPER_X_OFFSET));
+        assertThat(baseHelper.y(), is(INITIAL_Y + EXPECTED_HELPER_Y_OFFSET));
     }
 
     @Test()
     public void shouldMoveLeftBase() {
         baseHelper = unShieldedHelper(LEFT);
         baseHelper.move(300, 400);
-        assertThat(baseHelper.x(), is(300 - EXPECTED_OFFSET));
-        assertThat(baseHelper.y(), is(400));
+        assertThat(baseHelper.x(), is(300 - EXPECTED_HELPER_X_OFFSET));
+        assertThat(baseHelper.y(), is(400 + EXPECTED_HELPER_Y_OFFSET));
     }
 
     @Test()
     public void shouldMoveRightBase() {
         baseHelper = unShieldedHelper(RIGHT);
         baseHelper.move(300, 400);
-        assertThat(baseHelper.x(), is(300 + EXPECTED_OFFSET));
-        assertThat(baseHelper.y(), is(400));
+        assertThat(baseHelper.x(), is(300 + EXPECTED_HELPER_X_OFFSET));
+        assertThat(baseHelper.y(), is(400 + EXPECTED_HELPER_Y_OFFSET));
     }
 
     @Test()
@@ -129,8 +128,8 @@ public class BaseHelperTest {
         baseHelper.move(300, 400);
 
         // confirm helper has not moved
-        assertThat(baseHelper.x(), is(INITIAL_X + EXPECTED_OFFSET));
-        assertThat(baseHelper.y(), is(INITIAL_Y));
+        assertThat(baseHelper.x(), is(INITIAL_X + EXPECTED_HELPER_X_OFFSET));
+        assertThat(baseHelper.y(), is(INITIAL_Y + EXPECTED_HELPER_Y_OFFSET));
     }
 
     @Test()
@@ -146,7 +145,7 @@ public class BaseHelperTest {
         List<ISprite> sprites = baseHelper.allSprites();
         verifyShieldDoesNotExists(sprites);
 
-        baseHelper.addShield(SHIELD_SYNC_OFFSET);
+        baseHelper.addSynchronisedShield(SHIELD_SYNC_OFFSET);
         sprites = baseHelper.allSprites();
         verifyShieldExists(sprites);
     }
@@ -207,19 +206,19 @@ public class BaseHelperTest {
 
     @Test()
     public void shouldCallPrimaryBasePowerUp() {
-        IPowerUp energyPowerUp = new PowerUp(GameSpriteIdentifier.POWERUP_BATTERY, 0, 0, PowerUpType.ENERGY);
+        IPowerUp parallelMissilePowerUp = new PowerUp(GameSpriteIdentifier.POWERUP_MISSILE_PARALLEL, 0, 0, PowerUpType.MISSILE_PARALLEL);
         baseHelper = shieldedHelper(LEFT);
-        baseHelper.collectPowerUp(energyPowerUp);
-        verify(primaryBase, times(1)).collectPowerUp(energyPowerUp);
+        baseHelper.collectPowerUp(parallelMissilePowerUp);
+        verify(primaryBase, times(1)).collectPowerUp(parallelMissilePowerUp);
     }
 
     @Test()
     public void shouldFireMissile() {
         baseHelper = shieldedHelper(LEFT);
-        BaseMissilesDto missile = baseHelper.fire(SIMPLE);
+        BaseMissilesDto missile = baseHelper.fire(NORMAL);
         assertThat(missile.getMissiles().size() > 0, is(true));
         for (IBaseMissile aMissile : missile.getMissiles()) {
-            assertThat(aMissile instanceof BaseMissileSimple, is(true));
+            assertThat(aMissile instanceof BaseMissileUpwards, is(true));
         }
     }
 

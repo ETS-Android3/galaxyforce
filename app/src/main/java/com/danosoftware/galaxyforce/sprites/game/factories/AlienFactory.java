@@ -5,7 +5,7 @@ import android.util.Log;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
-import com.danosoftware.galaxyforce.flightpath.paths.Point;
+import com.danosoftware.galaxyforce.flightpath.paths.PathPoint;
 import com.danosoftware.galaxyforce.models.assets.SpawnedAliensDto;
 import com.danosoftware.galaxyforce.models.screens.game.GameModel;
 import com.danosoftware.galaxyforce.services.sound.SoundEffect;
@@ -13,24 +13,40 @@ import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlienFollower;
-import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienAsteroid;
-import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienAsteroidSimple;
-import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienDragonBody;
-import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienDragonHead;
-import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienDroid;
-import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienGobby;
-import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienHunter;
-import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienInsectPath;
-import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienMinion;
-import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienMothership;
-import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienOctopus;
-import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienSpawnedInsect;
-import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.AlienStork;
+import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.DirectionalDestroyableAlien;
+import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.DirectionalResettableAlien;
+import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.DriftingAlien;
+import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.ExplodingAlien;
+import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.FollowableHunterAlien;
+import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.FollowerAlien;
+import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.HunterAlien;
+import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.PathAlien;
+import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.StaticAlien;
+import com.danosoftware.galaxyforce.sprites.game.aliens.implementations.StaticExplosion;
+import com.danosoftware.galaxyforce.sprites.game.behaviours.explode.ExplosionBehaviourFactory;
+import com.danosoftware.galaxyforce.sprites.game.behaviours.fire.FireBehaviourFactory;
+import com.danosoftware.galaxyforce.sprites.game.behaviours.hit.HitBehaviourFactory;
+import com.danosoftware.galaxyforce.sprites.game.behaviours.powerup.PowerUpBehaviourFactory;
+import com.danosoftware.galaxyforce.sprites.game.behaviours.spawn.SpawnBehaviourFactory;
+import com.danosoftware.galaxyforce.sprites.game.behaviours.spinner.SpinningBehaviourFactory;
+import com.danosoftware.galaxyforce.utilities.Reversed;
 import com.danosoftware.galaxyforce.waves.AlienType;
+import com.danosoftware.galaxyforce.waves.config.aliens.AlienConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.types.DirectionalDestroyableConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.types.DirectionalResettableConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.types.DriftingConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.types.ExplodingConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowableHunterConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.types.HunterConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.types.PathConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.types.SplitterConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.types.StaticConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.types.StaticExplosionConfig;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocator;
+import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocatorFactory;
 
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class AlienFactory {
@@ -38,16 +54,27 @@ public class AlienFactory {
     private final static String TAG = "AlienFactory";
 
     private final GameModel model;
-    private final SoundPlayerService sounds;
-    private final VibrationService vibrator;
+    private final ExplosionBehaviourFactory explosionFactory;
+    private final SpawnBehaviourFactory spawnFactory;
+    private final SpinningBehaviourFactory spinningFactory;
+    private final PowerUpAllocatorFactory powerUpAllocatorFactory;
+    private final PowerUpBehaviourFactory powerUpFactory;
+    private final FireBehaviourFactory fireFactory;
+    private final HitBehaviourFactory hitFactory;
 
     public AlienFactory(
-            GameModel model,
-            SoundPlayerService sounds,
-            VibrationService vibrator) {
+            final GameModel model,
+            final PowerUpAllocatorFactory powerUpAllocatorFactory,
+            final SoundPlayerService sounds,
+            final VibrationService vibrator) {
         this.model = model;
-        this.sounds = sounds;
-        this.vibrator = vibrator;
+        this.powerUpAllocatorFactory = powerUpAllocatorFactory;
+        this.spawnFactory = new SpawnBehaviourFactory(model, this, powerUpAllocatorFactory);
+        this.explosionFactory = new ExplosionBehaviourFactory(model, this, spawnFactory, sounds, vibrator);
+        this.spinningFactory =  new SpinningBehaviourFactory();
+        this.powerUpFactory = new PowerUpBehaviourFactory(model);
+        this.fireFactory = new FireBehaviourFactory(model);
+        this.hitFactory = new HitBehaviourFactory(sounds, vibrator);
     }
 
     /**
@@ -55,57 +82,42 @@ public class AlienFactory {
      * path.
      */
     public List<IAlien> createAlien(
-            final AlienType alienType,
+            final AlienConfig alienConfig,
             final PowerUpType powerUp,
-            final List<Point> alienPath,
+            final List<PathPoint> alienPath,
             final float delay,
             final boolean restartImmediately) {
 
-        List<IAlien> aliens = new ArrayList<>();
+        final List<IAlien> aliens = new ArrayList<>();
+        final AlienType alienType = alienConfig.getAlienType();
 
         // create instance of the wanted alien
         switch (alienType) {
-            case OCTOPUS:
-                aliens.add(new AlienOctopus(model, sounds, vibrator, powerUp, alienPath, delay, restartImmediately));
-                break;
 
-            case GOBBY:
-                aliens.add(new AlienGobby(model, sounds, vibrator, powerUp, alienPath, delay, restartImmediately));
-                break;
-
-            case MINION:
-                aliens.add(new AlienMinion(model, sounds, vibrator, powerUp, alienPath, delay, restartImmediately));
-                break;
-
-            case MOTHERSHIP:
-                aliens.add(new AlienMothership(
-                        this,
-                        model,
-                        sounds,
-                        vibrator,
-                        powerUp,
-                        Arrays.asList(PowerUpType.ENERGY, PowerUpType.MISSILE_FAST, PowerUpType.MISSILE_PARALLEL),
-                        alienPath,
-                        delay,
-                        restartImmediately));
-                break;
-
-            case STORK:
-                aliens.add(new AlienStork(model, sounds, vibrator, powerUp, alienPath, delay, restartImmediately));
-                break;
-
-            case DROID:
-                aliens.add(new AlienDroid(model, sounds, vibrator, powerUp, alienPath, delay, restartImmediately));
-                break;
-
-            case INSECT:
-                aliens.add(new AlienInsectPath(model, sounds, vibrator, powerUp, alienPath, delay, restartImmediately));
+            case PATH:
+                aliens.add(
+                        PathAlien
+                                .builder()
+                                .explosionFactory(explosionFactory)
+                                .spawnFactory(spawnFactory)
+                                .spinningFactory(spinningFactory)
+                                .powerUpFactory(powerUpFactory)
+                                .fireFactory(fireFactory)
+                                .hitFactory(hitFactory)
+                                .alienConfig((PathConfig) alienConfig)
+                                .powerUpType(powerUp)
+                                .alienPath(alienPath)
+                                .delayStartTime(delay)
+                                .restartImmediately(restartImmediately)
+                                .build());
                 break;
 
             default:
-                String errorMessage = "Error: Unrecognised AlienType: '" + alienType + "'";
+                String errorMessage = String.format(
+                        "Error: Unrecognised Path AlienType: '%s'",
+                        alienType.name());
                 Log.e(TAG, errorMessage);
-                throw new IllegalStateException(errorMessage);
+                throw new GalaxyForceException(errorMessage);
         }
 
         // return alien;
@@ -116,7 +128,7 @@ public class AlienFactory {
      * Creates an alien with no path in the specified position.
      */
     public List<IAlien> createAlien(
-            final AlienType alienType,
+            final AlienConfig alienConfig,
             final PowerUpType powerUp,
             final boolean xRandom,
             final boolean yRandom,
@@ -126,6 +138,7 @@ public class AlienFactory {
             final boolean restartImmediately) {
 
         List<IAlien> aliens = new ArrayList<>();
+        final AlienType alienType = alienConfig.getAlienType();
 
         // choose a x start position
         int xStartPos;
@@ -155,36 +168,188 @@ public class AlienFactory {
 
         // create instance of the wanted alien
         switch (alienType) {
-            case ASTEROID:
-                aliens.add(new AlienAsteroid(powerUp, xStartPos, yStartPos, delay, restartImmediately, model, sounds, vibrator));
-                break;
-
-            case ASTEROID_SIMPLE:
-                aliens.add(new AlienAsteroidSimple(powerUp, xStartPos, yStartPos, delay, restartImmediately, model, sounds, vibrator));
-                break;
-
             case HUNTER:
-                aliens.add(new AlienHunter(powerUp, xStartPos, yStartPos, delay, model, sounds, vibrator));
+                aliens.add(
+                        HunterAlien
+                                .builder()
+                                .explosionFactory(explosionFactory)
+                                .spawnFactory(spawnFactory)
+                                .spinningFactory(spinningFactory)
+                                .powerUpFactory(powerUpFactory)
+                                .fireFactory(fireFactory)
+                                .hitFactory(hitFactory)
+                                .model(model)
+                                .alienConfig((HunterConfig) alienConfig)
+                                .powerUpType(powerUp)
+                                .xStart(xStartPos)
+                                .yStart(yStartPos)
+                                .timeDelayStart(delay)
+                                .build());
                 break;
 
-            case DRAGON:
+            case EXPLODING:
+                aliens.add(
+                        ExplodingAlien
+                                .builder()
+                                .explosionFactory(explosionFactory)
+                                .spawnFactory(spawnFactory)
+                                .spinningFactory(spinningFactory)
+                                .powerUpFactory(powerUpFactory)
+                                .fireFactory(fireFactory)
+                                .hitFactory(hitFactory)
+                                .model(model)
+                                .alienConfig((ExplodingConfig) alienConfig)
+                                .powerUpType(powerUp)
+                                .xStart(xStartPos)
+                                .yStart(yStartPos)
+                                .build());
+                break;
+
+            case HUNTER_FOLLOWABLE:
 
                 /*
-                 * dragon consists of multiple body parts and a head. The head
-                 * contains a reference to the body parts as all body parts will be
-                 * destroyed when the head is destroyed.
+                 * Hunter Followable consists of a head and multiple followers (that attempt to
+                 * follow the head's movements).
+                 * All followers will be destroyed when the head is destroyed.
                  */
-                List<IAlienFollower> dragonBodies = new ArrayList<>();
-                int dragonBodyCount = 20;
-                List<PowerUpType> powerUpTypes = Arrays.asList(PowerUpType.MISSILE_GUIDED, PowerUpType.MISSILE_PARALLEL, PowerUpType.MISSILE_SPRAY);
-                PowerUpAllocator powerUpAllocator = new PowerUpAllocator(powerUpTypes, dragonBodyCount, model.getLives());
-                for (int i = 0; i < dragonBodyCount; i++) {
-                    AlienDragonBody dragonBody = new AlienDragonBody(powerUpAllocator.allocate(), xStartPos, yStartPos, model, sounds, vibrator);
-                    dragonBodies.add(dragonBody);
+                final FollowableHunterConfig followableHunterConfig = (FollowableHunterConfig) alienConfig;
+                final int followerCount = followableHunterConfig.getNumberOfFollowers();
+                final PowerUpAllocator powerUpAllocator = powerUpAllocatorFactory.createAllocator(
+                        followableHunterConfig.getFollowerPowerUps(),
+                        followerCount);
+
+                // create followers
+                final List<IAlienFollower> followers = new ArrayList<>();
+                for (int i = 0; i < followerCount; i++) {
+                    followers.add(
+                            FollowerAlien
+                                    .builder()
+                                    .explosionFactory(explosionFactory)
+                                    .spawnFactory(spawnFactory)
+                                    .spinningFactory(spinningFactory)
+                                    .powerUpFactory(powerUpFactory)
+                                    .fireFactory(fireFactory)
+                                    .hitFactory(hitFactory)
+                                    .alienConfig(followableHunterConfig.getFollowerConfig())
+                                    .powerUpType(powerUpAllocator.allocate())
+                                    .xStart(xStartPos)
+                                    .yStart(yStartPos)
+                                    .build());
                 }
 
-                aliens.add(new AlienDragonHead(powerUp, xStartPos, yStartPos, delay, model, sounds, vibrator, dragonBodies));
-                aliens.addAll(dragonBodies);
+                // create head
+                aliens.add(
+                        FollowableHunterAlien
+                                .builder()
+                                .explosionFactory(explosionFactory)
+                                .spawnFactory(spawnFactory)
+                                .spinningFactory(spinningFactory)
+                                .powerUpFactory(powerUpFactory)
+                                .fireFactory(fireFactory)
+                                .hitFactory(hitFactory)
+                                .model(model)
+                                .alienConfig(followableHunterConfig)
+                                .powerUpType(powerUp)
+                                .xStart(xStartPos)
+                                .yStart(yStartPos)
+                                .timeDelayStart(delay)
+                                .followers(followers)
+                                .build());
+                aliens.addAll(followers);
+                break;
+
+            case STATIC:
+                aliens.add(
+                        StaticAlien
+                                .builder()
+                                .explosionFactory(explosionFactory)
+                                .spawnFactory(spawnFactory)
+                                .spinningFactory(spinningFactory)
+                                .powerUpFactory(powerUpFactory)
+                                .fireFactory(fireFactory)
+                                .hitFactory(hitFactory)
+                                .alienConfig((StaticConfig) alienConfig)
+                                .powerUpType(powerUp)
+                                .xStart(xStartPos)
+                                .yStart(yStartPos)
+                                .build());
+                break;
+
+            case SPLITTER:
+                SplitterConfig splitterConfig = (SplitterConfig) alienConfig;
+
+                for (AlienConfig splitAlienConfig : splitterConfig.getAlienConfigs()) {
+                    aliens.addAll(
+                            createAlien(
+                                    splitAlienConfig,
+                                    powerUp,    // same power-up for all split aliens
+                                    false,
+                                    false,
+                                    xStart,
+                                    yStart,
+                                    0f,
+                                    false));
+                }
+                break;
+
+            case DRIFTING:
+                DriftingConfig driftingConfig = (DriftingConfig) alienConfig;
+                aliens.add(
+                        DriftingAlien
+                                .builder()
+                                .explosionFactory(explosionFactory)
+                                .spawnFactory(spawnFactory)
+                                .spinningFactory(spinningFactory)
+                                .powerUpFactory(powerUpFactory)
+                                .fireFactory(fireFactory)
+                                .hitFactory(hitFactory)
+                                .alienConfig(driftingConfig)
+                                .powerUpType(powerUp)
+                                .xStart(xStartPos)
+                                .yStart(yStartPos)
+                                .timeDelayStart(delay)
+                                .restartImmediately(restartImmediately)
+                                .build());
+                break;
+
+            case DIRECTIONAL_RESETTABLE:
+                DirectionalResettableConfig directionalResettableConfig = (DirectionalResettableConfig) alienConfig;
+                aliens.add(
+                        DirectionalResettableAlien
+                                .builder()
+                                .explosionFactory(explosionFactory)
+                                .spawnFactory(spawnFactory)
+                                .spinningFactory(spinningFactory)
+                                .powerUpFactory(powerUpFactory)
+                                .fireFactory(fireFactory)
+                                .hitFactory(hitFactory)
+                                .alienConfig(directionalResettableConfig)
+                                .powerUpType(powerUp)
+                                .xStart(xStartPos)
+                                .yStart(yStartPos)
+                                .timeDelayStart(delay)
+                                .restartImmediately(restartImmediately)
+                                .build());
+                break;
+
+            case DIRECTIONAL_DESTROYABLE:
+                DirectionalDestroyableConfig directionalDestroyableConfig = (DirectionalDestroyableConfig) alienConfig;
+                aliens.add(
+                        DirectionalDestroyableAlien
+                                .builder()
+                                .explosionFactory(explosionFactory)
+                                .spawnFactory(spawnFactory)
+                                .spinningFactory(spinningFactory)
+                                .powerUpFactory(powerUpFactory)
+                                .fireFactory(fireFactory)
+                                .hitFactory(hitFactory)
+                                .alienConfig(directionalDestroyableConfig)
+                                .powerUpType(powerUp)
+                                .xStart(xStartPos)
+                                .yStart(yStartPos)
+                                .timeDelayStart(delay)
+                                .restartImmediately(restartImmediately)
+                                .build());
                 break;
 
             default:
@@ -203,22 +368,47 @@ public class AlienFactory {
      * Returns spawned alien bean containing alien and sound effect.
      */
     public SpawnedAliensDto createSpawnedAlien(
-            final AlienType alienType,
+            final AlienConfig alienConfig,
             final PowerUpType powerUpType,
             final int xStart,
             final int yStart) {
 
-        List<IAlien> aliens = new ArrayList<>();
+        final List<IAlien> aliens = createAlien(
+                alienConfig,
+                powerUpType,
+                false,
+                false,
+                xStart,
+                yStart,
+                0f,
+                false);
 
-        switch (alienType) {
-            case SPAWNED_INSECT:
-                aliens.add(new AlienSpawnedInsect(powerUpType, xStart, yStart, model, sounds, vibrator));
-                return new SpawnedAliensDto(aliens, SoundEffect.ALIEN_SPAWN);
-
-            default:
-                String errorMessage = "Error: Unrecognised AlienType: '" + alienType + "'";
-                Log.e(TAG, errorMessage);
-                throw new GalaxyForceException(errorMessage);
+        List<IAlien> reversedAlienList = new ArrayList<>();
+        for (IAlien eachAlien : Reversed.reversed(aliens)) {
+            reversedAlienList.add(eachAlien);
         }
+
+        return new SpawnedAliensDto(reversedAlienList, SoundEffect.ALIEN_SPAWN);
+    }
+
+    public SpawnedAliensDto createStaticExplosion(
+            final StaticExplosionConfig alienConfig,
+            final int x,
+            final int y) {
+
+        IAlien alien = StaticExplosion
+                .builder()
+                .explosionFactory(explosionFactory)
+                .spawnFactory(spawnFactory)
+                .spinningFactory(spinningFactory)
+                .powerUpFactory(powerUpFactory)
+                .fireFactory(fireFactory)
+                .hitFactory(hitFactory)
+                .alienConfig(alienConfig)
+                .x(x)
+                .y(y)
+                .build();
+
+        return new SpawnedAliensDto(Collections.singletonList(alien), SoundEffect.EXPLOSION);
     }
 }

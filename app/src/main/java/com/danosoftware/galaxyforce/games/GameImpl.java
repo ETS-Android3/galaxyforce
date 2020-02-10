@@ -11,6 +11,7 @@ import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
 import com.danosoftware.galaxyforce.input.GameInput;
 import com.danosoftware.galaxyforce.input.Input;
+import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.options.OptionMusic;
 import com.danosoftware.galaxyforce.options.OptionSound;
 import com.danosoftware.galaxyforce.options.OptionVibration;
@@ -18,15 +19,12 @@ import com.danosoftware.galaxyforce.screen.IScreen;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.screen.factories.ScreenFactory;
 import com.danosoftware.galaxyforce.services.configurations.ConfigurationService;
-import com.danosoftware.galaxyforce.services.configurations.ConfigurationServiceImpl;
-import com.danosoftware.galaxyforce.services.file.FileIO;
-import com.danosoftware.galaxyforce.services.file.GameFileIO;
+import com.danosoftware.galaxyforce.services.googleplay.GooglePlayServices;
 import com.danosoftware.galaxyforce.services.music.Music;
 import com.danosoftware.galaxyforce.services.music.MusicPlayerService;
 import com.danosoftware.galaxyforce.services.music.MusicPlayerServiceImpl;
 import com.danosoftware.galaxyforce.services.preferences.IPreferences;
 import com.danosoftware.galaxyforce.services.preferences.PreferencesInteger;
-import com.danosoftware.galaxyforce.services.preferences.PreferencesString;
 import com.danosoftware.galaxyforce.services.savedgame.SavedGame;
 import com.danosoftware.galaxyforce.services.savedgame.SavedGameImpl;
 import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
@@ -61,29 +59,26 @@ public class GameImpl implements Game {
 
     private final SoundPlayerService sounds;
     private final MusicPlayerService music;
+    private final VibrationService vibrator;
 
     public GameImpl(
             Context context,
             GLGraphics glGraphics,
             GLSurfaceView glView,
-            BillingService billingService) {
+            BillingService billingService,
+            GooglePlayServices playService,
+            ConfigurationService configurationService) {
 
         this.returningScreens = new ArrayDeque<>();
 
-        FileIO fileIO = new GameFileIO(context);
         Input input = new GameInput(glView, 1, 1);
         String versionName = versionName(context);
-
-        // set-up configuration service that uses shared preferences
-        // for persisting configuration
-        IPreferences<String> configPreferences = new PreferencesString(context);
-        ConfigurationService configurationService = new ConfigurationServiceImpl(configPreferences);
 
         boolean enableSounds = (configurationService.getSoundOption() == OptionSound.ON);
         this.sounds = new SoundPlayerServiceImpl(context, enableSounds);
 
         boolean enableVibrator = (configurationService.getVibrationOption() == OptionVibration.ON);
-        VibrationService vibrator = new VibrationServiceImpl(context, enableVibrator);
+        this.vibrator = new VibrationServiceImpl(context, enableVibrator);
 
         boolean enableMusic = (configurationService.getMusicOption() == OptionMusic.ON);
         this.music = new MusicPlayerServiceImpl(context, enableMusic);
@@ -91,16 +86,16 @@ public class GameImpl implements Game {
         this.music.play();
 
         IPreferences<Integer> savedGamePreferences = new PreferencesInteger(context);
-        SavedGame savedGame = new SavedGameImpl(savedGamePreferences);
+        SavedGame savedGame = new SavedGameImpl(savedGamePreferences, playService);
 
         this.screenFactory = new ScreenFactory(
                 glGraphics,
-                fileIO,
                 billingService,
                 configurationService,
                 sounds,
                 music,
                 vibrator,
+                playService,
                 savedGame,
                 context.getAssets(),
                 this,
@@ -133,9 +128,9 @@ public class GameImpl implements Game {
     }
 
     @Override
-    public void changeToGamePausedScreen(List<ISprite> pausedSprites) {
+    public void changeToGamePausedScreen(List<ISprite> pausedSprites, RgbColour backgroundColour) {
         switchScreenWithReturn(
-                screenFactory.newPausedGameScreen(pausedSprites));
+                screenFactory.newPausedGameScreen(pausedSprites, backgroundColour));
     }
 
     @Override
@@ -162,6 +157,7 @@ public class GameImpl implements Game {
     public void resume() {
         Log.i(GameConstants.LOG_TAG, LOCAL_TAG + ": Resume Game");
         screen.resume();
+        sounds.resume();
         music.play();
     }
 
@@ -169,6 +165,8 @@ public class GameImpl implements Game {
     public void pause() {
         Log.i(GameConstants.LOG_TAG, LOCAL_TAG + ": Pause Game");
         screen.pause();
+        sounds.pause();
+        vibrator.stop();
         music.pause();
     }
 

@@ -1,29 +1,35 @@
 package com.danosoftware.galaxyforce.sprites.game.missiles.aliens;
 
 import com.danosoftware.galaxyforce.sprites.common.AbstractCollidingSprite;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.view.Animation;
 
 public abstract class AbstractAlienMissile extends AbstractCollidingSprite implements IAlienMissile {
 
-    // how much energy will be lost by base when this missile hits it
-    private final int hitEnergy;
-
     private boolean isDestroyed;
+    private final Animation animation;
+
+    // state time used to select the current animation frame
+    private float stateTime;
 
     AbstractAlienMissile(
-            ISpriteIdentifier spriteId,
+            Animation animation,
             int x,
-            int y,
-            int hitEnergy) {
+            int y) {
 
-        super(spriteId, x, y);
-        this.hitEnergy = hitEnergy;
+        super(
+                animation.getKeyFrame(
+                        0,
+                        Animation.ANIMATION_LOOPING),
+                x,
+                y - (
+                        animation.getKeyFrame(
+                                0,
+                                Animation.ANIMATION_LOOPING))
+                        .getProperties()
+                        .getHeight() / 2);
         this.isDestroyed = false;
-    }
-
-    @Override
-    public int energyDamage() {
-        return hitEnergy;
+        this.animation = animation;
+        this.stateTime = 0f;
     }
 
     @Override
@@ -34,5 +40,11 @@ public abstract class AbstractAlienMissile extends AbstractCollidingSprite imple
     @Override
     public boolean isDestroyed() {
         return isDestroyed;
+    }
+
+    @Override
+    public void animate(float deltaTime) {
+        stateTime += deltaTime;
+        changeType(animation.getKeyFrame(stateTime, Animation.ANIMATION_LOOPING));
     }
 }

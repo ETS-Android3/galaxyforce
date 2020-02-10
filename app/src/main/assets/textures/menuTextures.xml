@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with TexturePacker https://www.codeandweb.com/texturepacker -->
+<!-- $TexturePacker:SmartUpdate:fbd33c9c82356523cacc4f039e6e70d4:72df9b2ffff037f623e6b6d88aa6dc84:c497cf166ca27ceddc98deb2edf60fa4$ -->
+<!--Format:
+n  => name of the sprite
+x  => sprite x pos in texture
+y  => sprite y pos in texture
+w  => sprite width (may be trimmed)
+h  => sprite height (may be trimmed)
+pX => x pos of the pivot point (relative to sprite width)
+pY => y pos of the pivot point (relative to sprite height)
+oX => sprite's x-corner offset (only available if trimmed)
+oY => sprite's y-corner offset (only available if trimmed)
+oW => sprite's original width (only available if trimmed)
+oH => sprite's original height (only available if trimmed)
+r => 'y' only set if sprite is rotated
+with polygon mode enabled:
+vertices   => points in sprite coordinate system (x0,y0,x1,y1,x2,y2, ...)
+verticesUV => points in sheet coordinate system (x0,y0,x1,y1,x2,y2, ...)
+triangles  => sprite triangulation, 3 vertex indices per triangle
+-->
+<TextureAtlas imagePath="menuTextures.png" width="1024" height="1024">
+    <sprite n="BaseLarge" x="0" y="216" w="128" h="128"/>
+    <sprite n="BaseTiltLarge" x="128" y="216" w="116" h="128"/>
+    <sprite n="blueButtonDown" x="530" y="0" w="322" h="104"/>
+    <sprite n="blueButtonUp" x="128" y="104" w="350" h="110"/>
+    <sprite n="GalaxyForceFont_30x38-crop" x="720" y="216" w="239" h="299"/>
+    <sprite n="goldButtonDown" x="852" y="0" w="166" h="104"/>
+    <sprite n="googlePlay" x="14" y="0" w="52" h="40"/>
+    <sprite n="greenButtonDown" x="410" y="0" w="120" h="104"/>
+    <sprite n="greenButtonUp" x="606" y="104" w="128" h="110"/>
+    <sprite n="greenLeftArrowDown" x="142" y="0" w="76" h="66"/>
+    <sprite n="greenLeftArrowUp" x="218" y="0" w="96" h="82"/>
+    <sprite n="greenRightArrowDown" x="66" y="0" w="76" h="66"/>
+    <sprite n="greenRightArrowUp" x="314" y="0" w="96" h="82"/>
+    <sprite n="greyButtonUp" x="734" y="104" w="180" h="112"/>
+    <sprite n="lockedButtonDown" x="478" y="104" w="128" h="110"/>
+    <sprite n="lockedButtonUp" x="0" y="104" w="128" h="110"/>
+    <sprite n="logo" x="244" y="216" w="476" h="156"/>
+    <sprite n="Pluto" x="0" y="515" w="580" h="303"/>
+    <sprite n="Star" x="0" y="0" w="2" h="2"/>
+    <sprite n="StarBLACK" x="6" y="0" w="2" h="2"/>
+    <sprite n="StarBLUE" x="2" y="0" w="2" h="2"/>
+    <sprite n="StarRED" x="4" y="0" w="2" h="2"/>
+    <sprite n="StarSPARKLE" x="8" y="0" w="6" h="6"/>
+</TextureAtlas>

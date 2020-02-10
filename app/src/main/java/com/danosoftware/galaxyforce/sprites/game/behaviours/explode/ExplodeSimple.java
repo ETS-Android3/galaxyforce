@@ -4,7 +4,7 @@ import com.danosoftware.galaxyforce.services.sound.SoundEffect;
 import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.services.vibration.VibrateTime;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
-import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 import com.danosoftware.galaxyforce.view.Animation;
 
@@ -24,21 +24,23 @@ public class ExplodeSimple implements ExplodeBehaviour {
 
     public ExplodeSimple(
             SoundPlayerService sounds,
-            VibrationService vibrator) {
-        this.animation = new Animation(
-                0.15f,
-                GameSpriteIdentifier.EXPLODE_01,
-                GameSpriteIdentifier.EXPLODE_02,
-                GameSpriteIdentifier.EXPLODE_03);
+            VibrationService vibrator,
+            Animation animation) {
+        this.animation = animation;
         this.sounds = sounds;
         this.vibrator = vibrator;
     }
 
     @Override
-    public void startExplosion() {
+    public void startExplosion(IAlien alien) {
         explosionTime = 0f;
         sounds.play(SoundEffect.EXPLOSION);
         vibrator.vibrate(VibrateTime.TINY);
+    }
+
+    @Override
+    public void startExplosionSilently() {
+        explosionTime = 0f;
     }
 
     @Override

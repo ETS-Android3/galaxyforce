@@ -1,6 +1,7 @@
 package com.danosoftware.galaxyforce;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
@@ -17,10 +18,24 @@ import com.danosoftware.galaxyforce.billing.BillingServiceImpl;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.games.Game;
 import com.danosoftware.galaxyforce.games.GameImpl;
+import com.danosoftware.galaxyforce.services.configurations.ConfigurationService;
+import com.danosoftware.galaxyforce.services.configurations.ConfigurationServiceImpl;
+import com.danosoftware.galaxyforce.services.googleplay.GooglePlayServices;
+import com.danosoftware.galaxyforce.services.preferences.IPreferences;
+import com.danosoftware.galaxyforce.services.preferences.PreferencesString;
 import com.danosoftware.galaxyforce.view.GLGraphics;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.tasks.Task;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
+import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_ALPHA;
+import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_BLUE;
+import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_GREEN;
+import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_RED;
+import static com.danosoftware.galaxyforce.constants.GameConstants.RC_SIGN_IN;
 
 public class MainActivity extends Activity {
 
@@ -49,6 +64,9 @@ public class MainActivity extends Activity {
     /* Billing Manager for In-App Billing Requests */
     private BillingManager mBillingManager;
 
+    /* Google Play Games Services */
+    private GooglePlayServices mPlayServices;
+
     /* runs when application initially starts */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +93,16 @@ public class MainActivity extends Activity {
         BillingManager.BillingUpdatesListener billingListener = (BillingManager.BillingUpdatesListener) billingService;
         this.mBillingManager = new BillingManager(this, billingListener);
 
+        // set-up configuration service that uses shared preferences
+        // for persisting configuration
+        IPreferences<String> configPreferences = new PreferencesString(this);
+        ConfigurationService configurationService = new ConfigurationServiceImpl(configPreferences);
+
+        // initialise play games services
+        this.mPlayServices = new GooglePlayServices(this, configurationService);
+
         // create instance of game
-        game = new GameImpl(this, glGraphics, glView, billingService);
+        game = new GameImpl(this, glGraphics, glView, billingService, mPlayServices, configurationService);
     }
 
     /* runs after onCreate or resuming after being in background */
@@ -95,6 +121,9 @@ public class MainActivity extends Activity {
                 && mBillingManager.getBillingClientResponseCode() == BillingClient.BillingResponse.OK) {
             mBillingManager.queryPurchases();
         }
+
+        // sign-in to google play services
+        mPlayServices.signInSilently();
     }
 
     /* runs when application is paused */
@@ -175,6 +204,17 @@ public class MainActivity extends Activity {
                         | View.SYSTEM_UI_FLAG_FULLSCREEN);
     }
 
+    // invoked with result on attempts to sign-in to Google Play Services.
+    // we will pass on result to our service to handle correctly.
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == RC_SIGN_IN) {
+            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+            mPlayServices.handleSignInResult(task);
+        }
+    }
+
     /**
      * Inner class to handle graphics
      */
@@ -227,6 +267,14 @@ public class MainActivity extends Activity {
         @Override
         public void onSurfaceCreated(GL10 gl, EGLConfig config) {
             Log.i(GameConstants.LOG_TAG, LOCAL_TAG + ": onSurfaceCreated");
+
+            // set game background colour.
+            // i.e. colour used when screen is cleared before each frame
+            gl.glClearColor(
+                    BACKGROUND_RED,
+                    BACKGROUND_GREEN,
+                    BACKGROUND_BLUE,
+                    BACKGROUND_ALPHA);
 
             glGraphics.setGl(gl);
 

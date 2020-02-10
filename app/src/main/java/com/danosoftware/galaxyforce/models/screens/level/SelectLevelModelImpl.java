@@ -17,7 +17,9 @@ import com.danosoftware.galaxyforce.controllers.touch.DetectButtonTouch;
 import com.danosoftware.galaxyforce.controllers.touch.SwipeTouch;
 import com.danosoftware.galaxyforce.games.Game;
 import com.danosoftware.galaxyforce.models.screens.ModelState;
+import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
+import com.danosoftware.galaxyforce.services.savedgame.HighestLevelChangeObserver;
 import com.danosoftware.galaxyforce.services.savedgame.SavedGame;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.starfield.StarAnimationType;
@@ -31,7 +33,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, BillingObserver {
+import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
+
+public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, BillingObserver, HighestLevelChangeObserver {
 
     /* logger tag */
     private static final String LOCAL_TAG = "SelectLevelModelImpl";
@@ -54,7 +58,7 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
     private int zone;
 
     // max wave unlocked
-    private final int maxWaveUnlocked;
+    private volatile int maxWaveUnlocked;
 
     // on-screen components
     private final StarField starField;
@@ -71,6 +75,9 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
     // reference to the billing service
     private final BillingService billingService;
 
+    // save game service
+    private final SavedGame savedGame;
+
     /*
      * Should we rebuild the screen sprites?
      * Normally triggered by a change in state from a billing thread.
@@ -86,6 +93,7 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
         this.game = game;
         this.controller = controller;
         this.billingService = billingService;
+        this.savedGame = savedGame;
         this.modelState = ModelState.RUNNING;
         this.reBuildAssets = false;
         this.messages = new ArrayList<>();
@@ -111,6 +119,9 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
 
         // register this model with the billing service
         billingService.registerPurchasesObserver(this);
+
+        // register for any changes in highest level unlocked
+        savedGame.registerHighestLevelChangeObserver(this);
 
         // refresh sprites and controllers
         refreshAssets();
@@ -314,6 +325,7 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
     @Override
     public void dispose() {
         billingService.unregisterPurchasesObserver(this);
+        savedGame.unregisterHighestLevelChangeObserver(this);
     }
 
     @Override
@@ -391,6 +403,11 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
     }
 
     @Override
+    public RgbColour background() {
+        return DEFAULT_BACKGROUND_COLOUR;
+    }
+
+    @Override
     public void pause() {
         // no implementation
     }
@@ -408,6 +425,14 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
     @Override
     public void onFullGamePurchaseStateChange(PurchaseState state) {
         Log.d(GameConstants.LOG_TAG, "Received full game purchase update: " + state.name());
+        this.reBuildAssets = true;
+    }
+
+    // called if the highest unlocked level has changed
+    @Override
+    public void onHighestLevelUnlockedChange(int level) {
+        Log.d(GameConstants.LOG_TAG, "Received updated highest level unlocked: " + level);
+        this.maxWaveUnlocked = level;
         this.reBuildAssets = true;
     }
 }

@@ -12,6 +12,7 @@ import com.danosoftware.galaxyforce.controllers.touch.DetectButtonTouch;
 import com.danosoftware.galaxyforce.games.Game;
 import com.danosoftware.galaxyforce.models.buttons.ButtonModel;
 import com.danosoftware.galaxyforce.models.buttons.ButtonType;
+import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
@@ -25,6 +26,10 @@ import com.danosoftware.galaxyforce.text.Text;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
+import static com.danosoftware.galaxyforce.constants.GameConstants.LOGO_Y_POS;
+import static com.danosoftware.galaxyforce.constants.GameConstants.PLANET_Y_POS;
+
 public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
 
     /* logger tag */
@@ -35,6 +40,7 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
     // sprites
     private final StarField starField;
     private final ISprite logo;
+    private final ISprite planet;
 
     // current visible buttons
     private final List<SpriteTextButton> buttons;
@@ -58,7 +64,8 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
         this.billingService = billingService;
         this.buttons = new ArrayList<>();
         this.starField = new StarField(starFieldTemplate, StarAnimationType.MENU);
-        this.logo = new SplashSprite(GameConstants.SCREEN_MID_X, 817, MenuSpriteIdentifier.GALAXY_FORCE);
+        this.logo = new SplashSprite(GameConstants.SCREEN_MID_X, LOGO_Y_POS, MenuSpriteIdentifier.GALAXY_FORCE);
+        this.planet = new SplashSprite(GameConstants.SCREEN_MID_X, PLANET_Y_POS, MenuSpriteIdentifier.PLUTO);
 
         // register this model with the billing service
         billingService.registerPurchasesObserver(this);
@@ -98,7 +105,7 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
          * button
          */
         if (billingService.getFullGamePurchaseState() == PurchaseState.NOT_PURCHASED) {
-            addNewMenuButton(0, "UPGRADE", ButtonType.UPGRADE);
+            addNewMenuButton(1, "UPGRADE", ButtonType.UPGRADE);
         }
     }
 
@@ -129,6 +136,7 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
 
         List<ISprite> sprites = new ArrayList<>();
         sprites.addAll(starField.getSprites());
+        sprites.add(planet);
         sprites.add(logo);
 
         for (SpriteTextButton button : buttons) {
@@ -196,6 +204,11 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
     @Override
     public void resume() {
         // no implementation
+    }
+
+    @Override
+    public RgbColour background() {
+        return DEFAULT_BACKGROUND_COLOUR;
     }
 
     @Override

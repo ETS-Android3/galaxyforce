@@ -13,11 +13,34 @@ apply plugin: 'com.android.application'
 android {
 
     /**
+     * This signings config allows the application to be signed when developing
+     * on a local device in debug mode. This is essential to test Google Play Services.
+     * To avoid adding these key details into our source code, the key-values can be
+     * stored within gradle.properties.
+     *
+     * These properties are optional to allow builds to succeed without them.
+     * This also allows builds to succeed on Circle CI.
+     *
+     * We do not include "release" signing configs as release builds are normally
+     * built from Android Studio, where key details must be supplied manually.
+     */
+    if(project.hasProperty("KEYSTORE_FILE")) {
+        signingConfigs {
+            debug {
+                storeFile file("$KEYSTORE_FILE")
+                storePassword "$KEYSTORE_PASSWORD"
+                keyAlias = "$KEY_ALIAS"
+                keyPassword "$KEY_PASSWORD"
+            }
+        }
+    }
+
+    /**
      * compileSdkVersion specifies the Android API level Gradle should use to
      * compile your app. This means your app can use the API features included in
      * this API level and lower.
      */
-    compileSdkVersion 27
+    compileSdkVersion 28
 
     /**
      * The defaultConfig block encapsulates default settings and entries for all
@@ -38,13 +61,13 @@ android {
         minSdkVersion 14
 
         // Specifies the API level used to test the app.
-        targetSdkVersion 27
+        targetSdkVersion 28
 
         // Defines the version number of your app.
-        versionCode 5
+        versionCode 26
 
         // Defines a user-friendly version name for your app.
-        versionName "0.05"
+        versionName "0.26"
     }
 
     /**
@@ -92,7 +115,8 @@ android {
             buildConfigField 'String', "public_key4", "\"$PUBLIC_KEY4\""
 
             minifyEnabled true // Enables code shrinking for the release build type.
-            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'proguard-rules.txt'
         }
     }
 }
@@ -106,17 +130,31 @@ android {
  * restricting which dependencies leak their APIs to other modules.
  */
 dependencies {
-    implementation 'com.android.support:support-v4:27.1.1'
     implementation 'com.android.billingclient:billing:1.2'
+    implementation 'com.google.android.gms:play-services-games:18.0.1'
+    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    implementation('com.google.apis:google-api-services-drive:v3-rev173-1.25.0') {
+        exclude group: 'org.apache.httpcomponents'
+    }
     implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.4'
     implementation 'com.fasterxml.jackson.core:jackson-core:2.9.4'
     implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.4'
+    implementation 'androidx.annotation:annotation:1.1.0'
+
+    // dependency below stops build parcelable error on release builds.
+    // play-services libraries bring in an earlier version (with a bug) of this library.
+    // see: https://stackoverflow.com/questions/57601897/android-studio-3-5-warning-the-rule-keep-public-class-extends-androidx-vers
+    implementation "androidx.versionedparcelable:versionedparcelable:1.1.0"
+
+    compileOnly 'org.projectlombok:lombok:1.18.8'
+    annotationProcessor 'org.projectlombok:lombok:1.18.8'
     testImplementation 'junit:junit:4.12'
     testImplementation 'org.hamcrest:hamcrest-library:1.3'
-    testImplementation 'org.mockito:mockito-core:2.8.9'
+    testImplementation 'org.mockito:mockito-core:2.23.0'
     testImplementation 'org.slf4j:slf4j-api:1.7.7'
     testImplementation 'ch.qos.logback:logback-classic:1.1.2'
     testImplementation 'ch.qos.logback:logback-core:1.1.2'
-    testImplementation 'org.powermock:powermock-api-mockito2:1.7.3'
-    testImplementation 'org.powermock:powermock-module-junit4:1.7.3'
+    testImplementation 'org.powermock:powermock-api-mockito2:2.0.0'
+    testImplementation 'org.powermock:powermock-module-junit4:2.0.0'
+    androidTestImplementation 'androidx.annotation:annotation:1.1.0'
 }

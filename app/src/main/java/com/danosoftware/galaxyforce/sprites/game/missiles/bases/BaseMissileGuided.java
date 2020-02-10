@@ -1,19 +1,20 @@
 package com.danosoftware.galaxyforce.sprites.game.missiles.bases;
 
+import com.danosoftware.galaxyforce.enumerations.BaseMissileSpeed;
 import com.danosoftware.galaxyforce.models.screens.game.GameModel;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
-import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.view.Animation;
 
 import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenAnySide;
 
+/**
+ * Guided missile that chases a chosen base.
+ */
 public class BaseMissileGuided extends AbstractBaseMissile {
 
-    /* missile sprite */
-    private static final ISpriteIdentifier SPRITE = GameSpriteIdentifier.LASER_BASE;
-
-    /* distance missile can move in pixels each second */
-    private static final int BASE_MISSILE_MOVE_PIXELS = 7 * 60;
+    private static final float PI_BY_TWO = (float) Math.PI / 2f;
+    private static final float TWO_PI = (float) Math.PI * 2f;
+    private static final float DEGREES_PER_PI = (float) (180f / Math.PI);
 
     /* time delay between missile direction changes */
     private static final float MISSILE_DIRECTION_CHANGE_DELAY = 0.1f;
@@ -21,8 +22,8 @@ public class BaseMissileGuided extends AbstractBaseMissile {
     /* maximum missile change direction in radians */
     private static final float MAX_DIRECTION_CHANGE_ANGLE = 0.3f;
 
-    /* how much energy will be lost by base when this missile hits it */
-    private static final int HIT_ENERGY = 2;
+    /* distance missile can move in pixels each second */
+    private final int missileSpeed;
 
     /* alien targeted by missile */
     private IAlien alien;
@@ -40,12 +41,21 @@ public class BaseMissileGuided extends AbstractBaseMissile {
     /* variable to store time passed since last missile direction change */
     private float timeSinceMissileDirectionChange;
 
-    public BaseMissileGuided(int xStart, int yStart, GameModel model) {
-        super(SPRITE, xStart, yStart, HIT_ENERGY);
+    public BaseMissileGuided(
+            final int xStart,
+            final int yStart,
+            final Animation animation,
+            final BaseMissileSpeed baseMissileSpeed,
+            final GameModel model) {
+        super(
+                animation,
+                xStart,
+                yStart);
         this.model = model;
+        this.missileSpeed = baseMissileSpeed.getSpeed();
 
         // initial angle (i.e. straight up)
-        this.angle = (float) (Math.PI / 2f);
+        this.angle = PI_BY_TWO;
 
         // calculate rotation and movement delta based on angle
         calculateMovements();
@@ -117,6 +127,13 @@ public class BaseMissileGuided extends AbstractBaseMissile {
                     alien.y() - this.y(),
                     alien.x() - this.x());
 
+            // adjust angle so that a result more negative than PI/2
+            // becomes a positive value. Gives missile a more direct
+            // route to target (otherwise goes the long-way around).
+            if (newAngle < -PI_BY_TWO) {
+                newAngle += TWO_PI;
+            }
+
             // don't allow sudden changes of direction. limit to MAX radians
             if ((newAngle - angle) > MAX_DIRECTION_CHANGE_ANGLE) {
                 angle += MAX_DIRECTION_CHANGE_ANGLE;
@@ -134,10 +151,10 @@ public class BaseMissileGuided extends AbstractBaseMissile {
     private void calculateMovements() {
         // convert angle to degrees for sprite rotation.
         // needs to be adjusted by 90 deg for correct rotation.
-        rotate((int) ((angle - Math.PI / 2f) * (180f / Math.PI)));
+        rotate((int) ((angle - PI_BY_TWO) * DEGREES_PER_PI));
 
         // calculate the deltas to be applied each move
-        this.xDelta = (int) (BASE_MISSILE_MOVE_PIXELS * (float) Math.cos(angle));
-        this.yDelta = (int) (BASE_MISSILE_MOVE_PIXELS * (float) Math.sin(angle));
+        this.xDelta = (int) (missileSpeed * (float) Math.cos(angle));
+        this.yDelta = (int) (missileSpeed * (float) Math.sin(angle));
     }
 }

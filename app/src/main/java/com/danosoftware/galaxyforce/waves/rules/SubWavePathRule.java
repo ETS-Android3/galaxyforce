@@ -1,12 +1,14 @@
 package com.danosoftware.galaxyforce.waves.rules;
 
 import com.danosoftware.galaxyforce.flightpath.paths.Path;
+import com.danosoftware.galaxyforce.flightpath.paths.PathSpeed;
 import com.danosoftware.galaxyforce.flightpath.translators.FlipXPointTranslator;
 import com.danosoftware.galaxyforce.flightpath.translators.FlipYPointTranslator;
 import com.danosoftware.galaxyforce.flightpath.translators.OffsetXPointTranslator;
 import com.danosoftware.galaxyforce.flightpath.translators.OffsetYPointTranslator;
 import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,6 +30,7 @@ public enum SubWavePathRule {
     SPACE_INVADER(
             new SubWavePathRuleProperties(
                     Path.SPACE_INVADER,
+                    PathSpeed.NORMAL,
                     20,
                     0.3f,
                     0,
@@ -41,6 +44,7 @@ public enum SubWavePathRule {
     SPACE_INVADER_REVERSE(
             new SubWavePathRuleProperties(
                     Path.SPACE_INVADER,
+                    PathSpeed.NORMAL,
                     20,
                     0.3f,
                     0,
@@ -57,6 +61,7 @@ public enum SubWavePathRule {
     FIGURE_OF_EIGHT(
             new SubWavePathRuleProperties(
                     Path.FIGURE_OF_EIGHT,
+                    PathSpeed.NORMAL,
                     20,
                     0.3f,
                     0,
@@ -70,6 +75,7 @@ public enum SubWavePathRule {
     BELL_CURVE(
             new SubWavePathRuleProperties(
                     Path.BELL_CURVE,
+                    PathSpeed.NORMAL,
                     20,
                     0.3f,
                     0,
@@ -83,6 +89,7 @@ public enum SubWavePathRule {
     DOUBLE_BELL_CURVE(
             new SubWavePathRuleProperties(
                     Path.BELL_CURVE,
+                    PathSpeed.NORMAL,
                     20,
                     0.3f,
                     0,
@@ -90,6 +97,7 @@ public enum SubWavePathRule {
             ),
             new SubWavePathRuleProperties(
                     Path.BELL_CURVE,
+                    PathSpeed.NORMAL,
                     20,
                     0.3f,
                     0,
@@ -105,6 +113,7 @@ public enum SubWavePathRule {
     LOOPER_ATTACK(
             new SubWavePathRuleProperties(
                     Path.LOOPER,
+                    PathSpeed.NORMAL,
                     20,
                     0.3f,
                     0,
@@ -118,6 +127,7 @@ public enum SubWavePathRule {
     TEAR_DROP_ATTACK(
             new SubWavePathRuleProperties(
                     Path.TEAR_DROP,
+                    PathSpeed.NORMAL,
                     20,
                     0.3f,
                     0,
@@ -127,6 +137,7 @@ public enum SubWavePathRule {
             ),
             new SubWavePathRuleProperties(
                     Path.TEAR_DROP,
+                    PathSpeed.NORMAL,
                     20,
                     0.3f,
                     0,
@@ -134,6 +145,7 @@ public enum SubWavePathRule {
             ),
             new SubWavePathRuleProperties(
                     Path.TEAR_DROP,
+                    PathSpeed.NORMAL,
                     20,
                     0.3f,
                     0,
@@ -150,6 +162,7 @@ public enum SubWavePathRule {
     CROSSING_STEP_ATTACK(
             new SubWavePathRuleProperties(
                     Path.BEZIER_STEP_UP,
+                    PathSpeed.NORMAL,
                     20,
                     0.3f,
                     0,
@@ -157,6 +170,7 @@ public enum SubWavePathRule {
             ),
             new SubWavePathRuleProperties(
                     Path.BEZIER_STEP_UP,
+                    PathSpeed.NORMAL,
                     20,
                     0.3f,
                     0,
@@ -173,6 +187,7 @@ public enum SubWavePathRule {
     CROSSOVER_EXIT_ATTACK(
             new SubWavePathRuleProperties(
                     Path.EXIT_STAGE_RIGHT,
+                    PathSpeed.NORMAL,
                     20,
                     0.3f,
                     0,
@@ -180,6 +195,7 @@ public enum SubWavePathRule {
             ),
             new SubWavePathRuleProperties(
                     Path.EXIT_STAGE_RIGHT,
+                    PathSpeed.NORMAL,
                     20,
                     0.3f,
                     0,
@@ -197,6 +213,7 @@ public enum SubWavePathRule {
     STAGGERED_BOUNCE_ATTACK(
             new SubWavePathRuleProperties(
                     Path.BOUNCE_DOWN_AND_UP,
+                    PathSpeed.NORMAL,
                     5,
                     0.3f,
                     0,
@@ -206,6 +223,7 @@ public enum SubWavePathRule {
             ),
             new SubWavePathRuleProperties(
                     Path.BOUNCE_DOWN_AND_UP,
+                    PathSpeed.NORMAL,
                     5,
                     0.3f,
                     0.5f,
@@ -215,6 +233,7 @@ public enum SubWavePathRule {
             ),
             new SubWavePathRuleProperties(
                     Path.BOUNCE_DOWN_AND_UP,
+                    PathSpeed.NORMAL,
                     5,
                     0.3f,
                     1f,
@@ -224,6 +243,7 @@ public enum SubWavePathRule {
             ),
             new SubWavePathRuleProperties(
                     Path.BOUNCE_DOWN_AND_UP,
+                    PathSpeed.NORMAL,
                     5,
                     0.3f,
                     1.5f,
@@ -233,6 +253,7 @@ public enum SubWavePathRule {
             ),
             new SubWavePathRuleProperties(
                     Path.BOUNCE_DOWN_AND_UP,
+                    PathSpeed.NORMAL,
                     5,
                     0.3f,
                     2f,
@@ -242,6 +263,7 @@ public enum SubWavePathRule {
             ),
             new SubWavePathRuleProperties(
                     Path.BOUNCE_DOWN_AND_UP,
+                    PathSpeed.NORMAL,
                     5,
                     0.3f,
                     2.5f,
@@ -251,9 +273,49 @@ public enum SubWavePathRule {
             )
     ),
 
+    /**
+     * row attack where 5 columns of aliens attack from top to bottom and
+     * then bounce back up. each row is delayed compared to the previous.
+     */
+    FLAT_ATTACK_ROW_1(
+            rowSubWave(0f)),
+    FLAT_ATTACK_ROW_2(
+            rowSubWave(0.3f)),
+    FLAT_ATTACK_ROW_3(
+            rowSubWave(0.6f)),
+    FLAT_ATTACK_ROW_4(
+            rowSubWave(0.9f)),
+
+
+
     WAVEY_LINE(
             new SubWavePathRuleProperties(
                     Path.SINGLE_ARC,
+                    PathSpeed.NORMAL,
+                    10,
+                    0.5f,
+                    0,
+                    false
+            )
+    ),
+
+    WAVEY_LINE_REVERSE(
+            new SubWavePathRuleProperties(
+                    Path.SINGLE_ARC,
+                    PathSpeed.NORMAL,
+                    10,
+                    0.5f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
+            )
+    ),
+
+    WAVEY_LINE_DOUBLE(
+            new SubWavePathRuleProperties(
+                    Path.SINGLE_ARC,
+                    PathSpeed.NORMAL,
                     10,
                     0.5f,
                     0,
@@ -261,6 +323,7 @@ public enum SubWavePathRule {
             ),
             new SubWavePathRuleProperties(
                     Path.SINGLE_ARC,
+                    PathSpeed.NORMAL,
                     10,
                     0.5f,
                     0,
@@ -278,6 +341,7 @@ public enum SubWavePathRule {
     VALLEY_DIVE(
             new SubWavePathRuleProperties(
                     Path.VALLEY_DROP,
+                    PathSpeed.FAST,
                     10,
                     1f,
                     0,
@@ -287,6 +351,7 @@ public enum SubWavePathRule {
     VALLEY_DIVE_INTERLEAVED(
             new SubWavePathRuleProperties(
                     Path.VALLEY_DROP,
+                    PathSpeed.FAST,
                     10,
                     1f,
                     0.5f,
@@ -294,15 +359,167 @@ public enum SubWavePathRule {
             )
     ),
 
+    VALLEY_DIVE_FLIPPED(
+            new SubWavePathRuleProperties(
+                    Path.VALLEY_DROP,
+                    PathSpeed.FAST,
+                    10,
+                    1f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipYPointTranslator(GAME_HEIGHT))
+            )
+    ),
+    VALLEY_DIVE_INTERLEAVED_FLIPPED(
+            new SubWavePathRuleProperties(
+                    Path.VALLEY_DROP,
+                    PathSpeed.FAST,
+                    10,
+                    1f,
+                    0.5f,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipYPointTranslator(GAME_HEIGHT))
+            )
+    ),
+
     WAVE_MOTHERSHIP(
             new SubWavePathRuleProperties(
                     Path.SINGLE_ARC,
+                    PathSpeed.NORMAL,
                     1,
                     0,
+                    0,
+                    true,
+                    new PointTranslatorChain()
+                            .add(new OffsetYPointTranslator(125))
+            )
+    ),
+
+    SINGLE_ARC(
+            new SubWavePathRuleProperties(
+                    Path.SINGLE_ARC,
+                    PathSpeed.VERY_SLOW,
+                    1,
+                    0,
+                    2.5f,
+                    true,
+                    new PointTranslatorChain()
+                            .add(new OffsetYPointTranslator(125))
+            )
+    ),
+
+    BOMBER_RUN(
+            new SubWavePathRuleProperties(
+                    Path.SPACE_INVADER,
+                    PathSpeed.NORMAL,
+                    1,
+                    0f,
                     0,
                     true
             )
     ),
+
+    STAGGERED_LEFT_AND_RIGHT(
+            new SubWavePathRuleProperties(
+                    Path.LEFT_AND_RIGHT,
+                    PathSpeed.NORMAL,
+                    1,
+                    0f,
+                    0.5f,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetYPointTranslator(GAME_HEIGHT - 230))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.LEFT_AND_RIGHT,
+                    PathSpeed.NORMAL,
+                    1,
+                    0f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetYPointTranslator(GAME_HEIGHT - 200))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.LEFT_AND_RIGHT,
+                    PathSpeed.NORMAL,
+                    1,
+                    0f,
+                    1f,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetYPointTranslator(GAME_HEIGHT - 200))
+            )
+    ),
+
+    STAGGERED_LEFT_AND_RIGHT_REVERSED(
+            new SubWavePathRuleProperties(
+                    Path.LEFT_AND_RIGHT,
+                    PathSpeed.NORMAL,
+                    1,
+                    0f,
+                    0.5f,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetYPointTranslator(GAME_HEIGHT - 230))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.LEFT_AND_RIGHT,
+                    PathSpeed.NORMAL,
+                    1,
+                    0f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetYPointTranslator(GAME_HEIGHT - 200))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.LEFT_AND_RIGHT,
+                    PathSpeed.NORMAL,
+                    1,
+                    0f,
+                    1f,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetYPointTranslator(GAME_HEIGHT - 200))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.LEFT_AND_RIGHT,
+                    PathSpeed.NORMAL,
+                    1,
+                    0f,
+                    0.5f,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
+                            .add(new OffsetYPointTranslator(GAME_HEIGHT - 430))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.LEFT_AND_RIGHT,
+                    PathSpeed.NORMAL,
+                    1,
+                    0f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
+                            .add(new OffsetYPointTranslator(GAME_HEIGHT - 400))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.LEFT_AND_RIGHT,
+                    PathSpeed.NORMAL,
+                    1,
+                    0f,
+                    1f,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
+                            .add(new OffsetYPointTranslator(GAME_HEIGHT - 400))
+            )
+    ),
+
 
     /**
      * One spiral path from top to bottom
@@ -310,8 +527,9 @@ public enum SubWavePathRule {
     SPIRAL(
             new SubWavePathRuleProperties(
                     Path.SPIRAL,
+                    PathSpeed.FAST,
                     10,
-                    1f,
+                    0.5f,
                     0,
                     false
             )
@@ -323,8 +541,9 @@ public enum SubWavePathRule {
     DOUBLE_SPIRAL(
             new SubWavePathRuleProperties(
                     Path.SPIRAL,
+                    PathSpeed.FAST,
                     10,
-                    1f,
+                    0.5f,
                     0,
                     false,
                     new PointTranslatorChain()
@@ -332,6 +551,7 @@ public enum SubWavePathRule {
             ),
             new SubWavePathRuleProperties(
                     Path.SPIRAL,
+                    PathSpeed.FAST,
                     10,
                     1f,
                     0,
@@ -347,11 +567,80 @@ public enum SubWavePathRule {
     WAVE_TRIANGULAR(
             new SubWavePathRuleProperties(
                     Path.TRIANGULAR,
+                    PathSpeed.FAST,
                     10,
-                    1f,
+                    0.25f,
                     0f,
-                    false
+                    false)
+    ),
+    WAVE_TRIANGULAR_REVERSED(
+            new SubWavePathRuleProperties(
+                    Path.TRIANGULAR,
+                    PathSpeed.FAST,
+                    10,
+                    0.25f,
+                    0f,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH)))
+    ),
+    SLIDE_FORMATION_LEFT_RIGHT(
+            new SubWavePathRuleProperties(
+                    Path.SLIDE_LEFT,
+                    PathSpeed.SLOW,
+                    1,
+                    0,
+                    0.25f,
+                    true,
+                    new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.SLIDE_CENTRE,
+                    PathSpeed.SLOW,
+                    1,
+                    0,
+                    0f,
+                    true,
+                    new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.SLIDE_RIGHT,
+                    PathSpeed.SLOW,
+                    1,
+                    0,
+                    0.25f,
+                    true,
+                    new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
             )
+    ),
+    SLIDE_FORMATION_RIGHT_LEFT(
+            new SubWavePathRuleProperties(
+            Path.SLIDE_LEFT,
+            PathSpeed.SLOW,
+                    1,
+                    0,
+                    0.25f,
+                    true
+    ),
+            new SubWavePathRuleProperties(
+            Path.SLIDE_CENTRE,
+            PathSpeed.SLOW,
+                    1,
+                    0,
+                    0f,
+                    true
+    ),
+            new SubWavePathRuleProperties(
+            Path.SLIDE_RIGHT,
+            PathSpeed.SLOW,
+                    1,
+                    0,
+                    0.25f,
+                    true
+    )
     );
 
     // list of properties for a sub-wave
@@ -361,10 +650,37 @@ public enum SubWavePathRule {
         this.subWaveProps = Arrays.asList(subWaveProps);
     }
 
+    SubWavePathRule(List<SubWavePathRuleProperties> subWaveProps) {
+        this.subWaveProps = subWaveProps;
+    }
+
     /**
      * Properties to create a sub-wave
      */
     public List<SubWavePathRuleProperties> subWaveProps() {
         return subWaveProps;
+    }
+
+    /**
+     * Creates a row attack
+     */
+    private static List<SubWavePathRuleProperties> rowSubWave(
+            final float delayStart) {
+        List<SubWavePathRuleProperties> subWaves = new ArrayList<>();
+
+        for (int col = 0; col < 6; col++) {
+            subWaves.add(new SubWavePathRuleProperties(
+                    Path.BOUNCE_DOWN_AND_UP,
+                    PathSpeed.NORMAL,
+                    1,
+                    0f,
+                    delayStart,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetXPointTranslator(40 + (col * 92)))
+            ));
+        }
+
+        return subWaves;
     }
 }

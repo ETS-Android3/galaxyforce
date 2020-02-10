@@ -27,9 +27,12 @@ import com.danosoftware.galaxyforce.models.assets.IGamePlayAssetsManager;
 import com.danosoftware.galaxyforce.models.assets.PowerUpsDto;
 import com.danosoftware.galaxyforce.models.assets.SpawnedAliensDto;
 import com.danosoftware.galaxyforce.models.screens.Model;
+import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.models.screens.flashing.FlashingText;
 import com.danosoftware.galaxyforce.models.screens.flashing.FlashingTextImpl;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
+import com.danosoftware.galaxyforce.services.achievements.AchievementService;
+import com.danosoftware.galaxyforce.services.achievements.CompletedWaveAchievements;
 import com.danosoftware.galaxyforce.services.savedgame.SavedGame;
 import com.danosoftware.galaxyforce.services.sound.SoundEffect;
 import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
@@ -52,6 +55,7 @@ import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.utilities.OverlapTester;
 import com.danosoftware.galaxyforce.waves.managers.WaveManager;
 import com.danosoftware.galaxyforce.waves.managers.WaveManagerImpl;
+import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocatorFactory;
 import com.danosoftware.galaxyforce.waves.utilities.WaveCreationUtils;
 import com.danosoftware.galaxyforce.waves.utilities.WaveFactory;
 
@@ -126,6 +130,9 @@ public class GamePlayModelImpl implements Model, GameModel {
     // saved game service
     private final SavedGame savedGame;
 
+    // achievements service
+    private final AchievementService achievements;
+
     /*
      * Instance variables required in GET_READY state
      */
@@ -136,6 +143,11 @@ public class GamePlayModelImpl implements Model, GameModel {
 
     // time since get ready message first appeared
     private float timeSinceGetReady;
+
+    // used to track if any lives were lost in current wave for achievements
+    // set to true when a new wave starts
+    // set to false whenever a life is lost
+    private boolean nolivesLostInWave;
 
     /*
      * ******************************************************
@@ -153,6 +165,7 @@ public class GamePlayModelImpl implements Model, GameModel {
             SoundPlayerService sounds,
             VibrationService vibrator,
             SavedGame savedGame,
+            AchievementService achievements,
             AssetManager assets,
             StarFieldTemplate starFieldTemplate) {
         this.game = game;
@@ -161,6 +174,7 @@ public class GamePlayModelImpl implements Model, GameModel {
         this.sounds = sounds;
         this.vibrator = vibrator;
         this.savedGame = savedGame;
+        this.achievements = achievements;
 
         // no text initially
         this.waveText = null;
@@ -217,7 +231,6 @@ public class GamePlayModelImpl implements Model, GameModel {
         gameSprites.add(pauseButton.getSprite());
         gameSprites.addAll(assets.getFlags());
         gameSprites.addAll(assets.getLives());
-        gameSprites.addAll(assets.getEnergyBar());
 
         return gameSprites;
     }
@@ -232,7 +245,6 @@ public class GamePlayModelImpl implements Model, GameModel {
         pausedSprites.addAll(assets.getPowerUps());
         pausedSprites.addAll(assets.getFlags());
         pausedSprites.addAll(assets.getLives());
-        pausedSprites.addAll(assets.getEnergyBar());
 
         return pausedSprites;
     }
@@ -251,8 +263,13 @@ public class GamePlayModelImpl implements Model, GameModel {
 
     @Override
     public void update(float deltaTime) {
-        switch (modelState) {
 
+        // slow down animation when base is exploding
+        if (primaryBase.isExploding()) {
+            deltaTime /= 2;
+        }
+
+        switch (modelState) {
             case PLAYING:
                 primaryBase.animate(deltaTime);
                 updatePlayingState();
@@ -264,7 +281,7 @@ public class GamePlayModelImpl implements Model, GameModel {
                 break;
 
             case PAUSE:
-                game.changeToGamePausedScreen(getPausedSprites());
+                game.changeToGamePausedScreen(getPausedSprites(), background());
                 this.modelState = previousModelState;
                 break;
 
@@ -310,6 +327,8 @@ public class GamePlayModelImpl implements Model, GameModel {
             this.previousModelState = this.modelState;
         }
         this.modelState = ModelState.PAUSE;
+        vibrator.stop();
+        sounds.pause();
     }
 
     /**
@@ -318,6 +337,12 @@ public class GamePlayModelImpl implements Model, GameModel {
     @Override
     public void resume() {
         Log.i(TAG, "Resume Game.");
+        sounds.resume();
+    }
+
+    @Override
+    public RgbColour background() {
+        return primaryBase.background();
     }
 
     /**
@@ -364,11 +389,6 @@ public class GamePlayModelImpl implements Model, GameModel {
     }
 
     @Override
-    public void energyUpdate(int energy) {
-        assets.updateEnergyBar(energy);
-    }
-
-    @Override
     public void addLife() {
         lives++;
         assets.setLives(lives);
@@ -388,7 +408,16 @@ public class GamePlayModelImpl implements Model, GameModel {
      * level.
      */
     private void updatePlayingState() {
-        if (alienManager.isWaveComplete()) {
+        if (isWaveComplete()) {
+
+            // reward user with end of wave achievements
+            achievements.waveCompleted(
+                    CompletedWaveAchievements
+                            .builder()
+                            .wave(wave)
+                            .nolivesLostInWave(nolivesLostInWave)
+                            .build()
+            );
 
             // check user is allowed to play next wave
             if (wave >= GameConstants.MAX_FREE_WAVE
@@ -424,7 +453,7 @@ public class GamePlayModelImpl implements Model, GameModel {
                 return;
             }
             // advance to next level
-            else {
+            else if (primaryBase.isActive()) {
                 Log.i(TAG, "Wave: New Wave");
                 wave++;
                 int maxLevelUnlocked = savedGame.getGameLevel();
@@ -440,20 +469,23 @@ public class GamePlayModelImpl implements Model, GameModel {
          * as set-up level will bypass the new base state.
          */
         if (primaryBase.isDestroyed()) {
+            nolivesLostInWave = false;
             /*
              * if destroyed object primary base then add new base and change
              * model state.
              */
             setupNewBase();
-        } else if (alienManager.isWaveComplete()) {
+        } else if (isWaveComplete() && primaryBase.isActive()) {
             /*
              * if base not destroyed and wave finished then start next level.
-             * special case: if the base and last alien was destroyed at the
-             * same time, then the new base state will handle the setting up of
-             * the next level after it leaves the new base state.
              */
             setupLevel();
         }
+    }
+
+    private boolean isWaveComplete() {
+        return alienManager.isWaveComplete() &&
+                assets.alienMissilesDestroyed();
     }
 
     /**
@@ -471,13 +503,21 @@ public class GamePlayModelImpl implements Model, GameModel {
 
             /*
              * check for base missiles and alien collisions.
+             *
              * we also check if base missile and alien have collided before.
              * base missiles can only damage the same alien once.
              * used for missile implementations that do not destroy
              * themselves on initial collision (e.g. laser).
+             *
+             * lastly, each missile could already be destroyed if it has hit another alien
+             * in the current collision detection loop. So, we also check for this.
+             * Failure to do this, could result in a single base missile destroying
+             * multiple closely located aliens.
              */
             for (IBaseMissile eachBaseMissile : assets.getBaseMissiles()) {
-                if (checkCollision(eachAlien, eachBaseMissile) && !eachBaseMissile.hitBefore(eachAlien)) {
+                if (checkCollision(eachAlien, eachBaseMissile)
+                        && !eachBaseMissile.hitBefore(eachAlien)
+                        && !eachBaseMissile.isDestroyed()) {
                     eachAlien.onHitBy(eachBaseMissile);
                 }
             }
@@ -497,6 +537,7 @@ public class GamePlayModelImpl implements Model, GameModel {
                 if (checkCollision(eachPowerUp, eachBase)) {
                     eachBase.collectPowerUp(eachPowerUp);
                     sounds.play(SoundEffect.POWER_UP_COLLIDE);
+                    achievements.powerUpCollected(eachPowerUp.getPowerUpType());
                 }
             }
         }
@@ -526,6 +567,9 @@ public class GamePlayModelImpl implements Model, GameModel {
 
         // set up get ready text and put model in get ready state.
         setupGetReady();
+
+        // reset lives lost for new wave
+        this.nolivesLostInWave = true;
     }
 
     /**
@@ -599,10 +643,13 @@ public class GamePlayModelImpl implements Model, GameModel {
         if (lives > 0) {
             // create new base at default position and change state
             addNewBase();
+            // new base starts as shielded to avoid being immediately destroyed by current wave
+            primaryBase.addShield(2f);
         }
         /* if no lives left then game over */
         else {
             this.modelState = ModelState.GAME_OVER;
+            achievements.gameOver();
         }
     }
 
@@ -616,11 +663,12 @@ public class GamePlayModelImpl implements Model, GameModel {
             GameModel model) {
         PathLoader pathLoader = new PathLoader(assets);
         PathFactory pathFactory = new PathFactory(pathLoader);
-        AlienFactory alienFactory = new AlienFactory(model, sounds, vibrator);
-        WaveCreationUtils creationUtils = new WaveCreationUtils(model, alienFactory, pathFactory);
-        WaveFactory waveFactory = new WaveFactory(creationUtils);
+        PowerUpAllocatorFactory powerUpAllocatorFactory = new PowerUpAllocatorFactory(model);
+        AlienFactory alienFactory = new AlienFactory(model, powerUpAllocatorFactory, sounds, vibrator);
+        WaveCreationUtils creationUtils = new WaveCreationUtils(alienFactory, pathFactory, powerUpAllocatorFactory);
+        WaveFactory waveFactory = new WaveFactory(creationUtils, powerUpAllocatorFactory);
         WaveManager waveManager = new WaveManagerImpl(waveFactory);
 
-        return new AlienManager(waveManager);
+        return new AlienManager(waveManager, achievements);
     }
 }

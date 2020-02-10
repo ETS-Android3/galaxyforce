@@ -4,29 +4,52 @@ import com.danosoftware.galaxyforce.textures.Texture;
 
 public enum MenuSpriteIdentifier implements ISpriteIdentifier {
 
-    GALAXY_FORCE("GalaxyForceLogo.png"),
+    // main logo
+    GALAXY_FORCE("logo"),
 
-    MAIN_MENU("BlueButton360px.png"), MAIN_MENU_PRESSED("BlueButton360pxPressed.png"),
+    // google play icon
+    GOOGLE_PLAY("googlePlay"),
 
-    LEVEL_FRAME("GreenButton128px.png"), LEVEL_FRAME_PRESSED("GreenButton128pxPressed.png"),
+    // menu buttons
+    MAIN_MENU("blueButtonUp"),
+    MAIN_MENU_PRESSED("blueButtonDown"),
 
-    LEVEL_FRAME_LOCKED("LockedButton128px.png"), LEVEL_FRAME_LOCKED_PRESSED("LockedButton128pxPressed.png"),
+    // wave select buttons
+    LEVEL_FRAME("greenButtonUp"),
+    LEVEL_FRAME_PRESSED("greenButtonDown"),
 
-    NEXT_LEVEL("NextLevels.png"), NEXT_LEVEL_PRESSED("NextLevelsPressed.png"),
+    // locked wave buttons
+    LEVEL_FRAME_LOCKED("lockedButtonUp"),
+    LEVEL_FRAME_LOCKED_PRESSED("lockedButtonDown"),
 
-    PREVIOUS_LEVEL("PreviousLevels.png"), PREVIOUS_LEVEL_PRESSED("PreviousLevelsPressed.png"),
+    // next zone buttons
+    NEXT_LEVEL("greenRightArrowUp"),
+    NEXT_LEVEL_PRESSED("greenRightArrowDown"),
 
-    OPTION_UNSELECTED("GreyButton180px.png"), OPTION_SELECTED("GoldButton180pxPressed.png"),
+    // previous zone buttons
+    PREVIOUS_LEVEL("greenLeftArrowUp"),
+    PREVIOUS_LEVEL_PRESSED("greenLeftArrowDown"),
 
-//    FACEBOOK("FaceBookOriginalButton128px.png"), FACEBOOK_PRESSED("FaceBookOriginalButton128pxPressed.png"),
+    // option buttons
+    OPTION_UNSELECTED("greyButtonUp"),
+    OPTION_SELECTED("goldButtonDown"),
 
-//    TWITTER("TwitterOriginalButton128px.png"), TWITTER_PRESSED("TwitterButtonOriginal128pxPressed.png"),
+    // stars
+    STAR("Star"),
+    STAR_BLACK("StarBLACK"),
+    STAR_RED("StarRED"),
+    STAR_BLUE("StarBLUE"),
+    STAR_SPARKLE("StarSPARKLE"),
 
-    STAR("Star.png"), STAR_BLACK("StarBLACK.png"), STAR_RED("StarRED.png"), STAR_BLUE("StarBLUE.png"), STAR_SPARKLE("StarSPARKLE.png"),
+    // pluto
+    PLUTO("Pluto"),
 
-    BASE("shooterSmall.png"),
+    // bases
+    BASE("BaseLarge"),
+    BASE_TILT("BaseTiltLarge"),
 
-    FONT_MAP("GalaxyForceFont_30x38.png");
+    // fonts
+    FONT_MAP("GalaxyForceFont_30x38-crop");
 
 
     private final String name;
@@ -51,5 +74,15 @@ public enum MenuSpriteIdentifier implements ISpriteIdentifier {
     @Override
     public void updateProperties(Texture texture) {
         this.properties = new SpriteProperties(name, texture);
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public int boundsReduction() {
+        return 0;
     }
 }

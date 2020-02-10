@@ -53,6 +53,13 @@ public enum Path {
     STRAIGHT_DOWN("straightDown.json"),
 
     /**
+     * straight line across screen from left to right and then back again.
+     * Designed to be adjusted in y-axis so horiontal path at any y-position can
+     * be used.
+     */
+    LEFT_AND_RIGHT("leftAndRight.json"),
+
+    /**
      * straight line down screen from top to near bottom then bounce up again.
      * designed to be adjusted in x-axis so any straight line path from top to
      * bottom at any x-position can be used.
@@ -83,7 +90,14 @@ public enum Path {
     /*
      * Spirals down the screen from top to bottom
      */
-    SPIRAL("spiral.json");
+    SPIRAL("spiral.json"),
+
+    /*
+     * Slides from top-right to bottom-left
+     */
+    SLIDE_LEFT("slideLeft.json"),
+    SLIDE_CENTRE("slideCentre.json"),
+    SLIDE_RIGHT("slideRight.json");
 
 
     // file name holding path data
