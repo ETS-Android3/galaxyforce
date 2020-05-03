@@ -234,100 +234,13 @@ public class WaveFactory {
                                 )
                         )
                 );
-                //break;
-
-                /// end wave 1
-
-                // old wave 1
-
-                // triangular attack from left-to-right
-                subWaves.add(
-                        createSubWave(
-                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                new SubWavePathConfig(
-                                        SubWavePathRule.WAVE_TRIANGULAR,
-                                        PathConfig
-                                                .builder()
-                                                .alienCharacter(AlienCharacter.OCTOPUS)
-                                                .energy(1)
-                                                .missileConfig(
-                                                        MissileFiringConfig
-                                                                .builder()
-                                                                .missileType(AlienMissileType.DOWNWARDS)
-                                                                .missileCharacter(AlienMissileCharacter.LASER)
-                                                                .missileSpeed(AlienMissileSpeed.MEDIUM)
-                                                                .missileFrequency(6.5f)
-                                                                .build())
-                                                .build(),
-                                        Collections.singletonList(PowerUpType.LIFE)
-                                )
-                        )
-                );
-                // triangular attack from right-to-left
-                subWaves.add(
-                        createSubWave(
-                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                new SubWavePathConfig(
-                                        SubWavePathRule.WAVE_TRIANGULAR_REVERSED,
-                                        PathConfig
-                                                .builder()
-                                                .alienCharacter(AlienCharacter.OCTOPUS)
-                                                .energy(1)
-                                                .missileConfig(
-                                                        MissileFiringConfig
-                                                                .builder()
-                                                                .missileType(AlienMissileType.DOWNWARDS)
-                                                                .missileCharacter(AlienMissileCharacter.LASER)
-                                                                .missileSpeed(AlienMissileSpeed.MEDIUM)
-                                                                .missileFrequency(6.5f)
-                                                                .build())
-                                                .build(),
-                                        Collections.singletonList(PowerUpType.MISSILE_GUIDED)
-                                )
-                        )
-                );
-                // both triangular attacks at same time
-                subWaves.add(
-                        createSubWave(
-                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                new SubWavePathConfig(
-                                        SubWavePathRule.WAVE_TRIANGULAR,
-                                        PathConfig
-                                                .builder()
-                                                .alienCharacter(AlienCharacter.OCTOPUS)
-                                                .energy(1)
-                                                .missileConfig(
-                                                        MissileFiringConfig
-                                                                .builder()
-                                                                .missileType(AlienMissileType.DOWNWARDS)
-                                                                .missileCharacter(AlienMissileCharacter.LASER)
-                                                                .missileSpeed(AlienMissileSpeed.MEDIUM)
-                                                                .missileFrequency(6.5f)
-                                                                .build())
-                                                .build(),
-                                        Collections.singletonList(PowerUpType.MISSILE_BLAST)
-                                ),
-                                new SubWavePathConfig(
-                                        SubWavePathRule.WAVE_TRIANGULAR_REVERSED,
-                                        PathConfig
-                                                .builder()
-                                                .alienCharacter(AlienCharacter.OCTOPUS)
-                                                .energy(1)
-                                                .missileConfig(
-                                                        MissileFiringConfig
-                                                                .builder()
-                                                                .missileType(AlienMissileType.DOWNWARDS)
-                                                                .missileCharacter(AlienMissileCharacter.LASER)
-                                                                .missileSpeed(AlienMissileSpeed.MEDIUM)
-                                                                .missileFrequency(6.5f)
-                                                                .build())
-                                                .build(),
-                                        NO_POWER_UPS
-                                )
-                        )
-                );
                 break;
 
+            /**
+             * Diamond formation of aliens followed by a wall of aliens.
+             * Wall of aliens are unable to fire.
+             * Starts with formation of Droopy, followed by Zogg and then Circuit
+             */
             case 2:
 
                 subWaves.add(
@@ -356,14 +269,6 @@ public class WaveFactory {
                                                 .builder()
                                                 .alienCharacter(AlienCharacter.DROOPY)
                                                 .energy(1)
-//                                                .missileConfig(
-//                                                        MissileFiringConfig
-//                                                                .builder()
-//                                                                .missileType(AlienMissileType.DOWNWARDS)
-//                                                                .missileCharacter(AlienMissileCharacter.LASER)
-//                                                                .missileSpeed(AlienMissileSpeed.MEDIUM)
-//                                                                .missileFrequency(6.5f)
-//                                                                .build())
                                                 .build(),
                                         NO_POWER_UPS
                                 ),
@@ -390,14 +295,6 @@ public class WaveFactory {
                                                 .builder()
                                                 .alienCharacter(AlienCharacter.ZOGG)
                                                 .energy(1)
-//                                                .missileConfig(
-//                                                        MissileFiringConfig
-//                                                                .builder()
-//                                                                .missileType(AlienMissileType.DOWNWARDS)
-//                                                                .missileCharacter(AlienMissileCharacter.LASER)
-//                                                                .missileSpeed(AlienMissileSpeed.MEDIUM)
-//                                                                .missileFrequency(6.5f)
-//                                                                .build())
                                                 .build(),
                                         NO_POWER_UPS
                                 ),
@@ -406,7 +303,7 @@ public class WaveFactory {
                                         PathConfig
                                                 .builder()
                                                 .alienCharacter(AlienCharacter.CIRCUIT)
-                                                .energy(1)
+                                                .energy(2)
                                                 .spinningConfig(
                                                         SpinningFixedAngularConfig
                                                                 .builder()
@@ -416,7 +313,7 @@ public class WaveFactory {
                                                         MissileFiringConfig
                                                                 .builder()
                                                                 .missileType(AlienMissileType.DOWNWARDS)
-                                                                .missileCharacter(AlienMissileCharacter.LASER)
+                                                                .missileCharacter(AlienMissileCharacter.LIGHTNING)
                                                                 .missileSpeed(AlienMissileSpeed.MEDIUM)
                                                                 .missileFrequency(6.5f)
                                                                 .build())
@@ -428,20 +325,12 @@ public class WaveFactory {
                                         PathConfig
                                                 .builder()
                                                 .alienCharacter(AlienCharacter.CIRCUIT)
-                                                .energy(1)
+                                                .energy(2)
                                                 .spinningConfig(
                                                         SpinningFixedAngularConfig
                                                                 .builder()
                                                                 .angularSpeed(70)
                                                                 .build())
-//                                                .missileConfig(
-//                                                        MissileFiringConfig
-//                                                                .builder()
-//                                                                .missileType(AlienMissileType.DOWNWARDS)
-//                                                                .missileCharacter(AlienMissileCharacter.LASER)
-//                                                                .missileSpeed(AlienMissileSpeed.MEDIUM)
-//                                                                .missileFrequency(6.5f)
-//                                                                .build())
                                                 .build(),
                                         NO_POWER_UPS
                                 )
@@ -449,6 +338,10 @@ public class WaveFactory {
                 );
                 break;
 
+            /**
+             * Waves of different aliens drop down in diamond formation and then return to
+             * top of screen one after the other.
+             */
             case 3:
 
                 subWaves.add(
@@ -565,75 +458,6 @@ public class WaveFactory {
                                                                 .build())
                                                 .build(),
                                         NO_POWER_UPS
-                                )
-                        )
-                );
-
-                // old wave 3
-
-                subWaves.add(
-                        createSubWave(
-                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                new SubWavePathConfig(
-                                        SubWavePathRule.WAVEY_LINE,
-                                        PathConfig
-                                                .builder()
-                                                .alienCharacter(AlienCharacter.OCTOPUS)
-                                                .energy(1)
-                                                .missileConfig(
-                                                        MissileFiringConfig
-                                                                .builder()
-                                                                .missileType(AlienMissileType.DOWNWARDS)
-                                                                .missileCharacter(AlienMissileCharacter.LASER)
-                                                                .missileSpeed(AlienMissileSpeed.MEDIUM)
-                                                                .missileFrequency(6.5f)
-                                                                .build())
-                                                .build(),
-                                        NO_POWER_UPS
-                                )
-                        )
-                );
-                subWaves.add(
-                        createSubWave(
-                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                new SubWavePathConfig(
-                                        SubWavePathRule.WAVEY_LINE_REVERSE,
-                                        PathConfig
-                                                .builder()
-                                                .alienCharacter(AlienCharacter.OCTOPUS)
-                                                .energy(1)
-                                                .missileConfig(
-                                                        MissileFiringConfig
-                                                                .builder()
-                                                                .missileType(AlienMissileType.DOWNWARDS)
-                                                                .missileCharacter(AlienMissileCharacter.LASER)
-                                                                .missileSpeed(AlienMissileSpeed.MEDIUM)
-                                                                .missileFrequency(6.5f)
-                                                                .build())
-                                                .build(),
-                                        NO_POWER_UPS
-                                )
-                        )
-                );
-                subWaves.add(
-                        createSubWave(
-                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                new SubWavePathConfig(
-                                        SubWavePathRule.WAVEY_LINE_DOUBLE,
-                                        PathConfig
-                                                .builder()
-                                                .alienCharacter(AlienCharacter.OCTOPUS)
-                                                .energy(1)
-                                                .missileConfig(
-                                                        MissileFiringConfig
-                                                                .builder()
-                                                                .missileType(AlienMissileType.DOWNWARDS)
-                                                                .missileCharacter(AlienMissileCharacter.LASER)
-                                                                .missileSpeed(AlienMissileSpeed.MEDIUM)
-                                                                .missileFrequency(6.5f)
-                                                                .build())
-                                                .build(),
-                                        Collections.singletonList(PowerUpType.MISSILE_GUIDED)
                                 )
                         )
                 );
@@ -803,6 +627,9 @@ public class WaveFactory {
 
                 // ????????
 
+                /**
+                 * Insect Motherships move at top of screen while spawning aliens that drop downwards.
+                 */
             case 6:
 
                 subWaves.add(
@@ -884,32 +711,6 @@ public class WaveFactory {
                                                                 .build())
                                                 .build(),
                                         Collections.singletonList(PowerUpType.SHIELD)
-                                )
-                        )
-                );
-
-
-                // old wave 6
-
-                subWaves.add(
-                        createSubWave(
-                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                new SubWavePathConfig(
-                                        SubWavePathRule.WAVEY_LINE_DOUBLE,
-                                        PathConfig
-                                                .builder()
-                                                .alienCharacter(AlienCharacter.OCTOPUS)
-                                                .energy(1)
-                                                .missileConfig(
-                                                        MissileFiringConfig
-                                                                .builder()
-                                                                .missileType(AlienMissileType.DOWNWARDS)
-                                                                .missileCharacter(AlienMissileCharacter.LASER)
-                                                                .missileSpeed(AlienMissileSpeed.MEDIUM)
-                                                                .missileFrequency(6.5f)
-                                                                .build())
-                                                .build(),
-                                        Collections.singletonList(PowerUpType.MISSILE_SPRAY)
                                 )
                         )
                 );
