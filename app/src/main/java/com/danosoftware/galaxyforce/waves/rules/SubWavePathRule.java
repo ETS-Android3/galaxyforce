@@ -10,6 +10,7 @@ import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
@@ -278,13 +279,13 @@ public enum SubWavePathRule {
      * then bounce back up. each row is delayed compared to the previous.
      */
     FLAT_ATTACK_ROW_1(
-            rowSubWave(0f)),
+            descendingRowSubWave(0f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)),
     FLAT_ATTACK_ROW_2(
-            rowSubWave(0.3f)),
+            descendingRowSubWave(0.3f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)),
     FLAT_ATTACK_ROW_3(
-            rowSubWave(0.6f)),
+            descendingRowSubWave(0.6f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)),
     FLAT_ATTACK_ROW_4(
-            rowSubWave(0.9f)),
+            descendingRowSubWave(0.9f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)),
 
 
 
@@ -309,6 +310,20 @@ public enum SubWavePathRule {
                     false,
                     new PointTranslatorChain()
                             .add(new FlipXPointTranslator(GAME_WIDTH))
+            )
+    ),
+
+    WAVEY_LINE_REVERSE_LOWER(
+            new SubWavePathRuleProperties(
+                    Path.SINGLE_ARC,
+                    PathSpeed.NORMAL,
+                    10,
+                    0.5f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
+                            .add(new OffsetYPointTranslator(-200))
             )
     ),
 
@@ -419,6 +434,163 @@ public enum SubWavePathRule {
                     0,
                     true
             )
+    ),
+
+
+    DROPPERS(
+            new SubWavePathRuleProperties(
+                    Path.STRAIGHT_DOWN,
+                    PathSpeed.SLOW,
+                    1,
+                    2f,
+                    0.75f,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetXPointTranslator(SCREEN_MID_X - (SCREEN_MID_X / 2)))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.STRAIGHT_DOWN,
+                    PathSpeed.SLOW,
+                    1,
+                    2f,
+                    0.25f,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetXPointTranslator(SCREEN_MID_X))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.STRAIGHT_DOWN,
+                    PathSpeed.SLOW,
+                    1,
+                    2f,
+                    0.75f,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetXPointTranslator(SCREEN_MID_X + (SCREEN_MID_X / 2)))
+            )
+    ),
+
+    DIAMOND_BOUNCERS_ZERO(
+            diamondSubWave(0f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)
+    ),
+
+    DIAMOND_BOUNCERS_FIVE(
+            diamondSubWave(5f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)
+    ),
+
+    DIAMOND_BOUNCERS_TEN(
+            diamondSubWave(10f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)
+    ),
+
+    DIAMOND_DROPPERS_ZERO(
+            diamondSubWave(0f, Path.STRAIGHT_DOWN, PathSpeed.SLOW)
+    ),
+
+    DIAMOND_DROPPERS_FIVE(
+            diamondSubWave(5f, Path.STRAIGHT_DOWN, PathSpeed.SLOW)
+    ),
+
+    DIAMOND_DROPPERS_TEN(
+            diamondSubWave(10f, Path.STRAIGHT_DOWN, PathSpeed.SLOW)
+    ),
+
+    ROW_BOUNCERS_THREE(
+            descendingRowSubWave(3f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)
+    ),
+    ROW_BOUNCERS_EIGHT(
+            descendingRowSubWave(8f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)
+    ),
+    ROW_BOUNCERS_THIRTEEN(
+            descendingRowSubWave(13f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)
+    ),
+
+    ROW_DROPPERS_THREE(
+            descendingRowSubWave(3f, Path.STRAIGHT_DOWN, PathSpeed.SLOW)
+    ),
+    ROW_DROPPERS_EIGHT(
+            descendingRowSubWave(8f, Path.STRAIGHT_DOWN, PathSpeed.SLOW)
+    ),
+    ROW_DROPPERS_THIRTEEN(
+            descendingRowSubWave(13f, Path.STRAIGHT_DOWN, PathSpeed.SLOW)
+    ),
+
+//    DIAMOND_DROPPERS(
+//            new SubWavePathRuleProperties(
+//                    Path.STRAIGHT_DOWN,
+//                    PathSpeed.SLOW,
+//                    1,
+//                    0f,
+//                    1f,
+//                    false,
+//                    new PointTranslatorChain()
+//                            .add(new OffsetXPointTranslator(SCREEN_MID_X - (2 * (SCREEN_MID_X / 3))))
+//            ),
+//            new SubWavePathRuleProperties(
+//                    Path.STRAIGHT_DOWN,
+//                    PathSpeed.SLOW,
+//                    2,
+//                    1f,
+//                    0.5f,
+//                    false,
+//                    new PointTranslatorChain()
+//                            .add(new OffsetXPointTranslator(SCREEN_MID_X - (SCREEN_MID_X / 3)))
+//            ),
+//            new SubWavePathRuleProperties(
+//                    Path.STRAIGHT_DOWN,
+//                    PathSpeed.SLOW,
+//                    2,
+//                    2f,
+//                    0f,
+//                    false,
+//                    new PointTranslatorChain()
+//                            .add(new OffsetXPointTranslator(SCREEN_MID_X))
+//            ),
+//            new SubWavePathRuleProperties(
+//                    Path.STRAIGHT_DOWN,
+//                    PathSpeed.SLOW,
+//                    2,
+//                    1f,
+//                    0.5f,
+//                    false,
+//                    new PointTranslatorChain()
+//                            .add(new OffsetXPointTranslator(SCREEN_MID_X + (SCREEN_MID_X / 3)))
+//            ),
+//            new SubWavePathRuleProperties(
+//                    Path.STRAIGHT_DOWN,
+//                    PathSpeed.SLOW,
+//                    1,
+//                    0f,
+//                    1f,
+//                    false,
+//                    new PointTranslatorChain()
+//                            .add(new OffsetXPointTranslator(SCREEN_MID_X + (2 * (SCREEN_MID_X / 3))))
+//            )
+//    ),
+
+    LEFT_AND_RIGHT_ROW_ONE(
+            crossingRowSubWave(GAME_HEIGHT - 230, Path.LEFT_AND_RIGHT, PathSpeed.NORMAL)
+    ),
+    LEFT_AND_RIGHT_ROW_TWO(
+            crossingRowSubWave(GAME_HEIGHT - 320, Path.LEFT_AND_RIGHT, PathSpeed.NORMAL)
+    ),
+    LEFT_AND_RIGHT_ROW_THREE(
+            crossingRowSubWave(GAME_HEIGHT - 410, Path.LEFT_AND_RIGHT, PathSpeed.NORMAL)
+    ),
+    LEFT_AND_RIGHT_ROW_FOUR(
+            crossingRowSubWave(GAME_HEIGHT - 500, Path.LEFT_AND_RIGHT, PathSpeed.NORMAL)
+    ),
+
+    LEFT_AND_RIGHT_ROW_ONE_FAST(
+            crossingRowSubWave(GAME_HEIGHT - 230, Path.LEFT_AND_RIGHT, PathSpeed.FAST)
+    ),
+    LEFT_AND_RIGHT_ROW_TWO_FAST(
+            crossingRowSubWave(GAME_HEIGHT - 320, Path.LEFT_AND_RIGHT, PathSpeed.FAST)
+    ),
+    LEFT_AND_RIGHT_ROW_THREE_FAST(
+            crossingRowSubWave(GAME_HEIGHT - 410, Path.LEFT_AND_RIGHT, PathSpeed.FAST)
+    ),
+    LEFT_AND_RIGHT_ROW_FOUR_FAST(
+            crossingRowSubWave(GAME_HEIGHT - 500, Path.LEFT_AND_RIGHT, PathSpeed.FAST)
     ),
 
     STAGGERED_LEFT_AND_RIGHT(
@@ -664,14 +836,16 @@ public enum SubWavePathRule {
     /**
      * Creates a row attack
      */
-    private static List<SubWavePathRuleProperties> rowSubWave(
-            final float delayStart) {
+    private static List<SubWavePathRuleProperties> descendingRowSubWave(
+            final float delayStart,
+            final Path path,
+            final PathSpeed speed) {
         List<SubWavePathRuleProperties> subWaves = new ArrayList<>();
 
         for (int col = 0; col < 6; col++) {
             subWaves.add(new SubWavePathRuleProperties(
-                    Path.BOUNCE_DOWN_AND_UP,
-                    PathSpeed.NORMAL,
+                    path,
+                    speed,
                     1,
                     0f,
                     delayStart,
@@ -682,5 +856,87 @@ public enum SubWavePathRule {
         }
 
         return subWaves;
+    }
+
+    private static List<SubWavePathRuleProperties> crossingRowSubWave(
+            final int yOffset,
+            final Path path,
+            final PathSpeed speed) {
+
+        // adjust delay so we have a constant gap between aliens regardless of speed
+        final float delayBetweenAliens = 0.5f * speed.getMultiplier();
+
+        return Collections.singletonList(
+                new SubWavePathRuleProperties(
+                        path,
+                        speed,
+                        5,
+                        delayBetweenAliens,
+                        0f,
+                        false,
+                        new PointTranslatorChain()
+                                .add(new OffsetYPointTranslator(yOffset))
+                )
+        );
+    }
+
+    private static List<SubWavePathRuleProperties> diamondSubWave(
+            final float delayTime,
+            final Path path,
+            final PathSpeed speed) {
+        return Arrays.asList(
+                new SubWavePathRuleProperties(
+                        path,
+                        speed,
+                        1,
+                        0f,
+                        delayTime + 1f,
+                        false,
+                        new PointTranslatorChain()
+                                .add(new OffsetXPointTranslator(SCREEN_MID_X - (2 * (SCREEN_MID_X / 3))))
+                ),
+                new SubWavePathRuleProperties(
+                        path,
+                        speed,
+                        2,
+                        1f,
+                        delayTime + 0.5f,
+                        false,
+                        new PointTranslatorChain()
+                                .add(new OffsetXPointTranslator(SCREEN_MID_X - (SCREEN_MID_X / 3)))
+                ),
+                new SubWavePathRuleProperties(
+                        path,
+                        speed,
+                        2,
+                        2f,
+                        delayTime + 0f,
+                        false,
+                        new PointTranslatorChain()
+                                .add(new OffsetXPointTranslator(SCREEN_MID_X))
+                ),
+                new SubWavePathRuleProperties(
+                        path,
+                        speed,
+                        2,
+                        1f,
+                        delayTime + 0.5f,
+                        false,
+                        new PointTranslatorChain()
+                                .add(new OffsetXPointTranslator(SCREEN_MID_X + (SCREEN_MID_X / 3)))
+                ),
+                new SubWavePathRuleProperties(
+                        path,
+                        speed,
+                        1,
+                        0f,
+                        delayTime + 1f,
+                        false,
+                        new PointTranslatorChain()
+                                .add(new OffsetXPointTranslator(SCREEN_MID_X + (2 * (SCREEN_MID_X / 3))))
+                )
+
+        );
+
     }
 }

@@ -5,6 +5,27 @@ import com.danosoftware.galaxyforce.textures.Texture;
 
 public enum GameSpriteIdentifier implements ISpriteIdentifier {
 
+    // A
+    A1("a1",4),
+    A2("a2", 4),
+    A3("a3", 4),
+    A4("a4", 4),
+    A5("a5", 4),
+
+    // B
+    B1("b1",4),
+    B2("b2", 4),
+    B3("b3", 4),
+    B4("b4", 4),
+
+    // C
+    C1("c1",4),
+    C2("c2", 4),
+    C3("c3", 4),
+    C4("c4", 4),
+
+
+
     // octopus
     OCTOPUS_LEFT("octopusLeft",4),
     OCTOPUS_RIGHT("octopusRight", 4),

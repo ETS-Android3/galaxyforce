@@ -12,6 +12,21 @@ import com.danosoftware.galaxyforce.view.Animation;
  */
 public enum AlienCharacter {
 
+    A(
+            new ISpriteIdentifier[]{GameSpriteIdentifier.A1,GameSpriteIdentifier.A2,GameSpriteIdentifier.A3,GameSpriteIdentifier.A4,GameSpriteIdentifier.A5},
+            new ISpriteIdentifier[]{GameSpriteIdentifier.NULL},
+            0.25f),
+
+    B(
+            new ISpriteIdentifier[]{GameSpriteIdentifier.B1,GameSpriteIdentifier.B2,GameSpriteIdentifier.B3,GameSpriteIdentifier.B4},
+            new ISpriteIdentifier[]{GameSpriteIdentifier.NULL},
+            0.25f),
+
+    C(
+            new ISpriteIdentifier[]{GameSpriteIdentifier.C1,GameSpriteIdentifier.C2,GameSpriteIdentifier.C3,GameSpriteIdentifier.C4},
+            new ISpriteIdentifier[]{GameSpriteIdentifier.NULL},
+            0.25f),
+
     // special null character reserved for multi-explosions that spawn immediately as exploding aliens
     NULL(
             new ISpriteIdentifier[]{GameSpriteIdentifier.NULL},
