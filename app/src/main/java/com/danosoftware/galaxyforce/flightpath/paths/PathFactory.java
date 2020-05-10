@@ -25,9 +25,11 @@ public final class PathFactory {
     private final static double TO_DEGREES = 180f / Math.PI;
 
     private final PathLoader loader;
+    private double lastAngle;
 
     public PathFactory(PathLoader loader) {
         this.loader = loader;
+        this.lastAngle = 0d;
     }
 
     public List<PathPoint> createPath(
@@ -38,6 +40,8 @@ public final class PathFactory {
 
         // load path data from file
         PathListDTO pathData = loader.loadPaths(path.getPathFile());
+
+        double lastAngle = 0d;
 
         for (PathDTO pathDTO : pathData.getPathList()) {
             final PathGenerator generator;
@@ -71,7 +75,6 @@ public final class PathFactory {
     // convert double path points into rounded integer points
     private List<PathPoint> createPathPoints(List<DoublePoint> dblPoints) {
         List<PathPoint> pathPoints = new ArrayList<>();
-        double lastAngle = 0d;
         for (int idx = 0; idx < dblPoints.size(); idx++) {
 
             DoublePoint current = dblPoints.get(idx);
@@ -114,6 +117,7 @@ public final class PathFactory {
                                     (int) Math.round(current.getX()),
                                     (int) Math.round(current.getY()),
                                     (int) Math.round(angle)));
+                    lastAngle = angle;
                 }
             }
         }

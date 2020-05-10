@@ -77,7 +77,7 @@ public enum SubWavePathRule {
             new SubWavePathRuleProperties(
                     Path.BELL_CURVE,
                     PathSpeed.NORMAL,
-                    20,
+                    10,
                     0.3f,
                     0,
                     false
@@ -91,7 +91,7 @@ public enum SubWavePathRule {
             new SubWavePathRuleProperties(
                     Path.BELL_CURVE,
                     PathSpeed.NORMAL,
-                    20,
+                    10,
                     0.3f,
                     0,
                     false
@@ -99,7 +99,7 @@ public enum SubWavePathRule {
             new SubWavePathRuleProperties(
                     Path.BELL_CURVE,
                     PathSpeed.NORMAL,
-                    20,
+                    15,
                     0.3f,
                     0,
                     false,
@@ -182,6 +182,58 @@ public enum SubWavePathRule {
     ),
 
     /**
+     * spaced out crossover attack where aliens drop from top, pause and then exit on
+     * opposite side of screen
+     */
+    CROSSOVER_EXIT_ATTACK_SPACED(
+            new SubWavePathRuleProperties(
+                    Path.EXIT_STAGE_RIGHT,
+                    PathSpeed.NORMAL,
+                    5,
+                    1.5f,
+                    0,
+                    false
+            ),
+            new SubWavePathRuleProperties(
+                    Path.EXIT_STAGE_RIGHT,
+                    PathSpeed.NORMAL,
+                    5,
+                    1.5f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
+            )
+    ),
+    /**
+     * spaced out crossover attack where aliens rise from bottom, pause and then exit on
+     * opposite side of screen
+     */
+    CROSSOVER_EXIT_ATTACK_SPACED_REVERSE(
+            new SubWavePathRuleProperties(
+                    Path.EXIT_STAGE_RIGHT,
+                    PathSpeed.NORMAL,
+                    5,
+                    1.5f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipYPointTranslator(GAME_HEIGHT))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.EXIT_STAGE_RIGHT,
+                    PathSpeed.NORMAL,
+                    5,
+                    1.5f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
+                            .add(new FlipYPointTranslator(GAME_HEIGHT))
+            )
+    ),
+
+    /**
      * crossover attack where aliens drop from top, pause and then exit on
      * opposite side of screen
      */
@@ -189,22 +241,51 @@ public enum SubWavePathRule {
             new SubWavePathRuleProperties(
                     Path.EXIT_STAGE_RIGHT,
                     PathSpeed.NORMAL,
-                    20,
-                    0.3f,
+                    5,
+                    0.75f,
                     0,
                     false
             ),
             new SubWavePathRuleProperties(
                     Path.EXIT_STAGE_RIGHT,
                     PathSpeed.NORMAL,
-                    20,
-                    0.3f,
+                    5,
+                    0.75f,
                     0,
                     false,
                     new PointTranslatorChain()
                             .add(new FlipXPointTranslator(GAME_WIDTH))
             )
     ),
+
+    /**
+     * crossover attack where aliens rise from bottom, pause and then exit on
+     * opposite side of screen
+     */
+    CROSSOVER_EXIT_ATTACK_REVERSE(
+            new SubWavePathRuleProperties(
+                    Path.EXIT_STAGE_RIGHT,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.75f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipYPointTranslator(GAME_HEIGHT))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.EXIT_STAGE_RIGHT,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.75f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
+                            .add(new FlipYPointTranslator(GAME_HEIGHT))
+            )
+    ),
+
 
     /**
      * staggered attack where 5 columns of aliens attack from top to bottom and
@@ -420,6 +501,19 @@ public enum SubWavePathRule {
                     0,
                     2.5f,
                     true,
+                    new PointTranslatorChain()
+                            .add(new OffsetYPointTranslator(125))
+            )
+    ),
+
+    SINGLE_ARC_NO_REPEAT(
+            new SubWavePathRuleProperties(
+                    Path.SINGLE_ARC,
+                    PathSpeed.VERY_SLOW,
+                    1,
+                    0,
+                    1f,
+                    false,
                     new PointTranslatorChain()
                             .add(new OffsetYPointTranslator(125))
             )
