@@ -28,6 +28,12 @@ public enum Path {
     SPACE_INVADER("spaceInvader.json"),
 
     /**
+     * space invader style attack - gradually moving across screen and then down
+     * easier version with bigger gaps
+     */
+    SPACE_INVADER_EASY("spaceInvaderEasy.json"),
+
+    /**
      * Figure of eight attack. Starting at top right looping round in figure
      * figure of eight and finishing at top right.
      */
