@@ -1286,7 +1286,7 @@ public class WaveFactory {
                                                                                 .builder()
                                                                                 .alienCharacter(AlienCharacter.INSECT)
                                                                                 .energy(1)
-                                                                                .speed(AlienSpeed.VERY_FAST)
+                                                                                .speed(AlienSpeed.MEDIUM)
                                                                                 .boundaries(BoundariesConfig
                                                                                         .builder()
                                                                                         .lanePolicy(BoundaryLanePolicy.VERTICAL)
@@ -1316,14 +1316,20 @@ public class WaveFactory {
                                                 .alienCharacter(AlienCharacter.INSECT_MOTHERSHIP)
                                                 .energy(10)
                                                 .spawnConfig(
-                                                        SpawningAlienConfig
+                                                        SpawningLimitedAlienConfig
                                                                 .builder()
+                                                                .maximumActiveSpawnedAliens(5)
                                                                 .spawnedAlienConfig(
-                                                                        DirectionalDestroyableConfig
+                                                                        HunterConfig
                                                                                 .builder()
                                                                                 .alienCharacter(AlienCharacter.INSECT)
                                                                                 .energy(1)
-                                                                                .angle(DOWNWARDS)
+                                                                                .speed(AlienSpeed.MEDIUM)
+                                                                                .boundaries(BoundariesConfig
+                                                                                        .builder()
+                                                                                        .lanePolicy(BoundaryLanePolicy.VERTICAL)
+                                                                                        .lanes(3)
+                                                                                        .build())
                                                                                 .missileConfig(
                                                                                         MissileFiringConfig
                                                                                                 .builder()
@@ -1332,7 +1338,6 @@ public class WaveFactory {
                                                                                                 .missileSpeed(AlienMissileSpeed.MEDIUM)
                                                                                                 .missileFrequency(1.5f)
                                                                                                 .build())
-                                                                                .speed(AlienSpeed.SLOW)
                                                                                 .build())
                                                                 .minimumSpawnDelayTime(0.5f)
                                                                 .maximumAdditionalRandomSpawnDelayTime(0.25f)
@@ -1343,7 +1348,7 @@ public class WaveFactory {
                                                                                 PowerUpType.MISSILE_PARALLEL))
                                                                 .build())
                                                 .build(),
-                                        Collections.singletonList(PowerUpType.SHIELD)
+                                        Collections.singletonList(PowerUpType.MISSILE_SPRAY)
                                 )
                         )
                 );
