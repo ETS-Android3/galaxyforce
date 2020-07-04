@@ -25,12 +25,13 @@ import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningAndExpl
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningLimitedAlienConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningBySpeedConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningFixedAngularConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.types.BoundariesConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.types.BoundaryLanePolicy;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.DirectionalDestroyableConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.DirectionalResettableConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.ExplodingConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowableHunterConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowerConfig;
-import com.danosoftware.galaxyforce.waves.config.aliens.types.HunterBoundariesConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.HunterConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.PathConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.SplitterConfig;
@@ -1058,7 +1059,7 @@ public class WaveFactory {
                                                                 PowerUpType.MISSILE_PARALLEL,
                                                                 PowerUpType.MISSILE_SPRAY))
                                                 .boundaries(
-                                                        HunterBoundariesConfig.builder().build())
+                                                        BoundariesConfig.builder().build())
                                                 .build(),
                                         Collections.singletonList(PowerUpType.LIFE)
                                 )
@@ -1277,23 +1278,20 @@ public class WaveFactory {
                                                 .alienCharacter(AlienCharacter.INSECT_MOTHERSHIP)
                                                 .energy(10)
                                                 .spawnConfig(
-                                                        SpawningAlienConfig
+                                                        SpawningLimitedAlienConfig
                                                                 .builder()
+                                                                .maximumActiveSpawnedAliens(5)
                                                                 .spawnedAlienConfig(
-                                                                        DirectionalDestroyableConfig
+                                                                        HunterConfig
                                                                                 .builder()
                                                                                 .alienCharacter(AlienCharacter.INSECT)
                                                                                 .energy(1)
-                                                                                .angle(DOWNWARDS)
-                                                                                .missileConfig(
-                                                                                        MissileFiringConfig
-                                                                                                .builder()
-                                                                                                .missileType(AlienMissileType.DOWNWARDS)
-                                                                                                .missileCharacter(AlienMissileCharacter.LASER)
-                                                                                                .missileSpeed(AlienMissileSpeed.MEDIUM)
-                                                                                                .missileFrequency(1.5f)
-                                                                                                .build())
-                                                                                .speed(AlienSpeed.SLOW)
+                                                                                .speed(AlienSpeed.VERY_FAST)
+                                                                                .boundaries(BoundariesConfig
+                                                                                        .builder()
+                                                                                        .lanePolicy(BoundaryLanePolicy.VERTICAL)
+                                                                                        .lanes(3)
+                                                                                        .build())
                                                                                 .build())
                                                                 .minimumSpawnDelayTime(0.5f)
                                                                 .maximumAdditionalRandomSpawnDelayTime(0.25f)
@@ -1453,7 +1451,7 @@ public class WaveFactory {
                                                 .energy(10)
                                                 .speed(AlienSpeed.VERY_FAST)
                                                 .boundaries(
-                                                        HunterBoundariesConfig
+                                                        BoundariesConfig
                                                                 .builder()
                                                                 .maxX(SCREEN_MID_X)
                                                                 .build()
@@ -1469,7 +1467,7 @@ public class WaveFactory {
                                                 .energy(10)
                                                 .speed(AlienSpeed.VERY_FAST)
                                                 .boundaries(
-                                                        HunterBoundariesConfig
+                                                        BoundariesConfig
                                                                 .builder()
                                                                 .minX(SCREEN_MID_X)
                                                                 .build()
@@ -1550,7 +1548,7 @@ public class WaveFactory {
                                                 .energy(10)
                                                 .speed(AlienSpeed.VERY_FAST)
                                                 .boundaries(
-                                                        HunterBoundariesConfig
+                                                        BoundariesConfig
                                                                 .builder()
                                                                 .maxX(SCREEN_MID_X)
                                                                 .build()
@@ -1566,7 +1564,7 @@ public class WaveFactory {
                                                 .energy(10)
                                                 .speed(AlienSpeed.VERY_FAST)
                                                 .boundaries(
-                                                        HunterBoundariesConfig
+                                                        BoundariesConfig
                                                                 .builder()
                                                                 .minX(SCREEN_MID_X)
                                                                 .build()
@@ -1834,7 +1832,7 @@ public class WaveFactory {
                                                                                                                                 PowerUpType.MISSILE_PARALLEL,
                                                                                                                                 PowerUpType.MISSILE_SPRAY))
                                                                                                                 .boundaries(
-                                                                                                                        HunterBoundariesConfig.builder().build())
+                                                                                                                        BoundariesConfig.builder().build())
                                                                                                                 .build())
                                                                                                 .spwanedPowerUpType(PowerUpType.MISSILE_GUIDED)
                                                                                                 .spawnDelayTime(2.25f)  // aligns to egg cracking animation 9 x 0.25f
@@ -2433,7 +2431,7 @@ public class WaveFactory {
                                                                 .build())
                                                 .speed(AlienSpeed.VERY_FAST)
                                                 .boundaries(
-                                                        HunterBoundariesConfig
+                                                        BoundariesConfig
                                                                 .builder()
                                                                 .build()
                                                 )
@@ -2465,7 +2463,7 @@ public class WaveFactory {
                                                                 .build())
                                                 .speed(AlienSpeed.VERY_FAST)
                                                 .boundaries(
-                                                        HunterBoundariesConfig
+                                                        BoundariesConfig
                                                                 .builder()
                                                                 .maxX(SCREEN_MID_X)
                                                                 .build()
@@ -2488,7 +2486,7 @@ public class WaveFactory {
                                                                 .build())
                                                 .speed(AlienSpeed.VERY_FAST)
                                                 .boundaries(
-                                                        HunterBoundariesConfig
+                                                        BoundariesConfig
                                                                 .builder()
                                                                 .minX(SCREEN_MID_X)
                                                                 .build()
@@ -2868,7 +2866,7 @@ public class WaveFactory {
                                                                                                 PowerUpType.MISSILE_PARALLEL,
                                                                                                 PowerUpType.MISSILE_SPRAY))
                                                                                 .boundaries(
-                                                                                        HunterBoundariesConfig.builder().build())
+                                                                                        BoundariesConfig.builder().build())
                                                                                 .build())
                                                                 .minimumSpawnDelayTime(5f)
                                                                 .maximumAdditionalRandomSpawnDelayTime(2f)

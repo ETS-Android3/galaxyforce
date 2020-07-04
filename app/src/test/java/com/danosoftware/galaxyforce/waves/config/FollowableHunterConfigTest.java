@@ -21,9 +21,9 @@ import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawnConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningAlienConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningFixedAngularConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.types.BoundariesConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowableHunterConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowerConfig;
-import com.danosoftware.galaxyforce.waves.config.aliens.types.HunterBoundariesConfig;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocator;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocatorFactory;
 
@@ -81,7 +81,7 @@ public class FollowableHunterConfigTest {
                         .energy(10)
                         .speed(AlienSpeed.SLOW)
                         .build())
-                .boundaries(HunterBoundariesConfig.builder().build())
+                .boundaries(BoundariesConfig.builder().build())
                 .build();
 
         assertThat(config.getAlienCharacter(), equalTo(AlienCharacter.OCTOPUS));
@@ -124,7 +124,7 @@ public class FollowableHunterConfigTest {
                 .followerPowerUps(Collections.singletonList(PowerUpType.LIFE))
                 .numberOfFollowers(1)
                 .boundaries(
-                        HunterBoundariesConfig
+                        BoundariesConfig
                                 .builder()
                                 .minX(100)
                                 .maxX(400)
