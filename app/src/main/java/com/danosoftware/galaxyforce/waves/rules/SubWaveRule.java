@@ -2,13 +2,9 @@ package com.danosoftware.galaxyforce.waves.rules;
 
 import com.danosoftware.galaxyforce.constants.GameConstants;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Random;
-
-import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
-import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.createAlienSubWaveProperty;
 
 /**
  * Each sub-wave consists of one or more sub-wave properties.
@@ -18,7 +14,7 @@ import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.cre
  */
 public enum SubWaveRule {
 
-    RANDOM_TOP(
+    RANDOM_TOP_DELAYED(
             // top
             new SubWaveRuleProperties(
                     true,
@@ -31,7 +27,7 @@ public enum SubWaveRule {
                     false
             )),
 
-    RANDOM_BOTTOM(
+    RANDOM_BOTTOM_DELAYED(
             // bottom
             new SubWaveRuleProperties(
                     true,
@@ -44,7 +40,7 @@ public enum SubWaveRule {
                     false
             )),
 
-    RANDOM_LEFT(
+    RANDOM_LEFT_DELAYED(
             // left
             new SubWaveRuleProperties(
                     false,
@@ -57,7 +53,7 @@ public enum SubWaveRule {
                     false
             )),
 
-    RANDOM_RIGHT(
+    RANDOM_RIGHT_DELAYED(
             // right
             new SubWaveRuleProperties(
                     false,
@@ -87,14 +83,9 @@ public enum SubWaveRule {
             )),
 
     /**
-     * Asteroids that form a path through an asteroid field.
+     * Aliens that start at different positions at the edges of the screen.
      */
-    ASTEROID_FIELD(asteroidHorizontalSubWave(10, 2)),
-
-    /**
-     * Hunters that start at different positions and chase the base.
-     */
-    HUNTER_TOP(
+    MIDDLE_TOP(
             new SubWaveRuleProperties(
                     false,
                     false,
@@ -105,7 +96,7 @@ public enum SubWaveRule {
                     0f,
                     false
             )),
-    HUNTER_BOTTOM(
+    MIDDLE_BOTTOM(
             new SubWaveRuleProperties(
                     false,
                     false,
@@ -116,7 +107,7 @@ public enum SubWaveRule {
                     0f,
                     false
             )),
-    HUNTER_LEFT(
+    MIDDLE_LEFT(
             new SubWaveRuleProperties(
                     false,
                     false,
@@ -127,7 +118,7 @@ public enum SubWaveRule {
                     0f,
                     false
             )),
-    HUNTER_RIGHT(
+    MIDDLE_RIGHT(
             new SubWaveRuleProperties(
                     false,
                     false,
@@ -140,9 +131,9 @@ public enum SubWaveRule {
             )),
 
     /**
-     * Dragon that chases the base.
+     * Alien that starts at random x position at top of screen.
      */
-    DRAGON_CHASE(
+    RANDOM_TOP(
             new SubWaveRuleProperties(
                     true,
                     false,
@@ -172,52 +163,5 @@ public enum SubWaveRule {
      */
     public List<SubWaveRuleProperties> subWaveProps() {
         return waveList;
-    }
-
-    /*
-     * ******************************************
-     * HELPER METHODS TO BUILD SPECIFIC SUB-WAVES
-     * ******************************************
-     */
-
-    // asteroid options
-    private static final int ASTEROIDS_PER_ROW = 6;
-    private static final int ASTEROIDS_SPRITE_WIDTH = 64;
-
-    private static List<SubWaveRuleProperties> asteroidHorizontalSubWave(
-            int totalRows,
-            int delayBetweenRows) {
-        return horizontalSubWave(
-                totalRows,
-                delayBetweenRows,
-                ASTEROIDS_PER_ROW,
-                ASTEROIDS_SPRITE_WIDTH);
-    }
-
-    /**
-     * Creates subwave of multiple rows.
-     * Each row containing multiple aliens.
-     */
-    private static List<SubWaveRuleProperties> horizontalSubWave(
-            int totalRows,
-            int delayBetweenRows,
-            int numberOfColumns,
-            int alienWidth) {
-
-        List<SubWaveRuleProperties> subWaves = new ArrayList<>();
-
-        // calculates min/max x positions for aliens per row
-        final int minX = alienWidth / 2;
-        final int maxX = GAME_WIDTH - (alienWidth / 2);
-
-        final int distanceBetweenAliens = (maxX - minX) / (numberOfColumns - 1);
-
-        for (int row = 0; row < totalRows; row++) {
-            for (int col = 0; col < numberOfColumns; col++) {
-                final int xPos = minX + (col * distanceBetweenAliens);
-                subWaves.add(createAlienSubWaveProperty(row, xPos, delayBetweenRows));
-            }
-        }
-        return subWaves;
     }
 }

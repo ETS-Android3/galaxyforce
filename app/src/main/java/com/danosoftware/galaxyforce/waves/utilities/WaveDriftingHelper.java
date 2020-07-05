@@ -85,7 +85,7 @@ public class WaveDriftingHelper {
             final PowerUpAllocator powerUpAllocator) {
         return new SubWaveConfig[] {
                 createAliens(
-                        SubWaveRule.RANDOM_TOP,
+                        SubWaveRule.RANDOM_TOP_DELAYED,
                         alien,
                         energy,
                         angle,
@@ -94,7 +94,7 @@ public class WaveDriftingHelper {
                         missileConfig,
                         powerUpAllocator),
                 createAliens(
-                        SubWaveRule.RANDOM_LEFT,
+                        SubWaveRule.RANDOM_LEFT_DELAYED,
                         alien,
                         energy,
                         angle + HALF_PI,
@@ -103,7 +103,7 @@ public class WaveDriftingHelper {
                         missileConfig,
                         powerUpAllocator),
                 createAliens(
-                        SubWaveRule.RANDOM_BOTTOM,
+                        SubWaveRule.RANDOM_BOTTOM_DELAYED,
                         alien,
                         energy,
                         angle + PI,
@@ -112,7 +112,7 @@ public class WaveDriftingHelper {
                         missileConfig,
                         powerUpAllocator),
                 createAliens(
-                        SubWaveRule.RANDOM_RIGHT,
+                        SubWaveRule.RANDOM_RIGHT_DELAYED,
                         alien,
                         energy,
                         angle - HALF_PI,

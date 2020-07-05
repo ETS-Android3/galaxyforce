@@ -30,6 +30,41 @@ public class WaveMazeHelper {
     private static final int ASTEROIDS_PER_ROW = 6;
     private static final int ASTEROIDS_SPRITE_WIDTH = 64;
 
+    /**
+     * Descending rows of asteroids with no gaps
+     */
+    public static SubWaveConfig[] asteroidHorizontalRows(
+            int totalRows,
+            final AlienSpeed speed,
+            int delayBetweenRows,
+            final List<PowerUpType> powerUps) {
+
+        return new SubWaveConfig[] {
+                new SubWaveNoPathConfig(
+                        rowsWithoutGaps(
+                                totalRows,
+                                delayBetweenRows,
+                                ASTEROIDS_PER_ROW,
+                                ASTEROIDS_SPRITE_WIDTH),
+                        DirectionalDestroyableConfig
+                                .builder()
+                                .alienCharacter(AlienCharacter.ASTEROID)
+                                .energy(5)
+                                .angle(DOWNWARDS)
+                                .speed(speed)
+                                .spinningConfig(
+                                        SpinningBySpeedConfig
+                                                .builder()
+                                                .build()
+                                )
+                                .build(),
+                        powerUps)
+        };
+    }
+
+    /**
+     * Maze of asteroids with a gap in each row.
+     */
     public static SubWaveConfig[] asteroidMazeSubWave(
             int totalRows,
             final AlienSpeed speed,
@@ -208,5 +243,32 @@ public class WaveMazeHelper {
             gaps.add(rand.nextInt(columnsPerRow));
         }
         return gaps;
+    }
+
+    /**
+     * Creates subwave of multiple rows.
+     * Each row containing multiple aliens.
+     */
+    private static List<SubWaveRuleProperties> rowsWithoutGaps(
+            int totalRows,
+            int delayBetweenRows,
+            int columnsPerRow,
+            int alienWidth) {
+
+        List<SubWaveRuleProperties> subWaves = new ArrayList<>();
+
+        // calculates min/max x positions for aliens per row
+        final int minX = alienWidth / 2;
+        final int maxX = GAME_WIDTH - (alienWidth / 2);
+
+        final int distanceBetweenAliens = (maxX - minX) / (columnsPerRow - 1);
+
+        for (int row = 0; row < totalRows; row++) {
+            for (int col = 0; col < columnsPerRow; col++) {
+                final int xPos = minX + (col * distanceBetweenAliens);
+                subWaves.add(createAlienSubWaveProperty(row, xPos, delayBetweenRows));
+            }
+        }
+        return subWaves;
     }
 }

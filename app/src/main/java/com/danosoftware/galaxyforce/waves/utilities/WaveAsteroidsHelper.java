@@ -68,10 +68,10 @@ public class WaveAsteroidsHelper {
             final AlienSpeed speed,
             final PowerUpAllocator powerUpAllocator) {
         return new SubWaveConfig[] {
-                createAsteroids(SubWaveRule.RANDOM_TOP, angle, speed, powerUpAllocator),
-                createAsteroids(SubWaveRule.RANDOM_LEFT, angle + HALF_PI, speed, powerUpAllocator),
-                createAsteroids(SubWaveRule.RANDOM_BOTTOM, angle + PI, speed, powerUpAllocator),
-                createAsteroids(SubWaveRule.RANDOM_RIGHT, angle - HALF_PI, speed, powerUpAllocator)
+                createAsteroids(SubWaveRule.RANDOM_TOP_DELAYED, angle, speed, powerUpAllocator),
+                createAsteroids(SubWaveRule.RANDOM_LEFT_DELAYED, angle + HALF_PI, speed, powerUpAllocator),
+                createAsteroids(SubWaveRule.RANDOM_BOTTOM_DELAYED, angle + PI, speed, powerUpAllocator),
+                createAsteroids(SubWaveRule.RANDOM_RIGHT_DELAYED, angle - HALF_PI, speed, powerUpAllocator)
         };
     }
 
