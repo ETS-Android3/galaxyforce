@@ -3,6 +3,7 @@ package com.danosoftware.galaxyforce.waves.config;
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.waves.config.aliens.AlienConfig;
 import com.danosoftware.galaxyforce.waves.rules.SubWaveRule;
+import com.danosoftware.galaxyforce.waves.rules.SubWaveRuleProperties;
 
 import java.util.List;
 
@@ -11,7 +12,8 @@ import java.util.List;
  */
 public class SubWaveNoPathConfig extends SubWaveConfig {
 
-    private final SubWaveRule subWaveRule;
+    // list of properties for a sub-wave
+    private final List<SubWaveRuleProperties> subWaveRuleProperties;
 
     public SubWaveNoPathConfig(
             final SubWaveRule subWaveRule,
@@ -19,10 +21,19 @@ public class SubWaveNoPathConfig extends SubWaveConfig {
             final List<PowerUpType> powerUps) {
 
         super(Type.NO_PATH, alienConfig, powerUps);
-        this.subWaveRule = subWaveRule;
+        this.subWaveRuleProperties = subWaveRule.subWaveProps();
     }
 
-    public SubWaveRule getSubWaveRule() {
-        return subWaveRule;
+    public SubWaveNoPathConfig(
+            final List<SubWaveRuleProperties> subWaveRuleProperties,
+            final AlienConfig alienConfig,
+            final List<PowerUpType> powerUps) {
+
+        super(Type.NO_PATH, alienConfig, powerUps);
+        this.subWaveRuleProperties = subWaveRuleProperties;
+    }
+
+    public List<SubWaveRuleProperties> getSubWaveRuleProperties() {
+        return subWaveRuleProperties;
     }
 }

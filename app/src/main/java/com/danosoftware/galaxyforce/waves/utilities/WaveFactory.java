@@ -45,13 +45,16 @@ import java.util.Collections;
 import java.util.List;
 
 import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveAsteroidsHelper.createAsteroidField;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveAsteroidsHelper.createMiniDirectionalAsteroid;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveDriftingHelper.createDriftingWave;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.DOWNWARDS;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.HALF_PI;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.NO_POWER_UPS;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.QUARTER_PI;
-import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.createAsteroidField;
-import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.createDriftingWave;
-import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.createMiniDirectionalAsteroid;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveMazeHelper.asteroidMazeSubWave;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveMazeHelper.createBarrierMaze;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveMazeHelper.createBarrierMazeWithGuards;
 
 
 /**
@@ -1583,20 +1586,28 @@ public class WaveFactory {
 
             case 21:
 
+                /**
+                 * Maze to navigate through.
+                 * First maze is empty.
+                 * Second maze has alien guards blocking the gaps.
+                 */
                 subWaves.add(
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                new SubWaveNoPathConfig(
-                                        SubWaveRule.BARRIER_MAZE,
-                                        DirectionalDestroyableConfig
-                                                .builder()
-                                                .alienCharacter(AlienCharacter.BARRIER)
-                                                .energy(Integer.MAX_VALUE)
-                                                .angle(DOWNWARDS)
-                                                .speed(AlienSpeed.SLOW)
-                                                .build(),
-                                        NO_POWER_UPS
-                                )
+                                createBarrierMaze(
+                                        15,
+                                        AlienSpeed.VERY_FAST,
+                                        2)
+                        )
+                );
+                subWaves.add(
+                        createSubWave(
+                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
+                                createBarrierMazeWithGuards(
+                                        15,
+                                        AlienSpeed.VERY_FAST,
+                                        2,
+                                        Collections.singletonList(PowerUpType.MISSILE_LASER))
                         )
                 );
                 break;
@@ -1891,17 +1902,11 @@ public class WaveFactory {
                 subWaves.add(
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                new SubWaveNoPathConfig(
-                                        SubWaveRule.BARRIER_MAZE,
-                                        DirectionalDestroyableConfig
-                                                .builder()
-                                                .alienCharacter(AlienCharacter.BARRIER)
-                                                .energy(Integer.MAX_VALUE)
-                                                .angle(DOWNWARDS)
-                                                .speed(AlienSpeed.SLOW)
-                                                .build(),
-                                        NO_POWER_UPS
-                                )
+                                createBarrierMazeWithGuards(
+                                        15,
+                                        AlienSpeed.VERY_FAST,
+                                        2,
+                                        Collections.singletonList(PowerUpType.MISSILE_LASER))
                         )
                 );
                 break;
@@ -1913,43 +1918,21 @@ public class WaveFactory {
                 subWaves.add(
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                new SubWaveNoPathConfig(
-                                        SubWaveRule.ASTEROID_MAZE_EASY,
-                                        DirectionalDestroyableConfig
-                                                .builder()
-                                                .alienCharacter(AlienCharacter.ASTEROID)
-                                                .energy(5)
-                                                .angle(DOWNWARDS)
-                                                .speed(AlienSpeed.SLOW)
-                                                .spinningConfig(
-                                                        SpinningBySpeedConfig
-                                                                .builder()
-                                                                .build()
-                                                )
-                                                .build(),
-                                        Collections.singletonList(PowerUpType.MISSILE_LASER)
-                                )
+                                asteroidMazeSubWave(
+                                        15,
+                                        AlienSpeed.SLOW,
+                                        3,
+                                        Collections.singletonList(PowerUpType.MISSILE_LASER))
                         )
                 );
                 subWaves.add(
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                new SubWaveNoPathConfig(
-                                        SubWaveRule.ASTEROID_MAZE,
-                                        DirectionalDestroyableConfig
-                                                .builder()
-                                                .alienCharacter(AlienCharacter.ASTEROID)
-                                                .energy(5)
-                                                .angle(DOWNWARDS)
-                                                .speed(AlienSpeed.SLOW)
-                                                .spinningConfig(
-                                                        SpinningBySpeedConfig
-                                                                .builder()
-                                                                .build()
-                                                )
-                                                .build(),
-                                        Collections.singletonList(PowerUpType.SHIELD)
-                                )
+                                asteroidMazeSubWave(
+                                        15,
+                                        AlienSpeed.SLOW,
+                                        3,
+                                        Collections.singletonList(PowerUpType.SHIELD))
                         )
                 );
                 break;
@@ -2109,17 +2092,11 @@ public class WaveFactory {
                 subWaves.add(
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                new SubWaveNoPathConfig(
-                                        SubWaveRule.BARRIER_MAZE,
-                                        DirectionalDestroyableConfig
-                                                .builder()
-                                                .alienCharacter(AlienCharacter.BARRIER)
-                                                .energy(Integer.MAX_VALUE)
-                                                .angle(DOWNWARDS)
-                                                .speed(AlienSpeed.SLOW)
-                                                .build(),
-                                        NO_POWER_UPS
-                                )
+                                createBarrierMazeWithGuards(
+                                        15,
+                                        AlienSpeed.VERY_FAST,
+                                        2,
+                                        Collections.singletonList(PowerUpType.MISSILE_LASER))
                         )
                 );
                 break;
