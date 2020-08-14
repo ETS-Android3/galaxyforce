@@ -143,7 +143,7 @@ To create a hit sprite follow the steps below:
 
 - Fill in any internal gaps with dark-gray (64, 64, 64).
 - Re-map any white sprites (255, 255, 255) to light-gray (225, 225, 225).
-- Colourise the sprite with red (255, 0, 0) or gray (??).
+- Colourise the sprite with red (255, 0, 0) or gray (200, 200, 200).
 - Outline in light-yellow (225, 225, 43).
 - Outline in white (255, 255, 255).
 
