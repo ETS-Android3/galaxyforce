@@ -19,7 +19,7 @@ import com.danosoftware.galaxyforce.waves.config.aliens.types.DriftingConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.PathConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.SplitterConfig;
 import com.danosoftware.galaxyforce.waves.rules.SubWavePathRule;
-import com.danosoftware.galaxyforce.waves.rules.SubWaveRule;
+import com.danosoftware.galaxyforce.waves.rules.SubWaveRuleProperties;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,6 +31,10 @@ import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.NO_
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.PI;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.QUARTER_PI;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.flatten;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.randomStartFromBottom;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.randomStartFromLeft;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.randomStartFromRight;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.randomStartFromTop;
 
 public class WaveAsteroidsHelper {
 
@@ -68,15 +72,15 @@ public class WaveAsteroidsHelper {
             final AlienSpeed speed,
             final PowerUpAllocator powerUpAllocator) {
         return new SubWaveConfig[] {
-                createAsteroids(SubWaveRule.RANDOM_TOP_DELAYED, angle, speed, powerUpAllocator),
-                createAsteroids(SubWaveRule.RANDOM_LEFT_DELAYED, angle + HALF_PI, speed, powerUpAllocator),
-                createAsteroids(SubWaveRule.RANDOM_BOTTOM_DELAYED, angle + PI, speed, powerUpAllocator),
-                createAsteroids(SubWaveRule.RANDOM_RIGHT_DELAYED, angle - HALF_PI, speed, powerUpAllocator)
+                createAsteroids(randomStartFromTop(2f), angle, speed, powerUpAllocator),
+                createAsteroids(randomStartFromLeft(2f), angle + HALF_PI, speed, powerUpAllocator),
+                createAsteroids(randomStartFromBottom(2f), angle + PI, speed, powerUpAllocator),
+                createAsteroids(randomStartFromRight(2f), angle - HALF_PI, speed, powerUpAllocator)
         };
     }
 
     private static SubWaveConfig createAsteroids(
-            final SubWaveRule subWaveRule,
+            final SubWaveRuleProperties subWaveRuleProperties,
             final float angle,
             final AlienSpeed speed,
             final PowerUpAllocator powerUpAllocator) {
@@ -84,7 +88,7 @@ public class WaveAsteroidsHelper {
         final PowerUpType powerUp = powerUpAllocator.allocate();
 
         return new SubWaveNoPathConfig(
-                subWaveRule,
+                Collections.singletonList(subWaveRuleProperties),
                 DriftingConfig
                         .builder()
                         .alienCharacter(AlienCharacter.ASTEROID)

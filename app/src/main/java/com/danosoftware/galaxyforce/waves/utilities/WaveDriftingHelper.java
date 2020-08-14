@@ -8,7 +8,7 @@ import com.danosoftware.galaxyforce.waves.config.SubWaveNoPathConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.missiles.MissileConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.DriftingConfig;
-import com.danosoftware.galaxyforce.waves.rules.SubWaveRule;
+import com.danosoftware.galaxyforce.waves.rules.SubWaveRuleProperties;
 
 import java.util.Collections;
 import java.util.List;
@@ -18,6 +18,10 @@ import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.HAL
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.NO_POWER_UPS;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.PI;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.flatten;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.randomStartFromBottom;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.randomStartFromLeft;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.randomStartFromRight;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.randomStartFromTop;
 
 public class WaveDriftingHelper {
 
@@ -85,7 +89,7 @@ public class WaveDriftingHelper {
             final PowerUpAllocator powerUpAllocator) {
         return new SubWaveConfig[] {
                 createAliens(
-                        SubWaveRule.RANDOM_TOP_DELAYED,
+                        randomStartFromTop(2f),
                         alien,
                         energy,
                         angle,
@@ -94,7 +98,7 @@ public class WaveDriftingHelper {
                         missileConfig,
                         powerUpAllocator),
                 createAliens(
-                        SubWaveRule.RANDOM_LEFT_DELAYED,
+                        randomStartFromLeft(2f),
                         alien,
                         energy,
                         angle + HALF_PI,
@@ -103,7 +107,7 @@ public class WaveDriftingHelper {
                         missileConfig,
                         powerUpAllocator),
                 createAliens(
-                        SubWaveRule.RANDOM_BOTTOM_DELAYED,
+                        randomStartFromBottom(2f),
                         alien,
                         energy,
                         angle + PI,
@@ -112,7 +116,7 @@ public class WaveDriftingHelper {
                         missileConfig,
                         powerUpAllocator),
                 createAliens(
-                        SubWaveRule.RANDOM_RIGHT_DELAYED,
+                        randomStartFromRight(2f),
                         alien,
                         energy,
                         angle - HALF_PI,
@@ -124,7 +128,7 @@ public class WaveDriftingHelper {
     }
 
     private static SubWaveConfig createAliens(
-            final SubWaveRule subWaveRule,
+            final SubWaveRuleProperties subWaveRuleProperties,
             final AlienCharacter alien,
             final Integer energy,
             final float angle,
@@ -136,7 +140,7 @@ public class WaveDriftingHelper {
         final PowerUpType powerUp = powerUpAllocator.allocate();
 
         return new SubWaveNoPathConfig(
-                subWaveRule,
+                Collections.singletonList(subWaveRuleProperties),
                 DriftingConfig
                         .builder()
                         .alienCharacter(alien)

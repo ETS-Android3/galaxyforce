@@ -161,7 +161,7 @@ public class WaveMazeHelper {
                                 BARRIERS_SPRITE_WIDTH),
                         DirectionalDestroyableConfig
                                 .builder()
-                                .alienCharacter(AlienCharacter.A)
+                                .alienCharacter(AlienCharacter.ROTATOR)
                                 .energy(1)
                                 .angle(DOWNWARDS)
                                 .speed(speed)

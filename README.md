@@ -121,3 +121,30 @@ Click on
 Upload all the mapping files for the current APK (`.../app/build/outputs/mapping/release/`)
 
 ![Deobsfucation Mapping Files](https://github.com/DannyNicholas/galaxyforce/raw/dev/assets/deobsfucation.png "Deobsfucation Mapping Files")
+
+
+## Creating Alien Characters
+
+[Pixel Mash](https://nevercenter.com/pixelmash/) has been used to create alien characters used within this game.
+
+### Sprite Generator
+
+Some alien animations have been created using Tomatic Labs Random Game Sprite Generator. The generator creates multiple sprites arranged horizontally within a single image.
+
+The generator normally surrounds sprites in black pixels. Use Pixel Mash to re-map the pixels from black (0, 0, 0) to dark-gray (64, 64, 64). Export the image.
+
+The exported image can be extracted and scaled into separate sprites using the [Film Strip Image Extractor](https://github.com/DannyNicholas/film-strip-image-extractor).
+
+### Hit Sprites
+
+Each alien sprite should have an equivalent hit sprite, to be displayed when an alien is hit by a missile but not destroyed.
+
+To create a hit sprite follow the steps below:
+
+- Fill in any internal gaps with dark-gray (64, 64, 64).
+- Re-map any white sprites (255, 255, 255) to light-gray (225, 225, 225).
+- Colourise the sprite with red (255, 0, 0) or gray (??).
+- Outline in light-yellow (225, 225, 43).
+- Outline in white (255, 255, 255).
+
+Export each individual sprite image.

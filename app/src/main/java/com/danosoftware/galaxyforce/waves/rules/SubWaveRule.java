@@ -4,7 +4,6 @@ import com.danosoftware.galaxyforce.constants.GameConstants;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Random;
 
 /**
  * Each sub-wave consists of one or more sub-wave properties.
@@ -13,58 +12,6 @@ import java.util.Random;
  * of aliens that follow some rules.
  */
 public enum SubWaveRule {
-
-    RANDOM_TOP_DELAYED(
-            // top
-            new SubWaveRuleProperties(
-                    true,
-                    false,
-                    0,
-                    GameConstants.SCREEN_TOP,
-                    1,
-                    0.5f,
-                    new Random().nextFloat() * 2f,
-                    false
-            )),
-
-    RANDOM_BOTTOM_DELAYED(
-            // bottom
-            new SubWaveRuleProperties(
-                    true,
-                    false,
-                    0,
-                    GameConstants.SCREEN_BOTTOM,
-                    1,
-                    0.5f,
-                    new Random().nextFloat() * 2f,
-                    false
-            )),
-
-    RANDOM_LEFT_DELAYED(
-            // left
-            new SubWaveRuleProperties(
-                    false,
-                    true,
-                    GameConstants.SCREEN_LEFT,
-                    0,
-                    1,
-                    0.5f,
-                    new Random().nextFloat() * 2f,
-                    false
-            )),
-
-    RANDOM_RIGHT_DELAYED(
-            // right
-            new SubWaveRuleProperties(
-                    false,
-                    true,
-                    GameConstants.SCREEN_RIGHT,
-                    0,
-                    1,
-                    0.5f,
-                    new Random().nextFloat() * 2f,
-                    false
-            )),
 
     /**
      * Asteroids that fall from top to bottom at random x positions and random

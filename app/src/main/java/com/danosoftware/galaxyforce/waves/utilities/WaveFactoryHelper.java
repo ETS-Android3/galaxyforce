@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 public class WaveFactoryHelper {
 
@@ -46,5 +47,57 @@ public class WaveFactoryHelper {
                 0,
                 row * delayBetweenRows,
                 false);
+    }
+
+    public static SubWaveRuleProperties randomStartFromTop(float maxDelay) {
+        return new SubWaveRuleProperties(
+                true,
+                false,
+                0,
+                GameConstants.SCREEN_TOP,
+                1,
+                0f,
+                new Random().nextFloat() * maxDelay,
+                false
+        );
+    }
+
+    public static SubWaveRuleProperties randomStartFromBottom(float maxDelay) {
+        return new SubWaveRuleProperties(
+                true,
+                false,
+                0,
+                GameConstants.SCREEN_BOTTOM,
+                1,
+                0f,
+                new Random().nextFloat() * maxDelay,
+                false
+        );
+    }
+
+    public static SubWaveRuleProperties randomStartFromLeft(float maxDelay) {
+        return new SubWaveRuleProperties(
+                false,
+                true,
+                GameConstants.SCREEN_LEFT,
+                0,
+                1,
+                0f,
+                new Random().nextFloat() * maxDelay,
+                false
+        );
+    }
+
+    public static SubWaveRuleProperties randomStartFromRight(float maxDelay) {
+        return new SubWaveRuleProperties(
+                false,
+                true,
+                GameConstants.SCREEN_RIGHT,
+                0,
+                1,
+                0f,
+                new Random().nextFloat() * maxDelay,
+                false
+        );
     }
 }

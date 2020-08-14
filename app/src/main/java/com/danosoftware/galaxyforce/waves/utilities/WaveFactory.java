@@ -110,8 +110,7 @@ public class WaveFactory {
                                         SubWavePathRule.WAVEY_LINE,
                                         PathConfig
                                                 .builder()
-//                                                .alienCharacter(AlienCharacter.OCTOPUS)
-                                                .alienCharacter(AlienCharacter.A)
+                                                .alienCharacter(AlienCharacter.ROTATOR)
                                                 .energy(1)
                                                 .missileConfig(
                                                         MissileFiringConfig
@@ -128,8 +127,7 @@ public class WaveFactory {
                                         SubWavePathRule.DROPPERS,
                                         PathConfig
                                                 .builder()
-//                                                .alienCharacter(AlienCharacter.BAD_CAT)
-                                                .alienCharacter(AlienCharacter.B)
+                                                .alienCharacter(AlienCharacter.FROGGER)
                                                 .energy(1)
                                                 .missileConfig(
                                                         MissileFiringConfig
@@ -151,8 +149,7 @@ public class WaveFactory {
                                         SubWavePathRule.WAVEY_LINE_REVERSE,
                                         PathConfig
                                                 .builder()
-//                                                .alienCharacter(AlienCharacter.BOUNCER)
-                                                .alienCharacter(AlienCharacter.C)
+                                                .alienCharacter(AlienCharacter.BOUNCER)
                                                 .energy(1)
                                                 .missileConfig(
                                                         MissileFiringConfig
@@ -1236,7 +1233,7 @@ public class WaveFactory {
                                         SubWavePathRule.BOUNCING,
                                         PathConfig
                                                 .builder()
-                                                .alienCharacter(AlienCharacter.C)
+                                                .alienCharacter(AlienCharacter.FROGGER)
                                                 .energy(1)
                                                 .missileConfig(
                                                         MissileFiringConfig
@@ -1253,7 +1250,7 @@ public class WaveFactory {
                                         SubWavePathRule.BOUNCING_HIGHER,
                                         PathConfig
                                                 .builder()
-                                                .alienCharacter(AlienCharacter.C)
+                                                .alienCharacter(AlienCharacter.JUMPER)
                                                 .energy(1)
                                                 .missileConfig(
                                                         MissileFiringConfig
@@ -1715,7 +1712,7 @@ public class WaveFactory {
                                         SubWavePathRule.LOOPER_ATTACK,
                                         PathConfig
                                                 .builder()
-                                                .alienCharacter(AlienCharacter.A)
+                                                .alienCharacter(AlienCharacter.ROTATOR)
                                                 .energy(1)
                                                 .missileConfig(
                                                         MissileFiringConfig
@@ -1731,7 +1728,7 @@ public class WaveFactory {
                                         SubWavePathRule.LOOPER_ATTACK_REVERSE,
                                         PathConfig
                                                 .builder()
-                                                .alienCharacter(AlienCharacter.A)
+                                                .alienCharacter(AlienCharacter.ROTATOR)
                                                 .energy(1)
                                                 .missileConfig(
                                                         MissileFiringConfig
