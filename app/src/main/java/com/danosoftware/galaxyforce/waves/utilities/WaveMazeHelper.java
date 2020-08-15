@@ -133,6 +133,8 @@ public class WaveMazeHelper {
             final int totalRows,
             final AlienSpeed speed,
             final int delayBetweenRows,
+            final AlienCharacter alienGuard,
+            final int alienGuardEnergy,
             final List<PowerUpType> powerUps) {
 
         // create random gaps in maze - 1 gap per row
@@ -161,8 +163,8 @@ public class WaveMazeHelper {
                                 BARRIERS_SPRITE_WIDTH),
                         DirectionalDestroyableConfig
                                 .builder()
-                                .alienCharacter(AlienCharacter.ROTATOR)
-                                .energy(1)
+                                .alienCharacter(alienGuard)
+                                .energy(alienGuardEnergy)
                                 .angle(DOWNWARDS)
                                 .speed(speed)
                                 .build(),

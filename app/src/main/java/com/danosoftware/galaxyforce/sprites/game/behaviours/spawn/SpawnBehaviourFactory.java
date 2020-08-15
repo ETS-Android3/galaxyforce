@@ -94,7 +94,7 @@ public class SpawnBehaviourFactory {
                     powerUpAllocatorFactory,
                     model,
                     spawningConfig.getSpawnedAlienConfig(),
-                    spawningConfig.getSpwanedPowerUpTypes());
+                    spawningConfig.getSpawnedPowerUpTypes());
         }
 
         // behaviour that disables spawning

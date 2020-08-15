@@ -107,7 +107,7 @@ public class WaveAsteroidsHelper {
                                                         .builder()
                                                         // do not assign power-ups. would result in same
                                                         // power-up being given to both split asteroids.
-                                                        .spwanedPowerUpTypes(
+                                                        .spawnedPowerUpTypes(
                                                                 NO_POWER_UPS)
                                                         .spawnedAlienConfig(
                                                                 SplitterConfig

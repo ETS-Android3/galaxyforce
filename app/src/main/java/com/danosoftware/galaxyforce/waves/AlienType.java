@@ -29,9 +29,6 @@ public enum AlienType {
     // alien that drifts from one side of screen to another
     DRIFTING,
 
-    // alien that spins while executing it's underlying behaviour (e.g. SPINNING while DESCENDING)
-    SPINNING,
-
     // alien that remains static and then explodes missiles
     EXPLODING,
 

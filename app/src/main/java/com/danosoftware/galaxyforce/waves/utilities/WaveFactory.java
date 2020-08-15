@@ -892,7 +892,7 @@ public class WaveFactory {
                                                                 .spawnConfig(
                                                                         SpawnOnDemandConfig
                                                                                 .builder()
-                                                                                .spwanedPowerUpTypes(
+                                                                                .spawnedPowerUpTypes(
                                                                                         NO_POWER_UPS)
                                                                                 .spawnedAlienConfig(SplitterConfig
                                                                                         .builder()
@@ -926,7 +926,7 @@ public class WaveFactory {
                                                                 .spawnConfig(
                                                                         SpawnOnDemandConfig
                                                                                 .builder()
-                                                                                .spwanedPowerUpTypes(
+                                                                                .spawnedPowerUpTypes(
                                                                                         NO_POWER_UPS)
                                                                                 .spawnedAlienConfig(SplitterConfig
                                                                                         .builder()
@@ -1606,6 +1606,8 @@ public class WaveFactory {
                                         15,
                                         AlienSpeed.VERY_FAST,
                                         2,
+                                        AlienCharacter.ROTATOR,
+                                        1,
                                         Collections.singletonList(PowerUpType.MISSILE_LASER))
                         )
                 );
@@ -1894,6 +1896,8 @@ public class WaveFactory {
                                         15,
                                         AlienSpeed.VERY_FAST,
                                         2,
+                                        AlienCharacter.ROTATOR,
+                                        1,
                                         Collections.singletonList(PowerUpType.MISSILE_LASER))
                         )
                 );
@@ -2082,6 +2086,8 @@ public class WaveFactory {
                                         15,
                                         AlienSpeed.VERY_FAST,
                                         2,
+                                        AlienCharacter.ROTATOR,
+                                        1,
                                         Collections.singletonList(PowerUpType.MISSILE_LASER))
                         )
                 );
@@ -2109,7 +2115,7 @@ public class WaveFactory {
                                                                 .spawnConfig(
                                                                         SpawnOnDemandConfig
                                                                                 .builder()
-                                                                                .spwanedPowerUpTypes(
+                                                                                .spawnedPowerUpTypes(
                                                                                         NO_POWER_UPS)
                                                                                 .spawnedAlienConfig(SplitterConfig
                                                                                         .builder()
@@ -2143,7 +2149,7 @@ public class WaveFactory {
                                                                 .spawnConfig(
                                                                         SpawnOnDemandConfig
                                                                                 .builder()
-                                                                                .spwanedPowerUpTypes(
+                                                                                .spawnedPowerUpTypes(
                                                                                         NO_POWER_UPS)
                                                                                 .spawnedAlienConfig(SplitterConfig
                                                                                         .builder()

@@ -13,15 +13,15 @@ import lombok.NonNull;
 public class SpawnOnDemandConfig extends SpawnConfig {
 
     private final AlienConfig spawnedAlienConfig;
-    private final List<PowerUpType> spwanedPowerUpTypes;
+    private final List<PowerUpType> spawnedPowerUpTypes;
 
     @Builder
     public SpawnOnDemandConfig(
             @NonNull final AlienConfig spawnedAlienConfig,
-            @NonNull final List<PowerUpType> spwanedPowerUpTypes) {
+            @NonNull final List<PowerUpType> spawnedPowerUpTypes) {
 
         super(SpawnType.SPAWN_ON_DEMAND);
         this.spawnedAlienConfig = spawnedAlienConfig;
-        this.spwanedPowerUpTypes = spwanedPowerUpTypes;
+        this.spawnedPowerUpTypes = spawnedPowerUpTypes;
     }
 }
