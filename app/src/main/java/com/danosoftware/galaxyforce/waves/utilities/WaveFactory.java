@@ -6,6 +6,8 @@ import com.danosoftware.galaxyforce.enumerations.AlienMissileType;
 import com.danosoftware.galaxyforce.enumerations.AlienSpeed;
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
+import com.danosoftware.galaxyforce.flightpath.paths.Path;
+import com.danosoftware.galaxyforce.flightpath.paths.PathSpeed;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.utilities.Reversed;
 import com.danosoftware.galaxyforce.utilities.WaveUtilities;
@@ -15,8 +17,10 @@ import com.danosoftware.galaxyforce.waves.config.SubWaveConfig;
 import com.danosoftware.galaxyforce.waves.config.SubWaveNoPathConfig;
 import com.danosoftware.galaxyforce.waves.config.SubWavePathConfig;
 import com.danosoftware.galaxyforce.waves.config.SubWaveRepeatMode;
+import com.danosoftware.galaxyforce.waves.config.aliens.AlienConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.exploding.MultiExplosionConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.exploding.SpawningExplosionConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.missiles.MissileConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.missiles.MissileFiringConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.missiles.MissileMultiFiringConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawnOnDemandConfig;
@@ -44,7 +48,12 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
+import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.createDescendingDelayedRowSubWave;
+import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.createDescendingOffsetRowsSubWave;
+import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.createLeftToRightDelayedRowSubWave;
+import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.createLeftToRightOffsetRowSubWave;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveAsteroidsHelper.createAsteroidField;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveAsteroidsHelper.createMiniDirectionalAsteroid;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveDriftingHelper.createDriftingWave;
@@ -468,6 +477,62 @@ public class WaveFactory {
 
             case 4:
 
+                final MissileConfig fourMissileConfig = MissileFiringConfig
+                        .builder()
+                        .missileType(AlienMissileType.DOWNWARDS)
+                        .missileCharacter(AlienMissileCharacter.LASER)
+                        .missileSpeed(AlienMissileSpeed.FAST)
+                        .missileFrequency(15f)
+                        .build();
+                final AlienRowConfig fourFrisbieRowConfig = AlienRowConfig
+                        .builder()
+                        .alienConfig(
+                                PathConfig
+                                        .builder()
+                                        .alienCharacter(AlienCharacter.FRISBIE)
+                                        .energy(2)
+                                        .missileConfig(fourMissileConfig)
+                                        .build())
+                        .powerUps(Collections.singletonList(PowerUpType.SHIELD))
+                        .build();
+                final AlienRowConfig fourPilotRowConfig = AlienRowConfig
+                        .builder()
+                        .alienConfig(
+                                PathConfig
+                                        .builder()
+                                        .alienCharacter(AlienCharacter.PILOT)
+                                        .energy(2)
+                                        .missileConfig(fourMissileConfig)
+                                        .build())
+                        .powerUps(Collections.singletonList(PowerUpType.SHIELD))
+                        .build();
+
+                subWaves.add(
+                        createSubWave(
+                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
+                                createLeftToRightDelayedRowSubWave(
+                                        Path.LEFT_AND_RIGHT,
+                                        PathSpeed.NORMAL,
+                                        new AlienRowConfig[] {fourPilotRowConfig, fourFrisbieRowConfig, fourFrisbieRowConfig, fourFrisbieRowConfig},
+                                        5,
+                                        GAME_HEIGHT - 230,
+                                        0f)
+                        )
+                );
+
+                subWaves.add(
+                        createSubWave(
+                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
+                                createLeftToRightOffsetRowSubWave(
+                                        Path.LEFT_AND_RIGHT,
+                                        PathSpeed.NORMAL,
+                                        new AlienRowConfig[] {fourPilotRowConfig, fourFrisbieRowConfig, fourFrisbieRowConfig, fourFrisbieRowConfig},
+                                        5,
+                                        GAME_HEIGHT - 230,
+                                        0f)
+                        )
+                );
+
                 subWaves.add(
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
@@ -628,7 +693,70 @@ public class WaveFactory {
 
             case 5:
 
-                // ????????
+                subWaves.add(
+                        createSubWave(
+                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
+                                new SubWavePathConfig(
+                                        SubWavePathRule.AROUND_EDGE,
+                                        PathConfig
+                                                .builder()
+                                                .alienCharacter(AlienCharacter.CHARLIE)
+                                                .energy(1)
+                                                .missileConfig(
+                                                        MissileFiringConfig
+                                                                .builder()
+                                                                .missileType(AlienMissileType.ROTATED)
+                                                                .missileCharacter(AlienMissileCharacter.LASER)
+                                                                .missileSpeed(AlienMissileSpeed.MEDIUM)
+                                                                .missileFrequency(6.5f)
+                                                                .build())
+                                                .build(),
+                                        Collections.singletonList(PowerUpType.MISSILE_PARALLEL)
+
+                                )));
+                subWaves.add(
+                        createSubWave(
+                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
+                                new SubWavePathConfig(
+                                        SubWavePathRule.DIAGONAL_CROSSOVER,
+                                        PathConfig
+                                                .builder()
+                                                .alienCharacter(AlienCharacter.PILOT)
+                                                .energy(1)
+                                                .missileConfig(
+                                                        MissileFiringConfig
+                                                                .builder()
+                                                                .missileType(AlienMissileType.ROTATED)
+                                                                .missileCharacter(AlienMissileCharacter.LASER)
+                                                                .missileSpeed(AlienMissileSpeed.MEDIUM)
+                                                                .missileFrequency(6.5f)
+                                                                .build())
+                                                .build(),
+                                        Collections.singletonList(PowerUpType.MISSILE_PARALLEL)
+
+                                )));
+                subWaves.add(
+                        createSubWave(
+                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
+                                new SubWavePathConfig(
+                                        SubWavePathRule.DIAGONAL_CROSSOVER_INTERLEAVED,
+                                        PathConfig
+                                                .builder()
+                                                .alienCharacter(AlienCharacter.FRISBIE)
+                                                .energy(1)
+                                                .missileConfig(
+                                                        MissileFiringConfig
+                                                                .builder()
+                                                                .missileType(AlienMissileType.ROTATED)
+                                                                .missileCharacter(AlienMissileCharacter.LASER)
+                                                                .missileSpeed(AlienMissileSpeed.MEDIUM)
+                                                                .missileFrequency(6.5f)
+                                                                .build())
+                                                .build(),
+                                        Collections.singletonList(PowerUpType.MISSILE_PARALLEL)
+
+                                )));
+                break;
 
                 /**
                  * Insect Motherships move at top of screen while spawning aliens that drop downwards.
@@ -1541,41 +1669,68 @@ public class WaveFactory {
 
             case 20:
 
-                // ?????
+                /**
+                 * Alien drops from top to bottom spawning aliens that move diagnonally
+                 * down the screen while firing missiles at the base.
+                 */
 
-                // old wave 20
+                // config of two spawned aliens
+                AlienConfig bearConfig = DirectionalDestroyableConfig
+                        .builder()
+                        .alienCharacter(AlienCharacter.BEAR)
+                        .energy(1)
+                        .speed(AlienSpeed.FAST)
+                        .angle(-HALF_PI - QUARTER_PI)
+                        .missileConfig(
+                                MissileFiringConfig
+                                        .builder()
+                                        .missileCharacter(AlienMissileCharacter.LASER)
+                                        .missileType(AlienMissileType.ROTATED)
+                                        .missileFrequency(4f)
+                                        .missileSpeed(AlienMissileSpeed.SLOW)
+                                        .build())
+                        .build();
+                AlienConfig jokerConfig = DirectionalDestroyableConfig
+                        .builder()
+                        .alienCharacter(AlienCharacter.JOKER)
+                        .energy(1)
+                        .speed(AlienSpeed.FAST)
+                        .angle(-HALF_PI + QUARTER_PI)
+                        .missileConfig(
+                                MissileFiringConfig
+                                        .builder()
+                                        .missileCharacter(AlienMissileCharacter.LASER)
+                                        .missileType(AlienMissileType.ROTATED)
+                                        .missileFrequency(4f)
+                                        .missileSpeed(AlienMissileSpeed.SLOW)
+                                        .build())
+                        .build();
+
                 subWaves.add(
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                new SubWaveNoPathConfig(
-                                        SubWaveRule.MIDDLE_TOP,
-                                        HunterConfig
+                                new SubWavePathConfig(
+                                        SubWavePathRule.SINGLE_SPIRAL,
+                                        PathConfig
                                                 .builder()
-                                                .alienCharacter(AlienCharacter.BOOK)
-                                                .energy(10)
-                                                .speed(AlienSpeed.VERY_FAST)
-                                                .boundaries(
-                                                        BoundariesConfig
-                                                                .builder()
-                                                                .maxX(SCREEN_MID_X)
-                                                                .build()
-                                                )
-                                                .build(),
-                                        Collections.singletonList(PowerUpType.MISSILE_GUIDED)
-                                ),
-                                new SubWaveNoPathConfig(
-                                        SubWaveRule.MIDDLE_BOTTOM,
-                                        HunterConfig
-                                                .builder()
-                                                .alienCharacter(AlienCharacter.BOOK)
-                                                .energy(10)
-                                                .speed(AlienSpeed.VERY_FAST)
-                                                .boundaries(
-                                                        BoundariesConfig
-                                                                .builder()
-                                                                .minX(SCREEN_MID_X)
-                                                                .build()
-                                                )
+                                                .alienCharacter(AlienCharacter.WHIRLPOOL)
+                                                .energy(20)
+                                                .spawnConfig(
+                                                        SpawningAlienConfig
+                                                        .builder()
+                                                        .maximumAdditionalRandomSpawnDelayTime(1f)
+                                                        .minimumSpawnDelayTime(0.5f)
+                                                        .spwanedPowerUpTypes(Arrays.asList(
+                                                                PowerUpType.MISSILE_LASER,
+                                                                PowerUpType.SHIELD,
+                                                                PowerUpType.MISSILE_SPRAY))
+                                                        .spawnedAlienConfig(
+                                                                SplitterConfig
+                                                                        .builder()
+                                                                        .alienConfigs(
+                                                                                Arrays.asList(bearConfig, jokerConfig))
+                                                                        .build())
+                                                        .build())
                                                 .build(),
                                         Collections.singletonList(PowerUpType.MISSILE_GUIDED)
                                 )
@@ -2588,6 +2743,96 @@ public class WaveFactory {
             case 46:
             case 47:
 
+                final MissileConfig fortySevenMissileConfig = MissileFiringConfig
+                        .builder()
+                        .missileType(AlienMissileType.DOWNWARDS)
+                        .missileCharacter(AlienMissileCharacter.LASER)
+                        .missileSpeed(AlienMissileSpeed.FAST)
+                        .missileFrequency(15f)
+                        .build();
+                final AlienRowConfig fishRowConfig = AlienRowConfig
+                        .builder()
+                        .alienConfig(
+                                PathConfig
+                                        .builder()
+                                        .alienCharacter(AlienCharacter.FISH)
+                                        .energy(2)
+                                        .missileConfig(fortySevenMissileConfig)
+                                        .build())
+                        .powerUps(Collections.singletonList(PowerUpType.SHIELD))
+                        .build();
+                final AlienRowConfig pilotRowConfig = AlienRowConfig
+                        .builder()
+                        .alienConfig(
+                                PathConfig
+                                        .builder()
+                                        .alienCharacter(AlienCharacter.PILOT)
+                                        .energy(2)
+                                        .missileConfig(fortySevenMissileConfig)
+                                        .build())
+                        .powerUps(Collections.singletonList(PowerUpType.MISSILE_GUIDED))
+                        .build();
+                final AlienRowConfig eyeRowConfig = AlienRowConfig
+                        .builder()
+                        .alienConfig(
+                                PathConfig
+                                        .builder()
+                                        .alienCharacter(AlienCharacter.ALL_SEEING_EYE)
+                                        .energy(2)
+                                        .missileConfig(fortySevenMissileConfig)
+                                        .build())
+                        .powerUps(Collections.singletonList(PowerUpType.MISSILE_LASER))
+                        .build();
+
+                subWaves.add(
+                        createSubWave(
+                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
+                                createDescendingDelayedRowSubWave(
+                                        Path.BOUNCE_DOWN_AND_UP,
+                                        PathSpeed.NORMAL,
+                                        new AlienRowConfig[] {fishRowConfig, fishRowConfig, pilotRowConfig, pilotRowConfig, eyeRowConfig, eyeRowConfig},
+                                        6,
+                                        0f,
+                                        true
+                                )
+                        )
+                );
+
+                subWaves.add(
+                        createSubWave(
+                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
+                                createDescendingOffsetRowsSubWave(
+                                        Path.BOUNCE_DOWN_AND_UP,
+                                        PathSpeed.NORMAL,
+                                        new AlienRowConfig[] {eyeRowConfig, eyeRowConfig, pilotRowConfig, pilotRowConfig, fishRowConfig , fishRowConfig},
+                                        6,
+                                        0f,
+                                        true)
+                        )
+                );
+
+                subWaves.add(
+                        createSubWave(
+                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
+                                new SubWavePathConfig(
+                                        SubWavePathRule.ROW_DROPPERS,
+                                        PathConfig
+                                                .builder()
+                                                .alienCharacter(AlienCharacter.FISH)
+                                                .energy(2)
+                                                .missileConfig(
+                                                        MissileFiringConfig
+                                                                .builder()
+                                                                .missileType(AlienMissileType.DOWNWARDS)
+                                                                .missileCharacter(AlienMissileCharacter.LASER)
+                                                                .missileSpeed(AlienMissileSpeed.FAST)
+                                                                .missileFrequency(15f)
+                                                                .build())
+                                                .build(),
+                                        Collections.singletonList(PowerUpType.SHIELD)
+                                )
+                        )
+                );
 
                 // old wave 22
                 subWaves.add(

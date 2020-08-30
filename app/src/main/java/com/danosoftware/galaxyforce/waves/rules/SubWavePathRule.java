@@ -378,13 +378,13 @@ public enum SubWavePathRule {
      * then bounce back up. each row is delayed compared to the previous.
      */
     FLAT_ATTACK_ROW_1(
-            descendingRowSubWave(0f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)),
+            descendingOverlappingRowSubWave(0f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)),
     FLAT_ATTACK_ROW_2(
-            descendingRowSubWave(0.3f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)),
+            descendingOverlappingRowSubWave(0.3f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)),
     FLAT_ATTACK_ROW_3(
-            descendingRowSubWave(0.6f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)),
+            descendingOverlappingRowSubWave(0.6f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)),
     FLAT_ATTACK_ROW_4(
-            descendingRowSubWave(0.9f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)),
+            descendingOverlappingRowSubWave(0.9f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)),
 
 
 
@@ -639,23 +639,27 @@ public enum SubWavePathRule {
     ),
 
     ROW_BOUNCERS_THREE(
-            descendingRowSubWave(3f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)
+            descendingOverlappingRowSubWave(3f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)
     ),
     ROW_BOUNCERS_EIGHT(
-            descendingRowSubWave(8f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)
+            descendingOverlappingRowSubWave(8f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)
     ),
     ROW_BOUNCERS_THIRTEEN(
-            descendingRowSubWave(13f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)
+            descendingOverlappingRowSubWave(13f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.NORMAL)
     ),
 
     ROW_DROPPERS_THREE(
-            descendingRowSubWave(3f, Path.STRAIGHT_DOWN, PathSpeed.SLOW)
+            descendingOverlappingRowSubWave(3f, Path.STRAIGHT_DOWN, PathSpeed.SLOW)
     ),
     ROW_DROPPERS_EIGHT(
-            descendingRowSubWave(8f, Path.STRAIGHT_DOWN, PathSpeed.SLOW)
+            descendingOverlappingRowSubWave(8f, Path.STRAIGHT_DOWN, PathSpeed.SLOW)
     ),
     ROW_DROPPERS_THIRTEEN(
-            descendingRowSubWave(13f, Path.STRAIGHT_DOWN, PathSpeed.SLOW)
+            descendingOverlappingRowSubWave(13f, Path.STRAIGHT_DOWN, PathSpeed.SLOW)
+    ),
+
+    ROW_DROPPERS(
+            descendingRowSubWave(0f, Path.BOUNCE_DOWN_AND_UP, PathSpeed.SLOW)
     ),
 
 //    DIAMOND_DROPPERS(
@@ -837,6 +841,17 @@ public enum SubWavePathRule {
     ),
 
 
+    SINGLE_SPIRAL(
+            new SubWavePathRuleProperties(
+                    Path.SPIRAL,
+                    PathSpeed.FAST,
+                    1,
+                    0f,
+                    0,
+                    false
+            )
+    ),
+
     /**
      * One spiral path from top to bottom
      */
@@ -985,6 +1000,80 @@ public enum SubWavePathRule {
                     0.25f,
                     true
     )
+    ),
+
+    /**
+     * Aliens follow diagonal path from top-left
+     */
+    DIAGONAL(
+            new SubWavePathRuleProperties(
+                    Path.DIAGONAL,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.25f,
+                    0f,
+                    false)
+    ),
+
+    /**
+     * Aliens move diagonally from top-left to bottom-right
+     * followed by top-right to bottom-left
+     */
+    DIAGONAL_CROSSOVER(
+            new SubWavePathRuleProperties(
+                    Path.DIAGONAL,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.25f,
+                    0f,
+                    false),
+            new SubWavePathRuleProperties(
+                    Path.DIAGONAL,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.25f,
+                    1.25f,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH)))
+    ),
+
+    /**
+     * Aliens move diagonally from top-left to bottom-right
+     * and from top-right to bottom-left.
+     *
+     * Paths are timed so that they just miss each other at the cross-over.
+     */
+    DIAGONAL_CROSSOVER_INTERLEAVED(
+            new SubWavePathRuleProperties(
+                    Path.DIAGONAL,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.5f,
+                    0f,
+                    false),
+            new SubWavePathRuleProperties(
+                    Path.DIAGONAL,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.5f,
+                    0.25f,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH)))
+    ),
+
+    /**
+     * Aliens follow square path around edge of screen
+     */
+    AROUND_EDGE(
+            new SubWavePathRuleProperties(
+                    Path.SQUARE,
+                    PathSpeed.FAST,
+                    10,
+                    0.25f,
+                    0f,
+                    false)
     );
 
     // list of properties for a sub-wave
@@ -1008,7 +1097,7 @@ public enum SubWavePathRule {
     /**
      * Creates a row attack
      */
-    private static List<SubWavePathRuleProperties> descendingRowSubWave(
+    private static List<SubWavePathRuleProperties> descendingOverlappingRowSubWave(
             final float delayStart,
             final Path path,
             final PathSpeed speed) {
@@ -1024,6 +1113,55 @@ public enum SubWavePathRule {
                     false,
                     new PointTranslatorChain()
                             .add(new OffsetXPointTranslator(40 + (col * 92)))
+            ));
+        }
+
+        return subWaves;
+    }
+
+    private static List<SubWavePathRuleProperties> descendingRowSubWave(
+            final float delayStart,
+            final Path path,
+            final PathSpeed speed) {
+        List<SubWavePathRuleProperties> subWaves = new ArrayList<>();
+
+        for (int row = 0; row < 6; row++) {
+            for (int col = 0; col < 6; col++) {
+                subWaves.add(new SubWavePathRuleProperties(
+                        path,
+                        speed,
+                        1,
+                        0f,
+                        delayStart,
+                        false,
+                        new PointTranslatorChain()
+                                .add(new OffsetXPointTranslator(40 + (col * 92)))
+                                .add(new OffsetYPointTranslator(0 + (row * 64)))
+                ));
+            }
+        }
+
+        return subWaves;
+    }
+
+    private static List<SubWavePathRuleProperties> descendingRow(
+            final int row,
+            final float delayStart,
+            final Path path,
+            final PathSpeed speed) {
+        List<SubWavePathRuleProperties> subWaves = new ArrayList<>();
+
+        for (int col = 0; col < 6; col++) {
+            subWaves.add(new SubWavePathRuleProperties(
+                    path,
+                    speed,
+                    1,
+                    0f,
+                    delayStart,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetXPointTranslator(40 + (col * 92)))
+                            .add(new OffsetYPointTranslator(0 + (row * 64)))
             ));
         }
 

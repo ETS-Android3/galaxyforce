@@ -99,11 +99,23 @@ public enum Path {
     SPIRAL("spiral.json"),
 
     /*
-     * Slides from top-right to bottom-left
+     * Slides from top-right to bottom-left.
+     * 3 versions to allow 3 aliens to slide together in formation.
      */
     SLIDE_LEFT("slideLeft.json"),
     SLIDE_CENTRE("slideCentre.json"),
-    SLIDE_RIGHT("slideRight.json");
+    SLIDE_RIGHT("slideRight.json"),
+
+    /*
+     * Square path the follows around the edge of the entire screen
+     * (clockwise starting and finishing at top-left)
+     */
+    SQUARE("square.json"),
+
+    /*
+     * Diagonal path from top-left to bottom-right
+     */
+    DIAGONAL("diagonal.json");
 
 
     // file name holding path data
