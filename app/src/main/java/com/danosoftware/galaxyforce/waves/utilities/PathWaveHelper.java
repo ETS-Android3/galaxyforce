@@ -11,7 +11,10 @@ import com.danosoftware.galaxyforce.waves.config.SubWavePathConfig;
 import com.danosoftware.galaxyforce.waves.rules.SubWavePathRuleProperties;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+
+import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
 
 public class PathWaveHelper {
 
@@ -409,6 +412,149 @@ public class PathWaveHelper {
                     new PointTranslatorChain()
                             .add(new OffsetXPointTranslator(xOffset + (col * xGapBetweenAliens)))
                             .add(new OffsetYPointTranslator(yOffset - (row * yGapBetweenAliens)))
+            ));
+        }
+
+        return subWaves;
+    }
+
+    //
+    // ******************************************
+    // CUSTOM PATTERNS
+    // ******************************************
+    //
+
+    /**
+     * Create a staggered row.
+     * One center alien dropping with two adjacent aliens slightly behind.
+     */
+    public static List<SubWavePathRuleProperties> createStaggeredDroppers(
+            final Path path,
+            final PathSpeed speed,
+            final float delayStart) {
+
+        float delayMultiplier = speed.getMultiplier();
+        float staggeredDelayStart = delayMultiplier * 0.25f;
+
+        return Arrays.asList(
+                new SubWavePathRuleProperties(
+                        path,
+                        speed,
+                        1,
+                        0f,
+                        delayStart + staggeredDelayStart,
+                        false,
+                        new PointTranslatorChain()
+                                .add(new OffsetXPointTranslator(SCREEN_MID_X - (SCREEN_MID_X / 2)))
+                ),
+                new SubWavePathRuleProperties(
+                        path,
+                        speed,
+                        1,
+                        0f,
+                        delayStart,
+                        false,
+                        new PointTranslatorChain()
+                                .add(new OffsetXPointTranslator(SCREEN_MID_X))
+                ),
+                new SubWavePathRuleProperties(
+                        path,
+                        speed,
+                        1,
+                        0f,
+                        delayStart + staggeredDelayStart,
+                        false,
+                        new PointTranslatorChain()
+                                .add(new OffsetXPointTranslator(SCREEN_MID_X + (SCREEN_MID_X / 2)))
+                )
+        );
+    }
+
+    /**
+     * Create a diamond pattern of descending aliens.
+     */
+    public static List<SubWavePathRuleProperties> createDiamondDroppers(
+            final Path path,
+            final PathSpeed speed,
+            final float delayStart) {
+
+        float delayMultiplier = speed.getMultiplier();
+
+        return Arrays.asList(
+                new SubWavePathRuleProperties(
+                        path,
+                        speed,
+                        1,
+                        0f,
+                        delayStart + (delayMultiplier * 0.5f),
+                        false,
+                        new PointTranslatorChain()
+                                .add(new OffsetXPointTranslator(SCREEN_MID_X - (2 * (SCREEN_MID_X / 3))))
+                ),
+                new SubWavePathRuleProperties(
+                        path,
+                        speed,
+                        2,
+                        0.5f * delayMultiplier,
+                        delayStart + (delayMultiplier * 0.25f),
+                        false,
+                        new PointTranslatorChain()
+                                .add(new OffsetXPointTranslator(SCREEN_MID_X - (SCREEN_MID_X / 3)))
+                ),
+                new SubWavePathRuleProperties(
+                        path,
+                        speed,
+                        2,
+                        1f * delayMultiplier,
+                        delayStart,
+                        false,
+                        new PointTranslatorChain()
+                                .add(new OffsetXPointTranslator(SCREEN_MID_X))
+                ),
+                new SubWavePathRuleProperties(
+                        path,
+                        speed,
+                        2,
+                        0.5f * delayMultiplier,
+                        delayStart + (delayMultiplier * 0.25f),
+                        false,
+                        new PointTranslatorChain()
+                                .add(new OffsetXPointTranslator(SCREEN_MID_X + (SCREEN_MID_X / 3)))
+                ),
+                new SubWavePathRuleProperties(
+                        path,
+                        speed,
+                        1,
+                        0f,
+                        delayStart + (delayMultiplier * 0.5f),
+                        false,
+                        new PointTranslatorChain()
+                                .add(new OffsetXPointTranslator(SCREEN_MID_X + (2 * (SCREEN_MID_X / 3))))
+                )
+        );
+    }
+
+    /**
+     * Creates an attack of 6 aliens in a row
+     */
+    public static List<SubWavePathRuleProperties> createRowDroppers(
+            final Path path,
+            final PathSpeed speed,
+            final float delayStart) {
+
+        List<SubWavePathRuleProperties> subWaves = new ArrayList<>();
+        int gapBetweenAliens = HORIZONTAL_SPACE_REMAINING / 6;
+
+        for (int col = 0; col < 6; col++) {
+            subWaves.add(new SubWavePathRuleProperties(
+                    path,
+                    speed,
+                    1,
+                    0f,
+                    delayStart,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetXPointTranslator(HORIZONTAL_ROW_EDGE_GAP + (col * gapBetweenAliens)))
             ));
         }
 
