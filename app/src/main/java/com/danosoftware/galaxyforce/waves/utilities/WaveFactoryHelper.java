@@ -37,7 +37,7 @@ public class WaveFactoryHelper {
     public static SubWaveRuleProperties createAlienSubWaveProperty(
             final int row,
             final int xPos,
-            final int delayBetweenRows) {
+            final float delayBetweenRows) {
         return new SubWaveRuleProperties(
                 false,
                 false,
@@ -46,6 +46,23 @@ public class WaveFactoryHelper {
                 1,
                 0,
                 row * delayBetweenRows,
+                false);
+    }
+
+    /**
+     * Create an subwave property for alien at the wanted position
+     */
+    public static SubWaveRuleProperties createAlienSubWaveProperty(
+            final int xPos,
+            final int yPos) {
+        return new SubWaveRuleProperties(
+                false,
+                false,
+                xPos,
+                yPos,
+                1,
+                0,
+                0,
                 false);
     }
 

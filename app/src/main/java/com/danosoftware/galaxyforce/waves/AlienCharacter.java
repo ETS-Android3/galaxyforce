@@ -18,6 +18,16 @@ public enum AlienCharacter {
             new ISpriteIdentifier[]{GameSpriteIdentifier.NULL},
             0f),
 
+    BLOCK(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.BLOCK_01,
+                    GameSpriteIdentifier.BLOCK_02},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.BLOCK_01,
+                    GameSpriteIdentifier.BLOCK_02},
+            0.5f
+    ),
+
     FROGGER(
             new ISpriteIdentifier[]{
                     GameSpriteIdentifier.FROGGER,
@@ -29,6 +39,136 @@ public enum AlienCharacter {
                     GameSpriteIdentifier.FROGGER_TALL_HIT,
                     GameSpriteIdentifier.FROGGER_HIT,
                     GameSpriteIdentifier.FROGGER_WIDE_HIT},
+            0.25f
+    ),
+
+    PINKO(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.PINKO,
+                    GameSpriteIdentifier.PINKO_TALL,
+                    GameSpriteIdentifier.PINKO,
+                    GameSpriteIdentifier.PINKO_WIDE},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.PINKO_HIT,
+                    GameSpriteIdentifier.PINKO_TALL_HIT,
+                    GameSpriteIdentifier.PINKO_HIT,
+                    GameSpriteIdentifier.PINKO_WIDE_HIT},
+            0.25f
+    ),
+
+    PISTON(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.PISTON,
+                    GameSpriteIdentifier.PISTON_TALL,
+                    GameSpriteIdentifier.PISTON,
+                    GameSpriteIdentifier.PISTON_WIDE},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.PISTON_HIT,
+                    GameSpriteIdentifier.PISTON_TALL_HIT,
+                    GameSpriteIdentifier.PISTON_HIT,
+                    GameSpriteIdentifier.PISTON_WIDE_HIT},
+            0.25f
+    ),
+
+    PURPLE_MEANIE(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.PURPLE_MEANIE_01,
+                    GameSpriteIdentifier.PURPLE_MEANIE_02,
+                    GameSpriteIdentifier.PURPLE_MEANIE_03,
+                    GameSpriteIdentifier.PURPLE_MEANIE_04,
+                    GameSpriteIdentifier.PURPLE_MEANIE_05},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.PURPLE_MEANIE_01_HIT,
+                    GameSpriteIdentifier.PURPLE_MEANIE_02_HIT,
+                    GameSpriteIdentifier.PURPLE_MEANIE_03_HIT,
+                    GameSpriteIdentifier.PURPLE_MEANIE_04_HIT,
+                    GameSpriteIdentifier.PURPLE_MEANIE_05_HIT},
+            0.25f
+    ),
+
+    PAD(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.PAD_01,
+                    GameSpriteIdentifier.PAD_02,
+                    GameSpriteIdentifier.PAD_03,
+                    GameSpriteIdentifier.PAD_04,
+                    GameSpriteIdentifier.PAD_05},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.PAD_01_HIT,
+                    GameSpriteIdentifier.PAD_02_HIT,
+                    GameSpriteIdentifier.PAD_03_HIT,
+                    GameSpriteIdentifier.PAD_04_HIT,
+                    GameSpriteIdentifier.PAD_05_HIT},
+            0.25f
+    ),
+
+    GHOST(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.GHOST,
+                    GameSpriteIdentifier.GHOST_LEFT,
+                    GameSpriteIdentifier.GHOST,
+                    GameSpriteIdentifier.GHOST_RIGHT},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.GHOST_HIT,
+                    GameSpriteIdentifier.GHOST_LEFT_HIT,
+                    GameSpriteIdentifier.GHOST_HIT,
+                    GameSpriteIdentifier.GHOST_RIGHT_HIT},
+            0.25f
+    ),
+
+    HOPPER(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.HOPPER,
+                    GameSpriteIdentifier.HOPPER_LEFT,
+                    GameSpriteIdentifier.HOPPER,
+                    GameSpriteIdentifier.HOPPER_RIGHT},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.HOPPER_HIT,
+                    GameSpriteIdentifier.HOPPER_LEFT_HIT,
+                    GameSpriteIdentifier.HOPPER_HIT,
+                    GameSpriteIdentifier.HOPPER_RIGHT_HIT},
+            0.25f
+    ),
+
+    AMOEBA(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.AMOEBA,
+                    GameSpriteIdentifier.AMOEBA_LEFT,
+                    GameSpriteIdentifier.AMOEBA,
+                    GameSpriteIdentifier.AMOEBA_RIGHT},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.AMOEBA_HIT,
+                    GameSpriteIdentifier.AMOEBA_LEFT_HIT,
+                    GameSpriteIdentifier.AMOEBA_HIT,
+                    GameSpriteIdentifier.AMOEBA_RIGHT_HIT},
+            0.25f
+    ),
+
+    CHEEKY(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.CHEEKY,
+                    GameSpriteIdentifier.CHEEKY_LEFT,
+                    GameSpriteIdentifier.CHEEKY,
+                    GameSpriteIdentifier.CHEEKY_RIGHT},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.CHEEKY_HIT,
+                    GameSpriteIdentifier.CHEEKY_LEFT_HIT,
+                    GameSpriteIdentifier.CHEEKY_HIT,
+                    GameSpriteIdentifier.CHEEKY_RIGHT_HIT},
+            0.25f
+    ),
+
+    FOXY(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.FOXY,
+                    GameSpriteIdentifier.FOXY_TALL,
+                    GameSpriteIdentifier.FOXY,
+                    GameSpriteIdentifier.FOXY_WIDE},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.FOXY_HIT,
+                    GameSpriteIdentifier.FOXY_TALL_HIT,
+                    GameSpriteIdentifier.FOXY_HIT,
+                    GameSpriteIdentifier.FOXY_WIDE_HIT},
             0.25f
     ),
 

@@ -50,6 +50,8 @@ import java.util.List;
 
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
+import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.mazePatternOne;
+import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.mazePatternTwo;
 import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.createDescendingDelayedRowSubWave;
 import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.createDescendingOffsetRowsSubWave;
 import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.createDiamondDroppers;
@@ -1953,17 +1955,20 @@ public class WaveFactory {
                 break;
 
             case 25:
-
-                // ??? place-holder need real level
-                // old wave 17
                 subWaves.add(
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                asteroidHorizontalRows(
-                                        10,
-                                        AlienSpeed.SLOW,
-                                        2,
-                                        Collections.singletonList(PowerUpType.SHIELD))
+                                mazePatternOne(
+                                        AlienSpeed.MEDIUM,
+                                        NO_POWER_UPS)
+                        )
+                );
+                subWaves.add(
+                        createSubWave(
+                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
+                                mazePatternTwo(
+                                        AlienSpeed.VERY_FAST,
+                                        NO_POWER_UPS)
                         )
                 );
                 break;

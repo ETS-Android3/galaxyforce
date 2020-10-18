@@ -5,6 +5,90 @@ import com.danosoftware.galaxyforce.textures.Texture;
 
 public enum GameSpriteIdentifier implements ISpriteIdentifier {
 
+    // Block
+    BLOCK_01("block01",2),
+    BLOCK_02("block02",2),
+
+    // Foxy
+    FOXY("foxy01",8),
+    FOXY_TALL("foxy02", 8),
+    FOXY_WIDE("foxy03", 8),
+    FOXY_HIT("foxy01Hit",8),
+    FOXY_TALL_HIT("foxy02Hit", 8),
+    FOXY_WIDE_HIT("foxy03Hit", 8),
+
+    // Pinko
+    PINKO("pinko01",6),
+    PINKO_TALL("pinko02", 6),
+    PINKO_WIDE("pinko03", 6),
+    PINKO_HIT("pinko01Hit",6),
+    PINKO_TALL_HIT("pinko02Hit", 6),
+    PINKO_WIDE_HIT("pinko03Hit", 6),
+
+    // Piston
+    PISTON("piston01",8),
+    PISTON_TALL("piston02", 8),
+    PISTON_WIDE("piston03", 8),
+    PISTON_HIT("piston01Hit",8),
+    PISTON_TALL_HIT("piston02Hit", 8),
+    PISTON_WIDE_HIT("piston03Hit", 8),
+
+    // Hopper
+    HOPPER("hopper01",8),
+    HOPPER_LEFT("hopper02", 8),
+    HOPPER_RIGHT("hopper03", 8),
+    HOPPER_HIT("hopper01Hit",8),
+    HOPPER_LEFT_HIT("hopper02Hit", 8),
+    HOPPER_RIGHT_HIT("hopper03Hit", 8),
+
+    // Ghost
+    GHOST("ghost01",8),
+    GHOST_LEFT("ghost02", 8),
+    GHOST_RIGHT("ghost03", 8),
+    GHOST_HIT("ghost01Hit",8),
+    GHOST_LEFT_HIT("ghost02Hit", 8),
+    GHOST_RIGHT_HIT("ghost03Hit", 8),
+
+    // Anomeba
+    AMOEBA("amoeba01",8),
+    AMOEBA_LEFT("amoeba02", 8),
+    AMOEBA_RIGHT("amoeba03", 8),
+    AMOEBA_HIT("amoeba01Hit",8),
+    AMOEBA_LEFT_HIT("amoeba02Hit", 8),
+    AMOEBA_RIGHT_HIT("amoeba03Hit", 8),
+
+    // Cheeky
+    CHEEKY("cheeky01",6),
+    CHEEKY_LEFT("cheeky02", 6),
+    CHEEKY_RIGHT("cheeky03", 6),
+    CHEEKY_HIT("cheeky01Hit",6),
+    CHEEKY_LEFT_HIT("cheeky02Hit", 6),
+    CHEEKY_RIGHT_HIT("cheeky03Hit", 6),
+
+    // Purple Meanie
+    PURPLE_MEANIE_01("purpleMeanie01",8),
+    PURPLE_MEANIE_02("purpleMeanie02", 8),
+    PURPLE_MEANIE_03("purpleMeanie03", 8),
+    PURPLE_MEANIE_04("purpleMeanie04", 8),
+    PURPLE_MEANIE_05("purpleMeanie05", 8),
+    PURPLE_MEANIE_01_HIT("purpleMeanie01Hit",8),
+    PURPLE_MEANIE_02_HIT("purpleMeanie02Hit", 8),
+    PURPLE_MEANIE_03_HIT("purpleMeanie03Hit", 8),
+    PURPLE_MEANIE_04_HIT("purpleMeanie04Hit", 8),
+    PURPLE_MEANIE_05_HIT("purpleMeanie05Hit", 8),
+
+    // Pad
+    PAD_01("pad01",6),
+    PAD_02("pad02", 6),
+    PAD_03("pad03", 6),
+    PAD_04("pad04", 6),
+    PAD_05("pad05", 6),
+    PAD_01_HIT("pad01Hit",6),
+    PAD_02_HIT("pad02Hit", 6),
+    PAD_03_HIT("pad03Hit", 6),
+    PAD_04_HIT("pad04Hit", 6),
+    PAD_05_HIT("pad05Hit", 6),
+
     // Jumper
     JUMPER("jumper",8),
     JUMPER_UP("jumperUp", 8),
