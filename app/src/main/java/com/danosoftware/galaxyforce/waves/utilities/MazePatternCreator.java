@@ -6,14 +6,23 @@ import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.waves.AlienCharacter;
 import com.danosoftware.galaxyforce.waves.config.SubWaveConfig;
 import com.danosoftware.galaxyforce.waves.config.SubWaveNoPathConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.exploding.SpawningExplosionConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawnOnDemandConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningBySpeedConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.DirectionalDestroyableConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.types.SplitterConfig;
 import com.danosoftware.galaxyforce.waves.rules.SubWaveRuleProperties;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveAsteroidsHelper.createMiniDirectionalAsteroid;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.DOWNWARDS;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.HALF_PI;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.NO_POWER_UPS;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.QUARTER_PI;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.createAlienSubWaveProperty;
 
 public class MazePatternCreator {
@@ -257,6 +266,37 @@ public class MazePatternCreator {
             0b1110111
     };
 
+    public static final int[] MAZE_THREE = {
+            0b1110111,
+            0b0000000,
+            0b0000000,
+            0b0001000,
+            0b0011100,
+            0b0111110,
+            0b0111110,
+            0b0011100,
+            0b0001000,
+            0b0000000,
+            0b0000000,
+            0b1111100,
+            0b0000000,
+            0b0000000,
+            0b0000000,
+            0b0000000,
+            0b0000000,
+            0b0011111,
+            0b0000111,
+            0b1000011,
+            0b1000001,
+            0b0000000,
+            0b0000000,
+            0b1111100,
+            0b1110000,
+            0b1100001,
+            0b1000001,
+            0b0000000
+    };
+
     /**
      * Create descending rows of blocks in a maze pattern
      */
@@ -300,6 +340,52 @@ public class MazePatternCreator {
                                 .energy(Integer.MAX_VALUE)
                                 .angle(DOWNWARDS)
                                 .speed(speed)
+                                .build(),
+                        powerUps)
+        };
+    }
+
+    /**
+     * Create descending rows of blocks in a maze pattern
+     */
+    public static SubWaveConfig[] mazePatternThree(
+            final AlienSpeed speed,
+            final List<PowerUpType> powerUps) {
+
+        return new SubWaveConfig[]{
+                new SubWaveNoPathConfig(
+                        createMaze(
+                                MAZE_THREE,
+                                BLOCKS_PER_ROW,
+                                BLOCK_SPRITE_WIDTH),
+                        DirectionalDestroyableConfig
+                                .builder()
+                                .alienCharacter(AlienCharacter.ASTEROID)
+                                .energy(2)
+                                .speed(speed)
+                                .angle(DOWNWARDS)
+                                .spinningConfig(
+                                        SpinningBySpeedConfig
+                                                .builder()
+                                                .build())
+                                .explosionConfig(
+                                        SpawningExplosionConfig
+                                                .builder()
+                                                .spawnConfig(
+                                                        SpawnOnDemandConfig
+                                                                .builder()
+                                                                .spawnedPowerUpTypes(
+                                                                        NO_POWER_UPS)
+                                                                .spawnedAlienConfig(SplitterConfig
+                                                                        .builder()
+                                                                        .alienConfigs(
+                                                                                Arrays.asList(
+                                                                                        createMiniDirectionalAsteroid(-HALF_PI - QUARTER_PI, AlienSpeed.MEDIUM),
+                                                                                        createMiniDirectionalAsteroid(-HALF_PI + QUARTER_PI, AlienSpeed.MEDIUM)))
+                                                                        .build())
+                                                                .build())
+                                                .build()
+                                )
                                 .build(),
                         powerUps)
         };

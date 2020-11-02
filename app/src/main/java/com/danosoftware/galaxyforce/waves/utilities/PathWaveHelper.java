@@ -60,6 +60,7 @@ public class PathWaveHelper {
      * @param aliensPerRow - number of aliens in each row.
      * @param delayStart - delay time before subwave starts.
      * @param fillSpace - spread-out aliens to fill available horizontal space.
+     * @param restartImmediately - restart subwave immediately.
      * @return array of subwave configs (1 per row).
      */
     public static SubWaveConfig[] createDescendingOffsetRowsSubWave(
@@ -68,7 +69,8 @@ public class PathWaveHelper {
             final AlienRowConfig[] alienRowConfigs,
             final int aliensPerRow,
             final float delayStart,
-            final boolean fillSpace) {
+            final boolean fillSpace,
+            final boolean restartImmediately) {
 
         // set yOffset so all aliens start off top-edge of screen
         final int rows = alienRowConfigs.length;
@@ -90,7 +92,8 @@ public class PathWaveHelper {
                 xOffset,
                 yOffset,
                 xGapBetweenAliens,
-                DEFAULT_ALIEN_GAP
+                DEFAULT_ALIEN_GAP,
+                restartImmediately
         );
     }
 
@@ -108,6 +111,7 @@ public class PathWaveHelper {
      * @param aliensPerRow - number of aliens in each row.
      * @param yOffset - offset y of all aliens in subwave (set position of row 1).
      * @param delayStart - delay time before subwave starts.
+     * @param restartImmediately - restart subwave immediately.
      * @return array of subwave configs (1 per row).
      */
     public static SubWaveConfig[] createLeftToRightOffsetRowSubWave(
@@ -116,7 +120,8 @@ public class PathWaveHelper {
             final AlienRowConfig[] alienRowConfigs,
             final int aliensPerRow,
             final int yOffset,
-            final float delayStart) {
+            final float delayStart,
+            final boolean restartImmediately) {
 
         // set xOffset so all aliens start off left edge of screen
         final int xOffset = -(aliensPerRow - 1) * DEFAULT_ALIEN_GAP;
@@ -130,7 +135,8 @@ public class PathWaveHelper {
                 xOffset,
                 yOffset,
                 DEFAULT_ALIEN_GAP,
-                DEFAULT_ALIEN_GAP
+                DEFAULT_ALIEN_GAP,
+                restartImmediately
         );
     }
 
@@ -164,7 +170,8 @@ public class PathWaveHelper {
             final int xOffset,
             final int yOffset,
             final int xGapBetweenAliens,
-            final int yGapBetweenAliens) {
+            final int yGapBetweenAliens,
+            final boolean restartImmediately) {
 
         SubWavePathConfig[] waveConfigs = new SubWavePathConfig[alienRowConfigs.length];
 
@@ -179,7 +186,8 @@ public class PathWaveHelper {
                             xOffset,
                             yOffset,
                             xGapBetweenAliens,
-                            yGapBetweenAliens),
+                            yGapBetweenAliens,
+                            restartImmediately),
                     alienRowConfigs[row].alienConfig,
                     alienRowConfigs[row].powerUps);
         }
@@ -262,7 +270,8 @@ public class PathWaveHelper {
             final AlienRowConfig[] alienRowConfigs,
             final int aliensPerRow,
             final float delayStart,
-            final boolean fillSpace) {
+            final boolean fillSpace,
+            final boolean restartImmediately) {
 
         int xGapBetweenAliens = calculateHorizontalGapBetweenAliens(fillSpace, aliensPerRow);
 
@@ -280,7 +289,8 @@ public class PathWaveHelper {
                 0,
                 xGapBetweenAliens,
                 0,
-                delayStart);
+                delayStart,
+                restartImmediately);
     }
 
     /**
@@ -310,7 +320,8 @@ public class PathWaveHelper {
             final int yOffset,
             final int xGapBetweenAliens,
             final int yGapBetweenAliens,
-            final float delayStart) {
+            final float delayStart,
+            final boolean restartImmediately) {
 
         SubWavePathConfig[] waveConfigs = new SubWavePathConfig[alienRowConfigs.length];
 
@@ -329,8 +340,8 @@ public class PathWaveHelper {
                             xOffset,
                             yOffset,
                             xGapBetweenAliens,
-                            yGapBetweenAliens
-                            ),
+                            yGapBetweenAliens,
+                            restartImmediately),
                     alienRowConfigs[row].alienConfig,
                     alienRowConfigs[row].powerUps);
 
@@ -398,7 +409,8 @@ public class PathWaveHelper {
             final int xOffset,
             final int yOffset,
             final int xGapBetweenAliens,
-            final int yGapBetweenAliens) {
+            final int yGapBetweenAliens,
+            final boolean restartImmediately) {
         List<SubWavePathRuleProperties> subWaves = new ArrayList<>();
 
         for (int col = 0; col < aliensPerRow; col++) {
@@ -408,7 +420,7 @@ public class PathWaveHelper {
                     1,
                     0f,
                     delayStart,
-                    false,
+                    restartImmediately,
                     new PointTranslatorChain()
                             .add(new OffsetXPointTranslator(xOffset + (col * xGapBetweenAliens)))
                             .add(new OffsetYPointTranslator(yOffset - (row * yGapBetweenAliens)))

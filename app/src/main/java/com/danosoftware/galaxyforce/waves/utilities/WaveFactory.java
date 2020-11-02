@@ -51,6 +51,7 @@ import java.util.List;
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
 import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.mazePatternOne;
+import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.mazePatternThree;
 import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.mazePatternTwo;
 import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.createDescendingDelayedRowSubWave;
 import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.createDescendingOffsetRowsSubWave;
@@ -566,7 +567,8 @@ public class WaveFactory {
                                         new AlienRowConfig[] {fourPilotRowConfig, fourPilotRowConfig},
                                         2,
                                         0,
-                                        0f)
+                                        0f,
+                                        false)
                         )
                 );
                 subWaves.add(
@@ -604,7 +606,8 @@ public class WaveFactory {
                                         new AlienRowConfig[] {fourPilotRowConfig, fourFrisbieRowConfig, fourFrisbieRowConfig, fourFrisbieRowConfig},
                                         5,
                                         GAME_HEIGHT - 230,
-                                        0f)
+                                        0f,
+                                        false)
                         )
                 );
                 break;
@@ -2041,7 +2044,46 @@ public class WaveFactory {
                 break;
 
             case 29:
-                // ????
+
+                final MissileConfig twentyNineMissileConfig = MissileFiringConfig
+                        .builder()
+                        .missileType(AlienMissileType.DOWNWARDS)
+                        .missileCharacter(AlienMissileCharacter.LASER)
+                        .missileSpeed(AlienMissileSpeed.FAST)
+                        .missileFrequency(15f)
+                        .build();
+                final AlienRowConfig fishRowConfig2 = AlienRowConfig
+                        .builder()
+                        .alienConfig(
+                                PathConfig
+                                        .builder()
+                                        .alienCharacter(AlienCharacter.FISH)
+                                        .energy(2)
+                                        .missileConfig(twentyNineMissileConfig)
+                                        .build())
+                        .powerUps(Collections.singletonList(PowerUpType.SHIELD))
+                        .build();
+
+                subWaves.add(
+                        createSubWave(
+                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
+                                flatten(
+                                        mazePatternThree(
+                                                AlienSpeed.MEDIUM,
+                                                NO_POWER_UPS),
+                                        createLeftToRightOffsetRowSubWave(
+                                                Path.LEFT_AND_RIGHT,
+                                                PathSpeed.NORMAL,
+                                                new AlienRowConfig[] {fishRowConfig2, fishRowConfig2},
+                                                3,
+                                                GAME_HEIGHT - 230,
+                                                0f,
+                                                true
+                                        )
+                                )
+                        )
+                );
+                break;
 
             case 30:
 
@@ -2724,7 +2766,8 @@ public class WaveFactory {
                                         new AlienRowConfig[] {fishRowConfig, fishRowConfig, pilotRowConfig, pilotRowConfig, eyeRowConfig, eyeRowConfig},
                                         6,
                                         0f,
-                                        true
+                                        true,
+                                        false
                                 )
                         )
                 );
@@ -2738,7 +2781,8 @@ public class WaveFactory {
                                         new AlienRowConfig[] {eyeRowConfig, eyeRowConfig, pilotRowConfig, pilotRowConfig, fishRowConfig , fishRowConfig},
                                         6,
                                         0f,
-                                        true)
+                                        true,
+                                        false)
                         )
                 );
 
@@ -2842,7 +2886,8 @@ public class WaveFactory {
                                         },
                                         6,
                                         0f,
-                                        true)
+                                        true,
+                                        false)
                         )
                 );
                 break;
