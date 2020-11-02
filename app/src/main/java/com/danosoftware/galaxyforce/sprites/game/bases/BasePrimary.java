@@ -322,7 +322,7 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
 
             // add blast missile for set time
             case MISSILE_BLAST:
-                setBaseMissileType(BaseMissileType.BLAST, 0.5f, 10f);
+                setBaseMissileType(BaseMissileType.BLAST, 0.5f, 2f);
                 break;
 
             // add fast missile for set time

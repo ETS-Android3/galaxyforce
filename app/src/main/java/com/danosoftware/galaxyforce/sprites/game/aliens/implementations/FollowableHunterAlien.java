@@ -98,7 +98,9 @@ public class FollowableHunterAlien extends AbstractAlien {
                 alienConfig.getBoundaries().getMinX(),
                 alienConfig.getBoundaries().getMaxX(),
                 alienConfig.getBoundaries().getMinY(),
-                alienConfig.getBoundaries().getMaxY());
+                alienConfig.getBoundaries().getMaxY(),
+                alienConfig.getBoundaries().getLanePolicy(),
+                alienConfig.getBoundaries().getLanes());
 
         this.model = model;
         this.followers = followers;

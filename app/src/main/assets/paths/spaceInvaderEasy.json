@@ -1,0 +1,136 @@
+{
+  "pathData": [
+    {
+      "type": "linear",
+      "start": {
+        "x": 50,
+        "y": 992
+      },
+      "finish": {
+        "x": 50,
+        "y": 838
+      },
+      "pathPoints": 38
+    },
+    {
+      "type": "linear",
+      "start": {
+        "x": 50,
+        "y": 838
+      },
+      "finish": {
+        "x": 490,
+        "y": 838
+      },
+      "pathPoints": 88
+    },
+    {
+      "type": "linear",
+      "start": {
+        "x": 490,
+        "y": 838
+      },
+      "finish": {
+        "x": 490,
+        "y": 662
+      },
+      "pathPoints": 30
+    },
+    {
+      "type": "linear",
+      "start": {
+        "x": 490,
+        "y": 662
+      },
+      "finish": {
+        "x": 50,
+        "y": 662
+      },
+      "pathPoints": 88
+    },
+    {
+      "type": "linear",
+      "start": {
+        "x": 50,
+        "y": 662
+      },
+      "finish": {
+        "x": 50,
+        "y": 480
+      },
+      "pathPoints": 30
+    },
+    {
+      "type": "linear",
+      "start": {
+        "x": 50,
+        "y": 480
+      },
+      "finish": {
+        "x": 490,
+        "y": 480
+      },
+      "pathPoints": 88
+    },
+    {
+      "type": "linear",
+      "start": {
+        "x": 490,
+        "y": 480
+      },
+      "finish": {
+        "x": 490,
+        "y": 298
+      },
+      "pathPoints": 30
+    },
+    {
+      "type": "linear",
+      "start": {
+        "x": 490,
+        "y": 298
+      },
+      "finish": {
+        "x": 50,
+        "y": 298
+      },
+      "pathPoints": 88
+    },
+    {
+      "type": "linear",
+      "start": {
+        "x": 50,
+        "y": 298
+      },
+      "finish": {
+        "x": 50,
+        "y": 116
+      },
+      "pathPoints": 30
+    },
+    {
+      "type": "linear",
+      "start": {
+        "x": 50,
+        "y": 116
+      },
+      "finish": {
+        "x": 490,
+        "y": 116
+      },
+      "pathPoints": 88
+    },
+    {
+      "type": "linear",
+      "start": {
+        "x": 490,
+        "y": 116
+      },
+      "finish": {
+        "x": 490,
+        "y": -32
+      },
+      "pathPoints": 30
+    }
+  ]
+}

@@ -91,4 +91,5 @@ public class GameConstants {
     public static final int SCREEN_LEFT_EDGE = (MAX_SPRITE_WIDTH / 2);
     public static final int SCREEN_RIGHT_EDGE = GameConstants.GAME_WIDTH - (MAX_SPRITE_WIDTH / 2);
 
+    public static final double ANGLE_TO_RADIANS_MULTIPLIER = (Math.PI / 180);
 }

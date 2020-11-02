@@ -5,6 +5,272 @@ import com.danosoftware.galaxyforce.textures.Texture;
 
 public enum GameSpriteIdentifier implements ISpriteIdentifier {
 
+    // Block
+    BLOCK_01("block01",2),
+    BLOCK_02("block02",2),
+
+    // Foxy
+    FOXY("foxy01",8),
+    FOXY_TALL("foxy02", 8),
+    FOXY_WIDE("foxy03", 8),
+    FOXY_HIT("foxy01Hit",8),
+    FOXY_TALL_HIT("foxy02Hit", 8),
+    FOXY_WIDE_HIT("foxy03Hit", 8),
+
+    // Pinko
+    PINKO("pinko01",6),
+    PINKO_TALL("pinko02", 6),
+    PINKO_WIDE("pinko03", 6),
+    PINKO_HIT("pinko01Hit",6),
+    PINKO_TALL_HIT("pinko02Hit", 6),
+    PINKO_WIDE_HIT("pinko03Hit", 6),
+
+    // Piston
+    PISTON("piston01",8),
+    PISTON_TALL("piston02", 8),
+    PISTON_WIDE("piston03", 8),
+    PISTON_HIT("piston01Hit",8),
+    PISTON_TALL_HIT("piston02Hit", 8),
+    PISTON_WIDE_HIT("piston03Hit", 8),
+
+    // Hopper
+    HOPPER("hopper01",8),
+    HOPPER_LEFT("hopper02", 8),
+    HOPPER_RIGHT("hopper03", 8),
+    HOPPER_HIT("hopper01Hit",8),
+    HOPPER_LEFT_HIT("hopper02Hit", 8),
+    HOPPER_RIGHT_HIT("hopper03Hit", 8),
+
+    // Ghost
+    GHOST("ghost01",8),
+    GHOST_LEFT("ghost02", 8),
+    GHOST_RIGHT("ghost03", 8),
+    GHOST_HIT("ghost01Hit",8),
+    GHOST_LEFT_HIT("ghost02Hit", 8),
+    GHOST_RIGHT_HIT("ghost03Hit", 8),
+
+    // Anomeba
+    AMOEBA("amoeba01",8),
+    AMOEBA_LEFT("amoeba02", 8),
+    AMOEBA_RIGHT("amoeba03", 8),
+    AMOEBA_HIT("amoeba01Hit",8),
+    AMOEBA_LEFT_HIT("amoeba02Hit", 8),
+    AMOEBA_RIGHT_HIT("amoeba03Hit", 8),
+
+    // Cheeky
+    CHEEKY("cheeky01",6),
+    CHEEKY_LEFT("cheeky02", 6),
+    CHEEKY_RIGHT("cheeky03", 6),
+    CHEEKY_HIT("cheeky01Hit",6),
+    CHEEKY_LEFT_HIT("cheeky02Hit", 6),
+    CHEEKY_RIGHT_HIT("cheeky03Hit", 6),
+
+    // Purple Meanie
+    PURPLE_MEANIE_01("purpleMeanie01",8),
+    PURPLE_MEANIE_02("purpleMeanie02", 8),
+    PURPLE_MEANIE_03("purpleMeanie03", 8),
+    PURPLE_MEANIE_04("purpleMeanie04", 8),
+    PURPLE_MEANIE_05("purpleMeanie05", 8),
+    PURPLE_MEANIE_01_HIT("purpleMeanie01Hit",8),
+    PURPLE_MEANIE_02_HIT("purpleMeanie02Hit", 8),
+    PURPLE_MEANIE_03_HIT("purpleMeanie03Hit", 8),
+    PURPLE_MEANIE_04_HIT("purpleMeanie04Hit", 8),
+    PURPLE_MEANIE_05_HIT("purpleMeanie05Hit", 8),
+
+    // Pad
+    PAD_01("pad01",6),
+    PAD_02("pad02", 6),
+    PAD_03("pad03", 6),
+    PAD_04("pad04", 6),
+    PAD_05("pad05", 6),
+    PAD_01_HIT("pad01Hit",6),
+    PAD_02_HIT("pad02Hit", 6),
+    PAD_03_HIT("pad03Hit", 6),
+    PAD_04_HIT("pad04Hit", 6),
+    PAD_05_HIT("pad05Hit", 6),
+
+    // Jumper
+    JUMPER("jumper",8),
+    JUMPER_UP("jumperUp", 8),
+    JUMPER_DOWN("jumperDown", 8),
+    JUMPER_HIT("jumperHit",8),
+    JUMPER_UP_HIT("jumperUpHit", 8),
+    JUMPER_DOWN_HIT("jumperDownHit", 8),
+
+    // Ripley
+    RIPLEY("ripley",6),
+    RIPLEY_LEFT("ripleyLeft", 6),
+    RIPLEY_RIGHT("ripleyRight", 6),
+    RIPLEY_HIT("ripleyHit",6),
+    RIPLEY_LEFT_HIT("ripleyLeftHit", 6),
+    RIPLEY_RIGHT_HIT("ripleyRightHit", 6),
+
+    // All Seeing Eye
+    ALL_SEEING_EYE("allSeeingEye",8),
+    ALL_SEEING_EYE_LEFT("allSeeingEyeLeft", 8),
+    ALL_SEEING_EYE_RIGHT("allSeeingEyeRight", 8),
+    ALL_SEEING_EYE_HIT("allSeeingEyeHit",8),
+    ALL_SEEING_EYE_LEFT_HIT("allSeeingEyeLeftHit", 8),
+    ALL_SEEING_EYE_RIGHT_HIT("allSeeingEyeRightHit", 8),
+
+    // Charlie
+    CHARLIE("charlie",8),
+    CHARLIE_LEFT("charlieLeft", 8),
+    CHARLIE_RIGHT("charlieRight", 8),
+    CHARLIE_HIT("charlieHit",8),
+    CHARLIE_LEFT_HIT("charlieLeftHit", 8),
+    CHARLIE_RIGHT_HIT("charlieRightHit", 8),
+
+    // Walker
+    WALKER("walker",8),
+    WALKER_RIGHT("walkerRight", 8),
+    WALKER_LEFT("walkerLeft", 8),
+    WALKER_HIT("walkerHit",8),
+    WALKER_RIGHT_HIT("walkerRightHit", 8),
+    WALKER_LEFT_HIT("walkerLeftHit", 8),
+
+    // Frogger
+    FROGGER("frogger",4),
+    FROGGER_TALL("froggerTall", 4),
+    FROGGER_WIDE("froggerWide", 4),
+    FROGGER_HIT("froggerHit",4),
+    FROGGER_TALL_HIT("froggerTallHit", 4),
+    FROGGER_WIDE_HIT("froggerWideHit", 4),
+
+    // Fighter
+    FIGHTER("fighter",8),
+    FIGHTER_TALL("fighterTall", 8),
+    FIGHTER_WIDE("fighterWide", 8),
+    FIGHTER_HIT("fighterHit",8),
+    FIGHTER_TALL_HIT("fighterTallHit", 8),
+    FIGHTER_WIDE_HIT("fighterWideHit", 8),
+
+    // Rotator
+    ROTATOR_01("rotator01",8),
+    ROTATOR_02("rotator02",8),
+    ROTATOR_03("rotator03",8),
+    ROTATOR_04("rotator04",8),
+    ROTATOR_05("rotator05",8),
+    ROTATOR_01_HIT("rotatorHit01",8),
+    ROTATOR_02_HIT("rotatorHit02",8),
+    ROTATOR_03_HIT("rotatorHit03",8),
+    ROTATOR_04_HIT("rotatorHit04",8),
+    ROTATOR_05_HIT("rotatorHit05",8),
+
+    // Whirlpool
+    WHIRLPOOL_01("whirlpool01",6),
+    WHIRLPOOL_02("whirlpool02",6),
+    WHIRLPOOL_03("whirlpool03",6),
+    WHIRLPOOL_04("whirlpool04",6),
+    WHIRLPOOL_05("whirlpool05",6),
+    WHIRLPOOL_01_HIT("whirlpool01Hit",6),
+    WHIRLPOOL_02_HIT("whirlpool02Hit",6),
+    WHIRLPOOL_03_HIT("whirlpool03Hit",6),
+    WHIRLPOOL_04_HIT("whirlpool04Hit",6),
+    WHIRLPOOL_05_HIT("whirlpool05Hit",6),
+
+    // Battle Droid
+    BATTLE_DROID_01("battleDroid01",6),
+    BATTLE_DROID_02("battleDroid02",6),
+    BATTLE_DROID_03("battleDroid03",6),
+    BATTLE_DROID_01_HIT("battleDroid01Hit",6),
+    BATTLE_DROID_02_HIT("battleDroid02Hit",6),
+    BATTLE_DROID_03_HIT("battleDroid03Hit",6),
+
+    // Fish
+    FISH_01("fish01",6),
+    FISH_02("fish02",6),
+    FISH_03("fish03",6),
+    FISH_01_HIT("fish01Hit",6),
+    FISH_02_HIT("fish02Hit",6),
+    FISH_03_HIT("fish03Hit",6),
+
+    // Lemming
+    LEMMING_01("lemming01",6),
+    LEMMING_02("lemming02",6),
+    LEMMING_03("lemming03",6),
+    LEMMING_01_HIT("lemming01Hit",6),
+    LEMMING_02_HIT("lemming02Hit",6),
+    LEMMING_03_HIT("lemming03Hit",6),
+
+    // Squeeze Box
+    SQUEEZE_BOX_01("squeezeBox01",6),
+    SQUEEZE_BOX_02("squeezeBox02",6),
+    SQUEEZE_BOX_03("squeezeBox03",6),
+    SQUEEZE_BOX_01_HIT("squeezeBox01Hit",6),
+    SQUEEZE_BOX_02_HIT("squeezeBox02Hit",6),
+    SQUEEZE_BOX_03_HIT("squeezeBox03Hit",6),
+
+    // Yellow Beard
+    YELLOW_BEARD_01("yellowBeard01",8),
+    YELLOW_BEARD_02("yellowBeard02",8),
+    YELLOW_BEARD_03("yellowBeard03",8),
+    YELLOW_BEARD_01_HIT("yellowBeard01Hit",8),
+    YELLOW_BEARD_02_HIT("yellowBeard02Hit",8),
+    YELLOW_BEARD_03_HIT("yellowBeard03Hit",8),
+
+    // Pilot
+    PILOT_01("pilot01",6),
+    PILOT_02("pilot02",6),
+    PILOT_03("pilot03",6),
+    PILOT_01_HIT("pilot01Hit",6),
+    PILOT_02_HIT("pilot02Hit",6),
+    PILOT_03_HIT("pilot03Hit",6),
+
+    // Aracnoid
+    ARACNOID_01("aracnoid01",4),
+    ARACNOID_02("aracnoid02",4),
+    ARACNOID_03("aracnoid03",4),
+    ARACNOID_01_HIT("aracnoid01Hit",4),
+    ARACNOID_02_HIT("aracnoid02Hit",4),
+    ARACNOID_03_HIT("aracnoid03Hit",4),
+
+    // Crab
+    CRAB_01("crab01",6),
+    CRAB_02("crab02",6),
+    CRAB_03("crab03",6),
+    CRAB_01_HIT("crab01Hit",6),
+    CRAB_02_HIT("crab02Hit",6),
+    CRAB_03_HIT("crab03Hit",6),
+
+    // Bear
+    BEAR_01("bear01",6),
+    BEAR_02("bear02",6),
+    BEAR_03("bear03",6),
+    BEAR_01_HIT("bear01Hit",6),
+    BEAR_02_HIT("bear02Hit",6),
+    BEAR_03_HIT("bear03Hit",6),
+
+    // Dino
+    DINO_01("dino01",6),
+    DINO_02("dino02",6),
+    DINO_03("dino03",6),
+    DINO_04("dino04",6),
+    DINO_01_HIT("dino01Hit",6),
+    DINO_02_HIT("dino02Hit",6),
+    DINO_03_HIT("dino03Hit",6),
+    DINO_04_HIT("dino04Hit",6),
+
+    // Frisbie
+    FRISBIE_01("frisbie01",8),
+    FRISBIE_02("frisbie02",8),
+    FRISBIE_03("frisbie03",8),
+    FRISBIE_04("frisbie04",8),
+    FRISBIE_05("frisbie05",8),
+    FRISBIE_01_HIT("frisbie01Hit",8),
+    FRISBIE_02_HIT("frisbie02Hit",8),
+    FRISBIE_03_HIT("frisbie03Hit",8),
+    FRISBIE_04_HIT("frisbie04Hit",8),
+    FRISBIE_05_HIT("frisbie05Hit",8),
+
+    // Joker
+    JOKER_01("joker01",8),
+    JOKER_02("joker02",8),
+    JOKER_03("joker03",8),
+    JOKER_01_HIT("joker01Hit",8),
+    JOKER_02_HIT("joker02Hit",8),
+    JOKER_03_HIT("joker03Hit",8),
+
     // octopus
     OCTOPUS_LEFT("octopusLeft",4),
     OCTOPUS_RIGHT("octopusRight", 4),
@@ -36,9 +302,9 @@ public enum GameSpriteIdentifier implements ISpriteIdentifier {
     SPACE_STATION_HIT("spaceStationHit", 4),
 
     // pulsating barrier
-    BARRIER_01("barrier01", 2),
-    BARRIER_02("barrier02", 2),
-    BARRIER_03("barrier03", 2),
+    BARRIER_01("barrierGirder01", 2),
+    BARRIER_02("barrierGirder02", 2),
+    BARRIER_03("barrierGirder03", 2),
 
     // molecule
     MOLECULE("molecule", 2),

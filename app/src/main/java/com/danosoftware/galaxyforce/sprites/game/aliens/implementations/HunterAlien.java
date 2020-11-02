@@ -88,7 +88,9 @@ public class HunterAlien extends AbstractAlien {
                 alienConfig.getBoundaries().getMinX(),
                 alienConfig.getBoundaries().getMaxX(),
                 alienConfig.getBoundaries().getMinY(),
-                alienConfig.getBoundaries().getMaxY());
+                alienConfig.getBoundaries().getMaxY(),
+                alienConfig.getBoundaries().getLanePolicy(),
+                alienConfig.getBoundaries().getLanes());
 
         waiting();
 

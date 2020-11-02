@@ -7,6 +7,7 @@ import com.danosoftware.galaxyforce.flightpath.translators.FlipYPointTranslator;
 import com.danosoftware.galaxyforce.flightpath.translators.OffsetXPointTranslator;
 import com.danosoftware.galaxyforce.flightpath.translators.OffsetYPointTranslator;
 import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
+import com.danosoftware.galaxyforce.flightpath.translators.RotatePointTranslator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -25,30 +26,33 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
 public enum SubWavePathRule {
 
     /**
-     * space invader style attack
+     * space invader style attack with 6 aliens in a batch.
+     * A timing-delay gap is inserted between each batch.
      */
     SPACE_INVADER(
-            new SubWavePathRuleProperties(
-                    Path.SPACE_INVADER,
+            waveWithGaps(
+                    Path.SPACE_INVADER_EASY,
                     PathSpeed.NORMAL,
-                    20,
+                    6,
                     0.3f,
-                    0,
-                    false
-            )
+                    5,
+                    0.3f * 7,
+                    null)
     ),
 
     /**
-     * space invader attack in reverse (i.e. from bottom to top)
+     * space invader style attack reverse (i.e. from bottom to top)
+     * with 6 aliens in a batch.
+     * A timing-delay gap is inserted between each batch.
      */
     SPACE_INVADER_REVERSE(
-            new SubWavePathRuleProperties(
-                    Path.SPACE_INVADER,
+            waveWithGaps(
+                    Path.SPACE_INVADER_EASY,
                     PathSpeed.NORMAL,
-                    20,
+                    6,
                     0.3f,
-                    0,
-                    false,
+                    5,
+                    0.3f * 7,
                     new PointTranslatorChain()
                             .add(new FlipXPointTranslator(GAME_WIDTH))
                             .add(new FlipYPointTranslator(GAME_HEIGHT))
@@ -76,7 +80,7 @@ public enum SubWavePathRule {
             new SubWavePathRuleProperties(
                     Path.BELL_CURVE,
                     PathSpeed.NORMAL,
-                    20,
+                    10,
                     0.3f,
                     0,
                     false
@@ -90,7 +94,7 @@ public enum SubWavePathRule {
             new SubWavePathRuleProperties(
                     Path.BELL_CURVE,
                     PathSpeed.NORMAL,
-                    20,
+                    10,
                     0.3f,
                     0,
                     false
@@ -98,7 +102,7 @@ public enum SubWavePathRule {
             new SubWavePathRuleProperties(
                     Path.BELL_CURVE,
                     PathSpeed.NORMAL,
-                    20,
+                    15,
                     0.3f,
                     0,
                     false,
@@ -113,11 +117,25 @@ public enum SubWavePathRule {
     LOOPER_ATTACK(
             new SubWavePathRuleProperties(
                     Path.LOOPER,
-                    PathSpeed.NORMAL,
-                    20,
-                    0.3f,
+                    PathSpeed.VERY_SLOW,
+                    10,
+                    1.6f,
                     0,
                     false
+            )
+    ),
+
+    LOOPER_ATTACK_REVERSE(
+            new SubWavePathRuleProperties(
+                    Path.LOOPER,
+                    PathSpeed.VERY_SLOW,
+                    10,
+                    1.6f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipYPointTranslator(GAME_HEIGHT))
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
             )
     ),
 
@@ -181,6 +199,58 @@ public enum SubWavePathRule {
     ),
 
     /**
+     * spaced out crossover attack where aliens drop from top, pause and then exit on
+     * opposite side of screen
+     */
+    CROSSOVER_EXIT_ATTACK_SPACED(
+            new SubWavePathRuleProperties(
+                    Path.EXIT_STAGE_RIGHT,
+                    PathSpeed.NORMAL,
+                    5,
+                    1.5f,
+                    0,
+                    false
+            ),
+            new SubWavePathRuleProperties(
+                    Path.EXIT_STAGE_RIGHT,
+                    PathSpeed.NORMAL,
+                    5,
+                    1.5f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
+            )
+    ),
+    /**
+     * spaced out crossover attack where aliens rise from bottom, pause and then exit on
+     * opposite side of screen
+     */
+    CROSSOVER_EXIT_ATTACK_SPACED_REVERSE(
+            new SubWavePathRuleProperties(
+                    Path.EXIT_STAGE_RIGHT,
+                    PathSpeed.NORMAL,
+                    5,
+                    1.5f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipYPointTranslator(GAME_HEIGHT))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.EXIT_STAGE_RIGHT,
+                    PathSpeed.NORMAL,
+                    5,
+                    1.5f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
+                            .add(new FlipYPointTranslator(GAME_HEIGHT))
+            )
+    ),
+
+    /**
      * crossover attack where aliens drop from top, pause and then exit on
      * opposite side of screen
      */
@@ -188,22 +258,51 @@ public enum SubWavePathRule {
             new SubWavePathRuleProperties(
                     Path.EXIT_STAGE_RIGHT,
                     PathSpeed.NORMAL,
-                    20,
-                    0.3f,
+                    5,
+                    0.75f,
                     0,
                     false
             ),
             new SubWavePathRuleProperties(
                     Path.EXIT_STAGE_RIGHT,
                     PathSpeed.NORMAL,
-                    20,
-                    0.3f,
+                    5,
+                    0.75f,
                     0,
                     false,
                     new PointTranslatorChain()
                             .add(new FlipXPointTranslator(GAME_WIDTH))
             )
     ),
+
+    /**
+     * crossover attack where aliens rise from bottom, pause and then exit on
+     * opposite side of screen
+     */
+    CROSSOVER_EXIT_ATTACK_REVERSE(
+            new SubWavePathRuleProperties(
+                    Path.EXIT_STAGE_RIGHT,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.75f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipYPointTranslator(GAME_HEIGHT))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.EXIT_STAGE_RIGHT,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.75f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
+                            .add(new FlipYPointTranslator(GAME_HEIGHT))
+            )
+    ),
+
 
     /**
      * staggered attack where 5 columns of aliens attack from top to bottom and
@@ -273,21 +372,6 @@ public enum SubWavePathRule {
             )
     ),
 
-    /**
-     * row attack where 5 columns of aliens attack from top to bottom and
-     * then bounce back up. each row is delayed compared to the previous.
-     */
-    FLAT_ATTACK_ROW_1(
-            rowSubWave(0f)),
-    FLAT_ATTACK_ROW_2(
-            rowSubWave(0.3f)),
-    FLAT_ATTACK_ROW_3(
-            rowSubWave(0.6f)),
-    FLAT_ATTACK_ROW_4(
-            rowSubWave(0.9f)),
-
-
-
     WAVEY_LINE(
             new SubWavePathRuleProperties(
                     Path.SINGLE_ARC,
@@ -309,6 +393,48 @@ public enum SubWavePathRule {
                     false,
                     new PointTranslatorChain()
                             .add(new FlipXPointTranslator(GAME_WIDTH))
+            )
+    ),
+
+    // curves from top to bottom arcing to right
+    WAVEY_LINE_BENDING_RIGHT(
+            new SubWavePathRuleProperties(
+                    Path.SINGLE_ARC,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.5f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new RotatePointTranslator(RotatePointTranslator.Rotation.CLOCKWISE))
+            )
+    ),
+    // curves from top to bottom arcing to left
+    WAVEY_LINE_BENDING_LEFT(
+            new SubWavePathRuleProperties(
+                    Path.SINGLE_ARC,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.5f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new RotatePointTranslator(RotatePointTranslator.Rotation.ANTI_CLOCKWISE))
+                            .add(new FlipYPointTranslator(GAME_HEIGHT))
+            )
+    ),
+
+    WAVEY_LINE_REVERSE_LOWER(
+            new SubWavePathRuleProperties(
+                    Path.SINGLE_ARC,
+                    PathSpeed.NORMAL,
+                    10,
+                    0.5f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
+                            .add(new OffsetYPointTranslator(-200))
             )
     ),
 
@@ -405,6 +531,19 @@ public enum SubWavePathRule {
                     0,
                     2.5f,
                     true,
+                    new PointTranslatorChain()
+                            .add(new OffsetYPointTranslator(125))
+            )
+    ),
+
+    SINGLE_ARC_NO_REPEAT(
+            new SubWavePathRuleProperties(
+                    Path.SINGLE_ARC,
+                    PathSpeed.VERY_SLOW,
+                    1,
+                    0,
+                    1f,
+                    false,
                     new PointTranslatorChain()
                             .add(new OffsetYPointTranslator(125))
             )
@@ -521,6 +660,17 @@ public enum SubWavePathRule {
     ),
 
 
+    SINGLE_SPIRAL(
+            new SubWavePathRuleProperties(
+                    Path.SPIRAL,
+                    PathSpeed.FAST,
+                    1,
+                    0f,
+                    0,
+                    false
+            )
+    ),
+
     /**
      * One spiral path from top to bottom
      */
@@ -558,6 +708,34 @@ public enum SubWavePathRule {
                     false,
                     new PointTranslatorChain()
                             .add(new OffsetXPointTranslator(-SCREEN_MID_X / 2))
+            )
+    ),
+
+    BOUNCING(
+            new SubWavePathRuleProperties(
+                    Path.SPIRAL,
+                    PathSpeed.FAST,
+                    10,
+                    1f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new RotatePointTranslator(RotatePointTranslator.Rotation.CLOCKWISE))
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
+            )
+    ),
+    BOUNCING_HIGHER(
+            new SubWavePathRuleProperties(
+                    Path.SPIRAL,
+                    PathSpeed.FAST,
+                    10,
+                    1f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new RotatePointTranslator(RotatePointTranslator.Rotation.CLOCKWISE))
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
+                            .add(new OffsetYPointTranslator(200))
             )
     ),
 
@@ -641,6 +819,80 @@ public enum SubWavePathRule {
                     0.25f,
                     true
     )
+    ),
+
+    /**
+     * Aliens follow diagonal path from top-left
+     */
+    DIAGONAL(
+            new SubWavePathRuleProperties(
+                    Path.DIAGONAL,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.25f,
+                    0f,
+                    false)
+    ),
+
+    /**
+     * Aliens move diagonally from top-left to bottom-right
+     * followed by top-right to bottom-left
+     */
+    DIAGONAL_CROSSOVER(
+            new SubWavePathRuleProperties(
+                    Path.DIAGONAL,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.25f,
+                    0f,
+                    false),
+            new SubWavePathRuleProperties(
+                    Path.DIAGONAL,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.25f,
+                    1.25f,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH)))
+    ),
+
+    /**
+     * Aliens move diagonally from top-left to bottom-right
+     * and from top-right to bottom-left.
+     *
+     * Paths are timed so that they just miss each other at the cross-over.
+     */
+    DIAGONAL_CROSSOVER_INTERLEAVED(
+            new SubWavePathRuleProperties(
+                    Path.DIAGONAL,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.5f,
+                    0f,
+                    false),
+            new SubWavePathRuleProperties(
+                    Path.DIAGONAL,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.5f,
+                    0.25f,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH)))
+    ),
+
+    /**
+     * Aliens follow square path around edge of screen
+     */
+    AROUND_EDGE(
+            new SubWavePathRuleProperties(
+                    Path.SQUARE,
+                    PathSpeed.FAST,
+                    10,
+                    0.25f,
+                    0f,
+                    false)
     );
 
     // list of properties for a sub-wave
@@ -662,23 +914,42 @@ public enum SubWavePathRule {
     }
 
     /**
-     * Creates a row attack
+     * Combines batches of waves with a timing delay between each batch.
+     * Allows a gap to be created between batches of aliens.
      */
-    private static List<SubWavePathRuleProperties> rowSubWave(
-            final float delayStart) {
+    private static List<SubWavePathRuleProperties> waveWithGaps(
+            final Path path,
+            final PathSpeed speed,
+            final int aliensInBatch,
+            final float delayBetweenAliens,
+            final int batches,
+            final float delayBetweenBatches,
+            final PointTranslatorChain translatorChain) {
+
+        float batchDelay = 0f;
+
         List<SubWavePathRuleProperties> subWaves = new ArrayList<>();
 
-        for (int col = 0; col < 6; col++) {
-            subWaves.add(new SubWavePathRuleProperties(
-                    Path.BOUNCE_DOWN_AND_UP,
-                    PathSpeed.NORMAL,
-                    1,
-                    0f,
-                    delayStart,
-                    false,
-                    new PointTranslatorChain()
-                            .add(new OffsetXPointTranslator(40 + (col * 92)))
-            ));
+        for (int batch = 0; batch < batches; batch++) {
+            subWaves.add(
+                    translatorChain != null
+                            ? new SubWavePathRuleProperties(
+                                path,
+                                speed,
+                                aliensInBatch,
+                                delayBetweenAliens,
+                                batchDelay,
+                                false,
+                                translatorChain)
+                            : new SubWavePathRuleProperties(
+                                    path,
+                                    speed,
+                                    aliensInBatch,
+                                    delayBetweenAliens,
+                                    batchDelay,
+                                    false)
+            );
+            batchDelay += (delayBetweenAliens * aliensInBatch) + delayBetweenBatches;
         }
 
         return subWaves;

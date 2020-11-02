@@ -20,7 +20,7 @@ import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawnConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningAlienConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningFixedAngularConfig;
-import com.danosoftware.galaxyforce.waves.config.aliens.types.HunterBoundariesConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.types.BoundariesConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.HunterConfig;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocatorFactory;
 
@@ -54,7 +54,7 @@ public class HunterConfigTest {
                 .alienCharacter(AlienCharacter.OCTOPUS)
                 .energy(10)
                 .speed(AlienSpeed.SLOW)
-                .boundaries(HunterBoundariesConfig.builder().build())
+                .boundaries(BoundariesConfig.builder().build())
                 .build();
 
         assertThat(config.getAlienCharacter(), equalTo(AlienCharacter.OCTOPUS));
@@ -92,7 +92,7 @@ public class HunterConfigTest {
                 .energy(10)
                 .speed(AlienSpeed.SLOW)
                 .boundaries(
-                        HunterBoundariesConfig
+                        BoundariesConfig
                                 .builder()
                                 .minX(100)
                                 .maxX(400)

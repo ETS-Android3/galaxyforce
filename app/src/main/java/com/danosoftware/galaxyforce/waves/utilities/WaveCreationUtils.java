@@ -8,9 +8,7 @@ import com.danosoftware.galaxyforce.sprites.game.factories.AlienFactory;
 import com.danosoftware.galaxyforce.waves.config.SubWaveNoPathConfig;
 import com.danosoftware.galaxyforce.waves.config.SubWavePathConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.AlienConfig;
-import com.danosoftware.galaxyforce.waves.rules.SubWavePathRule;
 import com.danosoftware.galaxyforce.waves.rules.SubWavePathRuleProperties;
-import com.danosoftware.galaxyforce.waves.rules.SubWaveRule;
 import com.danosoftware.galaxyforce.waves.rules.SubWaveRuleProperties;
 
 import java.util.ArrayList;
@@ -48,18 +46,18 @@ public class WaveCreationUtils {
 
         final AlienConfig alienConfig = config.getAlienConfig();
         final List<PowerUpType> powerUps = config.getPowerUps();
-        final SubWavePathRule rules = config.getSubWaveRule();
+        final List<SubWavePathRuleProperties> properties = config.getSubWaveRuleProperties();
 
         // initialise power-up allocator
         int numberOfAliens = 0;
-        for (SubWavePathRuleProperties props : rules.subWaveProps()) {
+        for (SubWavePathRuleProperties props : properties) {
             numberOfAliens += props.getNumberOfAliens();
         }
         final PowerUpAllocator powerUpAllocator = powerUpAllocatorFactory.createAllocator(
                 powerUps,
                 numberOfAliens);
 
-        for (SubWavePathRuleProperties props : rules.subWaveProps()) {
+        for (SubWavePathRuleProperties props : properties) {
 
             // create path points (that alien will follow) for sub-wave
             List<PathPoint> path = pathFactory.createPath(
@@ -91,18 +89,18 @@ public class WaveCreationUtils {
 
         final AlienConfig alienConfig = config.getAlienConfig();
         final List<PowerUpType> powerUps = config.getPowerUps();
-        final SubWaveRule rules = config.getSubWaveRule();
+        final List<SubWaveRuleProperties> properties = config.getSubWaveRuleProperties();
 
         // initialise power-up allocator
         int numberOfAliens = 0;
-        for (SubWaveRuleProperties props : rules.subWaveProps()) {
+        for (SubWaveRuleProperties props : properties) {
             numberOfAliens += props.getNumberOfAliens();
         }
         final PowerUpAllocator powerUpAllocator = powerUpAllocatorFactory.createAllocator(
                 powerUps,
                 numberOfAliens);
 
-        for (SubWaveRuleProperties props : rules.subWaveProps()) {
+        for (SubWaveRuleProperties props : properties) {
 
             for (int i = 0; i < props.getNumberOfAliens(); i++) {
                 aliens.addAll(alienFactory.createAlien(

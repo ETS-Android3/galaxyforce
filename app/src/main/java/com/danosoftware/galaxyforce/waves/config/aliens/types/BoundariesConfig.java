@@ -8,8 +8,7 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
 
 @Builder
 @Getter
-public class HunterBoundariesConfig {
-
+public class BoundariesConfig {
     @Builder.Default
     private final int minX = 0;
     @Builder.Default
@@ -18,4 +17,8 @@ public class HunterBoundariesConfig {
     private final int minY = 0;
     @Builder.Default
     private final int maxY = GAME_HEIGHT;
+    @Builder.Default
+    private final BoundaryLanePolicy lanePolicy = BoundaryLanePolicy.NONE;
+    @Builder.Default
+    private final int lanes = 1;
 }

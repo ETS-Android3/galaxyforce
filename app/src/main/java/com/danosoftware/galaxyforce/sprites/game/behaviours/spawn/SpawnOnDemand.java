@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * Spawn behaviour where an alien only spawns on demands.
- * This spawner does make its ownn decision on when to spawn.
+ * This spawner does make its own decision on when to spawn.
  */
 public class SpawnOnDemand implements SpawnBehaviour {
 
