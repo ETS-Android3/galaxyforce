@@ -9,6 +9,7 @@
 /build
 /app/build
 /app/release
+/app/debug
 /captures
 .externalNativeBuild
 /app/src/main/res/values/billing.xml 
