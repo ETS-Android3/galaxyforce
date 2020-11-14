@@ -3,6 +3,7 @@ package com.danosoftware.galaxyforce.waves.utilities;
 import com.danosoftware.galaxyforce.enumerations.AlienMissileCharacter;
 import com.danosoftware.galaxyforce.enumerations.AlienMissileSpeed;
 import com.danosoftware.galaxyforce.enumerations.AlienMissileType;
+import com.danosoftware.galaxyforce.enumerations.AlienSpeed;
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
 import com.danosoftware.galaxyforce.waves.AlienCharacter;
@@ -10,6 +11,7 @@ import com.danosoftware.galaxyforce.waves.config.aliens.AlienConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.missiles.MissileConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.missiles.MissileFiringConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningFixedAngularConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.types.DirectionalDestroyableConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.PathConfig;
 
 import java.util.List;
@@ -164,7 +166,6 @@ public class AlienConfigBuilder {
             case DRAGON_BODY:
             case SKULL:
             case DROID:
-            case INSECT_MOTHERSHIP:
             case INSECT:
             case GOBBY:
             case BOOK:
@@ -186,6 +187,8 @@ public class AlienConfigBuilder {
             case PILOT:
             case FRISBIE:
                 return 2;
+            case INSECT_MOTHERSHIP:
+                return 10;
             default:
                 throw new GalaxyForceException("Can not create energy for unknown character: " + character);
         }
@@ -378,6 +381,30 @@ public class AlienConfigBuilder {
                 throw new GalaxyForceException("Can not create alien config for unknown character: " + character);
         }
     }
+
+    /**
+     * Create alien config for character with missiles
+     */
+    public static AlienConfig directionalAlienConfig(
+            AlienCharacter character,
+            Float directionalAngle,
+            AlienSpeed alienSpeed,
+            AlienMissileSpeed missileSpeed,
+            Float missileFrequency) {
+
+        final Integer energy = energy(character);
+        final MissileConfig missileConfig = missileConfig(character, missileSpeed, missileFrequency);
+
+        return DirectionalDestroyableConfig
+                    .builder()
+                    .alienCharacter(character)
+                    .energy(energy)
+                    .speed(alienSpeed)
+                    .angle(directionalAngle)
+                    .missileConfig(missileConfig)
+                    .build();
+    }
+
 
     /**
      * Create alien config row with missiles and power-ups

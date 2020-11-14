@@ -52,6 +52,8 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
 import static com.danosoftware.galaxyforce.waves.utilities.AlienConfigBuilder.alienConfig;
 import static com.danosoftware.galaxyforce.waves.utilities.AlienConfigBuilder.alienRowConfig;
+import static com.danosoftware.galaxyforce.waves.utilities.AlienConfigBuilder.directionalAlienConfig;
+import static com.danosoftware.galaxyforce.waves.utilities.AlienConfigBuilder.energy;
 import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.mazePatternOne;
 import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.mazePatternThree;
 import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.mazePatternTwo;
@@ -516,26 +518,17 @@ public class WaveFactory {
                                         PathConfig
                                                 .builder()
                                                 .alienCharacter(AlienCharacter.INSECT_MOTHERSHIP)
-                                                .energy(10)
+                                                .energy(energy(AlienCharacter.INSECT_MOTHERSHIP))
                                                 .spawnConfig(
                                                         SpawningAlienConfig
                                                                 .builder()
                                                                 .spawnedAlienConfig(
-                                                                        DirectionalDestroyableConfig
-                                                                                .builder()
-                                                                                .alienCharacter(AlienCharacter.INSECT)
-                                                                                .energy(1)
-                                                                                .angle(DOWNWARDS)
-                                                                                .missileConfig(
-                                                                                        MissileFiringConfig
-                                                                                                .builder()
-                                                                                                .missileType(AlienMissileType.DOWNWARDS)
-                                                                                                .missileCharacter(AlienMissileCharacter.LASER)
-                                                                                                .missileSpeed(AlienMissileSpeed.MEDIUM)
-                                                                                                .missileFrequency(1.5f)
-                                                                                                .build())
-                                                                                .speed(AlienSpeed.SLOW)
-                                                                                .build())
+                                                                        directionalAlienConfig(
+                                                                                AlienCharacter.INSECT,
+                                                                                DOWNWARDS,
+                                                                                AlienSpeed.SLOW,
+                                                                                AlienMissileSpeed.MEDIUM,
+                                                                                1.5f))
                                                                 .minimumSpawnDelayTime(0.5f)
                                                                 .maximumAdditionalRandomSpawnDelayTime(0.25f)
                                                                 .spwanedPowerUpTypes(
@@ -557,26 +550,17 @@ public class WaveFactory {
                                         PathConfig
                                                 .builder()
                                                 .alienCharacter(AlienCharacter.INSECT_MOTHERSHIP)
-                                                .energy(10)
+                                                .energy(energy(AlienCharacter.INSECT_MOTHERSHIP))
                                                 .spawnConfig(
                                                         SpawningAlienConfig
                                                                 .builder()
                                                                 .spawnedAlienConfig(
-                                                                        DirectionalDestroyableConfig
-                                                                                .builder()
-                                                                                .alienCharacter(AlienCharacter.INSECT)
-                                                                                .energy(1)
-                                                                                .angle(DOWNWARDS)
-                                                                                .missileConfig(
-                                                                                        MissileFiringConfig
-                                                                                                .builder()
-                                                                                                .missileType(AlienMissileType.DOWNWARDS)
-                                                                                                .missileCharacter(AlienMissileCharacter.LASER)
-                                                                                                .missileSpeed(AlienMissileSpeed.MEDIUM)
-                                                                                                .missileFrequency(1.5f)
-                                                                                                .build())
-                                                                                .speed(AlienSpeed.SLOW)
-                                                                                .build())
+                                                                        directionalAlienConfig(
+                                                                                AlienCharacter.INSECT,
+                                                                                DOWNWARDS,
+                                                                                AlienSpeed.SLOW,
+                                                                                AlienMissileSpeed.MEDIUM,
+                                                                                1.5f))
                                                                 .minimumSpawnDelayTime(0.5f)
                                                                 .maximumAdditionalRandomSpawnDelayTime(0.25f)
                                                                 .spwanedPowerUpTypes(
@@ -596,7 +580,6 @@ public class WaveFactory {
              * Aliens attack in triangular attack patterns
              */
             case 7:
-
                 // triangular attack from left-to-right
                 subWaves.add(
                         createSubWave(
