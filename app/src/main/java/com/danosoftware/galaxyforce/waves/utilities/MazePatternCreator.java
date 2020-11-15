@@ -18,6 +18,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
+import static com.danosoftware.galaxyforce.waves.utilities.AlienConfigBuilder.directionalAlienConfig;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveAsteroidsHelper.createMiniDirectionalAsteroid;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.DOWNWARDS;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.HALF_PI;
@@ -310,13 +311,10 @@ public class MazePatternCreator {
                                 MAZE_ONE,
                                 BLOCKS_PER_ROW,
                                 BLOCK_SPRITE_WIDTH),
-                        DirectionalDestroyableConfig
-                                .builder()
-                                .alienCharacter(AlienCharacter.BLOCK)
-                                .energy(Integer.MAX_VALUE)
-                                .angle(DOWNWARDS)
-                                .speed(speed)
-                                .build(),
+                        directionalAlienConfig(
+                                AlienCharacter.BLOCK,
+                                DOWNWARDS,
+                                speed),
                         powerUps)
         };
     }
@@ -334,13 +332,10 @@ public class MazePatternCreator {
                                 MAZE_TWO,
                                 BLOCKS_PER_ROW,
                                 BLOCK_SPRITE_WIDTH),
-                        DirectionalDestroyableConfig
-                                .builder()
-                                .alienCharacter(AlienCharacter.BLOCK)
-                                .energy(Integer.MAX_VALUE)
-                                .angle(DOWNWARDS)
-                                .speed(speed)
-                                .build(),
+                        directionalAlienConfig(
+                                AlienCharacter.BLOCK,
+                                DOWNWARDS,
+                                speed),
                         powerUps)
         };
     }

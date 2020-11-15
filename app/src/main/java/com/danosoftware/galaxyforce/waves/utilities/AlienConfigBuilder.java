@@ -42,7 +42,6 @@ public class AlienConfigBuilder {
             case WALKER:
             case ALL_SEEING_EYE:
             case JUMPER:
-            case ROTATOR:
             case FROGGER:
             case WHIRLPOOL:
             case FISH:
@@ -52,10 +51,8 @@ public class AlienConfigBuilder {
             case PILOT:
             case ARACNOID:
             case CRAB:
-            case BEAR:
             case DINO:
             case FRISBIE:
-            case JOKER:
             case OCTOPUS:
             case MINION:
             case SPINNER_GREEN:
@@ -104,6 +101,9 @@ public class AlienConfigBuilder {
             case CHARLIE:
             case GHOST:
             case BATTLE_DROID:
+            case JOKER:
+            case BEAR:
+            case ROTATOR:
                 return MissileFiringConfig
                         .builder()
                         .missileType(AlienMissileType.ROTATED)
@@ -124,7 +124,6 @@ public class AlienConfigBuilder {
 
         switch (character) {
             case NULL:
-            case BLOCK:
             case PINKO:
             case PISTON:
             case PURPLE_MEANIE:
@@ -145,9 +144,7 @@ public class AlienConfigBuilder {
             case WHIRLPOOL:
             case BATTLE_DROID:
             case FISH:
-            case LEMMING:
             case SQUEEZE_BOX:
-            case YELLOW_BEARD:
             case ARACNOID:
             case CRAB:
             case BEAR:
@@ -169,7 +166,6 @@ public class AlienConfigBuilder {
             case INSECT:
             case GOBBY:
             case BOOK:
-            case ZOGG:
             case BOMB:
             case BATTY:
             case CLOUD:
@@ -180,17 +176,38 @@ public class AlienConfigBuilder {
             case TELLY:
             case HELMET:
             case EGG:
-            case BARRIER:
             case SPACE_STATION:
                 return 1;
             case CIRCUIT:
             case PILOT:
             case FRISBIE:
+            case ZOGG:
+            case LEMMING:
+            case YELLOW_BEARD:
                 return 2;
             case INSECT_MOTHERSHIP:
                 return 10;
+            case BARRIER:
+            case BLOCK:
+                return Integer.MAX_VALUE;
             default:
                 throw new GalaxyForceException("Can not create energy for unknown character: " + character);
+        }
+    }
+
+    /**
+     * Is character angled to path?
+     */
+    public static Boolean angledToPath(
+            AlienCharacter character) {
+
+        switch (character) {
+            case LADY_BIRD:
+            case FIGHTER:
+            case MINION:
+                return true;
+            default:
+                return false;
         }
 
     }
@@ -204,6 +221,7 @@ public class AlienConfigBuilder {
 
         final Integer energy = energy(character);
         final MissileConfig missileConfig = missileConfig(character, speed, missileFrequency);
+        final Boolean angledToPath = angledToPath(character);
 
         switch (character) {
             case NULL:
@@ -272,6 +290,7 @@ public class AlienConfigBuilder {
                         .alienCharacter(character)
                         .energy(energy)
                         .missileConfig(missileConfig)
+                        .angledToPath(angledToPath)
                         .build();
             case CIRCUIT:
             case SPINNER_PULSE_GREEN:
@@ -285,6 +304,7 @@ public class AlienConfigBuilder {
                                         .angularSpeed(70)
                                         .build())
                         .missileConfig(missileConfig)
+                        .angledToPath(angledToPath)
                         .build();
             default:
                 throw new GalaxyForceException("Can not create alien config for unknown character: " + character);
@@ -297,6 +317,7 @@ public class AlienConfigBuilder {
     public static AlienConfig alienConfig(AlienCharacter character) {
 
         final Integer energy = energy(character);
+        final Boolean angledToPath = angledToPath(character);
 
         switch (character) {
             case NULL:
@@ -364,6 +385,7 @@ public class AlienConfigBuilder {
                         .builder()
                         .alienCharacter(character)
                         .energy(energy)
+                        .angledToPath(angledToPath)
                         .build();
             case CIRCUIT:
             case SPINNER_PULSE_GREEN:
@@ -376,6 +398,7 @@ public class AlienConfigBuilder {
                                         .builder()
                                         .angularSpeed(70)
                                         .build())
+                        .angledToPath(angledToPath)
                         .build();
             default:
                 throw new GalaxyForceException("Can not create alien config for unknown character: " + character);
@@ -383,7 +406,7 @@ public class AlienConfigBuilder {
     }
 
     /**
-     * Create alien config for character with missiles
+     * Create directional alien config for character with missiles
      */
     public static AlienConfig directionalAlienConfig(
             AlienCharacter character,
@@ -403,6 +426,25 @@ public class AlienConfigBuilder {
                     .angle(directionalAngle)
                     .missileConfig(missileConfig)
                     .build();
+    }
+
+    /**
+     * Create directional alien config for character without missiles
+     */
+    public static AlienConfig directionalAlienConfig(
+            AlienCharacter character,
+            Float directionalAngle,
+            AlienSpeed alienSpeed) {
+
+        final Integer energy = energy(character);
+
+        return DirectionalDestroyableConfig
+                .builder()
+                .alienCharacter(character)
+                .energy(energy)
+                .speed(alienSpeed)
+                .angle(directionalAngle)
+                .build();
     }
 
 
