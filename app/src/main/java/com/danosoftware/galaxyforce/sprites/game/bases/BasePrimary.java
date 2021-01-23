@@ -100,6 +100,12 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
      */
     private float timeUntilShieldRemoved = 0f;
 
+    /*
+     * variable to store time until helper bases should be destroyed. Value
+     * of zero indicates no change is needed.
+     */
+    private float timeUntilHelpersExplode;
+
     /* does base have shield */
     private boolean shielded = false;
 
@@ -232,6 +238,16 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
                     shield.animate(deltaTime);
                 }
             }
+
+            // helpers should be destroyed when timer expires
+            if (!activeHelpers.isEmpty()) {
+                timeUntilHelpersExplode -= deltaTime;
+                if (timeUntilHelpersExplode <= 0) {
+                    for (IBaseHelper aHelperBase : activeHelpers.values()) {
+                        aHelperBase.destroy();
+                    }
+                }
+            }
         }
 
         // if exploding then animate or set destroyed once finished
@@ -332,7 +348,7 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
 
             // add guided missile for set time
             case MISSILE_GUIDED:
-                setBaseMissileType(BaseMissileType.GUIDED, 0.5f, 10f);
+                setBaseMissileType(BaseMissileType.GUIDED, 0.5f, 7.5f);
                 break;
 
             // add laser missile for set time
@@ -342,21 +358,22 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
 
             // add parallel missile for set time
             case MISSILE_PARALLEL:
-                setBaseMissileType(BaseMissileType.PARALLEL, 0.5f, 10f);
+                setBaseMissileType(BaseMissileType.PARALLEL, 0.5f, 7.5f);
                 break;
 
             // add spray missile for set time
             case MISSILE_SPRAY:
-                setBaseMissileType(BaseMissileType.SPRAY, 0.5f, 10f);
+                setBaseMissileType(BaseMissileType.SPRAY, 0.5f, 5f);
                 break;
 
             // add shield for set time
             case SHIELD:
-                addShield(10f);
+                addShield(7.5f);
                 break;
 
             // add helper bases for set time
             case HELPER_BASES:
+                timeUntilHelpersExplode = 10f;
                 if (!helpers.containsKey(LEFT)) {
                     createHelperBase(LEFT);
                 }

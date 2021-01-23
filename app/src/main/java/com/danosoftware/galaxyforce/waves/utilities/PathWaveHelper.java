@@ -9,12 +9,16 @@ import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
 import com.danosoftware.galaxyforce.waves.config.SubWaveConfig;
 import com.danosoftware.galaxyforce.waves.config.SubWavePathConfig;
 import com.danosoftware.galaxyforce.waves.rules.SubWavePathRuleProperties;
+import com.danosoftware.galaxyforce.waves.rules.SubWaveRuleProperties;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
+import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_LEFT_EDGE;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
+import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_RIGHT_EDGE;
 
 public class PathWaveHelper {
 
@@ -569,6 +573,123 @@ public class PathWaveHelper {
                             .add(new OffsetXPointTranslator(HORIZONTAL_ROW_EDGE_GAP + (col * gapBetweenAliens)))
             ));
         }
+
+        return subWaves;
+    }
+
+    /**
+     * Creates an attack of aliens at either side of the screen
+     */
+    public static List<SubWavePathRuleProperties> createSideDroppers(
+            final Path path,
+            final PathSpeed speed,
+            final int numberOfAliens,
+            final float delayStart) {
+
+        List<SubWavePathRuleProperties> subWaves = new ArrayList<>();
+
+        subWaves.add(new SubWavePathRuleProperties(
+                path,
+                speed,
+                numberOfAliens,
+                speed.getMultiplier() * 0.5f,
+                delayStart,
+                false,
+                new PointTranslatorChain()
+                        .add(new OffsetXPointTranslator(SCREEN_LEFT_EDGE))
+        ));
+        subWaves.add(new SubWavePathRuleProperties(
+                path,
+                speed,
+                numberOfAliens,
+                speed.getMultiplier() * 0.5f,
+                delayStart,
+                false,
+                new PointTranslatorChain()
+                        .add(new OffsetXPointTranslator(SCREEN_RIGHT_EDGE))
+        ));
+
+        return subWaves;
+    }
+
+    /**
+     * Creates an attack of aliens at centre of the screen
+     */
+    public static List<SubWavePathRuleProperties> createCentralDroppers(
+            final Path path,
+            final PathSpeed speed,
+            final int numberOfAliens,
+            final float delayStart) {
+
+        List<SubWavePathRuleProperties> subWaves = new ArrayList<>();
+
+        return Collections.singletonList(
+                new SubWavePathRuleProperties(
+                    path,
+                    speed,
+                    numberOfAliens,
+                    speed.getMultiplier() * 0.5f,
+                    delayStart,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetXPointTranslator(SCREEN_MID_X))
+                )
+        );
+    }
+
+    /**
+     * Create a rule for aliens starting at top in random positions
+     */
+    public static List<SubWaveRuleProperties> scatteredTopStart(
+            final int numberOfAliens,
+            final float delayStart,
+            final float delayBetweenAliens) {
+
+        return Collections.singletonList(
+                new SubWaveRuleProperties(
+                true,
+                false,
+                0,
+                GameConstants.SCREEN_TOP,
+                numberOfAliens,
+                delayBetweenAliens,
+                delayStart,
+                false
+                )
+        );
+    }
+
+    /**
+     * Creates an attack of aliens at either side of the screen
+     */
+    public static List<SubWavePathRuleProperties> staggeredDroppers(
+            final Path path,
+            final PathSpeed speed,
+            final int numberOfAliens,
+            final float delayStart) {
+
+        List<SubWavePathRuleProperties> subWaves = new ArrayList<>();
+
+        subWaves.add(new SubWavePathRuleProperties(
+                path,
+                speed,
+                numberOfAliens,
+                speed.getMultiplier() * 1f,
+                delayStart,
+                false,
+                new PointTranslatorChain()
+                        .add(new OffsetXPointTranslator(SCREEN_MID_X / 2))
+        ));
+        subWaves.add(new SubWavePathRuleProperties(
+                path,
+                speed,
+                numberOfAliens,
+                speed.getMultiplier() * 1f,
+                speed.getMultiplier() * 0.5f,
+                false,
+                new PointTranslatorChain()
+                        .add(new OffsetXPointTranslator(SCREEN_MID_X + SCREEN_MID_X / 2))
+        ));
 
         return subWaves;
     }

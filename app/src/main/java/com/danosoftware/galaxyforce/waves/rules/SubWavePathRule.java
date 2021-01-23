@@ -177,7 +177,7 @@ public enum SubWavePathRule {
      * crossing aliens that attack from the top, cross over then leave at the
      * bottom
      */
-    CROSSING_STEP_ATTACK(
+    CROSSING_STEP_ATTACK_BOTH(
             new SubWavePathRuleProperties(
                     Path.BEZIER_STEP_UP,
                     PathSpeed.NORMAL,
@@ -190,6 +190,28 @@ public enum SubWavePathRule {
                     Path.BEZIER_STEP_UP,
                     PathSpeed.NORMAL,
                     20,
+                    0.3f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
+            )
+    ),
+    CROSSING_STEP_ATTACK_LEFT_SHORT(
+            new SubWavePathRuleProperties(
+                    Path.BEZIER_STEP_UP,
+                    PathSpeed.NORMAL,
+                    10,
+                    0.3f,
+                    0,
+                    false
+            )
+    ),
+    CROSSING_STEP_ATTACK_RIGHT_SHORT(
+            new SubWavePathRuleProperties(
+                    Path.BEZIER_STEP_UP,
+                    PathSpeed.NORMAL,
+                    10,
                     0.3f,
                     0,
                     false,
