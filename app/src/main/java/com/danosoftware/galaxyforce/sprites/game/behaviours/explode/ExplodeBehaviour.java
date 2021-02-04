@@ -1,6 +1,7 @@
 package com.danosoftware.galaxyforce.sprites.game.behaviours.explode;
 
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
+import com.danosoftware.galaxyforce.sprites.game.aliens.IAlienFollower;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 
 public interface ExplodeBehaviour {
@@ -11,13 +12,11 @@ public interface ExplodeBehaviour {
     void startExplosion(IAlien alien);
 
     /**
-     * Initialise start of explosion.
+     * Initialise start of explosion for follower.
      * <p>
-     * This implementation is silent and does not cause an explosion
-     * sound or any vibration. Typically used for followers
-     * when another sprite will handle sound/vibration effects.
+     * Used for followers when another followable sprite is exploding.
      */
-    void startExplosionSilently();
+    void startExplosionFollower(IAlienFollower alien);
 
     /**
      * Get the current explosion sprite.

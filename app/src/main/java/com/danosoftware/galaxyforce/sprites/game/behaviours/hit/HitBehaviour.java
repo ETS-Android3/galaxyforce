@@ -17,11 +17,10 @@ public interface HitBehaviour {
      * Start hit behaviour. Supply stateTime to keep hit animation
      * in sync with the parent sprite.
      * <p>
-     * This implementation is silent and does not cause a hit
-     * sound or any vibration. Typically used for followers
-     * when another sprite will handle sound/vibration effects.
+     * This implementation used for followers when head
+     * followable sprite will handle main hit effects.
      */
-    void startHitSilently(float stateTime);
+    void startHitFollower(float stateTime);
 
     /**
      * Is sprite still performing hit behaviour?

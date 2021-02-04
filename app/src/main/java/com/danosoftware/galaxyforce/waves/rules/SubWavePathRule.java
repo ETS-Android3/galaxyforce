@@ -35,7 +35,7 @@ public enum SubWavePathRule {
                     PathSpeed.NORMAL,
                     6,
                     0.3f,
-                    5,
+                    4,
                     0.3f * 7,
                     null)
     ),
@@ -51,7 +51,7 @@ public enum SubWavePathRule {
                     PathSpeed.NORMAL,
                     6,
                     0.3f,
-                    5,
+                    4,
                     0.3f * 7,
                     new PointTranslatorChain()
                             .add(new FlipXPointTranslator(GAME_WIDTH))
@@ -177,7 +177,7 @@ public enum SubWavePathRule {
      * crossing aliens that attack from the top, cross over then leave at the
      * bottom
      */
-    CROSSING_STEP_ATTACK(
+    CROSSING_STEP_ATTACK_BOTH(
             new SubWavePathRuleProperties(
                     Path.BEZIER_STEP_UP,
                     PathSpeed.NORMAL,
@@ -190,6 +190,28 @@ public enum SubWavePathRule {
                     Path.BEZIER_STEP_UP,
                     PathSpeed.NORMAL,
                     20,
+                    0.3f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
+            )
+    ),
+    CROSSING_STEP_ATTACK_LEFT_SHORT(
+            new SubWavePathRuleProperties(
+                    Path.BEZIER_STEP_UP,
+                    PathSpeed.NORMAL,
+                    10,
+                    0.3f,
+                    0,
+                    false
+            )
+    ),
+    CROSSING_STEP_ATTACK_RIGHT_SHORT(
+            new SubWavePathRuleProperties(
+                    Path.BEZIER_STEP_UP,
+                    PathSpeed.NORMAL,
+                    10,
                     0.3f,
                     0,
                     false,
@@ -369,6 +391,59 @@ public enum SubWavePathRule {
                     false,
                     new PointTranslatorChain()
                             .add(new OffsetXPointTranslator(40 + (92 * 5)))
+            )
+    ),
+
+    STAGGERED_SYMMETRIC_BOUNCE_ATTACK(
+            new SubWavePathRuleProperties(
+                    Path.BOUNCE_DOWN_AND_UP,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.3f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetXPointTranslator(40))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.BOUNCE_DOWN_AND_UP,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.3f,
+                    0.5f,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetXPointTranslator(40 + 115))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.BOUNCE_DOWN_AND_UP,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.3f,
+                    1f,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetXPointTranslator(40 + (115 * 2)))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.BOUNCE_DOWN_AND_UP,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.3f,
+                    0.5f,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetXPointTranslator(40 + (115 * 3)))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.BOUNCE_DOWN_AND_UP,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.3f,
+                    0f,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetXPointTranslator(40 + (115 * 4)))
             )
     ),
 

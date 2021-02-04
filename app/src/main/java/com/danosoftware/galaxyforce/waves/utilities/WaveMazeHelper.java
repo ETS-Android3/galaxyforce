@@ -14,6 +14,7 @@ import java.util.List;
 import java.util.Random;
 
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
+import static com.danosoftware.galaxyforce.waves.utilities.AlienConfigBuilder.directionalAlienConfig;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.DOWNWARDS;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.NO_POWER_UPS;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.createAlienSubWaveProperty;
@@ -115,13 +116,10 @@ public class WaveMazeHelper {
                                    delayBetweenRows,
                                    BARRIERS_PER_ROW,
                                    BARRIERS_SPRITE_WIDTH),
-                           DirectionalDestroyableConfig
-                                   .builder()
-                                    .alienCharacter(AlienCharacter.BARRIER)
-                                    .energy(Integer.MAX_VALUE)
-                                    .angle(DOWNWARDS)
-                                    .speed(speed)
-                                    .build(),
+                           directionalAlienConfig(
+                                   AlienCharacter.BARRIER,
+                                   DOWNWARDS,
+                                   speed),
                            NO_POWER_UPS)
            };
     }
@@ -134,7 +132,6 @@ public class WaveMazeHelper {
             final AlienSpeed speed,
             final int delayBetweenRows,
             final AlienCharacter alienGuard,
-            final int alienGuardEnergy,
             final List<PowerUpType> powerUps) {
 
         // create random gaps in maze - 1 gap per row
@@ -147,13 +144,10 @@ public class WaveMazeHelper {
                                 delayBetweenRows,
                                 BARRIERS_PER_ROW,
                                 BARRIERS_SPRITE_WIDTH),
-                        DirectionalDestroyableConfig
-                                .builder()
-                                .alienCharacter(AlienCharacter.BARRIER)
-                                .energy(Integer.MAX_VALUE)
-                                .angle(DOWNWARDS)
-                                .speed(speed)
-                                .build(),
+                        directionalAlienConfig(
+                                AlienCharacter.BARRIER,
+                                DOWNWARDS,
+                                speed),
                         NO_POWER_UPS),
                 new SubWaveNoPathConfig(
                         mazeGuardsSubWave(
@@ -161,13 +155,10 @@ public class WaveMazeHelper {
                                 delayBetweenRows,
                                 BARRIERS_PER_ROW,
                                 BARRIERS_SPRITE_WIDTH),
-                        DirectionalDestroyableConfig
-                                .builder()
-                                .alienCharacter(alienGuard)
-                                .energy(alienGuardEnergy)
-                                .angle(DOWNWARDS)
-                                .speed(speed)
-                                .build(),
+                        directionalAlienConfig(
+                                alienGuard,
+                                DOWNWARDS,
+                                speed),
                         powerUps)
         };
     }
