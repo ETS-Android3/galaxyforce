@@ -18,6 +18,8 @@ import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningFixedAn
 import com.danosoftware.galaxyforce.waves.config.aliens.types.BoundariesConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.DirectionalDestroyableConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.DirectionalResettableConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowableHunterConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowerConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.HunterConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.PathConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.SplitterConfig;
@@ -77,7 +79,6 @@ public class AlienConfigBuilder {
             case LADY_BIRD:
             case ASTEROID:
             case ASTEROID_MINI:
-            case DRAGON_HEAD:
             case DRAGON_BODY:
             case SKULL:
             case DROID:
@@ -128,6 +129,7 @@ public class AlienConfigBuilder {
                         .missileFrequency(missileFrequency)
                         .build();
             // rotated fireball missile
+            case DRAGON_HEAD:
             case BATTY:
                 return MissileFiringConfig
                         .builder()
@@ -176,7 +178,6 @@ public class AlienConfigBuilder {
             case MOLECULE:
             case BIG_BOSS:
             case ASTEROID_MINI:
-            case DRAGON_HEAD:
             case DRAGON_BODY:
             case SKULL:
             case DROID:
@@ -212,6 +213,8 @@ public class AlienConfigBuilder {
             case INSECT_MOTHERSHIP:
             case BATTY:
                 return 10;
+            case DRAGON_HEAD:
+                return 20;
             case BARRIER:
             case BLOCK:
                 return Integer.MAX_VALUE;
@@ -622,5 +625,43 @@ public class AlienConfigBuilder {
                 .energy(energy)
                 .spawnConfig(spawnConfig)
                 .build();
+    }
+
+    public static FollowableHunterConfig.FollowableHunterConfigBuilder followableHunterConfigBuilder(
+            final AlienCharacter hunterCharacter,
+            final AlienSpeed speed,
+            final AlienMissileSpeed missileSpeed,
+            final Float missileFrequency,
+            final BoundariesConfig boundariesConfig,
+            final int numberOfFollowers,
+            final FollowerConfig followerConfig,
+            final List<PowerUpType> followerPowerUps) {
+
+        final Integer energy = energy(hunterCharacter);
+        final MissileConfig missileConfig = missileConfig(hunterCharacter, missileSpeed, missileFrequency);
+
+        return FollowableHunterConfig
+                .builder()
+                .alienCharacter(hunterCharacter)
+                .energy(energy)
+                .speed(speed)
+                .missileConfig(missileConfig)
+                .boundaries(boundariesConfig)
+                .numberOfFollowers(numberOfFollowers)
+                .followerConfig(followerConfig)
+                .followerPowerUps(followerPowerUps);
+    }
+
+    public static FollowerConfig.FollowerConfigBuilder followerConfigBuilder(
+            AlienCharacter character,
+            AlienSpeed speed) {
+
+        final Integer energy = energy(character);
+
+        return FollowerConfig
+                .builder()
+                .alienCharacter(character)
+                .energy(energy)
+                .speed(speed);
     }
 }

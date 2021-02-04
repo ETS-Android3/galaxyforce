@@ -158,7 +158,7 @@ public class AbstractAlienFollower extends AbstractAlien implements IAlienFollow
      */
     @Override
     public void showHit() {
-        hitBehaviour.startHitSilently(stateTime);
+        hitBehaviour.startHitFollower(stateTime);
     }
 
     /**
@@ -168,7 +168,7 @@ public class AbstractAlienFollower extends AbstractAlien implements IAlienFollow
      */
     @Override
     public void showExplode() {
-        explodeBehaviour.startExplosionSilently();
+        explodeBehaviour.startExplosionFollower(this);
         state = EXPLODING;
         powerUpBehaviour.releasePowerUp(this);
     }

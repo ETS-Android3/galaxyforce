@@ -35,7 +35,7 @@ public enum SubWavePathRule {
                     PathSpeed.NORMAL,
                     6,
                     0.3f,
-                    5,
+                    4,
                     0.3f * 7,
                     null)
     ),
@@ -51,7 +51,7 @@ public enum SubWavePathRule {
                     PathSpeed.NORMAL,
                     6,
                     0.3f,
-                    5,
+                    4,
                     0.3f * 7,
                     new PointTranslatorChain()
                             .add(new FlipXPointTranslator(GAME_WIDTH))
@@ -391,6 +391,59 @@ public enum SubWavePathRule {
                     false,
                     new PointTranslatorChain()
                             .add(new OffsetXPointTranslator(40 + (92 * 5)))
+            )
+    ),
+
+    STAGGERED_SYMMETRIC_BOUNCE_ATTACK(
+            new SubWavePathRuleProperties(
+                    Path.BOUNCE_DOWN_AND_UP,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.3f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetXPointTranslator(40))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.BOUNCE_DOWN_AND_UP,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.3f,
+                    0.5f,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetXPointTranslator(40 + 115))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.BOUNCE_DOWN_AND_UP,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.3f,
+                    1f,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetXPointTranslator(40 + (115 * 2)))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.BOUNCE_DOWN_AND_UP,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.3f,
+                    0.5f,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetXPointTranslator(40 + (115 * 3)))
+            ),
+            new SubWavePathRuleProperties(
+                    Path.BOUNCE_DOWN_AND_UP,
+                    PathSpeed.NORMAL,
+                    5,
+                    0.3f,
+                    0f,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetXPointTranslator(40 + (115 * 4)))
             )
     ),
 

@@ -7,6 +7,7 @@ import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.services.vibration.VibrateTime;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
+import com.danosoftware.galaxyforce.sprites.game.aliens.IAlienFollower;
 import com.danosoftware.galaxyforce.sprites.game.factories.AlienFactory;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 import com.danosoftware.galaxyforce.view.Animation;
@@ -99,8 +100,7 @@ public class ExplodeMultiple implements ExplodeBehaviour {
 
             for (int i = 0; i < numberOfExplosions; i++) {
                 final float angle = angleDelta * i;
-                final int radius = alien.halfHeight() < alien.halfWidth()
-                        ? alien.halfHeight() : alien.halfWidth();
+                final int radius = Math.max(alien.halfHeight(), alien.halfWidth());
                 final int x = alien.x() + (int) (radius * (float) Math.cos(angle));
                 final int y = alien.y() - (int) (radius * (float) Math.sin(angle));
                 timedExplosions.add(
@@ -122,8 +122,8 @@ public class ExplodeMultiple implements ExplodeBehaviour {
     }
 
     @Override
-    public void startExplosionSilently() {
-        explosionTime = 0f;
+    public void startExplosionFollower(IAlienFollower alien) {
+        startExplosion(alien);
     }
 
     @Override
