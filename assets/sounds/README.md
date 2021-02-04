@@ -13,5 +13,5 @@ The sound effects have been created in a tool called [Lab Chirp](http://labbed.n
 
 The original Lab Chirp files have been included in this directory as `.lch` files.
 
-These were exported as .wav files and the converted to .ogg files using the
+These were exported as `.wav` files and the converted to `.ogg` files using the
 [convert-to-ogg](https://audio.online-convert.com/convert-to-ogg) on-line tool.
