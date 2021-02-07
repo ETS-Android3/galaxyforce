@@ -113,9 +113,17 @@ public class AlienConfigBuilder {
                         .missileSpeed(speed)
                         .missileFrequency(missileFrequency)
                         .build();
-                // rotated laser missile
-            case CHARLIE:
+                // rotated downwards laser missile (will not fire upwards)
             case GHOST:
+                return MissileFiringConfig
+                        .builder()
+                        .missileType(AlienMissileType.ROTATED_DOWNWARDS)
+                        .missileCharacter(AlienMissileCharacter.LASER)
+                        .missileSpeed(speed)
+                        .missileFrequency(missileFrequency)
+                        .build();
+                // rotated laser missile (any direction)
+            case CHARLIE:
             case BATTLE_DROID:
             case JOKER:
             case BEAR:
