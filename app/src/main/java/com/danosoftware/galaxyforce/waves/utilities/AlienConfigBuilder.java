@@ -96,7 +96,18 @@ public class AlienConfigBuilder {
             case HELMET:
             case EGG:
             case BARRIER:
+            case CYCLONE:
             case SPACE_STATION:
+            case DEVIL:
+            case GREMLIN:
+            case PINCER:
+            case SPARKLE:
+            case SPECTATOR:
+            case SQUASHER:
+            case TINY_DANCER:
+            case WILD_STYLE:
+            case CONFUSER:
+            case SAUCER:
                 return MissileFiringConfig
                         .builder()
                         .missileType(AlienMissileType.DOWNWARDS)
@@ -202,6 +213,17 @@ public class AlienConfigBuilder {
             case HELMET:
             case EGG:
             case SPACE_STATION:
+            case CYCLONE:
+            case DEVIL:
+            case GREMLIN:
+            case PINCER:
+            case SPARKLE:
+            case SPECTATOR:
+            case SQUASHER:
+            case TINY_DANCER:
+            case WILD_STYLE:
+            case CONFUSER:
+            case SAUCER:
                 return 1;
             case CIRCUIT:
             case PILOT:
@@ -321,6 +343,17 @@ public class AlienConfigBuilder {
             case EGG:
             case BARRIER:
             case SPACE_STATION:
+            case CYCLONE:
+            case DEVIL:
+            case GREMLIN:
+            case PINCER:
+            case SPARKLE:
+            case SPECTATOR:
+            case SQUASHER:
+            case TINY_DANCER:
+            case WILD_STYLE:
+            case CONFUSER:
+            case SAUCER:
                 return PathConfig
                         .builder()
                         .alienCharacter(character)
@@ -417,6 +450,17 @@ public class AlienConfigBuilder {
             case EGG:
             case BARRIER:
             case SPACE_STATION:
+            case CYCLONE:
+            case DEVIL:
+            case GREMLIN:
+            case PINCER:
+            case SPARKLE:
+            case SPECTATOR:
+            case SQUASHER:
+            case TINY_DANCER:
+            case WILD_STYLE:
+            case CONFUSER:
+            case SAUCER:
                 return PathConfig
                         .builder()
                         .alienCharacter(character)

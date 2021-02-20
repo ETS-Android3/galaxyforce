@@ -1001,13 +1001,59 @@ public class WaveFactory {
 
             case 13:
 
-                // ??????
+                subWaves.add(
+                        createSubWave(
+                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
+                                createDescendingDelayedRowSubWave(
+                                        Path.BOUNCE_DOWN_AND_UP,
+                                        PathSpeed.NORMAL,
+                                        new AlienRowConfig[] {
+                                                alienRowConfig(
+                                                        AlienCharacter.HOPPER,
+                                                        AlienMissileSpeed.FAST,
+                                                        15f,
+                                                        Collections.singletonList(PowerUpType.SHIELD)
+                                                ),
+                                                alienRowConfig(
+                                                        AlienCharacter.CHEEKY,
+                                                        AlienMissileSpeed.FAST,
+                                                        15f,
+                                                        Collections.singletonList(PowerUpType.MISSILE_GUIDED)
+                                                ),
+                                                alienRowConfig(
+                                                        AlienCharacter.FOXY,
+                                                        AlienMissileSpeed.FAST,
+                                                        15f,
+                                                        Collections.singletonList(PowerUpType.MISSILE_GUIDED)
+                                                ),
+                                        },
+                                        6,
+                                        0f,
+                                        true,
+                                        false
+                                )
+                        )
+                );
+                break;
 
                 /**
                  * Aliens descend in spiral patterns from top-to-bottom
                  */
             case 14:
 
+                subWaves.add(
+                        createSubWave(
+                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
+                                new SubWavePathConfig(
+                                        SubWavePathRule.SPACE_INVADER,
+                                        alienConfig(
+                                                AlienCharacter.BAD_CAT,
+                                                AlienMissileSpeed.MEDIUM,
+                                                10f),
+                                        Collections.singletonList(PowerUpType.MISSILE_BLAST)
+                                )
+                        )
+                );
                 subWaves.add(
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
