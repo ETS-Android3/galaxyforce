@@ -57,10 +57,12 @@ import static com.danosoftware.galaxyforce.waves.utilities.AlienConfigBuilder.fo
 import static com.danosoftware.galaxyforce.waves.utilities.AlienConfigBuilder.followerConfigBuilder;
 import static com.danosoftware.galaxyforce.waves.utilities.AlienConfigBuilder.hunterAlienConfig;
 import static com.danosoftware.galaxyforce.waves.utilities.AlienConfigBuilder.spawningPathAlienConfig;
-import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.mazePatternFour;
-import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.mazePatternOne;
-import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.mazePatternThree;
-import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.mazePatternTwo;
+import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.MAZE_FOUR;
+import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.MAZE_ONE;
+import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.MAZE_THREE;
+import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.MAZE_TWO;
+import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.createMaze;
+import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.mazeDoubler;
 import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.createCentralDroppers;
 import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.createDescendingDelayedRowSubWave;
 import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.createDescendingOffsetRowsSubWave;
@@ -1037,19 +1039,32 @@ public class WaveFactory {
                 );
                 break;
 
-                /**
-                 * Aliens descend in spiral patterns from top-to-bottom
-                 */
+            /**
+             * Wave 14
+             * Easy maze of blocks descending from the top.
+             */
             case 14:
-
+                // easy maze of blocks
                 subWaves.add(
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                mazePatternFour(
-                                        AlienSpeed.VERY_FAST,
+                                new SubWaveNoPathConfig(
+                                        createMaze(
+                                                mazeDoubler(MAZE_FOUR)),
+                                        directionalAlienConfig(
+                                                AlienCharacter.BLOCK,
+                                                DOWNWARDS,
+                                                AlienSpeed.VERY_FAST),
                                         NO_POWER_UPS)
                         )
                 );
+                break;
+
+            case 15:
+
+            /**
+             * Aliens descend in spiral patterns from top-to-bottom
+             */
                 subWaves.add(
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
@@ -1103,9 +1118,9 @@ public class WaveFactory {
                                 )
                         )
                 );
-                break;
-
-            case 15:
+//                break;
+//
+//            case 15:
 
 
                 /**
@@ -1701,17 +1716,27 @@ public class WaveFactory {
                 subWaves.add(
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                mazePatternOne(
-                                        AlienSpeed.MEDIUM,
+                                new SubWaveNoPathConfig(
+                                        createMaze(
+                                                MAZE_ONE),
+                                        directionalAlienConfig(
+                                                AlienCharacter.BLOCK,
+                                                DOWNWARDS,
+                                                AlienSpeed.MEDIUM),
                                         NO_POWER_UPS)
                         )
                 );
                 subWaves.add(
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                mazePatternTwo(
-                                        AlienSpeed.VERY_FAST,
-                                        NO_POWER_UPS)
+                                new SubWaveNoPathConfig(
+                                    createMaze(
+                                            MAZE_TWO),
+                                    directionalAlienConfig(
+                                            AlienCharacter.BLOCK,
+                                            DOWNWARDS,
+                                            AlienSpeed.VERY_FAST),
+                                    NO_POWER_UPS)
                         )
                 );
                 break;
@@ -1806,9 +1831,16 @@ public class WaveFactory {
                                                 GAME_HEIGHT - 230,
                                                 5f,
                                                 true),
-                                        mazePatternThree(
-                                                AlienSpeed.MEDIUM,
-                                                NO_POWER_UPS)
+                                        new SubWaveConfig[]{
+                                                new SubWaveNoPathConfig(
+                                                        createMaze(
+                                                                MAZE_THREE),
+                                                        fallingSpinningSplittingConfig(
+                                                                AlienCharacter.ASTEROID,
+                                                                AlienSpeed.MEDIUM,
+                                                                AlienCharacter.ASTEROID_MINI),
+                                                        NO_POWER_UPS)
+                                        }
                                 )
                         )
                 );

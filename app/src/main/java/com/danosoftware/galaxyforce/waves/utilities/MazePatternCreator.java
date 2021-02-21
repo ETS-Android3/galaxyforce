@@ -1,29 +1,12 @@
 package com.danosoftware.galaxyforce.waves.utilities;
 
 import com.danosoftware.galaxyforce.constants.GameConstants;
-import com.danosoftware.galaxyforce.enumerations.AlienSpeed;
-import com.danosoftware.galaxyforce.enumerations.PowerUpType;
-import com.danosoftware.galaxyforce.waves.AlienCharacter;
-import com.danosoftware.galaxyforce.waves.config.SubWaveConfig;
-import com.danosoftware.galaxyforce.waves.config.SubWaveNoPathConfig;
-import com.danosoftware.galaxyforce.waves.config.aliens.exploding.SpawningExplosionConfig;
-import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawnOnDemandConfig;
-import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningBySpeedConfig;
-import com.danosoftware.galaxyforce.waves.config.aliens.types.DirectionalDestroyableConfig;
-import com.danosoftware.galaxyforce.waves.config.aliens.types.SplitterConfig;
 import com.danosoftware.galaxyforce.waves.rules.SubWaveRuleProperties;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
-import static com.danosoftware.galaxyforce.waves.utilities.AlienConfigBuilder.directionalAlienConfig;
-import static com.danosoftware.galaxyforce.waves.utilities.WaveAsteroidsHelper.createMiniDirectionalAsteroid;
-import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.DOWNWARDS;
-import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.HALF_PI;
-import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.NO_POWER_UPS;
-import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.QUARTER_PI;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.createAlienSubWaveProperty;
 
 public class MazePatternCreator {
@@ -45,7 +28,7 @@ public class MazePatternCreator {
      * 0 represents an empty space.
      */
 
-    private static final int[] MAZE_ONE = {
+    public static final int[] MAZE_ONE = {
             0b1110111,
             0b0000000,
             0b0111111,
@@ -147,7 +130,7 @@ public class MazePatternCreator {
             0b1110111
     };
 
-    private static final int[] MAZE_TWO = {
+    public static final int[] MAZE_TWO = {
             0b1110111,
             0b0000000,
             0b0000000,
@@ -300,6 +283,31 @@ public class MazePatternCreator {
 
     public static final int[] MAZE_FOUR = {
             0b1000001,
+            0b0100010,
+            0b1000100,
+            0b0100010,
+            0b0010001,
+            0b0001000,
+            0b0010001,
+            0b0100010,
+            0b1000100,
+            0b0100010,
+            0b0100010,
+            0b1000001,
+            0b1110001,
+            0b1111000,
+            0b1111100,
+            0b1111110,
+            0b1111100,
+            0b1111000,
+            0b1110000,
+            0b0000000,
+            0b0011111,
+            0b0111111,
+            0b0011111,
+            0b0001111,
+            0b0000000,
+            0b1000001,
             0b1000001,
             0b0100010,
             0b0100010,
@@ -328,6 +336,8 @@ public class MazePatternCreator {
             0b1000001,
             0b0000000,
             0b0001000,
+            0b0011100,
+            0b0111110,
             0b0011100,
             0b0001000,
             0b0000000,
@@ -361,129 +371,18 @@ public class MazePatternCreator {
     };
 
     /**
-     * Create descending rows of blocks in a maze pattern
-     */
-    public static SubWaveConfig[] mazePatternOne(
-            final AlienSpeed speed,
-            final List<PowerUpType> powerUps) {
-
-          return new SubWaveConfig[]{
-                new SubWaveNoPathConfig(
-                        createMaze(
-                                MAZE_ONE,
-                                BLOCKS_PER_ROW,
-                                BLOCK_SPRITE_WIDTH),
-                        directionalAlienConfig(
-                                AlienCharacter.BLOCK,
-                                DOWNWARDS,
-                                speed),
-                        powerUps)
-        };
-    }
-
-    /**
-     * Create descending rows of blocks in a maze pattern
-     */
-    public static SubWaveConfig[] mazePatternTwo(
-            final AlienSpeed speed,
-            final List<PowerUpType> powerUps) {
-
-        return new SubWaveConfig[]{
-                new SubWaveNoPathConfig(
-                        createMaze(
-                                MAZE_TWO,
-                                BLOCKS_PER_ROW,
-                                BLOCK_SPRITE_WIDTH),
-                        directionalAlienConfig(
-                                AlienCharacter.BLOCK,
-                                DOWNWARDS,
-                                speed),
-                        powerUps)
-        };
-    }
-
-    /**
-     * Create descending rows of blocks in a maze pattern
-     */
-    public static SubWaveConfig[] mazePatternThree(
-            final AlienSpeed speed,
-            final List<PowerUpType> powerUps) {
-
-        return new SubWaveConfig[]{
-                new SubWaveNoPathConfig(
-                        createMaze(
-                                MAZE_THREE,
-                                BLOCKS_PER_ROW,
-                                BLOCK_SPRITE_WIDTH),
-                        DirectionalDestroyableConfig
-                                .builder()
-                                .alienCharacter(AlienCharacter.ASTEROID)
-                                .energy(2)
-                                .speed(speed)
-                                .angle(DOWNWARDS)
-                                .spinningConfig(
-                                        SpinningBySpeedConfig
-                                                .builder()
-                                                .build())
-                                .explosionConfig(
-                                        SpawningExplosionConfig
-                                                .builder()
-                                                .spawnConfig(
-                                                        SpawnOnDemandConfig
-                                                                .builder()
-                                                                .spawnedPowerUpTypes(
-                                                                        NO_POWER_UPS)
-                                                                .spawnedAlienConfig(SplitterConfig
-                                                                        .builder()
-                                                                        .alienConfigs(
-                                                                                Arrays.asList(
-                                                                                        createMiniDirectionalAsteroid(-HALF_PI - QUARTER_PI, AlienSpeed.MEDIUM),
-                                                                                        createMiniDirectionalAsteroid(-HALF_PI + QUARTER_PI, AlienSpeed.MEDIUM)))
-                                                                        .build())
-                                                                .build())
-                                                .build()
-                                )
-                                .build(),
-                        powerUps)
-        };
-    }
-
-    /**
-     * Create descending rows of blocks in a maze pattern
-     */
-    public static SubWaveConfig[] mazePatternFour(
-            final AlienSpeed speed,
-            final List<PowerUpType> powerUps) {
-
-        return new SubWaveConfig[]{
-                new SubWaveNoPathConfig(
-                        createMaze(
-                                MAZE_FOUR,
-                                BLOCKS_PER_ROW,
-                                BLOCK_SPRITE_WIDTH),
-                        directionalAlienConfig(
-                                AlienCharacter.BLOCK,
-                                DOWNWARDS,
-                                speed),
-                        powerUps)
-        };
-    }
-
-    /**
      * Creates maze of multiple rows.
      * Each row containing multiple blocks to navigate around.
      */
-    private static List<SubWaveRuleProperties> createMaze(
-            int[] maze,
-            int columnsPerRow,
-            int alienWidth) {
+    public static List<SubWaveRuleProperties> createMaze(
+            int[] maze) {
 
         List<SubWaveRuleProperties> subWaves = new ArrayList<>();
 
         // calculates min/max x positions for aliens per row
-        final int minX = alienWidth / 2;
-        final int maxX = GAME_WIDTH - (alienWidth / 2);
-        final int distanceBetweenAliens = (maxX - minX) / (columnsPerRow - 1);
+        final int minX = BLOCK_SPRITE_WIDTH / 2;
+        final int maxX = GAME_WIDTH - (BLOCK_SPRITE_WIDTH / 2);
+        final int distanceBetweenAliens = (maxX - minX) / (BLOCKS_PER_ROW - 1);
 
         final int mazeLength = maze.length;
 
@@ -507,5 +406,18 @@ public class MazePatternCreator {
             }
         }
         return subWaves;
+    }
+
+    /**
+     * Doubles the length of a maze by repeating each row twice.
+     * Makes maze easier (and longer).
+     */
+    public static int[] mazeDoubler(int[] maze) {
+        final int[] doubleMaze = new int[maze.length * 2];
+        for (int row = 0; row < maze.length; row++) {
+            doubleMaze[row * 2] = maze[row];
+            doubleMaze[(row * 2) + 1] = maze[row];
+        }
+        return doubleMaze;
     }
 }
