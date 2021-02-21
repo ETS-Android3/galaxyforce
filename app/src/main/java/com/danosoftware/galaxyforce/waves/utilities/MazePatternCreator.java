@@ -298,6 +298,68 @@ public class MazePatternCreator {
             0b0000000
     };
 
+    public static final int[] MAZE_FOUR = {
+            0b1000001,
+            0b1000001,
+            0b0100010,
+            0b0100010,
+            0b0010001,
+            0b0100010,
+            0b1000100,
+            0b0100010,
+            0b0010001,
+            0b0001000,
+            0b0010001,
+            0b0100010,
+            0b1000100,
+            0b0100010,
+            0b0010001,
+            0b0100010,
+            0b1000100,
+            0b0100010,
+            0b0010001,
+            0b0001000,
+            0b0010001,
+            0b0100010,
+            0b1000100,
+            0b0100010,
+            0b0100010,
+            0b1000001,
+            0b1000001,
+            0b0000000,
+            0b0001000,
+            0b0011100,
+            0b0001000,
+            0b0000000,
+            0b1000001,
+            0b1000001,
+            0b0100010,
+            0b0100010,
+            0b0010001,
+            0b0100010,
+            0b1000100,
+            0b0100010,
+            0b0010001,
+            0b0001000,
+            0b0010001,
+            0b0100010,
+            0b1000100,
+            0b0100010,
+            0b0010001,
+            0b0100010,
+            0b1000100,
+            0b0100010,
+            0b0010001,
+            0b0001000,
+            0b0010001,
+            0b0100010,
+            0b1000100,
+            0b0100010,
+            0b0100010,
+            0b1000001,
+            0b1000001,
+    };
+
     /**
      * Create descending rows of blocks in a maze pattern
      */
@@ -382,6 +444,27 @@ public class MazePatternCreator {
                                                 .build()
                                 )
                                 .build(),
+                        powerUps)
+        };
+    }
+
+    /**
+     * Create descending rows of blocks in a maze pattern
+     */
+    public static SubWaveConfig[] mazePatternFour(
+            final AlienSpeed speed,
+            final List<PowerUpType> powerUps) {
+
+        return new SubWaveConfig[]{
+                new SubWaveNoPathConfig(
+                        createMaze(
+                                MAZE_FOUR,
+                                BLOCKS_PER_ROW,
+                                BLOCK_SPRITE_WIDTH),
+                        directionalAlienConfig(
+                                AlienCharacter.BLOCK,
+                                DOWNWARDS,
+                                speed),
                         powerUps)
         };
     }

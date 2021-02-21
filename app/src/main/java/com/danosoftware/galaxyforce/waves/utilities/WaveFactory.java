@@ -57,6 +57,7 @@ import static com.danosoftware.galaxyforce.waves.utilities.AlienConfigBuilder.fo
 import static com.danosoftware.galaxyforce.waves.utilities.AlienConfigBuilder.followerConfigBuilder;
 import static com.danosoftware.galaxyforce.waves.utilities.AlienConfigBuilder.hunterAlienConfig;
 import static com.danosoftware.galaxyforce.waves.utilities.AlienConfigBuilder.spawningPathAlienConfig;
+import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.mazePatternFour;
 import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.mazePatternOne;
 import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.mazePatternThree;
 import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.mazePatternTwo;
@@ -1041,6 +1042,14 @@ public class WaveFactory {
                  */
             case 14:
 
+                subWaves.add(
+                        createSubWave(
+                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
+                                mazePatternFour(
+                                        AlienSpeed.VERY_FAST,
+                                        NO_POWER_UPS)
+                        )
+                );
                 subWaves.add(
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
