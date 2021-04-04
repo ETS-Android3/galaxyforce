@@ -20,6 +20,17 @@ public class PointTranslatorChain {
     }
 
     /**
+     * Clone an existing Point Translator Chain
+     */
+    public static PointTranslatorChain clonePointTranslatorChain(PointTranslatorChain chain) {
+        PointTranslatorChain pointTranslatorChain = new PointTranslatorChain();
+        for (PointTranslator translator : chain.translators) {
+            pointTranslatorChain.add(translator);
+        }
+        return pointTranslatorChain;
+    }
+
+    /**
      * Add a new translator to the chain
      */
     public PointTranslatorChain add(final PointTranslator translator) {

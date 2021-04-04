@@ -19,6 +19,7 @@ import java.util.List;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_LEFT_EDGE;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_RIGHT_EDGE;
+import static com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain.clonePointTranslatorChain;
 
 public class PathWaveHelper {
 
@@ -216,7 +217,6 @@ public class PathWaveHelper {
      * @param pathSpeed - speed of aliens.
      * @param alienRowConfigs - array of alien row configs (1 config per row).
      * @param aliensPerRow - number of aliens in each row.
-     * @param yOffset - y offset of row 1.
      * @param delayStart - delay before subwave starts (0f to start immediately).
      * @return array of subwave configs (1 per row).
      */
@@ -225,7 +225,6 @@ public class PathWaveHelper {
             final PathSpeed pathSpeed,
             final AlienRowConfig[] alienRowConfigs,
             final int aliensPerRow,
-            final int yOffset,
             final float delayStart) {
 
         SubWavePathConfig[] waveConfigs = new SubWavePathConfig[alienRowConfigs.length];
@@ -242,7 +241,51 @@ public class PathWaveHelper {
                             path,
                             pathSpeed,
                             delayStart,
-                            yOffset),
+                            new PointTranslatorChain()),
+                    alienRowConfigs[row].alienConfig,
+                    alienRowConfigs[row].powerUps);
+        }
+
+        return waveConfigs;
+    }
+
+    /**
+     * Create a subwave of aliens in rows.
+     * Within each row, the aliens start at the same position but
+     * start after a different delay time (determined by their column).
+     * <p>
+     * Each row starts at the same time but offset in the y-axis.
+     *
+     * @param path            - path aliens will follow.
+     * @param pathSpeed       - speed of aliens.
+     * @param alienRowConfigs - array of alien row configs (1 config per row).
+     * @param aliensPerRow    - number of aliens in each row.
+     * @param delayStart      - delay before subwave starts (0f to start immediately).
+     * @return array of subwave configs (1 per row).
+     */
+    public static SubWaveConfig[] createLeftToRightDelayedRowSubWave(
+            final Path path,
+            final PathSpeed pathSpeed,
+            final AlienRowConfig[] alienRowConfigs,
+            final int aliensPerRow,
+            final float delayStart,
+            final PointTranslatorChain pointTranslatorChain) {
+
+        SubWavePathConfig[] waveConfigs = new SubWavePathConfig[alienRowConfigs.length];
+
+        // adjust delay so we have a constant gap between aliens regardless of speed
+        final float delayBetweenAliens = HORIZONTAL_DELAY_MULTIPLIER * pathSpeed.getMultiplier();
+
+        for (int row = 0; row < alienRowConfigs.length; row++) {
+            waveConfigs[row] = new SubWavePathConfig(
+                    createRowWithTimeDelayedAliens(
+                            row,
+                            aliensPerRow,
+                            delayBetweenAliens,
+                            path,
+                            pathSpeed,
+                            delayStart,
+                            pointTranslatorChain),
                     alienRowConfigs[row].alienConfig,
                     alienRowConfigs[row].powerUps);
         }
@@ -365,9 +408,9 @@ public class PathWaveHelper {
             final Path path,
             final PathSpeed speed,
             final float delayStart,
-            final int yOffset) {
+            final PointTranslatorChain pointTranslatorChain) {
         List<SubWavePathRuleProperties> subWaves = new ArrayList<>();
-        
+
         subWaves.add(new SubWavePathRuleProperties(
                 path,
                 speed,
@@ -375,8 +418,8 @@ public class PathWaveHelper {
                 delayBetweenAliens,
                 delayStart,
                 false,
-                new PointTranslatorChain()
-                        .add(new OffsetYPointTranslator(yOffset - (row * DEFAULT_ALIEN_GAP)))
+                clonePointTranslatorChain(pointTranslatorChain)
+                        .add(new OffsetYPointTranslator(-(row * DEFAULT_ALIEN_GAP)))
         ));
 
         return subWaves;
@@ -559,9 +602,10 @@ public class PathWaveHelper {
             final float delayStart) {
 
         List<SubWavePathRuleProperties> subWaves = new ArrayList<>();
-        int gapBetweenAliens = HORIZONTAL_SPACE_REMAINING / 6;
+        int aliensPerRow = 6;
+        int gapBetweenAliens = HORIZONTAL_SPACE_REMAINING / (aliensPerRow - 1);
 
-        for (int col = 0; col < 6; col++) {
+        for (int col = 0; col < aliensPerRow; col++) {
             subWaves.add(new SubWavePathRuleProperties(
                     path,
                     speed,

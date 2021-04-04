@@ -585,7 +585,7 @@ public enum SubWavePathRule {
             )
     ),
 
-    WAVE_MOTHERSHIP(
+    NORMAL_ARC(
             new SubWavePathRuleProperties(
                     Path.SINGLE_ARC,
                     PathSpeed.NORMAL,
@@ -598,7 +598,7 @@ public enum SubWavePathRule {
             )
     ),
 
-    SINGLE_ARC(
+    DELAYED_SLOW_ARC(
             new SubWavePathRuleProperties(
                     Path.SINGLE_ARC,
                     PathSpeed.VERY_SLOW,
@@ -799,6 +799,18 @@ public enum SubWavePathRule {
                             .add(new FlipXPointTranslator(GAME_WIDTH))
             )
     ),
+    BOUNCING_REVERSE(
+            new SubWavePathRuleProperties(
+                    Path.SPIRAL,
+                    PathSpeed.FAST,
+                    10,
+                    1f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new RotatePointTranslator(RotatePointTranslator.Rotation.CLOCKWISE))
+            )
+    ),
     BOUNCING_HIGHER(
             new SubWavePathRuleProperties(
                     Path.SPIRAL,
@@ -810,6 +822,19 @@ public enum SubWavePathRule {
                     new PointTranslatorChain()
                             .add(new RotatePointTranslator(RotatePointTranslator.Rotation.CLOCKWISE))
                             .add(new FlipXPointTranslator(GAME_WIDTH))
+                            .add(new OffsetYPointTranslator(200))
+            )
+    ),
+    BOUNCING_HIGHER_REVERSE(
+            new SubWavePathRuleProperties(
+                    Path.SPIRAL,
+                    PathSpeed.FAST,
+                    10,
+                    1f,
+                    0,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new RotatePointTranslator(RotatePointTranslator.Rotation.CLOCKWISE))
                             .add(new OffsetYPointTranslator(200))
             )
     ),

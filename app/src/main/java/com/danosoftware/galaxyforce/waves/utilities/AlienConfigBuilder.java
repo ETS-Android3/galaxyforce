@@ -53,7 +53,6 @@ public class AlienConfigBuilder {
             case HOPPER:
             case AMOEBA:
             case CHEEKY:
-            case FOXY:
             case FIGHTER:
             case RIPLEY:
             case WALKER:
@@ -126,6 +125,7 @@ public class AlienConfigBuilder {
                         .build();
                 // rotated downwards laser missile (will not fire upwards)
             case GHOST:
+            case FOXY:
                 return MissileFiringConfig
                         .builder()
                         .missileType(AlienMissileType.ROTATED_DOWNWARDS)
@@ -176,7 +176,6 @@ public class AlienConfigBuilder {
             case HOPPER:
             case AMOEBA:
             case CHEEKY:
-            case FOXY:
             case FIGHTER:
             case RIPLEY:
             case WALKER:
@@ -216,7 +215,6 @@ public class AlienConfigBuilder {
             case CYCLONE:
             case DEVIL:
             case GREMLIN:
-            case PINCER:
             case SPARKLE:
             case SPECTATOR:
             case SQUASHER:
@@ -239,7 +237,10 @@ public class AlienConfigBuilder {
             case ASTEROID:
             case SPINNER_GREEN:
             case SPINNER_PULSE_GREEN:
+            case FOXY:
                 return 2;
+            case PINCER:
+                return 3;
             case INSECT_MOTHERSHIP:
             case BATTY:
                 return 10;
