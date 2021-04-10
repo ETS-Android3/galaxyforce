@@ -29,6 +29,7 @@ import com.danosoftware.galaxyforce.waves.config.aliens.missiles.MissileMultiFir
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawnOnDemandConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningAlienConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningAndExplodingAlienConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningLimitedActiveAlienConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningLimitedAlienConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningBySpeedConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.BoundariesConfig;
@@ -38,10 +39,8 @@ import com.danosoftware.galaxyforce.waves.config.aliens.types.DirectionalResetta
 import com.danosoftware.galaxyforce.waves.config.aliens.types.ExplodingConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowableHunterConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowerConfig;
-import com.danosoftware.galaxyforce.waves.config.aliens.types.HunterConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.PathConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.SplitterConfig;
-import com.danosoftware.galaxyforce.waves.config.aliens.types.StaticConfig;
 import com.danosoftware.galaxyforce.waves.rules.SubWavePathRule;
 import com.danosoftware.galaxyforce.waves.rules.SubWaveRule;
 
@@ -61,6 +60,7 @@ import static com.danosoftware.galaxyforce.waves.utilities.AlienConfigBuilder.fo
 import static com.danosoftware.galaxyforce.waves.utilities.AlienConfigBuilder.followerConfigBuilder;
 import static com.danosoftware.galaxyforce.waves.utilities.AlienConfigBuilder.hunterAlienConfig;
 import static com.danosoftware.galaxyforce.waves.utilities.AlienConfigBuilder.spawningPathAlienConfig;
+import static com.danosoftware.galaxyforce.waves.utilities.AlienConfigBuilder.spawningStaticAlienConfig;
 import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.MAZE_FOUR;
 import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.MAZE_ONE;
 import static com.danosoftware.galaxyforce.waves.utilities.MazePatternCreator.MAZE_THREE;
@@ -1324,10 +1324,12 @@ public class WaveFactory {
                 break;
 
             /**
-             * Aliens attack in descending valley attack and then an ascending valley attack.
+             * Wave 17
+             * Valley dive attack interleaved aliens from top.
+             * Mini asteroid field
+             * Valley dive attack interleaved aliens from bottom.
              */
             case 17:
-
                 subWaves.add(
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
@@ -1342,10 +1344,38 @@ public class WaveFactory {
                                 new SubWavePathConfig(
                                         SubWavePathRule.VALLEY_DIVE_INTERLEAVED,
                                         alienConfig(
-                                                AlienCharacter.CHEEKY,
+                                                AlienCharacter.PAD,
                                                 AlienMissileSpeed.MEDIUM,
                                                 6.5f),
-                                        Collections.singletonList(PowerUpType.MISSILE_FAST)
+                                        Collections.singletonList(PowerUpType.HELPER_BASES)
+                                )
+                        )
+                );
+                // mini-asteroid field
+                subWaves.add(
+                        createSubWave(
+                                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
+                                new SubWaveNoPathConfig(
+                                        scatteredTopStart(
+                                                5,
+                                                0f,
+                                                1.2f),
+                                        fallingSpinningSplittingConfig(
+                                                AlienCharacter.ASTEROID,
+                                                AlienSpeed.MEDIUM,
+                                                AlienCharacter.ASTEROID_MINI),
+                                        NO_POWER_UPS
+                                ),
+                                new SubWaveNoPathConfig(
+                                        scatteredTopStart(
+                                                5,
+                                                1f,
+                                                1.5f),
+                                        fallingSpinningSplittingConfig(
+                                                AlienCharacter.ASTEROID,
+                                                AlienSpeed.VERY_FAST,
+                                                AlienCharacter.ASTEROID_MINI),
+                                        Collections.singletonList(PowerUpType.MISSILE_PARALLEL)
                                 )
                         )
                 );
@@ -1357,61 +1387,51 @@ public class WaveFactory {
                                         alienConfig(
                                                 AlienCharacter.FIGHTER,
                                                 AlienMissileSpeed.MEDIUM,
-                                                6.5f),
+                                                4.5f),
                                         NO_POWER_UPS
                                 ),
                                 new SubWavePathConfig(
                                         SubWavePathRule.VALLEY_DIVE_INTERLEAVED_FLIPPED,
                                         alienConfig(
-                                                AlienCharacter.CHEEKY,
+                                                AlienCharacter.PAD,
                                                 AlienMissileSpeed.MEDIUM,
-                                                6.5f),
-                                        Collections.singletonList(PowerUpType.MISSILE_GUIDED)
+                                                4.5f),
+                                        Collections.singletonList(PowerUpType.MISSILE_FAST)
                                 )
                         )
                 );
                 break;
 
             /**
+             * Wave 18
              * Base chased by two flying books. One book occupies left half or screen.
              * Other book occupies right half of screen.
              */
             case 18:
-
                 subWaves.add(
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
                                 new SubWaveNoPathConfig(
                                         SubWaveRule.MIDDLE_TOP,
-                                        HunterConfig
-                                                .builder()
-                                                .alienCharacter(AlienCharacter.BOOK)
-                                                .energy(10)
-                                                .speed(AlienSpeed.VERY_FAST)
-                                                .boundaries(
-                                                        BoundariesConfig
-                                                                .builder()
-                                                                .maxX(SCREEN_MID_X)
-                                                                .build()
-                                                )
-                                                .build(),
+                                        hunterAlienConfig(
+                                                AlienCharacter.BOOK,
+                                                AlienSpeed.VERY_FAST,
+                                                BoundariesConfig
+                                                        .builder()
+                                                        .maxX(SCREEN_MID_X)
+                                                        .build()),
                                         Collections.singletonList(PowerUpType.MISSILE_GUIDED)
                                 ),
                                 new SubWaveNoPathConfig(
                                         SubWaveRule.MIDDLE_BOTTOM,
-                                        HunterConfig
-                                                .builder()
-                                                .alienCharacter(AlienCharacter.BOOK)
-                                                .energy(10)
-                                                .speed(AlienSpeed.VERY_FAST)
-                                                .boundaries(
-                                                        BoundariesConfig
-                                                                .builder()
-                                                                .minX(SCREEN_MID_X)
-                                                                .build()
-                                                )
-                                                .build(),
-                                        Collections.singletonList(PowerUpType.MISSILE_GUIDED)
+                                        hunterAlienConfig(
+                                                AlienCharacter.BOOK,
+                                                AlienSpeed.VERY_FAST,
+                                                BoundariesConfig
+                                                        .builder()
+                                                        .minX(SCREEN_MID_X)
+                                                        .build()),
+                                        Collections.singletonList(PowerUpType.SHIELD)
                                 )
                         )
                 );
@@ -1673,74 +1693,88 @@ public class WaveFactory {
                                         Collections.singletonList(PowerUpType.MISSILE_FAST))));
                 break;
 
+            /**
+             * Wave 24
+             * Hunter dragon chases base and lays eggs that spawn baby dragons.
+             * A maximum of two baby dragons can be spawned at one time.
+             */
             case 24:
-                /**
-                 * Alien spawns an egg that cracks and then spawns a dragon!!
-                 */
+                // Long-tailed hunter dragon
                 subWaves.add(
                         createSubWave(
                                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                                new SubWavePathConfig(
-                                        SubWavePathRule.BOMBER_RUN,
-                                        PathConfig
-                                                .builder()
-                                                .alienCharacter(AlienCharacter.ZOGG)
-                                                .energy(10)
+                                new SubWaveNoPathConfig(
+                                        SubWaveRule.RANDOM_TOP,
+                                        followableHunterConfigBuilder(
+                                                AlienCharacter.DRAGON_HEAD,
+                                                AlienSpeed.FAST,
+                                                AlienMissileSpeed.FAST,
+                                                4f,
+                                                BoundariesConfig
+                                                        .builder()
+                                                        .build(),
+                                                5,
+                                                followerConfigBuilder(
+                                                        AlienCharacter.DRAGON_BODY,
+                                                        AlienSpeed.FAST
+                                                )
+                                                        // delay body explosions to sync with head
+                                                        .explosionConfig(
+                                                                DelayedFollowerExplosionConfig
+                                                                        .builder()
+                                                                        .delayTime(1.5f)
+                                                                        .build())
+                                                        .build(),
+                                                Arrays.asList(
+                                                        PowerUpType.SHIELD,
+                                                        PowerUpType.MISSILE_SPRAY)
+                                        )
                                                 .spawnConfig(
-                                                        SpawningAlienConfig
+                                                        SpawningLimitedActiveAlienConfig
                                                                 .builder()
-                                                                .spawnedAlienConfig(
-                                                                        StaticConfig
-                                                                                .builder()
-                                                                                .alienCharacter(AlienCharacter.EGG)
-                                                                                .energy(1)
-                                                                                .spawnConfig(
-                                                                                        SpawningAndExplodingAlienConfig.builder()
-                                                                                                .spawnedAlienConfig(
-                                                                                                        FollowableHunterConfig
-                                                                                                                .builder()
-                                                                                                                .alienCharacter(AlienCharacter.DRAGON_HEAD)
-                                                                                                                .energy(5)
-                                                                                                                .speed(AlienSpeed.VERY_FAST)
-                                                                                                                .missileConfig(
-                                                                                                                        MissileFiringConfig
-                                                                                                                                .builder()
-                                                                                                                                .missileType(AlienMissileType.ROTATED)
-                                                                                                                                .missileCharacter(AlienMissileCharacter.FIREBALL)
-                                                                                                                                .missileSpeed(AlienMissileSpeed.VERY_FAST)
-                                                                                                                                .missileFrequency(6.5f)
-                                                                                                                                .build())
-                                                                                                                .numberOfFollowers(5)
-                                                                                                                .followerConfig(
-                                                                                                                        FollowerConfig
-                                                                                                                                .builder()
-                                                                                                                                .alienCharacter(AlienCharacter.DRAGON_BODY)
-                                                                                                                                .energy(1)
-                                                                                                                                .speed(AlienSpeed.VERY_FAST)
-                                                                                                                                .build())
-                                                                                                                .followerPowerUps(
-                                                                                                                        Arrays.asList(
-                                                                                                                                PowerUpType.MISSILE_GUIDED,
-                                                                                                                                PowerUpType.MISSILE_PARALLEL,
-                                                                                                                                PowerUpType.MISSILE_SPRAY))
-                                                                                                                .boundaries(
-                                                                                                                        BoundariesConfig.builder().build())
-                                                                                                                .build())
-                                                                                                .spwanedPowerUpType(PowerUpType.MISSILE_GUIDED)
-                                                                                                .spawnDelayTime(2.25f)  // aligns to egg cracking animation 9 x 0.25f
-                                                                                                .build()
-                                                                                )
-                                                                                .build())
-                                                                .minimumSpawnDelayTime(1f)
-                                                                .maximumAdditionalRandomSpawnDelayTime(5f)
+                                                                .maximumActiveSpawnedAliens(2)
+                                                                // eggs will spawn into dragons so we limit on number of active dragons
+                                                                .limitedCharacter(AlienCharacter.BABY_DRAGON_HEAD)
+                                                                .minimumSpawnDelayTime(3f)
+                                                                .maximumAdditionalRandomSpawnDelayTime(2f)
                                                                 .spwanedPowerUpTypes(
                                                                         Arrays.asList(
                                                                                 PowerUpType.MISSILE_GUIDED,
-                                                                                PowerUpType.MISSILE_FAST,
-                                                                                PowerUpType.MISSILE_PARALLEL))
-                                                                .build())
+                                                                                PowerUpType.MISSILE_PARALLEL,
+                                                                                PowerUpType.HELPER_BASES))
+                                                                .spawnedAlienConfig(
+                                                                        spawningStaticAlienConfig(
+                                                                                AlienCharacter.EGG,
+                                                                                SpawningAndExplodingAlienConfig
+                                                                                        .builder()
+                                                                                        .spawnedPowerUpType(PowerUpType.MISSILE_FAST)
+                                                                                        .spawnDelayTime(2.25f)  // aligns to egg cracking animation 9 x 0.25f
+                                                                                        .spawnedAlienConfig(
+                                                                                                followableHunterConfigBuilder(
+                                                                                                        AlienCharacter.BABY_DRAGON_HEAD,
+                                                                                                        AlienSpeed.VERY_FAST,
+                                                                                                        BoundariesConfig
+                                                                                                                .builder()
+                                                                                                                .lanePolicy(BoundaryLanePolicy.VERTICAL)
+                                                                                                                .lanes(2)
+                                                                                                                .build(),
+                                                                                                        5,
+                                                                                                        followerConfigBuilder(
+                                                                                                                AlienCharacter.BABY_DRAGON_BODY,
+                                                                                                                AlienSpeed.VERY_FAST
+                                                                                                        )
+                                                                                                                .build(),
+                                                                                                        NO_POWER_UPS)
+                                                                                                        .build())
+                                                                                        .build()))
+                                                                .build()
+                                                )
+                                                .explosionConfig(MultiExplosionConfig.builder()
+                                                        .numberOfExplosions(10)
+                                                        .maximumExplosionStartTime(1.5f)
+                                                        .build())
                                                 .build(),
-                                        Collections.singletonList(PowerUpType.MISSILE_SPRAY)
+                                        Collections.singletonList(PowerUpType.LIFE)
                                 )
                         )
                 );

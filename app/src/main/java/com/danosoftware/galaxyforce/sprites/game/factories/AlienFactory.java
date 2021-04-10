@@ -111,7 +111,6 @@ public class AlienFactory {
                                 .restartImmediately(restartImmediately)
                                 .build());
                 break;
-
             default:
                 String errorMessage = String.format(
                         "Error: Unrecognised Path AlienType: '%s'",

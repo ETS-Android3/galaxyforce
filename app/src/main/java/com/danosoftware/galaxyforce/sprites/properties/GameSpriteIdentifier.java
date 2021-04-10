@@ -450,7 +450,15 @@ public enum GameSpriteIdentifier implements ISpriteIdentifier {
     DRAGON_HEAD_LEFT_HIT("dragonHitLeft", 5),
     DRAGON_HEAD_RIGHT_HIT("dragonHitRight", 5),
     DRAGON_BODY("dragonBody", 5),
-    DRAGON_BODY_HIT("dragonBodyHit",5),
+    DRAGON_BODY_HIT("dragonBodyHit", 5),
+
+    // baby dragon - head and body
+    BABY_DRAGON_HEAD_LEFT("babyDragonLeft", 4),
+    BABY_DRAGON_HEAD_RIGHT("babyDragonRight", 4),
+    BABY_DRAGON_HEAD_LEFT_HIT("babyDragonHitLeft", 4),
+    BABY_DRAGON_HEAD_RIGHT_HIT("babyDragonHitRight", 4),
+    BABY_DRAGON_BODY("babyDragonBody", 4),
+    BABY_DRAGON_BODY_HIT("babyDragonBodyHit", 4),
 
     // buzzer - small flying insect
     INSECT_WINGS_UP("buzzerWingsUp", 3),

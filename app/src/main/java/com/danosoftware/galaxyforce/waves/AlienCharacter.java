@@ -723,6 +723,23 @@ public enum AlienCharacter {
                     GameSpriteIdentifier.DRAGON_BODY_HIT},
             0.5f),
 
+    // baby dragon
+    BABY_DRAGON_HEAD(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.BABY_DRAGON_HEAD_LEFT,
+                    GameSpriteIdentifier.BABY_DRAGON_HEAD_RIGHT},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.BABY_DRAGON_HEAD_LEFT_HIT,
+                    GameSpriteIdentifier.BABY_DRAGON_HEAD_RIGHT_HIT},
+            0.5f),
+
+    BABY_DRAGON_BODY(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.BABY_DRAGON_BODY},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.BABY_DRAGON_BODY_HIT},
+            0.5f),
+
     // skull
     SKULL(
             new ISpriteIdentifier[]{

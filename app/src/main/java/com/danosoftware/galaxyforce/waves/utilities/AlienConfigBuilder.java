@@ -23,6 +23,7 @@ import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowerConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.HunterConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.PathConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.SplitterConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.types.StaticConfig;
 
 import java.util.Arrays;
 import java.util.List;
@@ -79,6 +80,7 @@ public class AlienConfigBuilder {
             case ASTEROID:
             case ASTEROID_MINI:
             case DRAGON_BODY:
+            case BABY_DRAGON_BODY:
             case SKULL:
             case DROID:
             case INSECT:
@@ -149,6 +151,7 @@ public class AlienConfigBuilder {
                         .build();
             // rotated fireball missile
             case DRAGON_HEAD:
+            case BABY_DRAGON_HEAD:
             case BATTY:
                 return MissileFiringConfig
                         .builder()
@@ -197,11 +200,11 @@ public class AlienConfigBuilder {
             case BIG_BOSS:
             case ASTEROID_MINI:
             case DRAGON_BODY:
+            case BABY_DRAGON_BODY:
             case SKULL:
             case DROID:
             case INSECT:
             case GOBBY:
-            case BOOK:
             case BOMB:
             case CLOUD:
             case BOUNCER:
@@ -238,12 +241,15 @@ public class AlienConfigBuilder {
             case SPINNER_GREEN:
             case SPINNER_PULSE_GREEN:
             case FOXY:
+            case BABY_DRAGON_HEAD:
                 return 2;
             case PINCER:
                 return 3;
             case INSECT_MOTHERSHIP:
             case BATTY:
                 return 10;
+            case BOOK:
+                return 15;
             case DRAGON_HEAD:
                 return 20;
             case BARRIER:
@@ -325,6 +331,8 @@ public class AlienConfigBuilder {
             case ASTEROID_MINI:
             case DRAGON_HEAD:
             case DRAGON_BODY:
+            case BABY_DRAGON_HEAD:
+            case BABY_DRAGON_BODY:
             case SKULL:
             case DROID:
             case INSECT_MOTHERSHIP:
@@ -432,6 +440,8 @@ public class AlienConfigBuilder {
             case ASTEROID_MINI:
             case DRAGON_HEAD:
             case DRAGON_BODY:
+            case BABY_DRAGON_HEAD:
+            case BABY_DRAGON_BODY:
             case SKULL:
             case DROID:
             case INSECT_MOTHERSHIP:
@@ -705,6 +715,27 @@ public class AlienConfigBuilder {
                 .followerPowerUps(followerPowerUps);
     }
 
+    public static FollowableHunterConfig.FollowableHunterConfigBuilder followableHunterConfigBuilder(
+            final AlienCharacter hunterCharacter,
+            final AlienSpeed speed,
+            final BoundariesConfig boundariesConfig,
+            final int numberOfFollowers,
+            final FollowerConfig followerConfig,
+            final List<PowerUpType> followerPowerUps) {
+
+        final Integer energy = energy(hunterCharacter);
+
+        return FollowableHunterConfig
+                .builder()
+                .alienCharacter(hunterCharacter)
+                .energy(energy)
+                .speed(speed)
+                .boundaries(boundariesConfig)
+                .numberOfFollowers(numberOfFollowers)
+                .followerConfig(followerConfig)
+                .followerPowerUps(followerPowerUps);
+    }
+
     public static FollowerConfig.FollowerConfigBuilder followerConfigBuilder(
             AlienCharacter character,
             AlienSpeed speed) {
@@ -716,5 +747,20 @@ public class AlienConfigBuilder {
                 .alienCharacter(character)
                 .energy(energy)
                 .speed(speed);
+    }
+
+    public static AlienConfig spawningStaticAlienConfig(
+            final AlienCharacter character,
+            final SpawnConfig spawnConfig
+    ) {
+
+        final Integer energy = energy(character);
+
+        return StaticConfig
+                .builder()
+                .alienCharacter(character)
+                .energy(energy)
+                .spawnConfig(spawnConfig)
+                .build();
     }
 }
