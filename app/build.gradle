@@ -64,10 +64,10 @@ android {
         targetSdkVersion 30
 
         // Defines the version number of your app.
-        versionCode 29
+        versionCode 32
 
         // Defines a user-friendly version name for your app.
-        versionName "0.29"
+        versionName "0.32"
     }
 
     /**
@@ -131,15 +131,17 @@ android {
  */
 dependencies {
     def billing_version = "3.0.3"
+    def jackson_version = "2.9.6"
+
     implementation "com.android.billingclient:billing:$billing_version"
     implementation 'com.google.android.gms:play-services-games:18.0.1'
     implementation 'com.google.android.gms:play-services-auth:17.0.0'
     implementation('com.google.apis:google-api-services-drive:v3-rev173-1.25.0') {
         exclude group: 'org.apache.httpcomponents'
     }
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.4'
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.4'
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.4'
+    implementation "com.fasterxml.jackson.core:jackson-databind:$jackson_version"
+    implementation "com.fasterxml.jackson.core:jackson-core:$jackson_version"
+    implementation "com.fasterxml.jackson.core:jackson-annotations:$jackson_version"
     implementation 'androidx.annotation:annotation:1.1.0'
 
     // lombok needed as compileOnly and annotationProcessor

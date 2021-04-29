@@ -6,6 +6,8 @@ import android.util.Log;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.android.billingclient.api.AcknowledgePurchaseParams;
+import com.android.billingclient.api.AcknowledgePurchaseResponseListener;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingClient.SkuType;
 import com.android.billingclient.api.BillingClientStateListener;
@@ -204,13 +206,37 @@ public class BillingManagerImpl implements PurchasesUpdatedListener, BillingMana
      *
      * @param purchase Purchase to be handled
      */
-    private void handlePurchase(Purchase purchase) {
+    private void handlePurchase(final Purchase purchase) {
         if (!verifyValidSignature(purchase.getOriginalJson(), purchase.getSignature())) {
             Log.i(TAG, "Got a purchase: " + purchase + "; but signature is bad. Skipping...");
             return;
         }
 
         Log.d(TAG, "Got a verified purchase: " + purchase);
+
+        // we must acknowledge a purchase or it will be automatically cancelled
+        AcknowledgePurchaseResponseListener acknowledgePurchaseResponseListener = new AcknowledgePurchaseResponseListener() {
+            @Override
+            public void onAcknowledgePurchaseResponse(@NonNull BillingResult billingResult) {
+                if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+                    Log.i(TAG, "Acknowledged purchase: " + purchase);
+                } else {
+                    Log.w(TAG, "Failed to acknowledge purchase: " + purchase);
+                }
+            }
+        };
+        if (purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
+            if (!purchase.isAcknowledged()) {
+                AcknowledgePurchaseParams acknowledgePurchaseParams =
+                        AcknowledgePurchaseParams.newBuilder()
+                                .setPurchaseToken(purchase.getPurchaseToken())
+                                .build();
+                mBillingClient.acknowledgePurchase(
+                        acknowledgePurchaseParams,
+                        acknowledgePurchaseResponseListener);
+            }
+        }
+
         mPurchases.add(purchase);
     }
 
