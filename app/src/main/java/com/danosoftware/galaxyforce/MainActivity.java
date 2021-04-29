@@ -11,10 +11,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.android.billingclient.api.BillingClient;
 import com.danosoftware.galaxyforce.billing.BillingManager;
+import com.danosoftware.galaxyforce.billing.BillingManagerImpl;
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.billing.BillingServiceImpl;
+import com.danosoftware.galaxyforce.billing.BillingUpdatesListener;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.games.Game;
 import com.danosoftware.galaxyforce.games.GameImpl;
@@ -90,8 +91,8 @@ public class MainActivity extends Activity {
 
         // Create and initialize billing
         BillingService billingService = new BillingServiceImpl();
-        BillingManager.BillingUpdatesListener billingListener = (BillingManager.BillingUpdatesListener) billingService;
-        this.mBillingManager = new BillingManager(this, billingListener);
+        BillingUpdatesListener billingListener = (BillingUpdatesListener) billingService;
+        this.mBillingManager = new BillingManagerImpl(this, billingListener);
 
         // set-up configuration service that uses shared preferences
         // for persisting configuration
@@ -117,8 +118,7 @@ public class MainActivity extends Activity {
         // is inactive. For example, this can happen if the activity is destroyed during the
         // purchase flow. This ensures that when the activity is resumed it reflects the user's
         // current purchases.
-        if (mBillingManager != null
-                && mBillingManager.getBillingClientResponseCode() == BillingClient.BillingResponse.OK) {
+        if (mBillingManager != null && mBillingManager.isConnected()) {
             mBillingManager.queryPurchases();
         }
 

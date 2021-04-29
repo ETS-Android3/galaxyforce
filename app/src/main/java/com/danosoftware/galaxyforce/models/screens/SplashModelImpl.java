@@ -115,7 +115,8 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
         /*
          * Add text to indicate whether full game has been purchased
          */
-        if (billingService.getFullGamePurchaseState() == PurchaseState.NOT_PURCHASED) {
+        if (billingService.getFullGamePurchaseState() == PurchaseState.NOT_PURCHASED
+                || billingService.getFullGamePurchaseState() == PurchaseState.PENDING) {
             text.add(
                     Text.newTextRelativePositionX(
                             "FREE TRIAL",

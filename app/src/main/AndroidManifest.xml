@@ -8,7 +8,6 @@ See: https://developer.android.com/guide/topics/manifest/manifest-intro.html
     package="com.danosoftware.galaxyforce">
 
     <uses-permission android:name="android.permission.VIBRATE" />
-    <uses-permission android:name="com.android.vending.BILLING" />
 
     <!--
     Previous application theme: android:theme="@style/AppTheme".

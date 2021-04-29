@@ -116,6 +116,12 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
             prepareUpgradeFullVersionSuccess();
         }
         /*
+         * Purchase is pending - may succeed or fail at this stage.
+         */
+        else if (billingService.getFullGamePurchaseState() == PurchaseState.PENDING) {
+            preparePendingPurchaseState();
+        }
+        /*
          * Purchases not ready.
          * This state should rarely/never occur. if so, should hopefully only be a
          * temporary state until purchases are returned asynchronously.
@@ -176,6 +182,47 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
                     0.5f,
                     false);
         }
+    }
+
+    private void preparePendingPurchaseState() {
+
+        int maxFreeZones = GameConstants.MAX_FREE_WAVE;
+
+        messages.add(
+                Text.newTextRelativePositionX(
+                        "TO PLAY BEYOND",
+                        TextPositionX.CENTRE,
+                        600 + 50));
+        messages.add(
+                Text.newTextRelativePositionX(
+                        maxFreeZones + " FREE ZONES",
+                        TextPositionX.CENTRE,
+                        600));
+        messages.add(
+                Text.newTextRelativePositionX(
+                        "UPGRADE TO",
+                        TextPositionX.CENTRE,
+                        450 + 50));
+        messages.add(
+                Text.newTextRelativePositionX(
+                        "FULL VERSION",
+                        TextPositionX.CENTRE,
+                        450));
+
+        this.flashingText = new FlashingTextImpl(
+                Arrays.asList(
+                        Text.newTextRelativePositionX(
+                                "YOUR PURCHASE",
+                                TextPositionX.CENTRE,
+                                300 + 50),
+                        Text.newTextRelativePositionX(
+                                "IS PENDING",
+                                TextPositionX.CENTRE,
+                                300)),
+                0.5f,
+                false);
+
+        addNewMenuButton(0, "BACK", ButtonType.EXIT);
     }
 
     private void prepareUnknownPurchaseState() {

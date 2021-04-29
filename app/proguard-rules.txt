@@ -31,3 +31,6 @@
     public static int d(...);
     public static int i(...);
 }
+
+# Helps debugging obsfucated code after mapping
+-keepattributes LineNumberTable,SourceFile
