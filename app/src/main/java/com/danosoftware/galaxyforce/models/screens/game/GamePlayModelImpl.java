@@ -394,6 +394,11 @@ public class GamePlayModelImpl implements Model, GameModel {
         assets.setLives(lives);
     }
 
+    @Override
+    public List<IAlien> getActiveAliens() {
+        return alienManager.activeAliens();
+    }
+
     /*
      * ******************************************************
      * PRIVATE HELPER METHODS

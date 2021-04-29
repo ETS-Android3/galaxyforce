@@ -17,6 +17,100 @@ public enum GameSpriteIdentifier implements ISpriteIdentifier {
     FOXY_TALL_HIT("foxy02Hit", 8),
     FOXY_WIDE_HIT("foxy03Hit", 8),
 
+    // Cyclone
+    CYCLONE_01("cyclone01",8),
+    CYCLONE_02("cyclone02", 8),
+    CYCLONE_03("cyclone03", 8),
+    CYCLONE_04("cyclone04",8),
+    CYCLONE_05("cyclone05",8),
+    CYCLONE_01_HIT("cycloneHit01",8),
+    CYCLONE_02_HIT("cycloneHit02",8),
+    CYCLONE_03_HIT("cycloneHit03",8),
+    CYCLONE_04_HIT("cycloneHit04",8),
+    CYCLONE_05_HIT("cycloneHit05",8),
+
+    // Devil
+    DEVIL("devil01",8),
+    DEVIL_UP("devil02", 8),
+    DEVIL_DOWN("devil03", 8),
+    DEVIL_HIT("devil01Hit",8),
+    DEVIL_UP_HIT("devil02Hit", 8),
+    DEVIL_DOWN_HIT("devil03Hit", 8),
+
+    // Gremlin
+    GREMLIN_01("gremlin01",8),
+    GREMLIN_02("gremlin02",8),
+    GREMLIN_03("gremlin03",8),
+    GREMLIN_04("gremlin04",8),
+    GREMLIN_01_HIT("gremlinHit01",8),
+    GREMLIN_02_HIT("gremlinHit02",8),
+    GREMLIN_03_HIT("gremlinHit03",8),
+    GREMLIN_04_HIT("gremlinHit04",8),
+
+    // Pincer
+    PINCER("pincer01",8),
+    PINCER_LEFT("pincer02",8),
+    PINCER_RIGHT("pincer03",8),
+    PINCER_HIT("pincerHit01",8),
+    PINCER_LEFT_HIT("pincerHit02",8),
+    PINCER_RIGHT_HIT("pincerHit03",8),
+
+    // Sparkle
+    SPARKLE("sparkle01",8),
+    SPARKLE_TALL("sparkle02",8),
+    SPARKLE_WIDE("sparkle03",8),
+    SPARKLE_HIT("sparkleHit01",8),
+    SPARKLE_TALL_HIT("sparkleHit02",8),
+    SPARKLE_WIDE_HIT("sparkleHit03",8),
+
+    // Spectator
+    SPECTATOR("spectator01",8),
+    SPECTATOR_UP("spectator02",8),
+    SPECTATOR_DOWN("spectator03",8),
+    SPECTATOR_HIT("spectatorHit01",8),
+    SPECTATOR_UP_HIT("spectatorHit02",8),
+    SPECTATOR_DOWN_HIT("spectatorHit03",8),
+
+    // Squasher
+    SQUASHER("squasher01",8),
+    SQUASHER_WIDE("squasher02",8),
+    SQUASHER_TALL("squasher03",8),
+    SQUASHER_HIT("squasherHit01",8),
+    SQUASHER_WIDE_HIT("squasherHit02",8),
+    SQUASHER_TALL_HIT("squasherHit03",8),
+
+    // Tiny Dancer
+    TINY_DANCER("tinyDancer01",16),
+    TINY_DANCER_LEFT("tinyDancer02",16),
+    TINY_DANCER_RIGHT("tinyDancer03",16),
+    TINY_DANCER_HIT("tinyDancerHit01",16),
+    TINY_DANCER_LEFT_HIT("tinyDancerHit02",16),
+    TINY_DANCER_RIGHT_HIT("tinyDancerHit03",16),
+
+    // Wild Style
+    WILD_STYLE("wildStyle01",8),
+    WILD_STYLE_FLAT("wildStyle02",8),
+    WILD_STYLE_TALL("wildStyle03",8),
+    WILD_STYLE_HIT("wildStyleHit01",8),
+    WILD_STYLE_FLAT_HIT("wildStyleHit02",8),
+    WILD_STYLE_TALL_HIT("wildStyleHit03",8),
+
+    // Confuser
+    CONFUSER("confuser01",8),
+    CONFUSER_FLAT("confuser02",8),
+    CONFUSER_TALL("confuser03",8),
+    CONFUSER_HIT("confuserHit01",8),
+    CONFUSER_FLAT_HIT("confuserHit02",8),
+    CONFUSER_TALL_HIT("confuserHit03",8),
+
+    // Saucer
+    SAUCER("saucer01",8),
+    SAUCER_RIGHT("saucer02",8),
+    SAUCER_LEFT("saucer03",8),
+    SAUCER_HIT("saucerHit01",8),
+    SAUCER_RIGHT_HIT("saucerHit02",8),
+    SAUCER_LEFT_HIT("saucerHit03",8),
+
     // Pinko
     PINKO("pinko01",6),
     PINKO_TALL("pinko02", 6),
@@ -356,7 +450,15 @@ public enum GameSpriteIdentifier implements ISpriteIdentifier {
     DRAGON_HEAD_LEFT_HIT("dragonHitLeft", 5),
     DRAGON_HEAD_RIGHT_HIT("dragonHitRight", 5),
     DRAGON_BODY("dragonBody", 5),
-    DRAGON_BODY_HIT("dragonBodyHit",5),
+    DRAGON_BODY_HIT("dragonBodyHit", 5),
+
+    // baby dragon - head and body
+    BABY_DRAGON_HEAD_LEFT("babyDragonLeft", 4),
+    BABY_DRAGON_HEAD_RIGHT("babyDragonRight", 4),
+    BABY_DRAGON_HEAD_LEFT_HIT("babyDragonHitLeft", 4),
+    BABY_DRAGON_HEAD_RIGHT_HIT("babyDragonHitRight", 4),
+    BABY_DRAGON_BODY("babyDragonBody", 4),
+    BABY_DRAGON_BODY_HIT("babyDragonBodyHit", 4),
 
     // buzzer - small flying insect
     INSECT_WINGS_UP("buzzerWingsUp", 3),
@@ -379,6 +481,14 @@ public enum GameSpriteIdentifier implements ISpriteIdentifier {
     // bad cat
     BAD_CAT("badCat", 2),
     BAD_CAT_HIT("badCatHit", 2),
+
+    // bad cat squeeze
+    BAD_CAT_SQUEEZE("badCatSqueeze01", 4),
+    BAD_CAT_SQUEEZE_WIDE("badCatSqueeze02", 4),
+    BAD_CAT_SQUEEZE_TALL("badCatSqueeze03", 4),
+    BAD_CAT_SQUEEZE_HIT("badCatSqueezeHit01", 4),
+    BAD_CAT_SQUEEZE_WIDE_HIT("badCatSqueezeHit02", 4),
+    BAD_CAT_SQUEEZE_TALL_HIT("badCatSqueezeHit03", 4),
 
     // bomb
     BOMB_01("bomb01", 3),

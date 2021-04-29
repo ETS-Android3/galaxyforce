@@ -104,24 +104,24 @@ public class WaveMazeHelper {
     public static SubWaveConfig[] createBarrierMaze(
             final int totalRows,
             final AlienSpeed speed,
-            final int delayBetweenRows) {
+            final float delayBetweenRows) {
 
         // create random gaps in maze - 1 gap per row
-        List<Integer> mazeGaps =  mazeGaps(totalRows, BARRIERS_PER_ROW);
+        List<Integer> mazeGaps = mazeGaps(totalRows, BARRIERS_PER_ROW);
 
-           return new SubWaveConfig[] {
-                   new SubWaveNoPathConfig(
-                           mazeSubWave(
-                                   mazeGaps,
-                                   delayBetweenRows,
-                                   BARRIERS_PER_ROW,
-                                   BARRIERS_SPRITE_WIDTH),
-                           directionalAlienConfig(
-                                   AlienCharacter.BARRIER,
-                                   DOWNWARDS,
-                                   speed),
-                           NO_POWER_UPS)
-           };
+        return new SubWaveConfig[]{
+                new SubWaveNoPathConfig(
+                        mazeSubWave(
+                                mazeGaps,
+                                delayBetweenRows,
+                                BARRIERS_PER_ROW,
+                                BARRIERS_SPRITE_WIDTH),
+                        directionalAlienConfig(
+                                AlienCharacter.BARRIER,
+                                DOWNWARDS,
+                                speed),
+                        NO_POWER_UPS)
+        };
     }
 
     /**
@@ -169,7 +169,7 @@ public class WaveMazeHelper {
      */
     private static List<SubWaveRuleProperties> mazeSubWave(
             List<Integer> mazeGaps,
-            int delayBetweenRows,
+            float delayBetweenRows,
             int columnsPerRow,
             int alienWidth) {
 

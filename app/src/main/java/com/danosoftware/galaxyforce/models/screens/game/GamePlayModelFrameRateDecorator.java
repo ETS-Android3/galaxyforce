@@ -135,4 +135,9 @@ public class GamePlayModelFrameRateDecorator implements Model, GameModel {
     public void addLife() {
         gameModel.addLife();
     }
+
+    @Override
+    public List<IAlien> getActiveAliens() {
+        return gameModel.getActiveAliens();
+    }
 }

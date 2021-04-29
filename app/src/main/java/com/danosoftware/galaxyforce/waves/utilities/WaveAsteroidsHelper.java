@@ -163,7 +163,7 @@ public class WaveAsteroidsHelper {
 
     private static SubWaveConfig[] flyingSaucer() {
         return new SubWaveConfig[] {new SubWavePathConfig(
-                SubWavePathRule.SINGLE_ARC,
+                SubWavePathRule.DELAYED_SLOW_ARC,
                 PathConfig
                         .builder()
                         .alienCharacter(AlienCharacter.DROOPY)

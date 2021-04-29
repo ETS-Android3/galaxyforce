@@ -7,6 +7,8 @@ import com.danosoftware.galaxyforce.models.assets.SpawnedAliensDto;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.bases.IBasePrimary;
 
+import java.util.List;
+
 public interface GameModel {
 
     /**
@@ -56,4 +58,9 @@ public interface GameModel {
      * Add an extra base life to the game.
      */
     void addLife();
+
+    /**
+     * Return all active aliens.
+     */
+    List<IAlien> getActiveAliens();
 }

@@ -42,6 +42,166 @@ public enum AlienCharacter {
             0.25f
     ),
 
+    CYCLONE(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.CYCLONE_01,
+                    GameSpriteIdentifier.CYCLONE_02,
+                    GameSpriteIdentifier.CYCLONE_03,
+                    GameSpriteIdentifier.CYCLONE_04,
+                    GameSpriteIdentifier.CYCLONE_05},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.CYCLONE_01_HIT,
+                    GameSpriteIdentifier.CYCLONE_02_HIT,
+                    GameSpriteIdentifier.CYCLONE_03_HIT,
+                    GameSpriteIdentifier.CYCLONE_04_HIT,
+                    GameSpriteIdentifier.CYCLONE_05_HIT},
+            0.25f
+    ),
+
+    DEVIL(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.DEVIL,
+                    GameSpriteIdentifier.DEVIL_DOWN,
+                    GameSpriteIdentifier.DEVIL,
+                    GameSpriteIdentifier.DEVIL_UP},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.DEVIL_HIT,
+                    GameSpriteIdentifier.DEVIL_DOWN_HIT,
+                    GameSpriteIdentifier.DEVIL_HIT,
+                    GameSpriteIdentifier.DEVIL_UP_HIT},
+            0.25f
+    ),
+
+    GREMLIN(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.GREMLIN_01,
+                    GameSpriteIdentifier.GREMLIN_02,
+                    GameSpriteIdentifier.GREMLIN_03,
+                    GameSpriteIdentifier.GREMLIN_04,
+                    GameSpriteIdentifier.GREMLIN_03,
+                    GameSpriteIdentifier.GREMLIN_02},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.GREMLIN_01_HIT,
+                    GameSpriteIdentifier.GREMLIN_02_HIT,
+                    GameSpriteIdentifier.GREMLIN_03_HIT,
+                    GameSpriteIdentifier.GREMLIN_04_HIT,
+                    GameSpriteIdentifier.GREMLIN_03_HIT,
+                    GameSpriteIdentifier.GREMLIN_02_HIT},
+            0.25f
+    ),
+
+    SPARKLE(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.SPARKLE,
+                    GameSpriteIdentifier.SPARKLE_TALL,
+                    GameSpriteIdentifier.SPARKLE,
+                    GameSpriteIdentifier.SPARKLE_WIDE},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.SPARKLE_HIT,
+                    GameSpriteIdentifier.SPARKLE_TALL_HIT,
+                    GameSpriteIdentifier.SPARKLE_HIT,
+                    GameSpriteIdentifier.SPARKLE_WIDE_HIT},
+            0.25f
+    ),
+
+    PINCER(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.PINCER,
+                    GameSpriteIdentifier.PINCER_LEFT,
+                    GameSpriteIdentifier.PINCER,
+                    GameSpriteIdentifier.PINCER_RIGHT},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.PINCER_HIT,
+                    GameSpriteIdentifier.PINCER_LEFT_HIT,
+                    GameSpriteIdentifier.PINCER_HIT,
+                    GameSpriteIdentifier.PINCER_RIGHT_HIT},
+            0.25f
+    ),
+
+    SPECTATOR(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.SPECTATOR,
+                    GameSpriteIdentifier.SPECTATOR_UP,
+                    GameSpriteIdentifier.SPECTATOR,
+                    GameSpriteIdentifier.SPECTATOR_DOWN},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.SPECTATOR_HIT,
+                    GameSpriteIdentifier.SPECTATOR_UP_HIT,
+                    GameSpriteIdentifier.SPECTATOR_HIT,
+                    GameSpriteIdentifier.SPECTATOR_DOWN_HIT},
+            0.25f
+    ),
+
+    SQUASHER(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.SQUASHER,
+                    GameSpriteIdentifier.SQUASHER_WIDE,
+                    GameSpriteIdentifier.SQUASHER,
+                    GameSpriteIdentifier.SQUASHER_TALL},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.SQUASHER_HIT,
+                    GameSpriteIdentifier.SQUASHER_WIDE_HIT,
+                    GameSpriteIdentifier.SQUASHER_HIT,
+                    GameSpriteIdentifier.SQUASHER_TALL_HIT},
+            0.25f
+    ),
+
+    TINY_DANCER(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.TINY_DANCER,
+                    GameSpriteIdentifier.TINY_DANCER_LEFT,
+                    GameSpriteIdentifier.TINY_DANCER,
+                    GameSpriteIdentifier.TINY_DANCER_RIGHT},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.TINY_DANCER_HIT,
+                    GameSpriteIdentifier.TINY_DANCER_LEFT_HIT,
+                    GameSpriteIdentifier.TINY_DANCER_HIT,
+                    GameSpriteIdentifier.TINY_DANCER_RIGHT_HIT},
+            0.25f
+    ),
+
+    WILD_STYLE(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.WILD_STYLE,
+                    GameSpriteIdentifier.WILD_STYLE_FLAT,
+                    GameSpriteIdentifier.WILD_STYLE,
+                    GameSpriteIdentifier.WILD_STYLE_TALL},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.WILD_STYLE_HIT,
+                    GameSpriteIdentifier.WILD_STYLE_FLAT_HIT,
+                    GameSpriteIdentifier.WILD_STYLE_HIT,
+                    GameSpriteIdentifier.WILD_STYLE_TALL_HIT},
+            0.25f
+    ),
+
+    CONFUSER(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.CONFUSER,
+                    GameSpriteIdentifier.CONFUSER_FLAT,
+                    GameSpriteIdentifier.CONFUSER,
+                    GameSpriteIdentifier.CONFUSER_TALL},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.CONFUSER_HIT,
+                    GameSpriteIdentifier.CONFUSER_FLAT_HIT,
+                    GameSpriteIdentifier.CONFUSER_HIT,
+                    GameSpriteIdentifier.CONFUSER_TALL_HIT},
+            0.25f
+    ),
+
+    SAUCER(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.SAUCER,
+                    GameSpriteIdentifier.SAUCER_RIGHT,
+                    GameSpriteIdentifier.SAUCER,
+                    GameSpriteIdentifier.SAUCER_LEFT},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.SAUCER_HIT,
+                    GameSpriteIdentifier.SAUCER_RIGHT_HIT,
+                    GameSpriteIdentifier.SAUCER_HIT,
+                    GameSpriteIdentifier.SAUCER_LEFT_HIT},
+            0.25f
+    ),
+
     PINKO(
             new ISpriteIdentifier[]{
                     GameSpriteIdentifier.PINKO,
@@ -563,6 +723,23 @@ public enum AlienCharacter {
                     GameSpriteIdentifier.DRAGON_BODY_HIT},
             0.5f),
 
+    // baby dragon
+    BABY_DRAGON_HEAD(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.BABY_DRAGON_HEAD_LEFT,
+                    GameSpriteIdentifier.BABY_DRAGON_HEAD_RIGHT},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.BABY_DRAGON_HEAD_LEFT_HIT,
+                    GameSpriteIdentifier.BABY_DRAGON_HEAD_RIGHT_HIT},
+            0.5f),
+
+    BABY_DRAGON_BODY(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.BABY_DRAGON_BODY},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.BABY_DRAGON_BODY_HIT},
+            0.5f),
+
     // skull
     SKULL(
             new ISpriteIdentifier[]{
@@ -701,12 +878,24 @@ public enum AlienCharacter {
             0.2f),
 
     // evil yellow cat
+//    BAD_CAT(
+//            new ISpriteIdentifier[]{
+//                    GameSpriteIdentifier.BAD_CAT},
+//            new ISpriteIdentifier[]{
+//                    GameSpriteIdentifier.BAD_CAT_HIT},
+//            0f),
     BAD_CAT(
             new ISpriteIdentifier[]{
-                    GameSpriteIdentifier.BAD_CAT},
+                    GameSpriteIdentifier.BAD_CAT_SQUEEZE,
+                    GameSpriteIdentifier.BAD_CAT_SQUEEZE_WIDE,
+                    GameSpriteIdentifier.BAD_CAT_SQUEEZE,
+                    GameSpriteIdentifier.BAD_CAT_SQUEEZE_TALL},
             new ISpriteIdentifier[]{
-                    GameSpriteIdentifier.BAD_CAT_HIT},
-            0f),
+                    GameSpriteIdentifier.BAD_CAT_SQUEEZE_HIT,
+                    GameSpriteIdentifier.BAD_CAT_SQUEEZE_WIDE_HIT,
+                    GameSpriteIdentifier.BAD_CAT_SQUEEZE_HIT,
+                    GameSpriteIdentifier.BAD_CAT_SQUEEZE_TALL_HIT},
+            0.25f),
 
     SMOKEY(
             new ISpriteIdentifier[]{
