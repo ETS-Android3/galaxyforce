@@ -15,7 +15,7 @@ import java.util.List;
 
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
-import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
+import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_Y;
 
 /**
  * Each sub-wave consists of one or more sub-wave properties.
@@ -67,6 +67,17 @@ public enum SubWavePathRule {
                     Path.FIGURE_OF_EIGHT,
                     PathSpeed.NORMAL,
                     20,
+                    0.3f,
+                    0,
+                    false
+            )
+    ),
+
+    FIGURE_OF_EIGHT_SHORT(
+            new SubWavePathRuleProperties(
+                    Path.FIGURE_OF_EIGHT,
+                    PathSpeed.NORMAL,
+                    10,
                     0.3f,
                     0,
                     false
@@ -734,58 +745,6 @@ public enum SubWavePathRule {
             )
     ),
 
-
-    SINGLE_SPIRAL(
-            new SubWavePathRuleProperties(
-                    Path.SPIRAL,
-                    PathSpeed.FAST,
-                    1,
-                    0f,
-                    0,
-                    false
-            )
-    ),
-
-    /**
-     * One spiral path from top to bottom
-     */
-    SPIRAL(
-            new SubWavePathRuleProperties(
-                    Path.SPIRAL,
-                    PathSpeed.FAST,
-                    10,
-                    0.5f,
-                    0,
-                    false
-            )
-    ),
-
-    /**
-     * Two side-by-side spiral path from top to bottom
-     */
-    DOUBLE_SPIRAL(
-            new SubWavePathRuleProperties(
-                    Path.SPIRAL,
-                    PathSpeed.FAST,
-                    10,
-                    0.5f,
-                    0,
-                    false,
-                    new PointTranslatorChain()
-                            .add(new OffsetXPointTranslator(SCREEN_MID_X / 2))
-            ),
-            new SubWavePathRuleProperties(
-                    Path.SPIRAL,
-                    PathSpeed.FAST,
-                    10,
-                    1f,
-                    0,
-                    false,
-                    new PointTranslatorChain()
-                            .add(new OffsetXPointTranslator(-SCREEN_MID_X / 2))
-            )
-    ),
-
     BOUNCING(
             new SubWavePathRuleProperties(
                     Path.SPIRAL,
@@ -797,6 +756,7 @@ public enum SubWavePathRule {
                     new PointTranslatorChain()
                             .add(new RotatePointTranslator(RotatePointTranslator.Rotation.CLOCKWISE))
                             .add(new FlipXPointTranslator(GAME_WIDTH))
+                            .add(new OffsetYPointTranslator(-SCREEN_MID_Y))
             )
     ),
     BOUNCING_REVERSE(
@@ -809,6 +769,7 @@ public enum SubWavePathRule {
                     false,
                     new PointTranslatorChain()
                             .add(new RotatePointTranslator(RotatePointTranslator.Rotation.CLOCKWISE))
+                            .add(new OffsetYPointTranslator(-SCREEN_MID_Y))
             )
     ),
     BOUNCING_HIGHER(
@@ -822,7 +783,7 @@ public enum SubWavePathRule {
                     new PointTranslatorChain()
                             .add(new RotatePointTranslator(RotatePointTranslator.Rotation.CLOCKWISE))
                             .add(new FlipXPointTranslator(GAME_WIDTH))
-                            .add(new OffsetYPointTranslator(200))
+                            .add(new OffsetYPointTranslator(-SCREEN_MID_Y + 200))
             )
     ),
     BOUNCING_HIGHER_REVERSE(
@@ -835,7 +796,7 @@ public enum SubWavePathRule {
                     false,
                     new PointTranslatorChain()
                             .add(new RotatePointTranslator(RotatePointTranslator.Rotation.CLOCKWISE))
-                            .add(new OffsetYPointTranslator(200))
+                            .add(new OffsetYPointTranslator(-SCREEN_MID_Y + 200))
             )
     ),
 

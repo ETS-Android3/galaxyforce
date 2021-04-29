@@ -224,7 +224,6 @@ public class AlienConfigBuilder {
             case TINY_DANCER:
             case WILD_STYLE:
             case CONFUSER:
-            case SAUCER:
                 return 1;
             case CIRCUIT:
             case PILOT:
@@ -247,6 +246,7 @@ public class AlienConfigBuilder {
                 return 3;
             case INSECT_MOTHERSHIP:
             case BATTY:
+            case SAUCER:
                 return 10;
             case BOOK:
                 return 15;

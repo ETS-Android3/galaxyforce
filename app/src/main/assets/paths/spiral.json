@@ -3,19 +3,19 @@
     {
       "type": "bezier",
       "start": {
-        "x": 270,
+        "x": 0,
         "y": 992
       },
       "startControl": {
-        "x": 40,
+        "x": -230,
         "y": 821
       },
       "finish": {
-        "x": 270,
+        "x": 0,
         "y": 650
       },
       "finishControl": {
-        "x": 500,
+        "x": 230,
         "y": 821
       },
       "pathPoints": 100
@@ -23,19 +23,19 @@
     {
       "type": "bezier",
       "start": {
-        "x": 270,
+        "x": 0,
         "y": 650
       },
       "startControl": {
-        "x": 40,
+        "x": -230,
         "y": 479
       },
       "finish": {
-        "x": 270,
+        "x": 0,
         "y": 308
       },
       "finishControl": {
-        "x": 500,
+        "x": 230,
         "y": 479
       },
       "pathPoints": 100
@@ -43,19 +43,19 @@
     {
       "type": "bezier",
       "start": {
-        "x": 270,
+        "x": 0,
         "y": 308
       },
       "startControl": {
-        "x": 40,
+        "x": -230,
         "y": 137
       },
       "finish": {
-        "x": 270,
+        "x": 0,
         "y": -32
       },
       "finishControl": {
-        "x": 500,
+        "x": 230,
         "y": 137
       },
       "pathPoints": 100

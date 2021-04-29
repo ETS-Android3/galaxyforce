@@ -16,6 +16,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_LEFT_EDGE;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_RIGHT_EDGE;
@@ -218,6 +219,7 @@ public class PathWaveHelper {
      * @param alienRowConfigs - array of alien row configs (1 config per row).
      * @param aliensPerRow - number of aliens in each row.
      * @param delayStart - delay before subwave starts (0f to start immediately).
+     * @param restartImmediately - restart subwave immediately.
      * @return array of subwave configs (1 per row).
      */
     public static SubWaveConfig[] createLeftToRightDelayedRowSubWave(
@@ -225,7 +227,8 @@ public class PathWaveHelper {
             final PathSpeed pathSpeed,
             final AlienRowConfig[] alienRowConfigs,
             final int aliensPerRow,
-            final float delayStart) {
+            final float delayStart,
+            final boolean restartImmediately) {
 
         SubWavePathConfig[] waveConfigs = new SubWavePathConfig[alienRowConfigs.length];
 
@@ -241,6 +244,7 @@ public class PathWaveHelper {
                             path,
                             pathSpeed,
                             delayStart,
+                            restartImmediately,
                             new PointTranslatorChain()),
                     alienRowConfigs[row].alienConfig,
                     alienRowConfigs[row].powerUps);
@@ -261,6 +265,7 @@ public class PathWaveHelper {
      * @param alienRowConfigs - array of alien row configs (1 config per row).
      * @param aliensPerRow    - number of aliens in each row.
      * @param delayStart      - delay before subwave starts (0f to start immediately).
+     * @param restartImmediately - restart subwave immediately.
      * @return array of subwave configs (1 per row).
      */
     public static SubWaveConfig[] createLeftToRightDelayedRowSubWave(
@@ -269,6 +274,7 @@ public class PathWaveHelper {
             final AlienRowConfig[] alienRowConfigs,
             final int aliensPerRow,
             final float delayStart,
+            final boolean restartImmediately,
             final PointTranslatorChain pointTranslatorChain) {
 
         SubWavePathConfig[] waveConfigs = new SubWavePathConfig[alienRowConfigs.length];
@@ -285,6 +291,7 @@ public class PathWaveHelper {
                             path,
                             pathSpeed,
                             delayStart,
+                            restartImmediately,
                             pointTranslatorChain),
                     alienRowConfigs[row].alienConfig,
                     alienRowConfigs[row].powerUps);
@@ -408,6 +415,7 @@ public class PathWaveHelper {
             final Path path,
             final PathSpeed speed,
             final float delayStart,
+            final boolean restartImmediately,
             final PointTranslatorChain pointTranslatorChain) {
         List<SubWavePathRuleProperties> subWaves = new ArrayList<>();
 
@@ -417,7 +425,7 @@ public class PathWaveHelper {
                 aliensPerRow,
                 delayBetweenAliens,
                 delayStart,
-                false,
+                restartImmediately,
                 clonePointTranslatorChain(pointTranslatorChain)
                         .add(new OffsetYPointTranslator(-(row * DEFAULT_ALIEN_GAP)))
         ));
@@ -622,6 +630,73 @@ public class PathWaveHelper {
     }
 
     /**
+     * Creates a box with 5 aliens on each side
+     */
+    public static List<SubWavePathRuleProperties> createBoxDroppers(
+            final Path path,
+            final PathSpeed speed,
+            final float delayStart) {
+
+        List<SubWavePathRuleProperties> subWaves = new ArrayList<>();
+        int aliensPerSide = 5;
+        int boxEdgeGap = HORIZONTAL_ROW_EDGE_GAP + 64;
+        int boxSpaceRemaining = GAME_WIDTH - boxEdgeGap - boxEdgeGap;
+        int gapBetweenAliens = boxSpaceRemaining / (aliensPerSide - 1);
+
+        // create bottom of box
+        for (int col = 0; col < aliensPerSide; col++) {
+            subWaves.add(new SubWavePathRuleProperties(
+                    path,
+                    speed,
+                    1,
+                    0f,
+                    delayStart,
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetXPointTranslator(boxEdgeGap + (col * gapBetweenAliens)))
+            ));
+        }
+
+        // create sides of box
+        subWaves.add(new SubWavePathRuleProperties(
+                path,
+                speed,
+                aliensPerSide - 2,
+                speed.getMultiplier() * 0.25f,
+                delayStart + 0.25f,
+                false,
+                new PointTranslatorChain()
+                        .add(new OffsetXPointTranslator(boxEdgeGap))
+        ));
+        subWaves.add(new SubWavePathRuleProperties(
+                path,
+                speed,
+                aliensPerSide - 2,
+                speed.getMultiplier() * 0.25f,
+                delayStart + 0.25f,
+                false,
+                new PointTranslatorChain()
+                        .add(new OffsetXPointTranslator(GAME_WIDTH - boxEdgeGap))
+        ));
+
+        // create top of box
+        for (int col = 0; col < aliensPerSide; col++) {
+            subWaves.add(new SubWavePathRuleProperties(
+                    path,
+                    speed,
+                    1,
+                    0f,
+                    delayStart + (0.25f * (aliensPerSide - 1)),
+                    false,
+                    new PointTranslatorChain()
+                            .add(new OffsetXPointTranslator(boxEdgeGap + (col * gapBetweenAliens)))
+            ));
+        }
+
+        return subWaves;
+    }
+
+    /**
      * Creates an attack of aliens at either side of the screen
      */
     public static List<SubWavePathRuleProperties> createSideDroppers(
@@ -665,18 +740,41 @@ public class PathWaveHelper {
             final int numberOfAliens,
             final float delayStart) {
 
-        List<SubWavePathRuleProperties> subWaves = new ArrayList<>();
+        return Collections.singletonList(
+                new SubWavePathRuleProperties(
+                        path,
+                        speed,
+                        numberOfAliens,
+                        speed.getMultiplier() * 0.5f,
+                        delayStart,
+                        false,
+                        new PointTranslatorChain()
+                                .add(new OffsetXPointTranslator(SCREEN_MID_X))
+                )
+        );
+    }
+
+    /**
+     * Creates an attack of aliens at centre of the screen
+     */
+    public static List<SubWavePathRuleProperties> createCentralDroppers(
+            final Path path,
+            final PathSpeed speed,
+            final int numberOfAliens,
+            final float delayStart,
+            final float delayBetweenAliens,
+            final boolean restartImmediately) {
 
         return Collections.singletonList(
                 new SubWavePathRuleProperties(
-                    path,
-                    speed,
-                    numberOfAliens,
-                    speed.getMultiplier() * 0.5f,
-                    delayStart,
-                    false,
-                    new PointTranslatorChain()
-                            .add(new OffsetXPointTranslator(SCREEN_MID_X))
+                        path,
+                        speed,
+                        numberOfAliens,
+                        speed.getMultiplier() * delayBetweenAliens,
+                        delayStart,
+                        restartImmediately,
+                        new PointTranslatorChain()
+                                .add(new OffsetXPointTranslator(SCREEN_MID_X))
                 )
         );
     }
@@ -691,22 +789,59 @@ public class PathWaveHelper {
 
         return Collections.singletonList(
                 new SubWaveRuleProperties(
-                true,
-                false,
-                0,
-                GameConstants.SCREEN_TOP,
-                numberOfAliens,
-                delayBetweenAliens,
-                delayStart,
-                false
+                        true,
+                        false,
+                        0,
+                        GameConstants.SCREEN_TOP,
+                        numberOfAliens,
+                        delayBetweenAliens,
+                        delayStart,
+                        false
                 )
         );
     }
 
     /**
+     * Creates an attack of double aliens equally spaced from centre
+     */
+    public static List<SubWavePathRuleProperties> createDoubleDroppers(
+            final Path path,
+            final PathSpeed speed,
+            final int numberOfAliens,
+            final float delayStart,
+            final float delayBetweenAliens,
+            final boolean restartImmediately) {
+
+        List<SubWavePathRuleProperties> subWaves = new ArrayList<>();
+
+        subWaves.add(new SubWavePathRuleProperties(
+                path,
+                speed,
+                numberOfAliens,
+                speed.getMultiplier() * delayBetweenAliens,
+                delayStart,
+                restartImmediately,
+                new PointTranslatorChain()
+                        .add(new OffsetXPointTranslator(SCREEN_MID_X / 2))
+        ));
+        subWaves.add(new SubWavePathRuleProperties(
+                path,
+                speed,
+                numberOfAliens,
+                speed.getMultiplier() * delayBetweenAliens,
+                delayStart,
+                restartImmediately,
+                new PointTranslatorChain()
+                        .add(new OffsetXPointTranslator(SCREEN_MID_X + SCREEN_MID_X / 2))
+        ));
+
+        return subWaves;
+    }
+
+    /**
      * Creates an attack of aliens at either side of the screen
      */
-    public static List<SubWavePathRuleProperties> staggeredDroppers(
+    public static List<SubWavePathRuleProperties> createDoubleStaggeredDroppers(
             final Path path,
             final PathSpeed speed,
             final int numberOfAliens,
