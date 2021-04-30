@@ -54,7 +54,7 @@ Build -> Generate Signed Bundle / APK...
 
 Choose "Andrioid App Bundle" then click `Next`.
 
-![Create Bundle_Signing Image](https://github.com/DannyNicholas/galaxyforce/raw/dev/assets/createBundleSigning.png "Create Bundle Signing Image")
+![Create Bundle_Signing Image](assets/createBundleSigning.png "Create Bundle Signing Image")
 
 Enter details key store details. It is important that the same keystore is used every time to avoid bundles being rejected by the Google Play Console.
 
@@ -74,7 +74,7 @@ By default, your bundle will be located at: `...\galaxyforce\app\release\app-rel
 
 It is not recommended to upload Signed APK to Google Play Console any more.
 
-However, this section on [Building, Testing and Deploying APKs](https://github.com/DannyNicholas/galaxyforce/raw/dev/assets/APKs.md) explains how to build and deploy signed APKs if needed.
+However, this section on [Building, Testing and Deploying APKs](assets/apks.md) explains how to build and deploy signed APKs if needed.
 
 ***
 
@@ -82,11 +82,11 @@ However, this section on [Building, Testing and Deploying APKs](https://github.c
 
 Click on `Testing -> Closed Testing`. Choose to `Manage Track` for `Beta`.
 
-![App Release](https://github.com/DannyNicholas/galaxyforce/raw/dev/assets/createRelease.png "App Release")
+![App Release](assets/createRelease.png "App Release")
 
 Click on `Create new release`.
 
-![Upload Bundle](https://github.com/DannyNicholas/galaxyforce/raw/dev/assets/uploadBundle.png "Upload Bundle")
+![Upload Bundle](assets/uploadBundle.png "Upload Bundle")
 
 Here you can:
 

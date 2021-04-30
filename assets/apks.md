@@ -15,13 +15,13 @@ Build -> Clean Project
 Build -> Generate Signed Bundle / APK...
 ```
 
-![Create APK Image](https://github.com/DannyNicholas/galaxyforce/raw/dev/createAPK.png "Create APK Image")
+![Create APK Image](createAPK.png "Create APK Image")
 
 Choose APK then click `Next`.
 
 Enter details key store details then click `Next`. It is important that the same keystore is used every time as otherwise new APKs will be rejected by Google Play Console.
 
-![Choose Build Variant](https://github.com/DannyNicholas/galaxyforce/raw/dev/buildVariant.png "Choose Build Variant")
+![Choose Build Variant](buildVariant.png "Choose Build Variant")
 
 Choose `release` build variant and the two signature versions. Click `Finish`.
 
@@ -60,11 +60,11 @@ Install the signed APK:
 
 Click on `Testing -> Closed Testing`. Choose to `Manage Track` for `Beta`.
 
-![App Release](https://github.com/DannyNicholas/galaxyforce/raw/dev/createRelease.png "App Release")
+![App Release](createRelease.png "App Release")
 
 Click on `Create new release`.
 
-![Upload Bundle](https://github.com/DannyNicholas/galaxyforce/raw/dev/uploadBundle.png "Upload Bundle")
+![Upload Bundle](uploadBundle.png "Upload Bundle")
 
 Here you can:
 
@@ -85,7 +85,7 @@ To aid investigation of crash reports, the deobfuscation mapping files must be u
 
 Click on `App bundle explorer`.
 
-![Deobsfucation Mapping Files](https://github.com/DannyNicholas/galaxyforce/raw/dev/apkMapping.png "Deobsfucation Mapping Files")
+![Deobsfucation Mapping Files](apkMapping.png "Deobsfucation Mapping Files")
 
 Click the `Downloads` tab.
 
