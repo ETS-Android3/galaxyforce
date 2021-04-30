@@ -132,7 +132,6 @@ public class MainActivity extends Activity {
             } else {
                 state = ActivityState.PAUSED;
             }
-
             while (true) {
                 try {
                     stateChanged.wait();
