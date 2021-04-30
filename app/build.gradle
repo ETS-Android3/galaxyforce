@@ -40,7 +40,7 @@ android {
      * compile your app. This means your app can use the API features included in
      * this API level and lower.
      */
-    compileSdkVersion 28
+    compileSdkVersion 30
 
     /**
      * The defaultConfig block encapsulates default settings and entries for all
@@ -58,16 +58,16 @@ android {
         applicationId "com.danosoftware.galaxyforce"
 
         // Defines the minimum API level required to run the app.
-        minSdkVersion 14
+        minSdkVersion 19
 
         // Specifies the API level used to test the app.
-        targetSdkVersion 28
+        targetSdkVersion 30
 
         // Defines the version number of your app.
-        versionCode 28
+        versionCode 32
 
         // Defines a user-friendly version name for your app.
-        versionName "0.28"
+        versionName "0.32"
     }
 
     /**
@@ -130,16 +130,18 @@ android {
  * restricting which dependencies leak their APIs to other modules.
  */
 dependencies {
-    implementation 'com.android.billingclient:billing:1.2'
-    implementation 'com.google.android.gms:play-services-games:18.0.1'
-    implementation 'com.google.android.gms:play-services-auth:17.0.0'
+    def billing_version = "3.0.3"
+    def jackson_version = "2.9.6"
+
+    implementation "com.android.billingclient:billing:$billing_version"
+    implementation 'com.google.android.gms:play-services-games:21.0.0'
+    implementation 'com.google.android.gms:play-services-auth:19.0.0'
     implementation('com.google.apis:google-api-services-drive:v3-rev173-1.25.0') {
         exclude group: 'org.apache.httpcomponents'
     }
-    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.4'
-    implementation 'com.fasterxml.jackson.core:jackson-core:2.9.4'
-    implementation 'com.fasterxml.jackson.core:jackson-annotations:2.9.4'
-    implementation 'androidx.annotation:annotation:1.1.0'
+    implementation "com.fasterxml.jackson.core:jackson-databind:$jackson_version"
+    implementation "com.fasterxml.jackson.core:jackson-core:$jackson_version"
+    implementation "com.fasterxml.jackson.core:jackson-annotations:$jackson_version"
 
     // lombok needed as compileOnly and annotationProcessor
     // see: https://projectlombok.org/setup/android
@@ -155,5 +157,4 @@ dependencies {
     testImplementation 'ch.qos.logback:logback-core:1.1.2'
     testImplementation 'org.powermock:powermock-api-mockito2:2.0.0'
     testImplementation 'org.powermock:powermock-module-junit4:2.0.0'
-    androidTestImplementation 'androidx.annotation:annotation:1.1.0'
 }

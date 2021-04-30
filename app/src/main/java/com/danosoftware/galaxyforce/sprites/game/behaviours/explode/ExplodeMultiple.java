@@ -174,7 +174,7 @@ public class ExplodeMultiple implements ExplodeBehaviour {
     }
 
     @Getter
-    private class TimedExplosion {
+    private static class TimedExplosion {
         private final int x;
         private final int y;
         private final float explodeTime;

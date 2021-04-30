@@ -71,8 +71,7 @@ public class BaseMultiExploder implements IBaseMultiExploder {
 
             for (int i = 0; i < NUMBER_OF_EXPLOSIONS; i++) {
                 final float angle = (angleDelta * i) / TWO_PI;
-                final int radius = (int) ((base.halfHeight() < base.halfWidth()
-                        ? base.halfHeight() : base.halfWidth()) * 1.5);
+                final int radius = (int) ((Math.min(base.halfHeight(), base.halfWidth())) * 1.5);
                 final int x = base.x() + (int) (radius * (float) Math.cos(angle));
                 final int y = base.y() - (int) (radius * (float) Math.sin(angle));
                 timedExplosions.add(
@@ -139,7 +138,7 @@ public class BaseMultiExploder implements IBaseMultiExploder {
     }
 
     @Getter
-    private class TimedExplosion {
+    private static class TimedExplosion {
         private final int x;
         private final int y;
         private final float explodeTime;

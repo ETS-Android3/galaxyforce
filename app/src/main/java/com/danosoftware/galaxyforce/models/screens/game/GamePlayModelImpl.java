@@ -427,7 +427,8 @@ public class GamePlayModelImpl implements Model, GameModel {
             // check user is allowed to play next wave
             if (wave >= GameConstants.MAX_FREE_WAVE
                     && (billingService.getFullGamePurchaseState() == PurchaseState.NOT_PURCHASED
-                    || billingService.getFullGamePurchaseState() == PurchaseState.NOT_READY)) {
+                    || billingService.getFullGamePurchaseState() == PurchaseState.NOT_READY
+                    || billingService.getFullGamePurchaseState() == PurchaseState.PENDING)) {
                 Log.i(TAG, "Exceeded maximum free zone. Must upgrade.");
                 game.changeToReturningScreen(ScreenType.UPGRADE_FULL_VERSION);
 

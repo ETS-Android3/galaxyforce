@@ -54,7 +54,7 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
     private final String versionName;
 
     // variables to track planet and logo movements
-    private static final int START_PLANET_Y_POS = 0 - (267 / 2);
+    private static final int START_PLANET_Y_POS = -(267 / 2);
     private static final int START_LOGO_Y_POS = GameConstants.GAME_HEIGHT + (184 / 2);
     private final IMovingSprite planet;
     private final IMovingSprite logo;
@@ -115,7 +115,8 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
         /*
          * Add text to indicate whether full game has been purchased
          */
-        if (billingService.getFullGamePurchaseState() == PurchaseState.NOT_PURCHASED) {
+        if (billingService.getFullGamePurchaseState() == PurchaseState.NOT_PURCHASED
+                || billingService.getFullGamePurchaseState() == PurchaseState.PENDING) {
             text.add(
                     Text.newTextRelativePositionX(
                             "FREE TRIAL",

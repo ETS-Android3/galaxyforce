@@ -11,10 +11,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 
-import com.android.billingclient.api.BillingClient;
 import com.danosoftware.galaxyforce.billing.BillingManager;
+import com.danosoftware.galaxyforce.billing.BillingManagerImpl;
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.billing.BillingServiceImpl;
+import com.danosoftware.galaxyforce.billing.BillingUpdatesListener;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.games.Game;
 import com.danosoftware.galaxyforce.games.GameImpl;
@@ -74,13 +75,7 @@ public class MainActivity extends Activity {
 
         Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Create Application");
 
-        // set application to use full screen
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        // stop window dimming when window is visible (recommended over
-        // deprecated full wake lock)
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        setupScreen();
 
         // set-up GL view
         glView = new GLSurfaceView(this);
@@ -90,8 +85,8 @@ public class MainActivity extends Activity {
 
         // Create and initialize billing
         BillingService billingService = new BillingServiceImpl();
-        BillingManager.BillingUpdatesListener billingListener = (BillingManager.BillingUpdatesListener) billingService;
-        this.mBillingManager = new BillingManager(this, billingListener);
+        BillingUpdatesListener billingListener = (BillingUpdatesListener) billingService;
+        this.mBillingManager = new BillingManagerImpl(this, billingListener);
 
         // set-up configuration service that uses shared preferences
         // for persisting configuration
@@ -117,8 +112,7 @@ public class MainActivity extends Activity {
         // is inactive. For example, this can happen if the activity is destroyed during the
         // purchase flow. This ensures that when the activity is resumed it reflects the user's
         // current purchases.
-        if (mBillingManager != null
-                && mBillingManager.getBillingClientResponseCode() == BillingClient.BillingResponse.OK) {
+        if (mBillingManager != null && mBillingManager.isConnected()) {
             mBillingManager.queryPurchases();
         }
 
@@ -138,13 +132,12 @@ public class MainActivity extends Activity {
             } else {
                 state = ActivityState.PAUSED;
             }
-
             while (true) {
                 try {
                     stateChanged.wait();
                     break;
                 } catch (InterruptedException e) {
-
+                    Log.w(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Unexpected InterruptedException", e);
                 }
             }
 
@@ -187,10 +180,23 @@ public class MainActivity extends Activity {
         }
     }
 
+    @SuppressWarnings("deprecation")
+    private void setupScreen() {
+        // set application to use full screen
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        // stop window dimming when window is visible (recommended over
+        // deprecated full wake lock)
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    // setSystemUiVisibility() is deprecated but WindowInsetsController replacement requires API 30.
+    // not replaced to simply support older APIs.
+    @SuppressWarnings("deprecation")
     private void hideSystemUI() {
-        // Enables "sticky immersive" mode.
-        // hides UI system bars until user swipes to reveal them
-        // see: https://developer.android.com/training/system-ui/immersive#sticky-immersive
+        // See https://developer.android.com/training/system-ui/immersive
+        // Using "sticky immersive"
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY

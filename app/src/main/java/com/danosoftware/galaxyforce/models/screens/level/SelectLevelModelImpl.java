@@ -269,8 +269,7 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
 
     @Override
     public List<ISprite> getStaticSprites() {
-        List<ISprite> sprites = new ArrayList<>();
-        sprites.addAll(starField.getSprites());
+        List<ISprite> sprites = new ArrayList<ISprite>(starField.getSprites());
         for (SpriteTextButton button : staticTextButtons) {
             sprites.add(button.getSprite());
         }
@@ -331,7 +330,8 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
     @Override
     public void setLevel(int level) {
         if (level > GameConstants.MAX_FREE_WAVE
-                && billingService.getFullGamePurchaseState() == PurchaseState.NOT_PURCHASED) {
+                && (billingService.getFullGamePurchaseState() == PurchaseState.NOT_PURCHASED
+                || billingService.getFullGamePurchaseState() == PurchaseState.PENDING)) {
             Log.i(LOCAL_TAG, "Exceeded maximum free wave. Must upgrade.");
             game.changeToReturningScreen(ScreenType.UPGRADE_FULL_VERSION);
         } else {
