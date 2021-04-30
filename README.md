@@ -50,7 +50,7 @@ Build -> Clean Project
 Build -> Generate Signed Bundle / APK...
 ```
 
-![Create Bundle Image](https://github.com/DannyNicholas/galaxyforce/raw/dev/assets/createBundle.png "Create Bundle Image")
+![Create Bundle Image](https://raw.githubusercontent.com/DannyNicholas/galaxyforce/dev/assets/createBundle.png "Create Bundle Image")
 
 Choose "Andrioid App Bundle" then click `Next`.
 
