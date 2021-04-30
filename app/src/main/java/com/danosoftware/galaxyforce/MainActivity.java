@@ -75,13 +75,7 @@ public class MainActivity extends Activity {
 
         Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Create Application");
 
-        // set application to use full screen
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        // stop window dimming when window is visible (recommended over
-        // deprecated full wake lock)
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        setupScreen();
 
         // set-up GL view
         glView = new GLSurfaceView(this);
@@ -144,7 +138,7 @@ public class MainActivity extends Activity {
                     stateChanged.wait();
                     break;
                 } catch (InterruptedException e) {
-
+                    Log.w(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Unexpected InterruptedException", e);
                 }
             }
 
@@ -187,10 +181,23 @@ public class MainActivity extends Activity {
         }
     }
 
+    @SuppressWarnings("deprecation")
+    private void setupScreen() {
+        // set application to use full screen
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        // stop window dimming when window is visible (recommended over
+        // deprecated full wake lock)
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    // setSystemUiVisibility() is deprecated but WindowInsetsController replacement requires API 30.
+    // not replaced to simply support older APIs.
+    @SuppressWarnings("deprecation")
     private void hideSystemUI() {
-        // Enables "sticky immersive" mode.
-        // hides UI system bars until user swipes to reveal them
-        // see: https://developer.android.com/training/system-ui/immersive#sticky-immersive
+        // See https://developer.android.com/training/system-ui/immersive
+        // Using "sticky immersive"
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY

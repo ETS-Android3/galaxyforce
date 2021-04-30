@@ -58,7 +58,7 @@ android {
         applicationId "com.danosoftware.galaxyforce"
 
         // Defines the minimum API level required to run the app.
-        minSdkVersion 14
+        minSdkVersion 19
 
         // Specifies the API level used to test the app.
         targetSdkVersion 30

@@ -312,8 +312,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
     @Override
     public List<ISprite> getSprites() {
 
-        List<ISprite> sprites = new ArrayList<>();
-        sprites.addAll(starField.getSprites());
+        List<ISprite> sprites = new ArrayList<ISprite>(starField.getSprites());
         sprites.add(logo);
 
         for (SpriteTextButton button : buttons) {
