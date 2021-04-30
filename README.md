@@ -74,7 +74,7 @@ By default, your bundle will be located at: `...\galaxyforce\app\release\app-rel
 
 It is not recommended to upload Signed APK to Google Play Console any more.
 
-However, this section on [Building, Testing and Deploying APKs](assets/APKs.md) explains how to build and deploy signed APKs if needed.
+However, this section on [Building, Testing and Deploying APKs](assets/apks.md) explains how to build and deploy signed APKs if needed.
 
 ***
 
