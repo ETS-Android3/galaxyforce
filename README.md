@@ -34,11 +34,13 @@ Once the correct values are provided for each property in the above `/.gradle/gr
 
 ## Deploying to the Android Play Console
 
+It is recommended that you deploy signed bundles to the Google Play Console.
+
 ***
 
-### Building a Signed APK
+### Building a Signed Bundle
 
-From Android Studio, create a new signed APK.
+From Android Studio, create a new signed App Bundle.
 
 ```
 Build -> Clean Project
@@ -48,79 +50,56 @@ Build -> Clean Project
 Build -> Generate Signed Bundle / APK...
 ```
 
-Choose APK then click `Next`.
+![Create Bundle Image](assets/createBundle.png "Create Bundle Image")
 
-![Create APK Image](https://github.com/DannyNicholas/galaxyforce/raw/dev/assets/createAPK.png "Create APK Image")
+Choose "Andrioid App Bundle" then click `Next`.
 
-Enter details key store details then click `Next`. It is important that the same keystore is used every time as otherwise new APKs will be rejected by Google Play Console.
+![Create Bundle_Signing Image](assets/createBundleSigning.png "Create Bundle Signing Image")
 
-Choose `release` build variant and the two signature versions. Click `Finish`.
+Enter details key store details. It is important that the same keystore is used every time to avoid bundles being rejected by the Google Play Console.
 
-![Choose Build Variant](https://github.com/DannyNicholas/galaxyforce/raw/dev/assets/buildVariant.png "Choose Build Variant")
+**NOTE:** When creating a bundle for the first time, export the encrypted key for [Google Play App Signing](https://developer.android.com/studio/publish/app-signing).
+This will generate a `*.pepk` file. Keep this file safe. This file should also be uploaded to the Google Play Console in the `Release management > App integrity` menu.
+This key is used by Google Play to sign your app for distribution to users.
+ 
+- Click `Next`.
+- Choose `release` build variant.
+- Click `Finish`.
+
+By default, your bundle will be located at: `...\galaxyforce\app\release\app-release.aab`
 
 ***
 
-### Testing a Signed APK
+### Signed APKs
 
-The signed APK can be tested on a real Android device by installing it onto a real device.
+It is not recommended to upload Signed APK to Google Play Console any more.
 
-Find path to the Android SDK platform tools. Normally...
-```
-<path-to-android-sdk-tools>/android-sdk-macosx/platform-tools
-```
-
-Confirm Android device is connected:
-```
-./adb devices
-```
-
-Uninstall previous versions of the app:
-```
-./adb uninstall com.danosoftware.galaxyforce
-```
-
-Install the signed APK:
-```
-./adb install <path-to-galaxyforce-project>/app/release/app-release.apk
-```
+However, this section on [Building, Testing and Deploying APKs](assets/APKs.md) explains how to build and deploy signed APKs if needed.
 
 ***
 
 ### Deploy to Google Play Console
 
-Click on `Release Management -> App Releases`. Currently these are deployed to a Beta closed track. Click on `Manage`.
+Click on `Testing -> Closed Testing`. Choose to `Manage Track` for `Beta`.
 
-![App Release](https://github.com/DannyNicholas/galaxyforce/raw/dev/assets/appRelease.png "App Release")
+![App Release](assets/createRelease.png "App Release")
 
-Here, you can create releases and manage beta testers.
+Click on `Create new release`.
 
-Click `Release` to create a new release.
+![Upload Bundle](assets/uploadBundle.png "Upload Bundle")
 
 Here you can:
 
-- Upload your signed APK (`.../app/release/app-release.apk`)
+- Upload your signed Bundle (`.../app/release/app-release.aab`)
 - Enter a release name
 - Add release notes
 
 Then press `Save`.
 
-![Upload](https://github.com/DannyNicholas/galaxyforce/raw/dev/assets/upload.png "Upload")
-
-Click `Review` to see the release changes.
+Click `Review release` to see the release changes.
 Once done, click `Start Rollout to Beta`.
 
-***
-
-### Upload Deobfuscation Files
-
-To aid investigation of crash reports, the deobfuscation mapping files must be uploaded. These mapping files change with every APK so must be re-uploaded with every new APK.
-
-Click on
-```Android Vitals -> Deobsfucation files```
-
-Upload all the mapping files for the current APK (`.../app/build/outputs/mapping/release/`)
-
-![Deobsfucation Mapping Files](https://github.com/DannyNicholas/galaxyforce/raw/dev/assets/deobsfucation.png "Deobsfucation Mapping Files")
+**NOTE:** There is no need to upload deobfuscation mapping files with bundles. The deobfuscation file from the bundle is used.
 
 ***
 
