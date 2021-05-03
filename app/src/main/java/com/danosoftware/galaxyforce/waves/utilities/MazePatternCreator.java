@@ -440,9 +440,11 @@ public class MazePatternCreator {
                 if ((bits & bitMask) != 0) {
                     // insert a maze block
                     final int xPos = minX + (col * distanceBetweenAliens);
-                    subWaves.add(createAlienSubWaveProperty(
-                            xPos,
-                            GameConstants.SCREEN_TOP + (row * distanceBetweenAliens)));
+                    subWaves.add(
+                            createAlienSubWaveProperty(
+                                    xPos,
+                                    GameConstants.SCREEN_TOP + (row * distanceBetweenAliens),
+                                    false));
                 }
                 // shift left for next column
                 bits = bits << 1;
@@ -462,5 +464,23 @@ public class MazePatternCreator {
             doubleMaze[(row * 2) + 1] = maze[row];
         }
         return doubleMaze;
+    }
+
+    /**
+     * Creates longer mazes by appending mazes together.
+     */
+    public static int[] mazeCombiner(int[]... mazes) {
+        int[] maze = new int[0];
+        for (int[] nextMaze : mazes) {
+            maze = concatArrays(maze, nextMaze);
+        }
+        return maze;
+    }
+
+    private static int[] concatArrays(int[] src1, int[] src2) {
+        int[] result = new int[src1.length + src2.length];
+        System.arraycopy(src1, 0, result, 0, src1.length);
+        System.arraycopy(src2, 0, result, src1.length, src2.length);
+        return result;
     }
 }

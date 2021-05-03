@@ -8,6 +8,7 @@ import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
 import com.danosoftware.galaxyforce.waves.AlienCharacter;
 import com.danosoftware.galaxyforce.waves.config.aliens.AlienConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.exploding.ExplosionConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.exploding.SpawningExplosionConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.missiles.MissileConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.missiles.MissileFiringConfig;
@@ -18,6 +19,7 @@ import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningFixedAn
 import com.danosoftware.galaxyforce.waves.config.aliens.types.BoundariesConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.DirectionalDestroyableConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.DirectionalResettableConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.types.ExplodingConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowableHunterConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowerConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.HunterConfig;
@@ -128,6 +130,7 @@ public class AlienConfigBuilder {
                 // rotated downwards laser missile (will not fire upwards)
             case GHOST:
             case FOXY:
+            case CHARLIE:
                 return MissileFiringConfig
                         .builder()
                         .missileType(AlienMissileType.ROTATED_DOWNWARDS)
@@ -136,7 +139,6 @@ public class AlienConfigBuilder {
                         .missileFrequency(missileFrequency)
                         .build();
                 // rotated laser missile (any direction)
-            case CHARLIE:
             case BATTLE_DROID:
             case JOKER:
             case BEAR:
@@ -182,7 +184,6 @@ public class AlienConfigBuilder {
             case FIGHTER:
             case RIPLEY:
             case WALKER:
-            case CHARLIE:
             case JUMPER:
             case ROTATOR:
             case FROGGER:
@@ -223,7 +224,6 @@ public class AlienConfigBuilder {
             case SQUASHER:
             case TINY_DANCER:
             case WILD_STYLE:
-            case CONFUSER:
                 return 1;
             case CIRCUIT:
             case PILOT:
@@ -231,7 +231,6 @@ public class AlienConfigBuilder {
             case ZOGG:
             case LEMMING:
             case YELLOW_BEARD:
-            case LADY_BIRD:
             case FISH:
             case ALL_SEEING_EYE:
             case PINKO:
@@ -241,12 +240,15 @@ public class AlienConfigBuilder {
             case SPINNER_PULSE_GREEN:
             case FOXY:
             case BABY_DRAGON_HEAD:
+            case CHARLIE:
                 return 2;
             case PINCER:
+            case CONFUSER:
                 return 3;
             case INSECT_MOTHERSHIP:
             case BATTY:
             case SAUCER:
+            case LADY_BIRD:
                 return 10;
             case BOOK:
                 return 15;
@@ -281,8 +283,28 @@ public class AlienConfigBuilder {
      * Create alien config for character with missiles
      */
     public static PathConfig alienConfig(AlienCharacter character,
-                                          AlienMissileSpeed speed,
-                                          Float missileFrequency) {
+                                         AlienMissileSpeed speed,
+                                         Float missileFrequency) {
+
+        return alienConfigBuilder(character, speed, missileFrequency)
+                .build();
+    }
+
+    /**
+     * Create alien config for character without missiles
+     */
+    public static PathConfig alienConfig(AlienCharacter character) {
+
+        return alienConfigBuilder(character)
+                .build();
+    }
+
+    /**
+     * Create alien config builder for character with missiles
+     */
+    private static PathConfig.PathConfigBuilder alienConfigBuilder(AlienCharacter character,
+                                                                   AlienMissileSpeed speed,
+                                                                   Float missileFrequency) {
 
         final Integer energy = energy(character);
         final MissileConfig missileConfig = missileConfig(character, speed, missileFrequency);
@@ -368,8 +390,7 @@ public class AlienConfigBuilder {
                         .alienCharacter(character)
                         .energy(energy)
                         .missileConfig(missileConfig)
-                        .angledToPath(isAngledToPath)
-                        .build();
+                        .angledToPath(isAngledToPath);
             case CIRCUIT:
             case SPINNER_PULSE_GREEN:
                 return PathConfig
@@ -382,17 +403,16 @@ public class AlienConfigBuilder {
                                         .angularSpeed(70)
                                         .build())
                         .missileConfig(missileConfig)
-                        .angledToPath(isAngledToPath)
-                        .build();
+                        .angledToPath(isAngledToPath);
             default:
                 throw new GalaxyForceException("Can not create alien config for unknown character: " + character);
         }
     }
 
     /**
-     * Create alien config for character without missiles
+     * Create alien config builder for character without missiles
      */
-    public static PathConfig alienConfig(AlienCharacter character) {
+    private static PathConfig.PathConfigBuilder alienConfigBuilder(AlienCharacter character) {
 
         final Integer energy = energy(character);
         final Boolean isAngledToPath = isAngledToPath(character);
@@ -476,8 +496,7 @@ public class AlienConfigBuilder {
                         .builder()
                         .alienCharacter(character)
                         .energy(energy)
-                        .angledToPath(isAngledToPath)
-                        .build();
+                        .angledToPath(isAngledToPath);
             case CIRCUIT:
             case SPINNER_PULSE_GREEN:
                 return PathConfig
@@ -489,8 +508,7 @@ public class AlienConfigBuilder {
                                         .builder()
                                         .angularSpeed(70)
                                         .build())
-                        .angledToPath(isAngledToPath)
-                        .build();
+                        .angledToPath(isAngledToPath);
             default:
                 throw new GalaxyForceException("Can not create alien config for unknown character: " + character);
         }
@@ -606,7 +624,7 @@ public class AlienConfigBuilder {
      * Create aliens that descend from screen and split when destroyed.
      * e.g. asteroids that split into smaller asteroids
      */
-    public static DirectionalResettableConfig fallingSpinningSplittingConfig(
+    public static DirectionalResettableConfig fallingSpinningSplittingResettableConfig(
             AlienCharacter character,
             AlienSpeed alienSpeed,
             AlienCharacter spawnCharacter
@@ -624,29 +642,67 @@ public class AlienConfigBuilder {
                                 .builder()
                                 .build())
                 .explosionConfig(
-                        SpawningExplosionConfig
-                                .builder()
-                                .spawnConfig(
-                                        SpawnOnDemandConfig
-                                                .builder()
-                                                .spawnedPowerUpTypes(
-                                                        NO_POWER_UPS)
-                                                .spawnedAlienConfig(SplitterConfig
-                                                        .builder()
-                                                        .alienConfigs(
-                                                                Arrays.asList(
-                                                                        angledSpinningDirectionalConfig(
-                                                                                spawnCharacter,
-                                                                                -HALF_PI - QUARTER_PI,
-                                                                                alienSpeed),
-                                                                        angledSpinningDirectionalConfig(
-                                                                                spawnCharacter,
-                                                                                -HALF_PI + QUARTER_PI,
-                                                                                alienSpeed)))
-                                                        .build())
-                                                .build())
-                                .build()
+                        splitOnExplodeConfig(alienSpeed, spawnCharacter)
                 )
+                .build();
+    }
+
+    /**
+     * Create aliens that descend from screen and split when destroyed.
+     * e.g. asteroids that split into smaller asteroids
+     */
+    public static DirectionalDestroyableConfig fallingSpinningSplittingDirectionalConfig(
+            AlienCharacter character,
+            AlienSpeed alienSpeed,
+            AlienCharacter spawnCharacter) {
+
+        final Integer energy = energy(character);
+
+        return DirectionalDestroyableConfig
+                .builder()
+                .alienCharacter(character)
+                .energy(energy)
+                .speed(alienSpeed)
+                .angle(DOWNWARDS)
+                .spinningConfig(
+                        SpinningBySpeedConfig
+                                .builder()
+                                .build())
+                .explosionConfig(
+                        splitOnExplodeConfig(alienSpeed, spawnCharacter)
+                )
+                .build();
+    }
+
+    /**
+     * Create explode config that splits and spawns new aliens.
+     * e.g. asteroids that split into smaller asteroids
+     */
+    public static ExplosionConfig splitOnExplodeConfig(
+            AlienSpeed alienSpeed,
+            AlienCharacter spawnCharacter
+    ) {
+        return SpawningExplosionConfig
+                .builder()
+                .spawnConfig(
+                        SpawnOnDemandConfig
+                                .builder()
+                                .spawnedPowerUpTypes(
+                                        NO_POWER_UPS)
+                                .spawnedAlienConfig(SplitterConfig
+                                        .builder()
+                                        .alienConfigs(
+                                                Arrays.asList(
+                                                        angledSpinningDirectionalConfig(
+                                                                spawnCharacter,
+                                                                -HALF_PI - QUARTER_PI,
+                                                                alienSpeed),
+                                                        angledSpinningDirectionalConfig(
+                                                                spawnCharacter,
+                                                                -HALF_PI + QUARTER_PI,
+                                                                alienSpeed)))
+                                        .build())
+                                .build())
                 .build();
     }
 
@@ -680,12 +736,7 @@ public class AlienConfigBuilder {
             final SpawnConfig spawnConfig
     ) {
 
-        final Integer energy = energy(character);
-
-        return PathConfig
-                .builder()
-                .alienCharacter(character)
-                .energy(energy)
+        return alienConfigBuilder(character)
                 .spawnConfig(spawnConfig)
                 .build();
     }
@@ -761,6 +812,22 @@ public class AlienConfigBuilder {
                 .alienCharacter(character)
                 .energy(energy)
                 .spawnConfig(spawnConfig)
+                .build();
+    }
+
+    public static AlienConfig explodingAlienConfig(
+            final AlienCharacter character,
+            final AlienMissileCharacter missileCharacter,
+            final Float explosionTime
+    ) {
+        final Integer energy = energy(character);
+
+        return ExplodingConfig
+                .builder()
+                .alienCharacter(character)
+                .energy(energy)
+                .explosionTime(explosionTime)
+                .explodingMissileCharacter(missileCharacter)
                 .build();
     }
 }

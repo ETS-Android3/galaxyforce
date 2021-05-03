@@ -646,6 +646,17 @@ public enum SubWavePathRule {
             )
     ),
 
+    DOUBLE_BOMBER_RUN(
+            new SubWavePathRuleProperties(
+                    Path.SPACE_INVADER,
+                    PathSpeed.NORMAL,
+                    2,
+                    6.25f,
+                    0,
+                    true
+            )
+    ),
+
     STAGGERED_LEFT_AND_RIGHT(
             new SubWavePathRuleProperties(
                     Path.LEFT_AND_RIGHT,

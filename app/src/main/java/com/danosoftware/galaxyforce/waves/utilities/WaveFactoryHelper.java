@@ -54,7 +54,8 @@ public class WaveFactoryHelper {
      */
     public static SubWaveRuleProperties createAlienSubWaveProperty(
             final int xPos,
-            final int yPos) {
+            final int yPos,
+            final boolean restartImmediately) {
         return new SubWaveRuleProperties(
                 false,
                 false,
@@ -63,7 +64,7 @@ public class WaveFactoryHelper {
                 1,
                 0,
                 0,
-                false);
+                restartImmediately);
     }
 
     public static SubWaveRuleProperties randomStartFromTop(float maxDelay) {
