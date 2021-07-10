@@ -403,6 +403,8 @@ public enum GameSpriteIdentifier implements ISpriteIdentifier {
     // molecule
     MOLECULE("molecule", 2),
     MOLECULE_HIT("moleculeHit", 2),
+    MOLECULE_MINI("moleculeMini", 2),
+    MOLECULE_MINI_HIT("moleculeMiniHit", 2),
 
     // big boss
     BIG_BOSS_01("bigBoss01", 6),
@@ -615,8 +617,10 @@ public enum GameSpriteIdentifier implements ISpriteIdentifier {
     FIREBALL02("fireBall02"),
 
     // lightning and rain missile
-    LIGHTNING("lightningLong"),
-    RAIN("rain"),
+    LIGHTNING_01("lightningLong01"),
+    LIGHTNING_02("lightningLong02"),
+    RAIN_01("rain01"),
+    RAIN_02("rain02"),
 
     // explosions
     EXPLODE_01("explodeOne"),

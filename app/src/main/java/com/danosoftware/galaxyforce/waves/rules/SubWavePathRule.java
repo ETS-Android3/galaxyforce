@@ -609,6 +609,19 @@ public enum SubWavePathRule {
             )
     ),
 
+    NORMAL_ARC_LOWER(
+            new SubWavePathRuleProperties(
+                    Path.SINGLE_ARC,
+                    PathSpeed.NORMAL,
+                    1,
+                    0,
+                    0,
+                    true,
+                    new PointTranslatorChain()
+                            .add(new OffsetYPointTranslator(-125))
+            )
+    ),
+
     DELAYED_SLOW_ARC(
             new SubWavePathRuleProperties(
                     Path.SINGLE_ARC,

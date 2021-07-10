@@ -77,6 +77,7 @@ public class AlienConfigBuilder {
             case SPINNER_GREEN:
             case SPINNER_PULSE_GREEN:
             case MOLECULE:
+            case MOLECULE_MINI:
             case BIG_BOSS:
             case LADY_BIRD:
             case ASTEROID:
@@ -197,7 +198,7 @@ public class AlienConfigBuilder {
             case JOKER:
             case OCTOPUS:
             case MINION:
-            case MOLECULE:
+            case MOLECULE_MINI:
             case BIG_BOSS:
             case ASTEROID_MINI:
             case DRAGON_BODY:
@@ -236,6 +237,7 @@ public class AlienConfigBuilder {
             case PINKO:
             case GHOST:
             case ASTEROID:
+            case MOLECULE:
             case SPINNER_GREEN:
             case SPINNER_PULSE_GREEN:
             case FOXY:
@@ -347,6 +349,7 @@ public class AlienConfigBuilder {
             case MINION:
             case SPINNER_GREEN:
             case MOLECULE:
+            case MOLECULE_MINI:
             case BIG_BOSS:
             case LADY_BIRD:
             case ASTEROID:
@@ -453,7 +456,6 @@ public class AlienConfigBuilder {
             case OCTOPUS:
             case MINION:
             case SPINNER_GREEN:
-            case MOLECULE:
             case BIG_BOSS:
             case LADY_BIRD:
             case ASTEROID:
@@ -509,6 +511,19 @@ public class AlienConfigBuilder {
                                         .angularSpeed(70)
                                         .build())
                         .angledToPath(isAngledToPath);
+            case MOLECULE:
+                return PathConfig
+                        .builder()
+                        .alienCharacter(character)
+                        .energy(energy)
+                        .spinningConfig(
+                                SpinningFixedAngularConfig
+                                        .builder()
+                                        .angularSpeed(280)
+                                        .build())
+                        .explosionConfig(
+                                splitFourWayOnExplodeConfig(AlienSpeed.FAST, AlienCharacter.MOLECULE_MINI)
+                        );
             default:
                 throw new GalaxyForceException("Can not create alien config for unknown character: " + character);
         }
@@ -651,6 +666,33 @@ public class AlienConfigBuilder {
      * Create aliens that descend from screen and split when destroyed.
      * e.g. asteroids that split into smaller asteroids
      */
+    public static DirectionalResettableConfig fallingSpinningFourWaySplittingResettableConfig(
+            AlienCharacter character,
+            AlienSpeed alienSpeed,
+            AlienCharacter spawnCharacter
+    ) {
+        final Integer energy = energy(character);
+
+        return DirectionalResettableConfig
+                .builder()
+                .alienCharacter(character)
+                .energy(energy)
+                .speed(alienSpeed)
+                .angle(DOWNWARDS)
+                .spinningConfig(
+                        SpinningBySpeedConfig
+                                .builder()
+                                .build())
+                .explosionConfig(
+                        splitFourWayOnExplodeConfig(alienSpeed, spawnCharacter)
+                )
+                .build();
+    }
+
+    /**
+     * Create aliens that descend from screen and split when destroyed.
+     * e.g. asteroids that split into smaller asteroids
+     */
     public static DirectionalDestroyableConfig fallingSpinningSplittingDirectionalConfig(
             AlienCharacter character,
             AlienSpeed alienSpeed,
@@ -675,7 +717,34 @@ public class AlienConfigBuilder {
     }
 
     /**
-     * Create explode config that splits and spawns new aliens.
+     * Create aliens that descend from screen and split 4 ways when destroyed.
+     * e.g. asteroids that split into smaller asteroids
+     */
+    public static DirectionalDestroyableConfig fallingSpinningFourWaySplittingDirectionalConfig(
+            AlienCharacter character,
+            AlienSpeed alienSpeed,
+            AlienCharacter spawnCharacter) {
+
+        final Integer energy = energy(character);
+
+        return DirectionalDestroyableConfig
+                .builder()
+                .alienCharacter(character)
+                .energy(energy)
+                .speed(alienSpeed)
+                .angle(DOWNWARDS)
+                .spinningConfig(
+                        SpinningBySpeedConfig
+                                .builder()
+                                .build())
+                .explosionConfig(
+                        splitFourWayOnExplodeConfig(alienSpeed, spawnCharacter)
+                )
+                .build();
+    }
+
+    /**
+     * Create 2-way explode config that splits and spawns new aliens.
      * e.g. asteroids that split into smaller asteroids
      */
     public static ExplosionConfig splitOnExplodeConfig(
@@ -693,6 +762,46 @@ public class AlienConfigBuilder {
                                         .builder()
                                         .alienConfigs(
                                                 Arrays.asList(
+                                                        angledSpinningDirectionalConfig(
+                                                                spawnCharacter,
+                                                                -HALF_PI - QUARTER_PI,
+                                                                alienSpeed),
+                                                        angledSpinningDirectionalConfig(
+                                                                spawnCharacter,
+                                                                -HALF_PI + QUARTER_PI,
+                                                                alienSpeed)))
+                                        .build())
+                                .build())
+                .build();
+    }
+
+    /**
+     * Create 4-way explode config that splits and spawns new aliens.
+     * e.g. asteroids that split into smaller asteroids
+     */
+    public static ExplosionConfig splitFourWayOnExplodeConfig(
+            AlienSpeed alienSpeed,
+            AlienCharacter spawnCharacter
+    ) {
+        return SpawningExplosionConfig
+                .builder()
+                .spawnConfig(
+                        SpawnOnDemandConfig
+                                .builder()
+                                .spawnedPowerUpTypes(
+                                        NO_POWER_UPS)
+                                .spawnedAlienConfig(SplitterConfig
+                                        .builder()
+                                        .alienConfigs(
+                                                Arrays.asList(
+                                                        angledSpinningDirectionalConfig(
+                                                                spawnCharacter,
+                                                                HALF_PI - QUARTER_PI,
+                                                                alienSpeed),
+                                                        angledSpinningDirectionalConfig(
+                                                                spawnCharacter,
+                                                                HALF_PI + QUARTER_PI,
+                                                                alienSpeed),
                                                         angledSpinningDirectionalConfig(
                                                                 spawnCharacter,
                                                                 -HALF_PI - QUARTER_PI,

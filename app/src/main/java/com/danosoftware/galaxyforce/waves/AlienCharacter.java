@@ -668,6 +668,12 @@ public enum AlienCharacter {
             new ISpriteIdentifier[]{
                     GameSpriteIdentifier.MOLECULE_HIT},
             0f),
+    MOLECULE_MINI(
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.MOLECULE_MINI},
+            new ISpriteIdentifier[]{
+                    GameSpriteIdentifier.MOLECULE_MINI_HIT},
+            0f),
 
     // big boss alien with claws
     BIG_BOSS(
