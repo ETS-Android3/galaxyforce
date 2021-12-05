@@ -5,6 +5,7 @@ import static com.danosoftware.galaxyforce.models.aliens.AlienManager.SubWaveSta
 import static com.danosoftware.galaxyforce.models.aliens.AlienManager.SubWaveState.IDLE;
 import static com.danosoftware.galaxyforce.models.aliens.AlienManager.SubWaveState.PLAYING;
 import static com.danosoftware.galaxyforce.models.aliens.AlienManager.SubWaveState.WAVE_COMPLETE;
+import static com.danosoftware.galaxyforce.waves.utilities.Randomiser.random;
 
 import android.util.Log;
 import com.danosoftware.galaxyforce.services.achievements.AchievementService;
@@ -153,7 +154,7 @@ public class AlienManager implements IAlienManager {
     }
 
     // choose a random active alien
-    int index = (int) (Math.random() * activeAliens.size());
+    int index = (int) (random() * activeAliens.size());
     return activeAliens.get(index);
   }
 

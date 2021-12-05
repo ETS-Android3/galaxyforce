@@ -37,7 +37,6 @@ import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.create
 import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.scatteredTopStart;
 import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.scatteredTopStartImmediateRestart;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveAsteroidsHelper.createAsteroidField;
-import static com.danosoftware.galaxyforce.waves.utilities.WaveAsteroidsHelper.createMiniDirectionalAsteroid;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveDriftingHelper.createDriftingWave;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.DOWNWARDS;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.HALF_PI;
@@ -45,7 +44,6 @@ import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.NO_
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.QUARTER_PI;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.flatten;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveMazeHelper.asteroidHorizontalRows;
-import static com.danosoftware.galaxyforce.waves.utilities.WaveMazeHelper.asteroidMazeSubWave;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveMazeHelper.createBarrierMaze;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveMazeHelper.createBarrierMazeWithGuards;
 
@@ -73,8 +71,6 @@ import com.danosoftware.galaxyforce.waves.config.aliens.AlienConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.exploding.MultiExplosionConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.exploding.SpawningExplosionConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.missiles.MissileFiringConfig;
-import com.danosoftware.galaxyforce.waves.config.aliens.missiles.MissileMultiFiringConfig;
-import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawnOnDemandConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningAlienConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningAndExplodingAlienConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningLimitedActiveAlienConfig;
@@ -83,7 +79,6 @@ import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningBySpeed
 import com.danosoftware.galaxyforce.waves.config.aliens.types.BoundariesConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.BoundaryLanePolicy;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.DirectionalDestroyableConfig;
-import com.danosoftware.galaxyforce.waves.config.aliens.types.DirectionalResettableConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowableHunterConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowerConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.PathConfig;
@@ -1906,7 +1901,7 @@ public class WaveFactory {
                     createRowDroppers(
                         Path.STRAIGHT_DOWN,
                         PathSpeed.NORMAL,
-                        1.5f),
+                        1.75f),
                     alienConfig(
                         AlienCharacter.JUMPER),
                     Collections.singletonList(PowerUpType.MISSILE_SPRAY)
@@ -1919,14 +1914,14 @@ public class WaveFactory {
                     alienConfig(
                         AlienCharacter.CHARLIE,
                         AlienMissileSpeed.FAST,
-                        6.5f),
+                        15f),
                     NO_POWER_UPS
                 ),
                 new SubWavePathConfig(
                     createRowDroppers(
                         Path.STRAIGHT_DOWN,
                         PathSpeed.NORMAL,
-                        4f),
+                        4.25f),
                     alienConfig(
                         AlienCharacter.CONFUSER),
                     NO_POWER_UPS
@@ -1946,7 +1941,7 @@ public class WaveFactory {
                     createRowDroppers(
                         Path.STRAIGHT_DOWN,
                         PathSpeed.NORMAL,
-                        6.5f),
+                        6.75f),
                     alienConfig(
                         AlienCharacter.CHARLIE),
                     Collections.singletonList(PowerUpType.MISSILE_LASER)

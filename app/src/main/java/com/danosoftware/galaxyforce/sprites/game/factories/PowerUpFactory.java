@@ -1,5 +1,7 @@
 package com.danosoftware.galaxyforce.sprites.game.factories;
 
+import static com.danosoftware.galaxyforce.waves.utilities.Randomiser.random;
+
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.models.assets.PowerUpsDto;
 import com.danosoftware.galaxyforce.services.sound.SoundEffect;
@@ -26,7 +28,7 @@ public class PowerUpFactory {
      */
     public static PowerUpsDto generateRandomPowerUp(int x, int y, PowerUpType... powerUps) {
         // select a random powerup type and generate the power-up
-        int index = (int) (Math.random() * powerUps.length);
+        int index = (int) (random() * powerUps.length);
 
         return newPowerUp(powerUps[index], x, y);
     }
