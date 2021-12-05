@@ -38,7 +38,7 @@ public class SpinningBehaviourFactory {
                     spinningFixedAngularConfig.getAngularSpeed());
         }
 
-        // behaviour that fires no missiles
+        // behaviour that does not spin alien
         return new SpinningDisabled();
     }
 }

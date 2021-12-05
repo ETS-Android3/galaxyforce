@@ -1,19 +1,19 @@
 package com.danosoftware.galaxyforce.utilities;
 
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
-
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
+
+import com.danosoftware.galaxyforce.sprites.common.ISprite;
 
 /**
  * Utility methods used to test if a sprite is currently off-screen
  */
 public class OffScreenTester {
 
-    /**
-     * Tests if the sprite is completely off-screen by testing it's
-     * position/dimensions against all screen edges.
-     */
+  /**
+   * Tests if the sprite is completely off-screen by testing it's position/dimensions against all
+   * screen edges.
+   */
     public static boolean offScreenAnySide(ISprite sprite) {
         return (offScreenTop(sprite)
                 || offScreenBottom(sprite)

@@ -1,5 +1,10 @@
 package com.danosoftware.galaxyforce.sprites.game.aliens;
 
+import static com.danosoftware.galaxyforce.sprites.game.aliens.enums.AlienState.ACTIVE;
+import static com.danosoftware.galaxyforce.sprites.game.aliens.enums.AlienState.DESTROYED;
+import static com.danosoftware.galaxyforce.sprites.game.aliens.enums.AlienState.EXPLODING;
+import static com.danosoftware.galaxyforce.sprites.game.aliens.enums.AlienState.WAITING;
+
 import com.danosoftware.galaxyforce.sprites.common.AbstractCollidingSprite;
 import com.danosoftware.galaxyforce.sprites.game.aliens.enums.AlienState;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.explode.ExplodeBehaviour;
@@ -11,11 +16,6 @@ import com.danosoftware.galaxyforce.sprites.game.behaviours.spinner.SpinningBeha
 import com.danosoftware.galaxyforce.sprites.game.missiles.bases.IBaseMissile;
 import com.danosoftware.galaxyforce.view.Animation;
 import com.danosoftware.galaxyforce.waves.AlienCharacter;
-
-import static com.danosoftware.galaxyforce.sprites.game.aliens.enums.AlienState.ACTIVE;
-import static com.danosoftware.galaxyforce.sprites.game.aliens.enums.AlienState.DESTROYED;
-import static com.danosoftware.galaxyforce.sprites.game.aliens.enums.AlienState.EXPLODING;
-import static com.danosoftware.galaxyforce.sprites.game.aliens.enums.AlienState.WAITING;
 
 public abstract class AbstractAlien extends AbstractCollidingSprite implements IAlien {
 

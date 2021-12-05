@@ -1,19 +1,19 @@
 package com.danosoftware.galaxyforce.flightpath.translators;
 
-import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
-
 import static com.danosoftware.galaxyforce.constants.GameConstants.ANGLE_TO_RADIANS_MULTIPLIER;
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_Y;
 
+import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
+
 /**
  * Point translator that rotates a point around the screen centre.
- *
- * Due to unequal x, y screen dimensions, rescaling must occur to
- * re-fit rotated points within the screen dimensions.
- *
+ * <p>
+ * Due to unequal x, y screen dimensions, rescaling must occur to re-fit rotated points within the
+ * screen dimensions.
+ * <p>
  * As a result of this re-scaling, only +/-90 degree rotations are supported.
  */
 public class RotatePointTranslator implements PointTranslator {

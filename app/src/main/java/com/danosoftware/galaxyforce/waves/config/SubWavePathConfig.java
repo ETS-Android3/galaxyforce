@@ -4,7 +4,6 @@ import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.waves.config.aliens.AlienConfig;
 import com.danosoftware.galaxyforce.waves.rules.SubWavePathRule;
 import com.danosoftware.galaxyforce.waves.rules.SubWavePathRuleProperties;
-
 import java.util.List;
 
 /**
@@ -12,28 +11,28 @@ import java.util.List;
  */
 public class SubWavePathConfig extends SubWaveConfig {
 
-    // list of properties for a sub-wave
-    private final List<SubWavePathRuleProperties> subWaveRuleProperties;
+  // list of properties for a sub-wave
+  private final List<SubWavePathRuleProperties> subWaveRuleProperties;
 
-    public SubWavePathConfig(
-            final SubWavePathRule subWaveRule,
-            final AlienConfig alienConfig,
-            final List<PowerUpType> powerUps) {
+  public SubWavePathConfig(
+      final SubWavePathRule subWaveRule,
+      final AlienConfig alienConfig,
+      final List<PowerUpType> powerUps) {
 
-        super(Type.PATH, alienConfig, powerUps);
-        this.subWaveRuleProperties = subWaveRule.subWaveProps();
-    }
+    super(Type.PATH, alienConfig, powerUps);
+    this.subWaveRuleProperties = subWaveRule.subWaveProps();
+  }
 
-    public SubWavePathConfig(
-            final List<SubWavePathRuleProperties> subWaveRuleProperties,
-            final AlienConfig alienConfig,
-            final List<PowerUpType> powerUps) {
+  public SubWavePathConfig(
+      final List<SubWavePathRuleProperties> subWaveRuleProperties,
+      final AlienConfig alienConfig,
+      final List<PowerUpType> powerUps) {
 
-        super(Type.PATH, alienConfig, powerUps);
-        this.subWaveRuleProperties = subWaveRuleProperties;
-    }
+    super(Type.PATH, alienConfig, powerUps);
+    this.subWaveRuleProperties = subWaveRuleProperties;
+  }
 
-    public List<SubWavePathRuleProperties> getSubWaveRuleProperties() {
-        return subWaveRuleProperties;
-    }
+  public List<SubWavePathRuleProperties> getSubWaveRuleProperties() {
+    return subWaveRuleProperties;
+  }
 }

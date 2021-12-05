@@ -7,25 +7,24 @@ import com.danosoftware.galaxyforce.utilities.Rectangle;
  */
 public interface Button {
 
-    /**
-     * Return the bounds of the button's area.
-     */
-    Rectangle getBounds();
+  /**
+   * Return the bounds of the button's area.
+   */
+  Rectangle getBounds();
 
-    /**
-     * Button has been pressed and then released. Process the button request.
-     */
-    void buttonUp();
+  /**
+   * Button has been pressed and then released. Process the button request.
+   */
+  void buttonUp();
 
-    /**
-     * Button has been pressed. The button request should not be processed until
-     * released.
-     */
-    void buttonDown();
+  /**
+   * Button has been pressed. The button request should not be processed until released.
+   */
+  void buttonDown();
 
-    /**
-     * Finger pressing button has been dragged outside the button's bounds.
-     * Release button but do not process the button's request.
-     */
-    void buttonReleased();
+  /**
+   * Finger pressing button has been dragged outside the button's bounds. Release button but do not
+   * process the button's request.
+   */
+  void buttonReleased();
 }

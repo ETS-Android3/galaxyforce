@@ -1,11 +1,11 @@
 package com.danosoftware.galaxyforce.sprites.game.missiles.bases;
 
+import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenAnySide;
+
 import com.danosoftware.galaxyforce.enumerations.BaseMissileSpeed;
 import com.danosoftware.galaxyforce.models.screens.game.GameModel;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.view.Animation;
-
-import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenAnySide;
 
 /**
  * Guided missile that chases a chosen base.

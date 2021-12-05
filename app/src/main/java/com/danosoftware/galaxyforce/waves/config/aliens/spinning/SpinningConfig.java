@@ -6,14 +6,14 @@ import lombok.NonNull;
 @Getter
 public class SpinningConfig {
 
-    private final SpinningConfigType type;
+  private final SpinningConfigType type;
 
-    public SpinningConfig(
-            @NonNull SpinningConfigType type) {
-        this.type = type;
-    }
+  public SpinningConfig(
+      @NonNull SpinningConfigType type) {
+    this.type = type;
+  }
 
-    public enum SpinningConfigType {
-        FIXED_ANGULAR_ROTATION, SPEED_BASED_ANGULAR_ROTATION
-    }
+  public enum SpinningConfigType {
+    FIXED_ANGULAR_ROTATION, SPEED_BASED_ANGULAR_ROTATION, NO_SPINNING
+  }
 }

@@ -51,6 +51,7 @@ public enum AlienMissileCharacter {
 
     public SoundEffect getSound() {
         return sound;
-    }}
+    }
+}
 
 

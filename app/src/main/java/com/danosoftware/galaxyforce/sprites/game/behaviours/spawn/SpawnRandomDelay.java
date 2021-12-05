@@ -50,12 +50,12 @@ public class SpawnRandomDelay implements SpawnBehaviour {
     private final AlienFactory alienFactory;
 
     /**
-     * @param alienFactory     - factory to create aliens
+     * @param alienFactory            - factory to create aliens
      * @param powerUpAllocatorFactory - factory to create power-up allocators
-     * @param model            - model to receive aliens
-     * @param alienConfig      - config of alien to spawn
-     * @param minSpawnDelay    - minimum delay between spawns
-     * @param spawnDelayRandom - additional maximum random time before spawns
+     * @param model                   - model to receive aliens
+     * @param alienConfig             - config of alien to spawn
+     * @param minSpawnDelay           - minimum delay between spawns
+     * @param spawnDelayRandom        - additional maximum random time before spawns
      */
     SpawnRandomDelay(
             final AlienFactory alienFactory,

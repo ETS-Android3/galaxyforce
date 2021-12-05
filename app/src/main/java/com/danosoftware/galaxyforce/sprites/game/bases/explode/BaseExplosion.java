@@ -23,11 +23,11 @@ public class BaseExplosion extends AbstractSprite implements IBaseExplosion {
             SoundPlayerService sounds,
             VibrationService vibrator) {
         super(
-                ANIMATION.getKeyFrame(
+            ANIMATION.getKeyFrame(
                 0,
                 Animation.ANIMATION_LOOPING),
-                x,
-                y);
+            x,
+            y);
         this.exploder = new BaseExploderSimple(sounds, vibrator, ANIMATION);
     }
 

@@ -4,5 +4,5 @@ import com.android.billingclient.api.SkuDetails;
 
 public interface SkuDetailsListener {
 
-    void onSkuDetailsRetrieved(SkuDetails skuDetails);
+  void onSkuDetailsRetrieved(SkuDetails skuDetails);
 }

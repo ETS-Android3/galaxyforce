@@ -1,13 +1,13 @@
 package com.danosoftware.galaxyforce.sprites.game.missiles.bases;
 
+import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenTop;
+
 import com.danosoftware.galaxyforce.enumerations.BaseMissileSpeed;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.view.Animation;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenTop;
 
 /**
  * Laser missile that is not destroyed on contact with an alien.

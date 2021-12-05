@@ -1,31 +1,31 @@
 package com.danosoftware.galaxyforce.view;
 
 import android.opengl.GLSurfaceView;
-
 import javax.microedition.khronos.opengles.GL10;
 
 public class GLGraphics {
-    private final GLSurfaceView glView;
-    private GL10 gl = null;
 
-    public GLGraphics(GLSurfaceView glView) {
-        this.glView = glView;
-    }
+  private final GLSurfaceView glView;
+  private GL10 gl = null;
 
-    public GL10 getGl() {
-        return gl;
-    }
+  public GLGraphics(GLSurfaceView glView) {
+    this.glView = glView;
+  }
 
-    public void setGl(GL10 gl) {
-        this.gl = gl;
-    }
+  public GL10 getGl() {
+    return gl;
+  }
 
-    public int getWidth() {
-        return glView.getWidth();
-    }
+  public void setGl(GL10 gl) {
+    this.gl = gl;
+  }
 
-    public int getHeight() {
-        return glView.getHeight();
-    }
+  public int getWidth() {
+    return glView.getWidth();
+  }
+
+  public int getHeight() {
+    return glView.getHeight();
+  }
 
 }

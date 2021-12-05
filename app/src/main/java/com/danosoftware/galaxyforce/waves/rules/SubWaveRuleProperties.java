@@ -4,83 +4,84 @@ package com.danosoftware.galaxyforce.waves.rules;
  * Holds a set of properties that describe a sub-wave (without a path).
  */
 public class SubWaveRuleProperties {
-    // use random x position
-    private final boolean xRandom;
 
-    // use random y position
-    private final boolean yRandom;
+  // use random x position
+  private final boolean xRandom;
 
-    // use fixed x start position
-    private final int xStart;
+  // use random y position
+  private final boolean yRandom;
 
-    // use fixed y start position
-    private final int yStart;
+  // use fixed x start position
+  private final int xStart;
 
-    // total number of aliens in the sub-wave
-    private final int numberOfAliens;
+  // use fixed y start position
+  private final int yStart;
 
-    // timing delay between each adjacent alien
-    private final float delayBetweenAliens;
+  // total number of aliens in the sub-wave
+  private final int numberOfAliens;
 
-    // timing delay before sub-wave starts
-    private final float delayOffet;
+  // timing delay between each adjacent alien
+  private final float delayBetweenAliens;
 
-    // restart alien immediately when it reaches the end of it's path?
-    // alternatively will wait until entire in-progress subwave finishes
-    private final boolean restartImmediately;
+  // timing delay before sub-wave starts
+  private final float delayOffet;
 
-    /**
-     * Properties to help create a new alien sub-wave using a supplied positions
-     * (random or specified) and delays in seconds.
-     */
-    public SubWaveRuleProperties(
-            boolean xRandom,
-            boolean yRandom,
-            int xStart,
-            int yStart,
-            int numberOfAliens,
-            float delayBetweenAliens,
-            float delayOffet,
-            boolean restartImmediately) {
-        this.xRandom = xRandom;
-        this.yRandom = yRandom;
-        this.xStart = xStart;
-        this.yStart = yStart;
-        this.numberOfAliens = numberOfAliens;
-        this.delayBetweenAliens = delayBetweenAliens;
-        this.delayOffet = delayOffet;
-        this.restartImmediately = restartImmediately;
-    }
+  // restart alien immediately when it reaches the end of it's path?
+  // alternatively will wait until entire in-progress subwave finishes
+  private final boolean restartImmediately;
 
-    public boolean isxRandom() {
-        return xRandom;
-    }
+  /**
+   * Properties to help create a new alien sub-wave using a supplied positions (random or specified)
+   * and delays in seconds.
+   */
+  public SubWaveRuleProperties(
+      boolean xRandom,
+      boolean yRandom,
+      int xStart,
+      int yStart,
+      int numberOfAliens,
+      float delayBetweenAliens,
+      float delayOffet,
+      boolean restartImmediately) {
+    this.xRandom = xRandom;
+    this.yRandom = yRandom;
+    this.xStart = xStart;
+    this.yStart = yStart;
+    this.numberOfAliens = numberOfAliens;
+    this.delayBetweenAliens = delayBetweenAliens;
+    this.delayOffet = delayOffet;
+    this.restartImmediately = restartImmediately;
+  }
 
-    public boolean isyRandom() {
-        return yRandom;
-    }
+  public boolean isxRandom() {
+    return xRandom;
+  }
 
-    public int getxStart() {
-        return xStart;
-    }
+  public boolean isyRandom() {
+    return yRandom;
+  }
 
-    public int getyStart() {
-        return yStart;
-    }
+  public int getxStart() {
+    return xStart;
+  }
 
-    public int getNumberOfAliens() {
-        return numberOfAliens;
-    }
+  public int getyStart() {
+    return yStart;
+  }
 
-    public float getDelayBetweenAliens() {
-        return delayBetweenAliens;
-    }
+  public int getNumberOfAliens() {
+    return numberOfAliens;
+  }
 
-    public float getDelayOffet() {
-        return delayOffet;
-    }
+  public float getDelayBetweenAliens() {
+    return delayBetweenAliens;
+  }
 
-    public boolean isRestartImmediately() {
-        return restartImmediately;
-    }
+  public float getDelayOffet() {
+    return delayOffet;
+  }
+
+  public boolean isRestartImmediately() {
+    return restartImmediately;
+  }
 }

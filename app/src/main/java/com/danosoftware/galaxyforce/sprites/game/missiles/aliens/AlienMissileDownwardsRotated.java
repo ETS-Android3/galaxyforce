@@ -1,11 +1,11 @@
 package com.danosoftware.galaxyforce.sprites.game.missiles.aliens;
 
+import static com.danosoftware.galaxyforce.sprites.game.missiles.aliens.AlienMissileRotater.calculateAngle;
+import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenAnySide;
+
 import com.danosoftware.galaxyforce.enumerations.AlienMissileSpeed;
 import com.danosoftware.galaxyforce.sprites.game.bases.IBasePrimary;
 import com.danosoftware.galaxyforce.view.Animation;
-
-import static com.danosoftware.galaxyforce.sprites.game.missiles.aliens.AlienMissileRotater.calculateAngle;
-import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenAnySide;
 
 /**
  * Alien missile that targets the supplied base.
@@ -42,14 +42,14 @@ public class AlienMissileDownwardsRotated extends AbstractAlienMissile {
 
         // if missile is starting above base then calculate a direct angle to the base.
         final float angle;
-        if(this.y > base.y()) {
-            final AlienMissileRotateCalculation calculation = calculateAngle(this, base);
-            angle = calculation.getAngle();
-            rotate(calculation.getRotation());
-        } else {
-            // otherwise fire directly downwards
-            angle = DOWNWARDS;
-        }
+      if (this.y > base.y()) {
+        final AlienMissileRotateCalculation calculation = calculateAngle(this, base);
+        angle = calculation.getAngle();
+        rotate(calculation.getRotation());
+      } else {
+        // otherwise fire directly downwards
+        angle = DOWNWARDS;
+      }
 
         // calculate the deltas to be applied each move
         this.xDelta = (int) (missileSpeed.getSpeed() * (float) Math.cos(angle));

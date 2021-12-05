@@ -10,15 +10,15 @@ import com.danosoftware.galaxyforce.view.SpriteBatcher;
 
 public class Screen extends AbstractScreen {
 
-    public Screen(
-            Model model,
-            Controller controller,
-            TextureService textureService,
-            TextureMap textureMap,
-            GLGraphics glGraphics,
-            Camera2D camera,
-            SpriteBatcher batcher) {
+  public Screen(
+      Model model,
+      Controller controller,
+      TextureService textureService,
+      TextureMap textureMap,
+      GLGraphics glGraphics,
+      Camera2D camera,
+      SpriteBatcher batcher) {
 
-        super(model, controller, textureService, textureMap, glGraphics, camera, batcher);
-    }
+    super(model, controller, textureService, textureMap, glGraphics, camera, batcher);
+  }
 }

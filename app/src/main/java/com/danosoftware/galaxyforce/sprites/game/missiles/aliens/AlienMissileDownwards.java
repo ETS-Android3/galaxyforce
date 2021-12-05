@@ -1,9 +1,9 @@
 package com.danosoftware.galaxyforce.sprites.game.missiles.aliens;
 
+import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenBottom;
+
 import com.danosoftware.galaxyforce.enumerations.AlienMissileSpeed;
 import com.danosoftware.galaxyforce.view.Animation;
-
-import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenBottom;
 
 public class AlienMissileDownwards extends AbstractAlienMissile {
 

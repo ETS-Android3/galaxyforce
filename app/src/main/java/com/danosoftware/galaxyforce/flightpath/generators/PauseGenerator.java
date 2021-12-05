@@ -1,13 +1,12 @@
 package com.danosoftware.galaxyforce.flightpath.generators;
 
+import static com.danosoftware.galaxyforce.flightpath.utilities.PauseMathematics.createPausePath;
+import static com.danosoftware.galaxyforce.flightpath.utilities.PointMathematics.convertAndTranslatePoint;
+
 import com.danosoftware.galaxyforce.flightpath.dto.PausePathDTO;
 import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
 import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
-
 import java.util.List;
-
-import static com.danosoftware.galaxyforce.flightpath.utilities.PauseMathematics.createPausePath;
-import static com.danosoftware.galaxyforce.flightpath.utilities.PointMathematics.convertAndTranslatePoint;
 
 /**
  * Create pause path from provided control points.

@@ -70,9 +70,10 @@ public class AlienFactory {
         this.model = model;
         this.powerUpAllocatorFactory = powerUpAllocatorFactory;
         this.spawnFactory = new SpawnBehaviourFactory(model, this, powerUpAllocatorFactory);
-        this.explosionFactory = new ExplosionBehaviourFactory(model, this, spawnFactory, sounds, vibrator);
-        this.spinningFactory =  new SpinningBehaviourFactory();
-        this.powerUpFactory = new PowerUpBehaviourFactory(model);
+        this.explosionFactory = new ExplosionBehaviourFactory(model, this, spawnFactory, sounds,
+            vibrator);
+      this.spinningFactory = new SpinningBehaviourFactory();
+      this.powerUpFactory = new PowerUpBehaviourFactory(model);
         this.fireFactory = new FireBehaviourFactory(model);
         this.hitFactory = new HitBehaviourFactory(sounds, vibrator);
     }

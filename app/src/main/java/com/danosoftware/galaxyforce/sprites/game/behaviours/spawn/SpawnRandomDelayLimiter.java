@@ -65,13 +65,13 @@ public class SpawnRandomDelayLimiter implements SpawnBehaviour {
     private final AlienCharacter limitedCharacter;
 
     /**
-     * @param alienFactory     - factory to create aliens
+     * @param alienFactory            - factory to create aliens
      * @param powerUpAllocatorFactory - factory to create power-up allocators
-     * @param model            - model to receive aliens
-     * @param alienConfig      - config of alien to spawn
-     * @param minSpawnDelay    - minimum delay between spawns
-     * @param spawnDelayRandom - additional maximum random time before spawns
-     * @param maxActiveSpawnedAliens - max allowed active spawned aliens
+     * @param model                   - model to receive aliens
+     * @param alienConfig             - config of alien to spawn
+     * @param minSpawnDelay           - minimum delay between spawns
+     * @param spawnDelayRandom        - additional maximum random time before spawns
+     * @param maxActiveSpawnedAliens  - max allowed active spawned aliens
      */
     SpawnRandomDelayLimiter(
             final AlienFactory alienFactory,
@@ -138,14 +138,15 @@ public class SpawnRandomDelayLimiter implements SpawnBehaviour {
 
     // how many spawned aliens are still active
     private int countSpawnedAliens() {
-        int count = 0;
-        for (SpawnedAliensDto spawnedAliensDto: spawnedAliens) {
-            for (IAlien alien: spawnedAliensDto.getAliens()) {
-                if (alien.isActive() && (limitedCharacter == null || limitedCharacter == alien.character())) {
-                    count++;
-                }
-            }
+      int count = 0;
+      for (SpawnedAliensDto spawnedAliensDto : spawnedAliens) {
+        for (IAlien alien : spawnedAliensDto.getAliens()) {
+          if (alien.isActive() && (limitedCharacter == null || limitedCharacter == alien
+              .character())) {
+            count++;
+          }
         }
-        return count;
+      }
+      return count;
     }
 }

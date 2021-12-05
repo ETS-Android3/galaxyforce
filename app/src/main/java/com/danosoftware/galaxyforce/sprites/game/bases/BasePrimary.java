@@ -1,5 +1,17 @@
 package com.danosoftware.galaxyforce.sprites.game.bases;
 
+import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
+import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_BOTTOM;
+import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
+import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.ACTIVE;
+import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.DESTROYED;
+import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.EXPLODING;
+import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.LEFT;
+import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.RIGHT;
+import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.BASE;
+import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.BASE_LEFT;
+import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.BASE_RIGHT;
+
 import android.util.Log;
 
 import com.danosoftware.galaxyforce.enumerations.BaseMissileType;
@@ -30,18 +42,6 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
-import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_BOTTOM;
-import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
-import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.ACTIVE;
-import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.DESTROYED;
-import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.EXPLODING;
-import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.LEFT;
-import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.RIGHT;
-import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.BASE;
-import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.BASE_LEFT;
-import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.BASE_RIGHT;
 
 public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary {
 

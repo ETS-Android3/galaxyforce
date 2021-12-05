@@ -8,7 +8,6 @@ import com.danosoftware.galaxyforce.waves.config.aliens.exploding.ExplosionConfi
 import com.danosoftware.galaxyforce.waves.config.aliens.missiles.MissileConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawnConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningConfig;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -16,28 +15,28 @@ import lombok.NonNull;
 @Getter
 public class DirectionalResettableConfig extends BasicAlienConfig {
 
-    private final AlienSpeed speed;
-    private final Float angle;
+  private final AlienSpeed speed;
+  private final Float angle;
 
-    @Builder
-    public DirectionalResettableConfig(
-            @NonNull final AlienCharacter alienCharacter,
-            @NonNull final Integer energy,
-            final MissileConfig missileConfig,
-            final SpawnConfig spawnConfig,
-            final SpinningConfig spinningConfig,
-            final ExplosionConfig explosionConfig,
-            @NonNull final AlienSpeed speed,
-            @NonNull final Float angle) {
-        super(
-                AlienType.DIRECTIONAL_RESETTABLE,
-                alienCharacter,
-                energy,
-                missileConfig,
-                spawnConfig,
-                spinningConfig,
-                explosionConfig);
-        this.speed = speed;
-        this.angle = angle;
-    }
+  @Builder
+  public DirectionalResettableConfig(
+      @NonNull final AlienCharacter alienCharacter,
+      @NonNull final Integer energy,
+      final MissileConfig missileConfig,
+      final SpawnConfig spawnConfig,
+      final SpinningConfig spinningConfig,
+      final ExplosionConfig explosionConfig,
+      @NonNull final AlienSpeed speed,
+      @NonNull final Float angle) {
+    super(
+        AlienType.DIRECTIONAL_RESETTABLE,
+        alienCharacter,
+        energy,
+        missileConfig,
+        spawnConfig,
+        spinningConfig,
+        explosionConfig);
+    this.speed = speed;
+    this.angle = angle;
+  }
 }

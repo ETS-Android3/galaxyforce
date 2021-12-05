@@ -1,23 +1,23 @@
 package com.danosoftware.galaxyforce.flightpath.translators;
 
-import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
-
-import org.junit.Test;
-
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
+
+import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
+
+import org.junit.Test;
 
 /**
  * Checks that a chain of point translators correctly converts an example point
  */
 public class TranslatorChainTest {
 
-    @Test
-    public void translateTest() {
+  @Test
+  public void translateTest() {
 
-        DoublePoint point = new DoublePoint(10, 20);
+    DoublePoint point = new DoublePoint(10, 20);
 
         // build up a chain of translators
         PointTranslatorChain translatorChain = new PointTranslatorChain()

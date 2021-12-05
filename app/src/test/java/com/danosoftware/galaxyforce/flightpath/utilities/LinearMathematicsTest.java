@@ -1,24 +1,24 @@
 package com.danosoftware.galaxyforce.flightpath.utilities;
 
+import static com.danosoftware.galaxyforce.flightpath.utilities.LinearMathematics.createLinearPath;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
 
 import org.junit.Test;
 
 import java.util.List;
 
-import static com.danosoftware.galaxyforce.flightpath.utilities.LinearMathematics.createLinearPath;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-
 /**
  * Test Linear Mathematics Utility
  */
 public class LinearMathematicsTest {
 
-    @Test
-    public void shouldCalculateLinearPath() {
+  @Test
+  public void shouldCalculateLinearPath() {
 
-        // create linear control points
+    // create linear control points
         final int pathPoints = 100;
         final DoublePoint start = new DoublePoint(10, 20);
         final DoublePoint finish = new DoublePoint(30, 40);

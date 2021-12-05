@@ -1,5 +1,12 @@
 package com.danosoftware.galaxyforce.sprites.game.aliens.implementations;
 
+import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
+import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
+import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenBottom;
+import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenLeft;
+import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenRight;
+import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenTop;
+
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.sprites.game.aliens.AbstractAlien;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.explode.ExplosionBehaviourFactory;
@@ -9,16 +16,8 @@ import com.danosoftware.galaxyforce.sprites.game.behaviours.powerup.PowerUpBehav
 import com.danosoftware.galaxyforce.sprites.game.behaviours.spawn.SpawnBehaviourFactory;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.spinner.SpinningBehaviourFactory;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.DriftingConfig;
-
 import lombok.Builder;
 import lombok.NonNull;
-
-import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
-import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
-import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenBottom;
-import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenLeft;
-import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenRight;
-import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenTop;
 
 /**
  * Alien that drifts from starting position across the screen.

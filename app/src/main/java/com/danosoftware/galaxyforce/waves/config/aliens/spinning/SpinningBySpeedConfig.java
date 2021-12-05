@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 public class SpinningBySpeedConfig extends SpinningConfig {
 
-    @Builder
-    public SpinningBySpeedConfig() {
-        super(SpinningConfigType.SPEED_BASED_ANGULAR_ROTATION);
-    }
+  @Builder
+  public SpinningBySpeedConfig() {
+    super(SpinningConfigType.SPEED_BASED_ANGULAR_ROTATION);
+  }
 }

@@ -6,7 +6,6 @@ import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.missiles.bases.IBaseMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
 import com.danosoftware.galaxyforce.sprites.game.starfield.Star;
-
 import java.util.List;
 
 /**
@@ -14,29 +13,29 @@ import java.util.List;
  */
 public interface IGamePlayAssetsManager {
 
-    void animate(float deltaTime);
+  void animate(float deltaTime);
 
-    void setLevelFlags(int wave);
+  void setLevelFlags(int wave);
 
-    void setLives(int lives);
+  void addPowerUp(PowerUpsDto powerUp);
 
-    void addPowerUp(PowerUpsDto powerUp);
+  void fireBaseMissiles(BaseMissilesDto missiles);
 
-    void fireBaseMissiles(BaseMissilesDto missiles);
+  void fireAlienMissiles(AlienMissilesDto missiles);
 
-    void fireAlienMissiles(AlienMissilesDto missiles);
+  List<IAlienMissile> getAliensMissiles();
 
-    List<IAlienMissile> getAliensMissiles();
+  List<IBaseMissile> getBaseMissiles();
 
-    List<IBaseMissile> getBaseMissiles();
+  List<IPowerUp> getPowerUps();
 
-    List<IPowerUp> getPowerUps();
+  List<Star> getStars();
 
-    List<Star> getStars();
+  List<Flag> getFlags();
 
-    List<Flag> getFlags();
+  List<Life> getLives();
 
-    List<Life> getLives();
+  void setLives(int lives);
 
-    boolean alienMissilesDestroyed();
+  boolean alienMissilesDestroyed();
 }

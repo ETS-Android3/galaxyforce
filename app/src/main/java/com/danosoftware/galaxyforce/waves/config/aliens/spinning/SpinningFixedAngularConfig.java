@@ -7,13 +7,13 @@ import lombok.NonNull;
 @Getter
 public class SpinningFixedAngularConfig extends SpinningConfig {
 
-    // fixed spinning angular speed
-    private final int angularSpeed;
+  // fixed spinning angular speed
+  private final int angularSpeed;
 
-    @Builder
-    public SpinningFixedAngularConfig(
-            @NonNull Integer angularSpeed) {
-        super(SpinningConfigType.FIXED_ANGULAR_ROTATION);
-        this.angularSpeed = angularSpeed;
-    }
+  @Builder
+  public SpinningFixedAngularConfig(
+      @NonNull Integer angularSpeed) {
+    super(SpinningConfigType.FIXED_ANGULAR_ROTATION);
+    this.angularSpeed = angularSpeed;
+  }
 }

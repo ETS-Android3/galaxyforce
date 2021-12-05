@@ -1,12 +1,11 @@
 package com.danosoftware.galaxyforce.flightpath.utilities;
 
-import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.danosoftware.galaxyforce.flightpath.utilities.PointMathematics.addition;
 import static com.danosoftware.galaxyforce.flightpath.utilities.PointMathematics.multiply;
+
+import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Bezier Mathematics Utilities
@@ -49,10 +48,10 @@ public final class BezierMathematics {
      * @return current point on bezier curve
      */
     private static DoublePoint calculateBezierPoint(final DoublePoint start,
-                                              final DoublePoint startControl,
-                                              final DoublePoint finish,
-                                              final DoublePoint finishControl,
-                                              double t) {
+        final DoublePoint startControl,
+        final DoublePoint finish,
+        final DoublePoint finishControl,
+        double t) {
         double u = 1 - t;
         double tt = t * t;
         double uu = u * u;

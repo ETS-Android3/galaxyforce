@@ -19,12 +19,14 @@ public interface SavedGame {
 
     /**
      * Register an observer for highest level unlocked changes
+     *
      * @param observer
      */
     void registerHighestLevelChangeObserver(HighestLevelChangeObserver observer);
 
     /**
      * Unregister an observer for highest level unlocked changes
+     *
      * @param observer
      */
     void unregisterHighestLevelChangeObserver(HighestLevelChangeObserver observer);

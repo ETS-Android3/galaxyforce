@@ -1,12 +1,13 @@
 package com.danosoftware.galaxyforce.services.googleplay;
 
+import static com.danosoftware.galaxyforce.constants.GameConstants.RC_SIGN_IN;
+import static com.danosoftware.galaxyforce.constants.GameConstants.SAVED_GAME_FILENAME;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
 import android.util.Log;
-
 import androidx.annotation.NonNull;
-
 import com.danosoftware.galaxyforce.R;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
 import com.danosoftware.galaxyforce.options.OptionGooglePlay;
@@ -35,13 +36,9 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
 import com.google.android.gms.tasks.Tasks;
 import com.google.api.services.drive.DriveScopes;
-
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
-
-import static com.danosoftware.galaxyforce.constants.GameConstants.RC_SIGN_IN;
-import static com.danosoftware.galaxyforce.constants.GameConstants.SAVED_GAME_FILENAME;
 
 /**
  * Services responsible for connecting to Google Play Services and
@@ -352,10 +349,10 @@ public class GooglePlayServices {
     }
 
     /**
-     * Asynchronously load latest snapshot and resolve conflicts.
-     * Then asynchronously overwrite snapshot with current game progress
+     * Asynchronously load latest snapshot and resolve conflicts. Then asynchronously overwrite
+     * snapshot with current game progress
      *
-     * @param account   - player's account
+     * @param account    - player's account
      * @param gameToSave - latest game progress to save
      */
     private void saveSnapshotAsync(

@@ -1,4 +1,3 @@
-
 /**
  * The first line in the build configuration applies the Android plugin for
  * Gradle to this build and makes the android block available to specify
@@ -24,7 +23,7 @@ android {
      * We do not include "release" signing configs as release builds are normally
      * built from Android Studio, where key details must be supplied manually.
      */
-    if(project.hasProperty("KEYSTORE_FILE")) {
+    if (project.hasProperty("KEYSTORE_FILE")) {
         signingConfigs {
             debug {
                 storeFile file("$KEYSTORE_FILE")

@@ -1,5 +1,7 @@
 package com.danosoftware.galaxyforce.sprites.game.aliens.implementations;
 
+import static com.danosoftware.galaxyforce.utilities.OffScreenTester.isTravellingOffScreen;
+
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.sprites.game.aliens.AbstractResettableAlien;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.explode.ExplosionBehaviourFactory;
@@ -9,11 +11,8 @@ import com.danosoftware.galaxyforce.sprites.game.behaviours.powerup.PowerUpBehav
 import com.danosoftware.galaxyforce.sprites.game.behaviours.spawn.SpawnBehaviourFactory;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.spinner.SpinningBehaviourFactory;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.DirectionalResettableConfig;
-
 import lombok.Builder;
 import lombok.NonNull;
-
-import static com.danosoftware.galaxyforce.utilities.OffScreenTester.isTravellingOffScreen;
 
 /**
  * Alien that moves from starting position across the screen in a

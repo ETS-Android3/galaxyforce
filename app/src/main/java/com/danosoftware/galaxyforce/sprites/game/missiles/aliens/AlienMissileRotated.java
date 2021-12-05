@@ -1,12 +1,12 @@
 package com.danosoftware.galaxyforce.sprites.game.missiles.aliens;
 
-import com.danosoftware.galaxyforce.enumerations.AlienMissileSpeed;
-import com.danosoftware.galaxyforce.sprites.game.bases.IBasePrimary;
-import com.danosoftware.galaxyforce.view.Animation;
-
 import static com.danosoftware.galaxyforce.sprites.game.missiles.aliens.AlienMissileRotater.calculateAngle;
 import static com.danosoftware.galaxyforce.sprites.game.missiles.aliens.AlienMissileRotater.calculateRotation;
 import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenAnySide;
+
+import com.danosoftware.galaxyforce.enumerations.AlienMissileSpeed;
+import com.danosoftware.galaxyforce.sprites.game.bases.IBasePrimary;
+import com.danosoftware.galaxyforce.view.Animation;
 
 /**
  * Alien missile that targets the supplied base.

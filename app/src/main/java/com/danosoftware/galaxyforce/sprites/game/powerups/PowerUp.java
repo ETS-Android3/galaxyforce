@@ -1,10 +1,10 @@
 package com.danosoftware.galaxyforce.sprites.game.powerups;
 
+import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenBottom;
+
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.sprites.common.AbstractCollidingSprite;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
-
-import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenBottom;
 
 public class PowerUp extends AbstractCollidingSprite implements IPowerUp {
 

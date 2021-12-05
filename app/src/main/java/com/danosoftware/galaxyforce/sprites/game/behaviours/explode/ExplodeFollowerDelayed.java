@@ -11,12 +11,11 @@ import com.danosoftware.galaxyforce.view.Animation;
 import com.danosoftware.galaxyforce.waves.AlienCharacter;
 
 /**
- * Implementation of explosion behaviour that triggers explosion
- * after a set delay time. Alien will appear frozen until that point.
- *
- * Used for followers. When directly hit, they explode normally.
- * When exploded as a follower, they explode after a set delay
- * so they are in-sync with the head followable alien.
+ * Implementation of explosion behaviour that triggers explosion after a set delay time. Alien will
+ * appear frozen until that point.
+ * <p>
+ * Used for followers. When directly hit, they explode normally. When exploded as a follower, they
+ * explode after a set delay so they are in-sync with the head followable alien.
  */
 public class ExplodeFollowerDelayed implements ExplodeBehaviour {
 

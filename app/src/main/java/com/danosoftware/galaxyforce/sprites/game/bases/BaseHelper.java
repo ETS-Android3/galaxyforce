@@ -1,5 +1,11 @@
 package com.danosoftware.galaxyforce.sprites.game.bases;
 
+import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.ACTIVE;
+import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.DESTROYED;
+import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.EXPLODING;
+import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.LEFT;
+import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.HELPER;
+
 import com.danosoftware.galaxyforce.enumerations.BaseMissileType;
 import com.danosoftware.galaxyforce.models.assets.BaseMissilesDto;
 import com.danosoftware.galaxyforce.models.screens.game.GameModel;
@@ -20,12 +26,6 @@ import com.danosoftware.galaxyforce.view.Animation;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.ACTIVE;
-import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.DESTROYED;
-import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.EXPLODING;
-import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.LEFT;
-import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.HELPER;
 
 /**
  * Base Helper that moves alongside the Primary Base

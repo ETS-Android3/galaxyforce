@@ -1,6 +1,5 @@
 # Galaxy Force
 
-
 ## Sounds
 
 This folder contains all the assets required for sound effects.
@@ -9,7 +8,8 @@ This folder contains all the assets required for sound effects.
 
 ### Creating Sounds
 
-The sound effects have been created in a tool called [Lab Chirp](http://labbed.net/software/labchirp/).
+The sound effects have been created in a tool
+called [Lab Chirp](http://labbed.net/software/labchirp/).
 
 The original Lab Chirp files have been included in this directory as `.lch` files.
 
