@@ -1,9 +1,9 @@
 package com.danosoftware.galaxyforce.sprites.game.splash;
 
+import static com.danosoftware.galaxyforce.constants.GameConstants.PLANET_Y_POS;
+
 import com.danosoftware.galaxyforce.sprites.common.AbstractMovingSprite;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
-
-import static com.danosoftware.galaxyforce.constants.GameConstants.PLANET_Y_POS;
 
 public class PlanetMovingSprite extends AbstractMovingSprite {
 

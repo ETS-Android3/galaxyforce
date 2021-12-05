@@ -1,5 +1,14 @@
 package com.danosoftware.galaxyforce.flightpath.paths;
 
+import static com.danosoftware.galaxyforce.helpers.AssetHelpers.pathAsset;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.when;
+
 import android.util.Log;
 
 import com.danosoftware.galaxyforce.flightpath.dto.PathListDTO;
@@ -18,15 +27,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-
-import static com.danosoftware.galaxyforce.helpers.AssetHelpers.pathAsset;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.when;
 
 /**
  * Test that checks all the paths create a list of points representing their paths.

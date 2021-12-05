@@ -1,7 +1,8 @@
 package com.danosoftware.galaxyforce.sprites.game.factories;
 
-import android.util.Log;
+import static com.danosoftware.galaxyforce.waves.utilities.Randomiser.random;
 
+import android.util.Log;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
@@ -44,7 +45,6 @@ import com.danosoftware.galaxyforce.waves.config.aliens.types.StaticConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.StaticExplosionConfig;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocator;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocatorFactory;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -70,9 +70,10 @@ public class AlienFactory {
         this.model = model;
         this.powerUpAllocatorFactory = powerUpAllocatorFactory;
         this.spawnFactory = new SpawnBehaviourFactory(model, this, powerUpAllocatorFactory);
-        this.explosionFactory = new ExplosionBehaviourFactory(model, this, spawnFactory, sounds, vibrator);
-        this.spinningFactory =  new SpinningBehaviourFactory();
-        this.powerUpFactory = new PowerUpBehaviourFactory(model);
+        this.explosionFactory = new ExplosionBehaviourFactory(model, this, spawnFactory, sounds,
+            vibrator);
+      this.spinningFactory = new SpinningBehaviourFactory();
+      this.powerUpFactory = new PowerUpBehaviourFactory(model);
         this.fireFactory = new FireBehaviourFactory(model);
         this.hitFactory = new HitBehaviourFactory(sounds, vibrator);
     }
@@ -147,7 +148,7 @@ public class AlienFactory {
              * edge where it may be impossible to hit. ensure min 32 pixels from
              * screen edges
              */
-            xStartPos = 32 + (int) (Math.random() * (GameConstants.GAME_WIDTH - 64));
+            xStartPos = 32 + (int) (random() * (GameConstants.GAME_WIDTH - 64));
         } else {
             xStartPos = xStart;
         }
@@ -160,7 +161,7 @@ public class AlienFactory {
              * edge where it may be impossible to hit. ensure min 32 pixels from
              * screen edges
              */
-            yStartPos = 32 + (int) (Math.random() * (GameConstants.GAME_HEIGHT - 64));
+            yStartPos = 32 + (int) (random() * (GameConstants.GAME_HEIGHT - 64));
         } else {
             yStartPos = yStart;
         }

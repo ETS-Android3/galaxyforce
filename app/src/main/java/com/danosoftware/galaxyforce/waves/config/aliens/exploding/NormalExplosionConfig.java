@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 public class NormalExplosionConfig extends ExplosionConfig {
 
-    @Builder
-    public NormalExplosionConfig() {
-        super(ExplosionConfigType.NORMAL);
-    }
+  @Builder
+  public NormalExplosionConfig() {
+    super(ExplosionConfigType.NORMAL);
+  }
 }

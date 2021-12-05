@@ -1,24 +1,24 @@
 package com.danosoftware.galaxyforce.flightpath.utilities;
 
+import static com.danosoftware.galaxyforce.flightpath.utilities.PauseMathematics.createPausePath;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.hamcrest.core.IsEqual.equalTo;
+
 import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
 
 import org.junit.Test;
 
 import java.util.List;
 
-import static com.danosoftware.galaxyforce.flightpath.utilities.PauseMathematics.createPausePath;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.hamcrest.core.IsEqual.equalTo;
-
 /**
  * Test Pause Mathematics Utility
  */
 public class PauseMathematicsTest {
 
-    @Test
-    public void shouldCalculatePausePath() {
+  @Test
+  public void shouldCalculatePausePath() {
 
-        // create pause control points
+    // create pause control points
         final float pauseTimeInSeconds = 0.5f;
         final DoublePoint pausePosition = new DoublePoint(10, 20);
 

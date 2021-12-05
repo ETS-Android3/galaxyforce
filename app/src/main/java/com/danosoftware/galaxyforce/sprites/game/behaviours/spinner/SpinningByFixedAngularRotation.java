@@ -1,5 +1,7 @@
 package com.danosoftware.galaxyforce.sprites.game.behaviours.spinner;
 
+import static com.danosoftware.galaxyforce.waves.utilities.Randomiser.random;
+
 import com.danosoftware.galaxyforce.enumerations.AlienSpeed;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 
@@ -30,7 +32,7 @@ public class SpinningByFixedAngularRotation implements SpinningBehaviour {
     public SpinningByFixedAngularRotation(final int angularSpeed) {
 
         // set random starting rotation angle
-        this.angle = (float) (Math.random() * 360);
+        this.angle = (float) (random() * 360);
         this.anglularSpeed = angularSpeed;
     }
 

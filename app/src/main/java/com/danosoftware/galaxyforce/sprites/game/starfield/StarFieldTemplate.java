@@ -1,5 +1,7 @@
 package com.danosoftware.galaxyforce.sprites.game.starfield;
 
+import static com.danosoftware.galaxyforce.waves.utilities.Randomiser.random;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -88,19 +90,19 @@ public class StarFieldTemplate {
         List<StarTemplate> stars = new ArrayList<>();
 
         for (int i = 0; i < MAX_STARS; i++) {
-            int x = (int) (width * Math.random());
-            int y = (int) (height * Math.random());
+            int x = (int) (width * random());
+            int y = (int) (height * random());
 
             int animationIndex = getRandomAnimationIndex();
             float animationStateTime = getRandomAnimationStartTime();
             StarSpeed speed = getSpeedRandom();
 
             stars.add(new StarTemplate(
-                    x,
-                    y,
-                    animationIndex,
-                    animationStateTime,
-                    speed));
+                x,
+                y,
+                animationIndex,
+                animationStateTime,
+                speed));
         }
 
         return stars;

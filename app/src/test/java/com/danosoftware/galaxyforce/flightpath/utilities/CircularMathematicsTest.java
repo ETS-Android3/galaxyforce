@@ -1,15 +1,15 @@
 package com.danosoftware.galaxyforce.flightpath.utilities;
 
+import static com.danosoftware.galaxyforce.flightpath.utilities.CircularMathematics.createCircularPath;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+
 import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
 import com.danosoftware.galaxyforce.flightpath.paths.PathSpeed;
 
 import org.junit.Test;
 
 import java.util.List;
-
-import static com.danosoftware.galaxyforce.flightpath.utilities.CircularMathematics.createCircularPath;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
 
 /**
  * Test Circular Mathematics Utility

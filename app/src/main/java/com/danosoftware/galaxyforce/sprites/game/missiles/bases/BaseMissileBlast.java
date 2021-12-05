@@ -1,9 +1,9 @@
 package com.danosoftware.galaxyforce.sprites.game.missiles.bases;
 
+import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenAnySide;
+
 import com.danosoftware.galaxyforce.enumerations.BaseMissileSpeed;
 import com.danosoftware.galaxyforce.view.Animation;
-
-import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenAnySide;
 
 /**
  * Single missile of a blast. Missiles fires in a fixed direction.

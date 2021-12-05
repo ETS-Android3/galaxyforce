@@ -1,5 +1,7 @@
 package com.danosoftware.galaxyforce.sprites.game.behaviours.fire;
 
+import static com.danosoftware.galaxyforce.waves.utilities.Randomiser.randomFloat;
+
 import com.danosoftware.galaxyforce.enumerations.AlienMissileCharacter;
 import com.danosoftware.galaxyforce.enumerations.AlienMissileSpeed;
 import com.danosoftware.galaxyforce.enumerations.AlienMissileType;
@@ -45,7 +47,7 @@ public class FireCyclicWithRandomStart implements FireBehaviour {
 
         // randomise time until alien can fire.
         // between 0 to missileFireFrequency.
-        this.timeUntilNextFire = missileFireFrequency * (float) Math.random();
+        this.timeUntilNextFire = missileFireFrequency * randomFloat();
     }
 
     @Override

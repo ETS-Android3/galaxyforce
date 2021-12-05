@@ -1,14 +1,13 @@
 package com.danosoftware.galaxyforce.flightpath.generators;
 
+import static com.danosoftware.galaxyforce.flightpath.utilities.CircularMathematics.createCircularPath;
+import static com.danosoftware.galaxyforce.flightpath.utilities.PointMathematics.convertAndTranslatePoint;
+
 import com.danosoftware.galaxyforce.flightpath.dto.CircularPathDTO;
 import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
 import com.danosoftware.galaxyforce.flightpath.paths.PathSpeed;
 import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
-
 import java.util.List;
-
-import static com.danosoftware.galaxyforce.flightpath.utilities.CircularMathematics.createCircularPath;
-import static com.danosoftware.galaxyforce.flightpath.utilities.PointMathematics.convertAndTranslatePoint;
 
 /**
  * Create circular path from provided control points

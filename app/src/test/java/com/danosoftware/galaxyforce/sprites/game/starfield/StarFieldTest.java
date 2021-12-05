@@ -1,20 +1,20 @@
 package com.danosoftware.galaxyforce.sprites.game.starfield;
 
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.junit.Assert.assertThat;
+
 import org.junit.Test;
 
 import java.util.List;
 
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.junit.Assert.assertThat;
-
 public class StarFieldTest {
 
-    @Test
-    public void shouldIncreaseElapsedTime() {
+  @Test
+  public void shouldIncreaseElapsedTime() {
 
-        StarFieldTemplate starFieldTemplate = new StarFieldTemplate(100, 100);
-        float initialElapsedTime = starFieldTemplate.getTimeElapsed();
-        assertThat(initialElapsedTime, equalTo(0f));
+    StarFieldTemplate starFieldTemplate = new StarFieldTemplate(100, 100);
+    float initialElapsedTime = starFieldTemplate.getTimeElapsed();
+    assertThat(initialElapsedTime, equalTo(0f));
 
         StarField starField = new StarField(starFieldTemplate, StarAnimationType.GAME);
         starField.animate(100f);

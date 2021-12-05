@@ -4,7 +4,6 @@ import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.waves.config.aliens.AlienConfig;
 import com.danosoftware.galaxyforce.waves.rules.SubWaveRule;
 import com.danosoftware.galaxyforce.waves.rules.SubWaveRuleProperties;
-
 import java.util.List;
 
 /**
@@ -12,28 +11,28 @@ import java.util.List;
  */
 public class SubWaveNoPathConfig extends SubWaveConfig {
 
-    // list of properties for a sub-wave
-    private final List<SubWaveRuleProperties> subWaveRuleProperties;
+  // list of properties for a sub-wave
+  private final List<SubWaveRuleProperties> subWaveRuleProperties;
 
-    public SubWaveNoPathConfig(
-            final SubWaveRule subWaveRule,
-            final AlienConfig alienConfig,
-            final List<PowerUpType> powerUps) {
+  public SubWaveNoPathConfig(
+      final SubWaveRule subWaveRule,
+      final AlienConfig alienConfig,
+      final List<PowerUpType> powerUps) {
 
-        super(Type.NO_PATH, alienConfig, powerUps);
-        this.subWaveRuleProperties = subWaveRule.subWaveProps();
-    }
+    super(Type.NO_PATH, alienConfig, powerUps);
+    this.subWaveRuleProperties = subWaveRule.subWaveProps();
+  }
 
-    public SubWaveNoPathConfig(
-            final List<SubWaveRuleProperties> subWaveRuleProperties,
-            final AlienConfig alienConfig,
-            final List<PowerUpType> powerUps) {
+  public SubWaveNoPathConfig(
+      final List<SubWaveRuleProperties> subWaveRuleProperties,
+      final AlienConfig alienConfig,
+      final List<PowerUpType> powerUps) {
 
-        super(Type.NO_PATH, alienConfig, powerUps);
-        this.subWaveRuleProperties = subWaveRuleProperties;
-    }
+    super(Type.NO_PATH, alienConfig, powerUps);
+    this.subWaveRuleProperties = subWaveRuleProperties;
+  }
 
-    public List<SubWaveRuleProperties> getSubWaveRuleProperties() {
-        return subWaveRuleProperties;
-    }
+  public List<SubWaveRuleProperties> getSubWaveRuleProperties() {
+    return subWaveRuleProperties;
+  }
 }

@@ -1,5 +1,11 @@
 package com.danosoftware.galaxyforce;
 
+import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_ALPHA;
+import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_BLUE;
+import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_GREEN;
+import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_RED;
+import static com.danosoftware.galaxyforce.constants.GameConstants.RC_SIGN_IN;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.opengl.GLSurfaceView;
@@ -31,12 +37,6 @@ import com.google.android.gms.tasks.Task;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-
-import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_ALPHA;
-import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_BLUE;
-import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_GREEN;
-import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_RED;
-import static com.danosoftware.galaxyforce.constants.GameConstants.RC_SIGN_IN;
 
 public class MainActivity extends Activity {
 

@@ -5,9 +5,9 @@ package com.danosoftware.galaxyforce.waves.config;
  */
 public enum SubWaveRepeatMode {
 
-    // repeat the subwave until all aliens are destroyed
-    REPEAT_UNTIL_DESTROYED,
+  // repeat the subwave until all aliens are destroyed
+  REPEAT_UNTIL_DESTROYED,
 
-    // do not repeat the subwave once path is completed.
-    SINGLE_PASS
+  // do not repeat the subwave once path is completed.
+  SINGLE_PASS
 }

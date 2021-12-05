@@ -33,12 +33,10 @@ public class Star extends AbstractMovingSprite {
     }
 
     /**
-     * Update animation for star.
-     * Position changes are more efficiently handled by star-field.
-     *
-     * NOTE: deltaTime represents total time since the initial star-field
-     * was created (not time since the last update). Helps seamless star-field
-     * animation when switching screens.
+     * Update animation for star. Position changes are more efficiently handled by star-field.
+     * <p>
+     * NOTE: deltaTime represents total time since the initial star-field was created (not time since
+     * the last update). Helps seamless star-field animation when switching screens.
      *
      * @param deltaTime - total time since initial star-field was first created
      */

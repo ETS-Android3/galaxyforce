@@ -1,5 +1,7 @@
 package com.danosoftware.galaxyforce.sprites.game.aliens;
 
+import static com.danosoftware.galaxyforce.sprites.game.aliens.enums.AlienState.EXPLODING;
+
 import com.danosoftware.galaxyforce.sprites.game.behaviours.explode.ExplodeBehaviour;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.fire.FireBehaviour;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.hit.HitBehaviour;
@@ -8,8 +10,6 @@ import com.danosoftware.galaxyforce.sprites.game.behaviours.spawn.SpawnBehaviour
 import com.danosoftware.galaxyforce.sprites.game.behaviours.spinner.SpinningBehaviour;
 import com.danosoftware.galaxyforce.view.Animation;
 import com.danosoftware.galaxyforce.waves.AlienCharacter;
-
-import static com.danosoftware.galaxyforce.sprites.game.aliens.enums.AlienState.EXPLODING;
 
 public class AbstractAlienFollower extends AbstractAlien implements IAlienFollower {
     /*

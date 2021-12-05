@@ -1,12 +1,5 @@
 package com.danosoftware.galaxyforce.sprites.common;
 
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteProperties;
-import com.danosoftware.galaxyforce.utilities.Rectangle;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -14,14 +7,21 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.ISpriteProperties;
+import com.danosoftware.galaxyforce.utilities.Rectangle;
+
+import org.junit.Before;
+import org.junit.Test;
+
 public class AbstractCollidingSpriteTest {
 
-    private static final int HEIGHT = 24;
-    private static final int WIDTH = 32;
-    private static final int HALF_HEIGHT = HEIGHT / 2;
-    private static final int HALF_WIDTH = WIDTH / 2;
-    private static final int X = 100;
-    private static final int Y = 200;
+  private static final int HEIGHT = 24;
+  private static final int WIDTH = 32;
+  private static final int HALF_HEIGHT = HEIGHT / 2;
+  private static final int HALF_WIDTH = WIDTH / 2;
+  private static final int X = 100;
+  private static final int Y = 200;
 
     private static final Rectangle EXPECTED_EMPTY_BOUNDS = new Rectangle(X, Y, 0, 0);
     private static final Rectangle EXPECTED_BOUNDS = new Rectangle(X - HALF_WIDTH, Y - HALF_HEIGHT, WIDTH, HEIGHT);

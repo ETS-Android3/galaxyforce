@@ -1,20 +1,20 @@
 package com.danosoftware.galaxyforce.utilities;
 
-import com.danosoftware.galaxyforce.sprites.game.bases.IBasePrimary;
-import com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseLean;
-
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
 import static java.lang.Math.abs;
 
+import com.danosoftware.galaxyforce.sprites.game.bases.IBasePrimary;
+import com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseLean;
+
 /**
- * Helper class that moves the base around the screen and changes sprites depending
- * on speed of turning.
+ * Helper class that moves the base around the screen and changes sprites depending on speed of
+ * turning.
  * <p>
  * For instance a sharp right turn, changes the base sprite to a banked right turn.
  * <p>
- * Instances of this class reference a specific base so a new instance must be created
- * every time a new base is created.
+ * Instances of this class reference a specific base so a new instance must be created every time a
+ * new base is created.
  */
 public class MoveBaseHelper {
 
@@ -193,17 +193,15 @@ public class MoveBaseHelper {
         int y = base.y() + (int) (maxDistanceMoved * weightingY);
 
         // has base reached launch target
-        if (abs(base.y() - BASE_START_Y) <= BASE_MOVE_RADIUS_LARGE
-                || base.y() >= BASE_START_Y) {
-            base.move(SCREEN_MID_X, BASE_START_Y);
-            isLaunching = false;
-        }
-        else {
-            // move base to new position
-            base.move(x, y);
-        }
+      if (abs(base.y() - BASE_START_Y) <= BASE_MOVE_RADIUS_LARGE
+          || base.y() >= BASE_START_Y) {
+        base.move(SCREEN_MID_X, BASE_START_Y);
+        isLaunching = false;
+      } else {
+        // move base to new position
+        base.move(x, y);
+      }
     }
-
 
 
     private void updateWeighting(float deltaX, float deltaY) {

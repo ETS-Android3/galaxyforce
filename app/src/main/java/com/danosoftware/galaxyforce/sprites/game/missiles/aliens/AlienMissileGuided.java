@@ -1,12 +1,12 @@
 package com.danosoftware.galaxyforce.sprites.game.missiles.aliens;
 
-import com.danosoftware.galaxyforce.enumerations.AlienMissileSpeed;
-import com.danosoftware.galaxyforce.sprites.game.bases.IBasePrimary;
-import com.danosoftware.galaxyforce.view.Animation;
-
 import static com.danosoftware.galaxyforce.sprites.game.missiles.aliens.AlienMissileRotater.calculateAngle;
 import static com.danosoftware.galaxyforce.sprites.game.missiles.aliens.AlienMissileRotater.calculateRotation;
 import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenAnySide;
+
+import com.danosoftware.galaxyforce.enumerations.AlienMissileSpeed;
+import com.danosoftware.galaxyforce.sprites.game.bases.IBasePrimary;
+import com.danosoftware.galaxyforce.view.Animation;
 
 /**
  * Alien missile that targets the supplied base.
@@ -15,8 +15,8 @@ import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenAn
  */
 public class AlienMissileGuided extends AbstractAlienMissile {
 
-    /* maximum missile change direction in radians */
-    private static final float MAX_DIRECTION_CHANGE_ANGLE = 0.3f;
+  /* maximum missile change direction in radians */
+  private static final float MAX_DIRECTION_CHANGE_ANGLE = 0.3f;
 
     /* time delay between missile direction changes */
     private static final float MISSILE_DIRECTION_CHANGE_DELAY = 0.1f;

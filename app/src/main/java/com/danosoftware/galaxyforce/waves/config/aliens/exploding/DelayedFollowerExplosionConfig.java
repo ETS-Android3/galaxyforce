@@ -7,13 +7,13 @@ import lombok.NonNull;
 @Getter
 public class DelayedFollowerExplosionConfig extends ExplosionConfig {
 
-    private final Float delayTime;
+  private final Float delayTime;
 
-    @Builder
-    public DelayedFollowerExplosionConfig(
-            @NonNull final Float delayTime
-    ) {
-        super(ExplosionConfigType.FOLLOWER_DELAYED);
-        this.delayTime = delayTime;
-    }
+  @Builder
+  public DelayedFollowerExplosionConfig(
+      @NonNull final Float delayTime
+  ) {
+    super(ExplosionConfigType.FOLLOWER_DELAYED);
+    this.delayTime = delayTime;
+  }
 }

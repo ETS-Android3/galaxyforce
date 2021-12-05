@@ -24,14 +24,16 @@ public enum AlienMissileCharacter {
     ),
     LIGHTNING(
             new Animation(
-                    0f,
-                    GameSpriteIdentifier.LIGHTNING),
+                    0.4f,
+                    GameSpriteIdentifier.LIGHTNING_01,
+                    GameSpriteIdentifier.LIGHTNING_02),
             SoundEffect.ALIEN_FIRE
     ),
     RAIN(
             new Animation(
-                    0f,
-                    GameSpriteIdentifier.RAIN),
+                    0.2f,
+                    GameSpriteIdentifier.RAIN_01,
+                    GameSpriteIdentifier.RAIN_02),
             SoundEffect.ALIEN_FIRE
     );
 
@@ -49,6 +51,7 @@ public enum AlienMissileCharacter {
 
     public SoundEffect getSound() {
         return sound;
-    }}
+    }
+}
 
 

@@ -1,10 +1,8 @@
 package com.danosoftware.galaxyforce.sprites.game.aliens.implementations.helpers;
 
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.BoundaryLanePolicy;
-
 import java.util.Random;
 
 /**
@@ -43,7 +41,7 @@ public class BoundariesChecker {
                 // choose a random horizontal lane
                 int horizontalLane = rand.nextInt(laneCount);
                 int horizontalLaneWidth = (boundaryMaxY - boundaryMinY) / laneCount;
-                this.minY  = boundaryMinY + (horizontalLane * horizontalLaneWidth);
+                this.minY = boundaryMinY + (horizontalLane * horizontalLaneWidth);
                 this.maxY = minY + horizontalLaneWidth;
                 this.minX = boundaryMinX;
                 this.maxX = boundaryMaxX;
@@ -53,7 +51,7 @@ public class BoundariesChecker {
                 int verticalLane = rand.nextInt(laneCount);
                 Log.i("TAG", Integer.toString(verticalLane));
                 int verticalLaneWidth = (boundaryMaxX - boundaryMinX) / laneCount;
-                this.minX  = boundaryMinX + (verticalLane * verticalLaneWidth);
+                this.minX = boundaryMinX + (verticalLane * verticalLaneWidth);
                 this.maxX = minX + verticalLaneWidth;
                 this.minY = boundaryMinY;
                 this.maxY = boundaryMaxY;

@@ -1,5 +1,19 @@
 package com.danosoftware.galaxyforce.sprites.game.bases;
 
+import static com.danosoftware.galaxyforce.enumerations.BaseMissileType.NORMAL;
+import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.ACTIVE;
+import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.EXPLODING;
+import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.LEFT;
+import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.RIGHT;
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
+import static org.powermock.api.mockito.PowerMockito.when;
+
 import android.util.Log;
 
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
@@ -31,20 +45,6 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
-
-import static com.danosoftware.galaxyforce.enumerations.BaseMissileType.NORMAL;
-import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.ACTIVE;
-import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.EXPLODING;
-import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.LEFT;
-import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.RIGHT;
-import static org.hamcrest.CoreMatchers.is;
-import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
-import static org.powermock.api.mockito.PowerMockito.when;
 
 
 @RunWith(PowerMockRunner.class)

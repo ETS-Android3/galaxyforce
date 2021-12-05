@@ -10,21 +10,21 @@ import com.danosoftware.galaxyforce.view.SpriteBatcher;
 
 public class ExitingScreen extends AbstractScreen {
 
-    public ExitingScreen(
-            Model model,
-            Controller controller,
-            TextureService textureService,
-            TextureMap textureMap,
-            GLGraphics glGraphics,
-            Camera2D camera,
-            SpriteBatcher batcher) {
+  public ExitingScreen(
+      Model model,
+      Controller controller,
+      TextureService textureService,
+      TextureMap textureMap,
+      GLGraphics glGraphics,
+      Camera2D camera,
+      SpriteBatcher batcher) {
 
-        super(model, controller, textureService, textureMap, glGraphics, camera, batcher);
-    }
+    super(model, controller, textureService, textureMap, glGraphics, camera, batcher);
+  }
 
-    @Override
-    public boolean handleBackButton() {
-        // Don't handle back button and so allow application to exit
-        return false;
-    }
+  @Override
+  public boolean handleBackButton() {
+    // Don't handle back button and so allow application to exit
+    return false;
+  }
 }

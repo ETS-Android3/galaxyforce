@@ -1,5 +1,10 @@
 package com.danosoftware.galaxyforce.flightpath.dto;
 
+import static com.danosoftware.galaxyforce.helpers.AssetHelpers.pathAsset;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.notNullValue;
+import static org.junit.Assert.assertThat;
+
 import androidx.annotation.NonNull;
 
 import com.danosoftware.galaxyforce.flightpath.paths.Path;
@@ -12,11 +17,6 @@ import org.slf4j.LoggerFactory;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-
-import static com.danosoftware.galaxyforce.helpers.AssetHelpers.pathAsset;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.notNullValue;
-import static org.junit.Assert.assertThat;
 
 
 /**

@@ -9,94 +9,91 @@ import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.utilities.Rectangle;
 
 /**
- * Represents a level selector. Level selector has a border, level number and
- * position.
+ * Represents a level selector. Level selector has a border, level number and position.
  */
 public class SelectLevel implements SpriteTextButton {
-    // enum used to determine if button is locked
-    public enum LockStatus {
-        UNLOCKED, LOCKED
+
+  // possible button sprites
+  private static final ISpriteIdentifier levelButton = MenuSpriteIdentifier.LEVEL_FRAME;
+  private static final ISpriteIdentifier levelButtonPressed = MenuSpriteIdentifier.LEVEL_FRAME_PRESSED;
+  private static final ISpriteIdentifier lockedButton = MenuSpriteIdentifier.LEVEL_FRAME_LOCKED;
+  private static final ISpriteIdentifier lockedButtonPressed = MenuSpriteIdentifier.LEVEL_FRAME_LOCKED_PRESSED;
+  // reference to button's level number
+  private final static int NO_LEVEL = 0;
+  // reference to Text representing level number
+  private final Text text;
+
+  // reference to button's parent model
+  private final SelectLevelModel model;
+
+  // reference to level selector button sprite
+  private final IButtonSprite levelSprite;
+  private final int levelNumber;
+  // lock status of this button
+  private final LockStatus lockStatus;
+  // sprites to be used for when button is up (not pressed) or down (pressed)
+  private final ISpriteIdentifier spriteButtonUp;
+  private final ISpriteIdentifier spriteButtonDown;
+
+  public SelectLevel(SelectLevelModel model, int xPos, int yPos, int levelInt,
+      LockStatus lockStatus) {
+    this.model = model;
+    this.lockStatus = lockStatus;
+
+    if (lockStatus == LockStatus.UNLOCKED) {
+      // unlocked button
+      this.spriteButtonUp = levelButton;
+      this.spriteButtonDown = levelButtonPressed;
+      this.levelSprite = new ButtonSprite(spriteButtonUp, xPos, yPos);
+      this.text = Text.newTextAbsolutePosition(Integer.toString(levelInt), xPos, yPos);
+      this.levelNumber = levelInt;
+    } else {
+      // locked button
+      this.spriteButtonUp = lockedButton;
+      this.spriteButtonDown = lockedButtonPressed;
+      this.levelSprite = new ButtonSprite(spriteButtonUp, xPos, yPos);
+      this.text = Text.newTextAbsolutePosition("", xPos, yPos);
+      this.levelNumber = NO_LEVEL;
     }
+  }
 
-    // possible button sprites
-    private static final ISpriteIdentifier levelButton = MenuSpriteIdentifier.LEVEL_FRAME;
-    private static final ISpriteIdentifier levelButtonPressed = MenuSpriteIdentifier.LEVEL_FRAME_PRESSED;
-    private static final ISpriteIdentifier lockedButton = MenuSpriteIdentifier.LEVEL_FRAME_LOCKED;
-    private static final ISpriteIdentifier lockedButtonPressed = MenuSpriteIdentifier.LEVEL_FRAME_LOCKED_PRESSED;
+  @Override
+  public Rectangle getBounds() {
+    return levelSprite.getBounds();
+  }
 
-    // reference to Text representing level number
-    private final Text text;
+  @Override
+  public void buttonUp() {
+    levelSprite.changeType(spriteButtonUp);
 
-    // reference to button's parent model
-    private final SelectLevelModel model;
-
-    // reference to level selector button sprite
-    private final IButtonSprite levelSprite;
-
-    // reference to button's level number
-    private final static int NO_LEVEL = 0;
-    private final int levelNumber;
-
-    // lock status of this button
-    private final LockStatus lockStatus;
-
-    // sprites to be used for when button is up (not pressed) or down (pressed)
-    private final ISpriteIdentifier spriteButtonUp;
-    private final ISpriteIdentifier spriteButtonDown;
-
-    public SelectLevel(SelectLevelModel model, int xPos, int yPos, int levelInt, LockStatus lockStatus) {
-        this.model = model;
-        this.lockStatus = lockStatus;
-
-        if (lockStatus == LockStatus.UNLOCKED) {
-            // unlocked button
-            this.spriteButtonUp = levelButton;
-            this.spriteButtonDown = levelButtonPressed;
-            this.levelSprite = new ButtonSprite(spriteButtonUp, xPos, yPos);
-            this.text = Text.newTextAbsolutePosition(Integer.toString(levelInt), xPos, yPos);
-            this.levelNumber = levelInt;
-        } else {
-            // locked button
-            this.spriteButtonUp = lockedButton;
-            this.spriteButtonDown = lockedButtonPressed;
-            this.levelSprite = new ButtonSprite(spriteButtonUp, xPos, yPos);
-            this.text = Text.newTextAbsolutePosition("", xPos, yPos);
-            this.levelNumber = NO_LEVEL;
-        }
+    if (lockStatus == LockStatus.UNLOCKED) {
+      model.setLevel(levelNumber);
     }
+  }
 
-    @Override
-    public Rectangle getBounds() {
-        return levelSprite.getBounds();
-    }
+  @Override
+  public void buttonDown() {
 
-    @Override
-    public void buttonUp() {
-        levelSprite.changeType(spriteButtonUp);
+    levelSprite.changeType(spriteButtonDown);
+  }
 
-        if (lockStatus == LockStatus.UNLOCKED) {
-            model.setLevel(levelNumber);
-        }
-    }
+  @Override
+  public void buttonReleased() {
+    levelSprite.changeType(spriteButtonUp);
+  }
 
-    @Override
-    public void buttonDown() {
+  @Override
+  public IButtonSprite getSprite() {
+    return levelSprite;
+  }
 
-        levelSprite.changeType(spriteButtonDown);
-    }
+  @Override
+  public Text getText() {
+    return text;
+  }
 
-    @Override
-    public void buttonReleased() {
-        levelSprite.changeType(spriteButtonUp);
-    }
-
-    @Override
-    public IButtonSprite getSprite() {
-        return levelSprite;
-    }
-
-    @Override
-    public Text getText() {
-        return text;
-    }
+  // enum used to determine if button is locked
+  public enum LockStatus {
+    UNLOCKED, LOCKED
+  }
 }

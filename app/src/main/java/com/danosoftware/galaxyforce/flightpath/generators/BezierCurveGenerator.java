@@ -1,14 +1,13 @@
 package com.danosoftware.galaxyforce.flightpath.generators;
 
+import static com.danosoftware.galaxyforce.flightpath.utilities.BezierMathematics.createBezierPath;
+import static com.danosoftware.galaxyforce.flightpath.utilities.PointMathematics.convertAndTranslatePoint;
+
 import com.danosoftware.galaxyforce.flightpath.dto.BezierPathDTO;
 import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
 import com.danosoftware.galaxyforce.flightpath.paths.PathSpeed;
 import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
-
 import java.util.List;
-
-import static com.danosoftware.galaxyforce.flightpath.utilities.BezierMathematics.createBezierPath;
-import static com.danosoftware.galaxyforce.flightpath.utilities.PointMathematics.convertAndTranslatePoint;
 
 /**
  * Create bezier curve from provided control points

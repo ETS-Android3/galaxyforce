@@ -7,19 +7,20 @@ import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
  * Power-up DTO holding the power-up and sound effects.
  */
 public class PowerUpsDto {
-    private final IPowerUp powerUp;
-    private final SoundEffect soundEffect;
 
-    public PowerUpsDto(IPowerUp powerUp, SoundEffect soundEffect) {
-        this.powerUp = powerUp;
-        this.soundEffect = soundEffect;
-    }
+  private final IPowerUp powerUp;
+  private final SoundEffect soundEffect;
 
-    public IPowerUp getPowerUp() {
-        return powerUp;
-    }
+  public PowerUpsDto(IPowerUp powerUp, SoundEffect soundEffect) {
+    this.powerUp = powerUp;
+    this.soundEffect = soundEffect;
+  }
 
-    public SoundEffect getSoundEffect() {
-        return soundEffect;
-    }
+  public IPowerUp getPowerUp() {
+    return powerUp;
+  }
+
+  public SoundEffect getSoundEffect() {
+    return soundEffect;
+  }
 }
