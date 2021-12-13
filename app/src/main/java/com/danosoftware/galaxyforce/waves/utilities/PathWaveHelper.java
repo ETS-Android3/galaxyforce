@@ -881,4 +881,46 @@ public class PathWaveHelper {
 
     return subWaves;
   }
+
+  /**
+   * Combines batches of waves with a timing delay between each batch. Allows a gap to be created
+   * between batches of aliens.
+   */
+  public static List<SubWavePathRuleProperties> waveWithGaps(
+      final Path path,
+      final PathSpeed speed,
+      final int aliensInBatch,
+      final float delayBetweenAliens,
+      final int batches,
+      final float delayBetweenBatches,
+      final PointTranslatorChain translatorChain) {
+
+    float batchDelay = 0f;
+
+    List<SubWavePathRuleProperties> subWaves = new ArrayList<>();
+
+    for (int batch = 0; batch < batches; batch++) {
+      subWaves.add(
+          translatorChain != null
+              ? new SubWavePathRuleProperties(
+              path,
+              speed,
+              aliensInBatch,
+              delayBetweenAliens,
+              batchDelay,
+              false,
+              translatorChain)
+              : new SubWavePathRuleProperties(
+                  path,
+                  speed,
+                  aliensInBatch,
+                  delayBetweenAliens,
+                  batchDelay,
+                  false)
+      );
+      batchDelay += (delayBetweenAliens * aliensInBatch) + delayBetweenBatches;
+    }
+
+    return subWaves;
+  }
 }

@@ -4,7 +4,6 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_Y;
-import static com.danosoftware.galaxyforce.waves.rules.SubWavePathRule.waveWithGaps;
 import static com.danosoftware.galaxyforce.waves.utilities.AlienConfigBuilder.alienConfig;
 import static com.danosoftware.galaxyforce.waves.utilities.AlienConfigBuilder.alienRowConfig;
 import static com.danosoftware.galaxyforce.waves.utilities.AlienConfigBuilder.directionalAlienConfig;
@@ -37,6 +36,7 @@ import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.create
 import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.createStaggeredDroppers;
 import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.scatteredTopStart;
 import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.scatteredTopStartImmediateRestart;
+import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.waveWithGaps;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveAsteroidsHelper.createAsteroidField;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveDriftingHelper.createDriftingWave;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.DOWNWARDS;
@@ -901,7 +901,14 @@ public class WaveFactory {
             createSubWave(
                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
                 new SubWavePathConfig(
-                    SubWavePathRule.SPACE_INVADER,
+                    waveWithGaps(
+                        Path.SPACE_INVADER_EASY,
+                        PathSpeed.NORMAL,
+                        6,
+                        0.3f,
+                        4,
+                        0.3f * 7,
+                        null),
                     alienConfig(
                         AlienCharacter.WALKER,
                         AlienMissileSpeed.MEDIUM,
@@ -929,7 +936,17 @@ public class WaveFactory {
             createSubWave(
                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
                 new SubWavePathConfig(
-                    SubWavePathRule.SPACE_INVADER_REVERSE,
+                    waveWithGaps(
+                        Path.SPACE_INVADER_EASY,
+                        PathSpeed.NORMAL,
+                        6,
+                        0.3f,
+                        4,
+                        0.3f * 7,
+                        new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
+                            .add(new FlipYPointTranslator(GAME_HEIGHT))
+                    ),
                     alienConfig(
                         AlienCharacter.WALKER,
                         AlienMissileSpeed.MEDIUM,
@@ -2727,11 +2744,12 @@ public class WaveFactory {
 
       case 39:
 
+        // space invader style attack with aliens in a batch.
+        // A timing-delay gap is inserted between each batch.
         subWaves.add(
             createSubWave(
                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
                 new SubWavePathConfig(
-                    // move waveWithGaps to wave helper
                     waveWithGaps(
                         Path.SPACE_INVADER_EASY,
                         PathSpeed.SLIGHTLY_FAST,
@@ -2759,6 +2777,8 @@ public class WaveFactory {
                     PowerUpType.MISSILE_LASER))
             )
         );
+        // space invader style attack reverse (i.e. from bottom to top) with aliens in a batch.
+        // A timing-delay gap is inserted between each batch.
         subWaves.add(
             createSubWave(
                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
