@@ -186,8 +186,8 @@ public abstract class AbstractScreen implements IScreen {
           sprite,
           new TextureRegion(
               texture,
-              textureDetails.getxPos(),
-              textureDetails.getyPos(),
+              textureDetails.getXPos(),
+              textureDetails.getYPos(),
               textureDetails.getWidth(),
               textureDetails.getHeight()));
     }
@@ -197,8 +197,8 @@ public abstract class AbstractScreen implements IScreen {
     TextureDetail fontTextureDetails = texture.getTextureDetail(fontId.getName());
     this.gameFont = new Font(
         texture,
-        fontTextureDetails.getxPos(),
-        fontTextureDetails.getyPos(),
+        fontTextureDetails.getXPos(),
+        fontTextureDetails.getYPos(),
         FONT_GLYPHS_PER_ROW,
         FONT_GLYPHS_WIDTH,
         FONT_GLYPHS_HEIGHT,

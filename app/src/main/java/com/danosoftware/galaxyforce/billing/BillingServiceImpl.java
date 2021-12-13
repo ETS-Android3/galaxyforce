@@ -2,12 +2,10 @@ package com.danosoftware.galaxyforce.billing;
 
 import android.util.Log;
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import com.android.billingclient.api.BillingClient;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.Purchase;
 import com.android.billingclient.api.SkuDetails;
-import com.android.billingclient.api.SkuDetailsResponseListener;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
@@ -122,18 +120,14 @@ public class BillingServiceImpl implements BillingService, BillingUpdatesListene
       billingManager.querySkuDetailsAsync(
           BillingClient.SkuType.INAPP,
           Collections.singletonList(BillingConstants.SKU_FULL_GAME),
-          new SkuDetailsResponseListener() {
-            @Override
-            public void onSkuDetailsResponse(@NonNull BillingResult billingResult,
-                @Nullable List<SkuDetails> skuDetailsList) {
-              if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK) {
-                Log.w(TAG,
-                    "Unsuccessful SKU query. Error code: " + billingResult.getResponseCode());
-              } else if (skuDetailsList != null) {
-                for (SkuDetails details : skuDetailsList) {
-                  if (details.getSku().equals(BillingConstants.SKU_FULL_GAME)) {
-                    listener.onSkuDetailsRetrieved(details);
-                  }
+          (billingResult, skuDetailsList) -> {
+            if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK) {
+              Log.w(TAG,
+                  "Unsuccessful SKU query. Error code: " + billingResult.getResponseCode());
+            } else if (skuDetailsList != null) {
+              for (SkuDetails details : skuDetailsList) {
+                if (details.getSku().equals(BillingConstants.SKU_FULL_GAME)) {
+                  listener.onSkuDetailsRetrieved(details);
                 }
               }
             }

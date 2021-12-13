@@ -1,7 +1,6 @@
 package com.danosoftware.galaxyforce.textures;
 
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.constants.GameConstants;
 
 /**
@@ -46,11 +45,11 @@ public class TextureDetail {
         return name;
     }
 
-    public int getxPos() {
+    public int getXPos() {
         return xPos;
     }
 
-    public int getyPos() {
+    public int getYPos() {
         return yPos;
     }
 

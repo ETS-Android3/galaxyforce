@@ -18,7 +18,7 @@ class StarTemplate {
   // index of animation used by star
   private final int animationIndex;
 
-  // inital animation elapsed time
+  // initial animation elapsed time
   private final float animationStateTime;
 
   // speed of star

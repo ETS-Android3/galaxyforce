@@ -106,11 +106,11 @@ public class Font {
 
     // text position must be offset by half a character glyph's width
     // x position represents the centre of the first character.
-    float offset = (glyphWidth / 2);
+    float offset = (glyphWidth / 2f);
 
     switch (posX) {
       case CENTRE:
-        x = ((GameConstants.GAME_WIDTH - textLength) / 2) + offset;
+        x = ((GameConstants.GAME_WIDTH - textLength) / 2f) + offset;
         break;
       case LEFT:
         x = offset;
@@ -134,14 +134,14 @@ public class Font {
 
     // text position must be offset by half a character glyph's height
     // y position represents the centre of the text.
-    float offset = (glyphWidth / 2);
+    float offset = (glyphWidth / 2f);
 
     switch (posY) {
       case TOP:
         y = GameConstants.GAME_HEIGHT - offset;
         break;
       case CENTRE:
-        y = GameConstants.GAME_HEIGHT / 2;
+        y = GameConstants.GAME_HEIGHT / 2f;
         break;
       case BOTTOM:
         y = offset;
@@ -166,7 +166,7 @@ public class Font {
     // 2 characters - offset by half width
     // 3 characters - offset by one width
     // ...etc...
-    float offset = (glyphWidth / 2) * (text.length() - 1);
+    float offset = (glyphWidth / 2f) * (text.length() - 1);
 
     return x - offset;
   }

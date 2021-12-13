@@ -10,7 +10,6 @@ import static org.mockito.Mockito.when;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteProperties;
 import com.danosoftware.galaxyforce.utilities.Rectangle;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -23,23 +22,27 @@ public class AbstractCollidingSpriteTest {
   private static final int X = 100;
   private static final int Y = 200;
 
-    private static final Rectangle EXPECTED_EMPTY_BOUNDS = new Rectangle(X, Y, 0, 0);
-    private static final Rectangle EXPECTED_BOUNDS = new Rectangle(X - HALF_WIDTH, Y - HALF_HEIGHT, WIDTH, HEIGHT);
+  private static final Rectangle EXPECTED_EMPTY_BOUNDS = new Rectangle(X, Y, 0, 0);
+  private static final Rectangle EXPECTED_BOUNDS = new Rectangle(X - HALF_WIDTH, Y - HALF_HEIGHT,
+      WIDTH, HEIGHT);
 
-    // alternative sprite of different size
-    private static final int ALT_HEIGHT = 100;
-    private static final int ALT_WIDTH = 200;
-    private static final Rectangle ALTERNATIVE_BOUNDS = new Rectangle(X - ALT_WIDTH / 2, Y - ALT_HEIGHT / 2, ALT_WIDTH, ALT_HEIGHT);
+  // alternative sprite of different size
+  private static final int ALT_HEIGHT = 100;
+  private static final int ALT_WIDTH = 200;
+  private static final Rectangle ALTERNATIVE_BOUNDS = new Rectangle(X - ALT_WIDTH / 2f,
+      Y - ALT_HEIGHT / 2f, ALT_WIDTH, ALT_HEIGHT);
 
-    // moved sprite
-    private static final int MOVED_X = 300;
-    private static final int MOVED_Y = 400;
-    private static final Rectangle MOVED_BOUNDS = new Rectangle(MOVED_X - HALF_WIDTH, MOVED_Y - HALF_HEIGHT, WIDTH, HEIGHT);
+  // moved sprite
+  private static final int MOVED_X = 300;
+  private static final int MOVED_Y = 400;
+  private static final Rectangle MOVED_BOUNDS = new Rectangle(MOVED_X - HALF_WIDTH,
+      MOVED_Y - HALF_HEIGHT, WIDTH, HEIGHT);
 
 
-    // test implementation of an abstract sprite
-    private static class TestSprite extends AbstractCollidingSprite {
-        private TestSprite(ISpriteIdentifier spriteId) {
+  // test implementation of an abstract sprite
+  private static class TestSprite extends AbstractCollidingSprite {
+
+    private TestSprite(ISpriteIdentifier spriteId) {
             super(spriteId, X, Y, 0);
         }
 
@@ -104,7 +107,7 @@ public class AbstractCollidingSpriteTest {
 
         Rectangle bounds = sprite.getBounds();
 
-        // multiple unneccessary calls - should all be cached
+      // multiple unnecessary calls - should all be cached
         sprite.getBounds();
         sprite.getBounds();
         sprite.getBounds();

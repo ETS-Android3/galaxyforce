@@ -93,8 +93,7 @@ public class GameOverModelImpl implements Model, ButtonModel {
   @Override
   public List<ISprite> getSprites() {
 
-    List<ISprite> sprites = new ArrayList<>();
-    sprites.addAll(starField.getSprites());
+    List<ISprite> sprites = new ArrayList<>(starField.getSprites());
     for (SpriteTextButton eachButton : menuButtons) {
       sprites.add(eachButton.getSprite());
     }

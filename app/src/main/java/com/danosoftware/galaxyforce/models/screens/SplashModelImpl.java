@@ -97,7 +97,7 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
   }
 
   /**
-   * Update on-sceen text messages.
+   * Update on-screen text messages.
    */
   private void buildTextMessages() {
 

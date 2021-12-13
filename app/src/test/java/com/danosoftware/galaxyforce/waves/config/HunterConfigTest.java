@@ -32,11 +32,9 @@ import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningFixedAn
 import com.danosoftware.galaxyforce.waves.config.aliens.types.BoundariesConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.HunterConfig;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocatorFactory;
-
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.List;
+import org.junit.Test;
 
 public class HunterConfigTest {
 
@@ -100,10 +98,10 @@ public class HunterConfigTest {
                                 .maxY(250)
                                 .build())
                 .spawnConfig(new SpawningAlienConfig(
-                        mock(AlienConfig.class),
-                        new ArrayList<PowerUpType>(),
-                        0f,
-                        0f))
+                    mock(AlienConfig.class),
+                    new ArrayList<>(),
+                    0f,
+                    0f))
                 .missileConfig(new MissileFiringConfig(
                         AlienMissileType.DOWNWARDS,
                         AlienMissileSpeed.MEDIUM,

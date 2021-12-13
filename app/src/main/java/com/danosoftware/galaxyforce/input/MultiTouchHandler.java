@@ -24,11 +24,7 @@ public class MultiTouchHandler implements TouchHandler {
   private final float scaleY;
 
   public MultiTouchHandler(View view, float scaleX, float scaleY) {
-    PoolObjectFactory<TouchEvent> factory = new PoolObjectFactory<TouchEvent>() {
-      public TouchEvent createObject() {
-        return new TouchEvent();
-      }
-    };
+    PoolObjectFactory<TouchEvent> factory = TouchEvent::new;
     touchEventPool = new Pool<>(factory, 100);
     view.setOnTouchListener(this);
 

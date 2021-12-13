@@ -13,18 +13,18 @@ public class SpawningAlienConfig extends SpawnConfig {
   private final AlienConfig spawnedAlienConfig;
   private final float minimumSpawnDelayTime;
   private final float maximumAdditionalRandomSpawnDelayTime;
-  private final List<PowerUpType> spwanedPowerUpTypes;
+  private final List<PowerUpType> spawnedPowerUpTypes;
 
   @Builder
   public SpawningAlienConfig(
       @NonNull final AlienConfig spawnedAlienConfig,
-      @NonNull final List<PowerUpType> spwanedPowerUpTypes,
+      @NonNull final List<PowerUpType> spawnedPowerUpTypes,
       @NonNull final Float minimumSpawnDelayTime,
       @NonNull final Float maximumAdditionalRandomSpawnDelayTime) {
 
     super(SpawnType.SPAWN);
     this.spawnedAlienConfig = spawnedAlienConfig;
-    this.spwanedPowerUpTypes = spwanedPowerUpTypes;
+    this.spawnedPowerUpTypes = spawnedPowerUpTypes;
     this.minimumSpawnDelayTime = minimumSpawnDelayTime;
     this.maximumAdditionalRandomSpawnDelayTime = maximumAdditionalRandomSpawnDelayTime;
   }

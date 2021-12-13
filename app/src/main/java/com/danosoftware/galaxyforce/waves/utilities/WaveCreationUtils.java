@@ -106,9 +106,9 @@ public class WaveCreationUtils {
             powerUpAllocator.allocate(),
             props.isxRandom(),
             props.isyRandom(),
-            props.getxStart(),
-            props.getyStart(),
-            (i * props.getDelayBetweenAliens()) + props.getDelayOffet(),
+            props.getXStart(),
+            props.getYStart(),
+            (i * props.getDelayBetweenAliens()) + props.getDelayOffset(),
             props.isRestartImmediately()));
       }
     }
@@ -134,7 +134,7 @@ public class WaveCreationUtils {
               alienConfig,
               powerUpAllocator.allocate(),
               path,
-              (i * props.getDelayBetweenAliens()) + props.getDelayOffet(),
+              (i * props.getDelayBetweenAliens()) + props.getDelayOffset(),
               props.isRestartImmediately()
           ));
     }

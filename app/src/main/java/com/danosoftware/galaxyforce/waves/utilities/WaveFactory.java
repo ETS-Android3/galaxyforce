@@ -580,7 +580,7 @@ public class WaveFactory {
                                     1.5f))
                             .minimumSpawnDelayTime(0.5f)
                             .maximumAdditionalRandomSpawnDelayTime(0.25f)
-                            .spwanedPowerUpTypes(
+                            .spawnedPowerUpTypes(
                                 Arrays.asList(
                                     PowerUpType.MISSILE_GUIDED,
                                     PowerUpType.MISSILE_FAST,
@@ -628,7 +628,7 @@ public class WaveFactory {
                                     1.5f))
                             .minimumSpawnDelayTime(0.5f)
                             .maximumAdditionalRandomSpawnDelayTime(0.25f)
-                            .spwanedPowerUpTypes(
+                            .spawnedPowerUpTypes(
                                 Arrays.asList(
                                     PowerUpType.MISSILE_GUIDED,
                                     PowerUpType.MISSILE_FAST,
@@ -852,7 +852,7 @@ public class WaveFactory {
        * Diagonal crossing path of aliens
        */
       case 9:
-        // Square path aroud edge of screen
+        // Square path around edge of screen
         subWaves.add(
             createSubWave(
                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
@@ -1280,7 +1280,7 @@ public class WaveFactory {
                             .limitedCharacter(AlienCharacter.INSECT)
                             .maximumActiveSpawnedAliens(5)
                             .minimumSpawnDelayTime(0.5f)
-                            .spwanedPowerUpTypes(Arrays.asList(
+                            .spawnedPowerUpTypes(Arrays.asList(
                                 PowerUpType.MISSILE_GUIDED,
                                 PowerUpType.MISSILE_FAST,
                                 PowerUpType.MISSILE_PARALLEL))
@@ -1345,7 +1345,7 @@ public class WaveFactory {
                             .limitedCharacter(AlienCharacter.INSECT)
                             .maximumActiveSpawnedAliens(5)
                             .minimumSpawnDelayTime(0.5f)
-                            .spwanedPowerUpTypes(Arrays.asList(
+                            .spawnedPowerUpTypes(Arrays.asList(
                                 PowerUpType.MISSILE_GUIDED,
                                 PowerUpType.MISSILE_FAST,
                                 PowerUpType.MISSILE_PARALLEL))
@@ -1572,7 +1572,7 @@ public class WaveFactory {
                             .builder()
                             .maximumAdditionalRandomSpawnDelayTime(0f)
                             .minimumSpawnDelayTime(3f)
-                            .spwanedPowerUpTypes(Arrays.asList(
+                            .spawnedPowerUpTypes(Arrays.asList(
                                 PowerUpType.MISSILE_GUIDED,
                                 PowerUpType.SHIELD))
                             .spawnedAlienConfig(
@@ -1681,9 +1681,9 @@ public class WaveFactory {
 
       /**
        * Wave 22
-       * 2 alien travels down centre of screen spawing multiple aliens that travel diagonally
+       * 2 alien travels down centre of screen spawning multiple aliens that travel diagonally
        * across screen (left-down and right-down) while firing.
-       * 2 alien travel in row down screen spawing multiple aliens that travel diagonally
+       * 2 alien travel in row down screen spawning multiple aliens that travel diagonally
        * across screen (left-down and right-down).
        */
       case 22:
@@ -1706,7 +1706,7 @@ public class WaveFactory {
                             .builder()
                             .maximumAdditionalRandomSpawnDelayTime(0f)
                             .minimumSpawnDelayTime(3f)
-                            .spwanedPowerUpTypes(Arrays.asList(
+                            .spawnedPowerUpTypes(Arrays.asList(
                                 PowerUpType.MISSILE_GUIDED,
                                 PowerUpType.SHIELD))
                             .spawnedAlienConfig(
@@ -1749,7 +1749,7 @@ public class WaveFactory {
                             .builder()
                             .maximumAdditionalRandomSpawnDelayTime(0f)
                             .minimumSpawnDelayTime(3f)
-                            .spwanedPowerUpTypes(Arrays.asList(
+                            .spawnedPowerUpTypes(Arrays.asList(
                                 PowerUpType.MISSILE_GUIDED,
                                 PowerUpType.SHIELD))
                             .spawnedAlienConfig(
@@ -2274,7 +2274,7 @@ public class WaveFactory {
                                     3f))
                             .minimumSpawnDelayTime(1f)
                             .maximumAdditionalRandomSpawnDelayTime(0.5f)
-                            .spwanedPowerUpTypes(
+                            .spawnedPowerUpTypes(
                                 Collections.singletonList(
                                     PowerUpType.MISSILE_PARALLEL))
                             .build()),
@@ -2298,7 +2298,7 @@ public class WaveFactory {
                                     3f))
                             .minimumSpawnDelayTime(1f)
                             .maximumAdditionalRandomSpawnDelayTime(0.5f)
-                            .spwanedPowerUpTypes(
+                            .spawnedPowerUpTypes(
                                 Arrays.asList(
                                     PowerUpType.MISSILE_GUIDED,
                                     PowerUpType.MISSILE_FAST))
@@ -2392,7 +2392,7 @@ public class WaveFactory {
                             .builder()
                             .maximumAdditionalRandomSpawnDelayTime(0f)
                             .minimumSpawnDelayTime(3f)
-                            .spwanedPowerUpTypes(Arrays.asList(
+                            .spawnedPowerUpTypes(Arrays.asList(
                                 PowerUpType.MISSILE_GUIDED,
                                 PowerUpType.SHIELD))
                             .spawnedAlienConfig(
@@ -2589,7 +2589,7 @@ public class WaveFactory {
                             .limitedCharacter(AlienCharacter.BABY_DRAGON_HEAD)
                             .minimumSpawnDelayTime(3f)
                             .maximumAdditionalRandomSpawnDelayTime(2f)
-                            .spwanedPowerUpTypes(
+                            .spawnedPowerUpTypes(
                                 Arrays.asList(
                                     PowerUpType.MISSILE_GUIDED,
                                     PowerUpType.MISSILE_PARALLEL,
@@ -2631,7 +2631,7 @@ public class WaveFactory {
       case 37:
 
         /**
-         * Alien drops from top to bottom spawning aliens that move diagnonally
+         * Alien drops from top to bottom spawning aliens that move diagonally
          * down the screen while firing missiles targeted at the base.
          */
         subWaves.add(
@@ -2655,7 +2655,7 @@ public class WaveFactory {
                                 .builder()
                                 .maximumAdditionalRandomSpawnDelayTime(1f)
                                 .minimumSpawnDelayTime(0.5f)
-                                .spwanedPowerUpTypes(Arrays.asList(
+                                .spawnedPowerUpTypes(Arrays.asList(
                                     PowerUpType.MISSILE_LASER,
                                     PowerUpType.SHIELD,
                                     PowerUpType.MISSILE_SPRAY))
@@ -3030,7 +3030,7 @@ public class WaveFactory {
                                     1.5f))
                             .minimumSpawnDelayTime(0.5f)
                             .maximumAdditionalRandomSpawnDelayTime(0.25f)
-                            .spwanedPowerUpTypes(
+                            .spawnedPowerUpTypes(
                                 Arrays.asList(
                                     PowerUpType.MISSILE_GUIDED,
                                     PowerUpType.MISSILE_FAST,
@@ -3418,7 +3418,7 @@ public class WaveFactory {
                                 .maximumActiveSpawnedAliens(2)
                                 .limitedCharacter(
                                     AlienCharacter.DRAGON_HEAD)// max 2 dragon heads at any time
-                                .spwanedPowerUpTypes(
+                                .spawnedPowerUpTypes(
                                     Arrays.asList(
                                         PowerUpType.MISSILE_GUIDED,
                                         PowerUpType.MISSILE_FAST,
@@ -3496,7 +3496,7 @@ public class WaveFactory {
                                                 .build())
                                         .minimumSpawnDelayTime(0.5f)
                                         .maximumAdditionalRandomSpawnDelayTime(0.25f)
-                                        .spwanedPowerUpTypes(
+                                        .spawnedPowerUpTypes(
                                             Arrays.asList(
                                                 PowerUpType.MISSILE_GUIDED,
                                                 PowerUpType.MISSILE_FAST,

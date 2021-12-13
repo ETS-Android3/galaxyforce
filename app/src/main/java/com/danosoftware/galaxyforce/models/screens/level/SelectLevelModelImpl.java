@@ -256,7 +256,7 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
 
   @Override
   public List<ISprite> getStaticSprites() {
-    List<ISprite> sprites = new ArrayList<ISprite>(starField.getSprites());
+    List<ISprite> sprites = new ArrayList<>(starField.getSprites());
     for (SpriteTextButton button : staticTextButtons) {
       sprites.add(button.getSprite());
     }

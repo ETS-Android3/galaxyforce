@@ -26,32 +26,32 @@ public class StarFieldTest {
     @Test
     public void newStarFieldShouldMatchOriginal() {
 
-        // create starfield and animate it
-        StarFieldTemplate starFieldTemplate = new StarFieldTemplate(100, 100);
-        StarField starField = new StarField(starFieldTemplate, StarAnimationType.GAME);
-        starField.animate(10f);
+      // create starfield and animate it
+      StarFieldTemplate starFieldTemplate = new StarFieldTemplate(100, 100);
+      StarField starField = new StarField(starFieldTemplate, StarAnimationType.GAME);
+      starField.animate(10f);
 
-        // get position of first star
-        List<Star> initalStars = starField.getSprites();
-        Star firstStar = initalStars.get(0);
+      // get position of first star
+      List<Star> initialStars = starField.getSprites();
+      Star firstStar = initialStars.get(0);
 
-        // create new starfield from same template
-        // confirm first star starts from previous position
-        StarField starField1 = new StarField(starFieldTemplate, StarAnimationType.GAME);
-        List<Star> stars1 = starField1.getSprites();
-        Star firstStar1 = stars1.get(0);
-        assertThat(firstStar1.x(), equalTo(firstStar.x()));
-        assertThat(firstStar1.y(), equalTo(firstStar.y()));
+      // create new starfield from same template
+      // confirm first star starts from previous position
+      StarField starField1 = new StarField(starFieldTemplate, StarAnimationType.GAME);
+      List<Star> stars1 = starField1.getSprites();
+      Star firstStar1 = stars1.get(0);
+      assertThat(firstStar1.x(), equalTo(firstStar.x()));
+      assertThat(firstStar1.y(), equalTo(firstStar.y()));
 
-        // animate starfield for a longer period
-        // create new starfield from same template
-        // confirm first star still starts from previous position
-        starField1.animate(60000f);
-        StarField starField2 = new StarField(starFieldTemplate, StarAnimationType.GAME);
-        List<Star> stars2 = starField2.getSprites();
-        Star firstStar2 = stars2.get(0);
-        assertThat(firstStar2.x(), equalTo(firstStar.x()));
-        assertThat(firstStar2.y(), equalTo(firstStar.y()));
+      // animate starfield for a longer period
+      // create new starfield from same template
+      // confirm first star still starts from previous position
+      starField1.animate(60000f);
+      StarField starField2 = new StarField(starFieldTemplate, StarAnimationType.GAME);
+      List<Star> stars2 = starField2.getSprites();
+      Star firstStar2 = stars2.get(0);
+      assertThat(firstStar2.x(), equalTo(firstStar.x()));
+      assertThat(firstStar2.y(), equalTo(firstStar.y()));
     }
 
     /**

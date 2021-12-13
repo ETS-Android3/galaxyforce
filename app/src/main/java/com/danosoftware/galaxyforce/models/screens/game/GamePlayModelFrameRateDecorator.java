@@ -49,8 +49,7 @@ public class GamePlayModelFrameRateDecorator implements Model, GameModel {
 
   @Override
   public List<Text> getText() {
-    List<Text> text = new ArrayList<>();
-    text.addAll(model.getText());
+    List<Text> text = new ArrayList<>(model.getText());
     text.add(tempFps);
 
     return text;

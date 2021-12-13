@@ -2,7 +2,6 @@ package com.danosoftware.galaxyforce.flightpath.utilities;
 
 import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
 import com.danosoftware.galaxyforce.flightpath.paths.PathSpeed;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,7 +36,7 @@ public final class CircularMathematics {
             DoublePoint position = new DoublePoint(xPos, yPos);
             path.add(position);
 
-            // reduce radius for next interation
+            // reduce radius for next iteration
             radius = radius - 0.5;
         }
 

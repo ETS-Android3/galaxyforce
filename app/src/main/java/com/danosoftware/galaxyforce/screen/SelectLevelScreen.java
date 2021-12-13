@@ -19,7 +19,7 @@ import javax.microedition.khronos.opengles.GL10;
 
 public class SelectLevelScreen extends AbstractScreen {
 
-  private static final float SCREEN_CENTRE = GameConstants.GAME_WIDTH / 2;
+  private static final float SCREEN_CENTRE = GameConstants.GAME_WIDTH / 2f;
 
   /*
    * contains reference to level model needed for local override. This a

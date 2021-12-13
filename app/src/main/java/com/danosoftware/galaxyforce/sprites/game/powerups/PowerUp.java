@@ -35,7 +35,7 @@ public class PowerUp extends AbstractCollidingSprite implements IPowerUp {
     public void animate(float deltaTime) {
       moveYByDelta(POWER_UP_MOVE_PIXELS * deltaTime);
 
-        // if power-up is now off screen then destory it
+        // if power-up is now off screen then destroy it
         if (offScreenBottom(this)) {
             destroy();
         }

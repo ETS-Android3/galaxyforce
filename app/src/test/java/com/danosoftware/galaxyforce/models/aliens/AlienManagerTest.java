@@ -14,24 +14,19 @@ import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.services.achievements.AchievementService;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IResettableAlien;
 import com.danosoftware.galaxyforce.waves.SubWave;
 import com.danosoftware.galaxyforce.waves.managers.WaveManager;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Log.class})
@@ -155,12 +150,9 @@ public class AlienManagerTest {
         IAlien spawnedAlien = mock(IAlien.class);
         when(spawnedAlien.isVisible()).thenReturn(true);
         final List<IAlien> spawnedAliens = Collections.singletonList(spawnedAlien);
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) {
-                alienMgr.spawnAliens(spawnedAliens);
-                return null;
-            }
+        doAnswer(invocation -> {
+            alienMgr.spawnAliens(spawnedAliens);
+            return null;
         }).when(mockAlien).animate(any(Float.class));
 
         // first animation loop will queue up the spawned aliens

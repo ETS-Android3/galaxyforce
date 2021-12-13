@@ -91,7 +91,7 @@ public class AlienManager implements IAlienManager {
     this.activeAliens = currentActiveAliens;
     this.visibleAliens = currentVisibleAliens;
 
-    // have all aliens finished pass or been destoyed
+    // have all aliens finished pass or been destroyed
     if (subWaveState == PLAYING && aliens.size() == 0) {
       subWaveState = DESTROYED;
     } else if (subWaveState == PLAYING && aliens.size() == finishedAliens) {
