@@ -923,10 +923,6 @@ public enum SubWavePathRule {
     this.subWaveProps = Arrays.asList(subWaveProps);
   }
 
-  SubWavePathRule(List<SubWavePathRuleProperties> subWaveProps) {
-    this.subWaveProps = subWaveProps;
-  }
-
   /**
    * Properties to create a sub-wave
    */
