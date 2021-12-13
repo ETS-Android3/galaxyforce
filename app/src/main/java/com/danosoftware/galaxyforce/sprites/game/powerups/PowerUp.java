@@ -17,13 +17,13 @@ public class PowerUp extends AbstractCollidingSprite implements IPowerUp {
     private boolean isDestroyed;
 
     public PowerUp(
-            ISpriteIdentifier spriteId,
-            int x,
-            int y,
-            PowerUpType powerUpType) {
-        super(spriteId, x, y);
-        this.isDestroyed = false;
-        this.powerUpType = powerUpType;
+        ISpriteIdentifier spriteId,
+        float x,
+        float y,
+        PowerUpType powerUpType) {
+      super(spriteId, x, y);
+      this.isDestroyed = false;
+      this.powerUpType = powerUpType;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class PowerUp extends AbstractCollidingSprite implements IPowerUp {
 
     @Override
     public void animate(float deltaTime) {
-        moveYByDelta((int) (POWER_UP_MOVE_PIXELS * deltaTime));
+      moveYByDelta(POWER_UP_MOVE_PIXELS * deltaTime);
 
         // if power-up is now off screen then destory it
         if (offScreenBottom(this)) {

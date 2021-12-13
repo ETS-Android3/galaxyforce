@@ -12,7 +12,6 @@ import com.danosoftware.galaxyforce.flightpath.translators.OffsetXPointTranslato
 import com.danosoftware.galaxyforce.flightpath.translators.OffsetYPointTranslator;
 import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
 import com.danosoftware.galaxyforce.flightpath.translators.RotatePointTranslator;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -22,39 +21,6 @@ import java.util.List;
  * Each sub-wave property contains enough data to create a sub-wave of aliens that follow a path.
  */
 public enum SubWavePathRule {
-
-  /**
-   * space invader style attack with 6 aliens in a batch. A timing-delay gap is inserted between
-   * each batch.
-   */
-  SPACE_INVADER(
-      waveWithGaps(
-          Path.SPACE_INVADER_EASY,
-          PathSpeed.NORMAL,
-          6,
-          0.3f,
-          4,
-          0.3f * 7,
-          null)
-  ),
-
-  /**
-   * space invader style attack reverse (i.e. from bottom to top) with 6 aliens in a batch. A
-   * timing-delay gap is inserted between each batch.
-   */
-  SPACE_INVADER_REVERSE(
-      waveWithGaps(
-          Path.SPACE_INVADER_EASY,
-          PathSpeed.NORMAL,
-          6,
-          0.3f,
-          4,
-          0.3f * 7,
-          new PointTranslatorChain()
-              .add(new FlipXPointTranslator(GAME_WIDTH))
-              .add(new FlipYPointTranslator(GAME_HEIGHT))
-      )
-  ),
 
   /**
    * figure of eight path
@@ -955,52 +921,6 @@ public enum SubWavePathRule {
 
   SubWavePathRule(SubWavePathRuleProperties... subWaveProps) {
     this.subWaveProps = Arrays.asList(subWaveProps);
-  }
-
-  SubWavePathRule(List<SubWavePathRuleProperties> subWaveProps) {
-    this.subWaveProps = subWaveProps;
-  }
-
-  /**
-   * Combines batches of waves with a timing delay between each batch. Allows a gap to be created
-   * between batches of aliens.
-   */
-  private static List<SubWavePathRuleProperties> waveWithGaps(
-      final Path path,
-      final PathSpeed speed,
-      final int aliensInBatch,
-      final float delayBetweenAliens,
-      final int batches,
-      final float delayBetweenBatches,
-      final PointTranslatorChain translatorChain) {
-
-    float batchDelay = 0f;
-
-    List<SubWavePathRuleProperties> subWaves = new ArrayList<>();
-
-    for (int batch = 0; batch < batches; batch++) {
-      subWaves.add(
-          translatorChain != null
-              ? new SubWavePathRuleProperties(
-              path,
-              speed,
-              aliensInBatch,
-              delayBetweenAliens,
-              batchDelay,
-              false,
-              translatorChain)
-              : new SubWavePathRuleProperties(
-                  path,
-                  speed,
-                  aliensInBatch,
-                  delayBetweenAliens,
-                  batchDelay,
-                  false)
-      );
-      batchDelay += (delayBetweenAliens * aliensInBatch) + delayBetweenBatches;
-    }
-
-    return subWaves;
   }
 
   /**

@@ -23,7 +23,6 @@ import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.view.Animation;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -254,13 +253,13 @@ public class BaseHelper extends AbstractCollidingSprite implements IBaseHelper {
      * Shifts helper base by the wanted x offset
      */
     @Override
-    public void move(int x, int y) {
-        if (state == ACTIVE) {
-            super.move(x + xOffset, y + Y_OFFSET_FROM_PRIMARY_BASE);
-            // if base has a shield, move it with base
-            if (shielded) {
-                shield.move(x + xOffset, y + Y_OFFSET_FROM_PRIMARY_BASE);
-            }
+    public void move(float x, float y) {
+      if (state == ACTIVE) {
+        super.move(x + xOffset, y + Y_OFFSET_FROM_PRIMARY_BASE);
+        // if base has a shield, move it with base
+        if (shielded) {
+          shield.move(x + xOffset, y + Y_OFFSET_FROM_PRIMARY_BASE);
         }
+      }
     }
 }

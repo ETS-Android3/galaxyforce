@@ -59,27 +59,27 @@ public abstract class AbstractAlien extends AbstractCollidingSprite implements I
     private final AlienCharacter character;
 
     protected AbstractAlien(
-            AlienCharacter character,
-            Animation animation,
-            int x,
-            int y,
-            int energy,
-            FireBehaviour fireBehaviour,
-            PowerUpBehaviour powerUpBehaviour,
-            SpawnBehaviour spawnBehaviour,
-            HitBehaviour hitBehaviour,
-            ExplodeBehaviour explodeBehaviour,
-            SpinningBehaviour spinningBehaviour) {
+        AlienCharacter character,
+        Animation animation,
+        float x,
+        float y,
+        int energy,
+        FireBehaviour fireBehaviour,
+        PowerUpBehaviour powerUpBehaviour,
+        SpawnBehaviour spawnBehaviour,
+        HitBehaviour hitBehaviour,
+        ExplodeBehaviour explodeBehaviour,
+        SpinningBehaviour spinningBehaviour) {
 
-        super(
-                animation.getKeyFrame(
-                        0,
-                        Animation.ANIMATION_LOOPING),
-                x,
-                y);
-        this.character = character;
-        state = ACTIVE;
-        this.energy = energy;
+      super(
+          animation.getKeyFrame(
+              0,
+              Animation.ANIMATION_LOOPING),
+          x,
+          y);
+      this.character = character;
+      state = ACTIVE;
+      this.energy = energy;
         this.explodeBehaviour = explodeBehaviour;
         this.fireBehaviour = fireBehaviour;
         this.powerUpBehaviour = powerUpBehaviour;

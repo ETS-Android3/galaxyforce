@@ -17,27 +17,27 @@ import com.danosoftware.galaxyforce.waves.AlienCharacter;
 public abstract class AbstractResettableAlien extends AbstractAlien implements IResettableAlien {
 
     protected AbstractResettableAlien(
-            final AlienCharacter character,
-            final Animation animation,
-            final int x,
-            final int y,
-            final int energy,
-            final FireBehaviour fireBehaviour,
-            final PowerUpBehaviour powerUpBehaviour,
-            final SpawnBehaviour spawnBehaviour,
-            final HitBehaviour hitBehaviour,
-            final ExplodeBehaviour explodeBehaviour,
-            final SpinningBehaviour spinningBehaviour) {
+        final AlienCharacter character,
+        final Animation animation,
+        final float x,
+        final float y,
+        final int energy,
+        final FireBehaviour fireBehaviour,
+        final PowerUpBehaviour powerUpBehaviour,
+        final SpawnBehaviour spawnBehaviour,
+        final HitBehaviour hitBehaviour,
+        final ExplodeBehaviour explodeBehaviour,
+        final SpinningBehaviour spinningBehaviour) {
 
-        super(
-                character,
-                animation,
-                x,
-                y,
-                energy,
-                fireBehaviour,
-                powerUpBehaviour,
-                spawnBehaviour,
+      super(
+          character,
+          animation,
+          x,
+          y,
+          energy,
+          fireBehaviour,
+          powerUpBehaviour,
+          spawnBehaviour,
                 hitBehaviour,
                 explodeBehaviour,
                 spinningBehaviour);

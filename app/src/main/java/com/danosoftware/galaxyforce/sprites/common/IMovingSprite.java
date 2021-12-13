@@ -2,17 +2,17 @@ package com.danosoftware.galaxyforce.sprites.common;
 
 public interface IMovingSprite extends ISprite {
 
-    void move(int x, int y);
+    void move(float x, float y);
 
-    void moveByDelta(int xDelta, int yDelta);
+  void moveByDelta(float xDelta, float yDelta);
 
-    void moveY(int y);
+  void moveY(float y);
 
-    void moveYByDelta(int yDelta);
+  void moveYByDelta(float yDelta);
 
-    void moveXByDelta(int xDelta);
+  void moveXByDelta(float xDelta);
 
     void animate(float deltaTime);
 
-    void rotate(int rotation);
+  void rotate(float rotation);
 }

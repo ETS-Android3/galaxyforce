@@ -14,7 +14,6 @@ import com.danosoftware.galaxyforce.flightpath.generators.PathGenerator;
 import com.danosoftware.galaxyforce.flightpath.generators.PauseGenerator;
 import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
 import com.danosoftware.galaxyforce.flightpath.utilities.PathLoader;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -81,21 +80,21 @@ public final class PathFactory {
 
             if (idx == dblPoints.size() - 1) {
                 pathPoints.add(
-                        new PathPoint(
-                                (int) Math.round(current.getX()),
-                                (int) Math.round(current.getY()),
-                                (int) Math.round(lastAngle)));
+                    new PathPoint(
+                        (float) current.getX(),
+                        (float) current.getY(),
+                        (float) lastAngle));
             } else {
                 DoublePoint next = dblPoints.get(idx + 1);
 
                 // use last angle in cases where alien hasn't moved
                 // would otherwise calculate an angle of zero
                 if (current.getX() == next.getX() && current.getY() == next.getY()) {
-                    pathPoints.add(
-                            new PathPoint(
-                                    (int) Math.round(current.getX()),
-                                    (int) Math.round(current.getY()),
-                                    (int) Math.round(lastAngle)));
+                  pathPoints.add(
+                      new PathPoint(
+                          (float) current.getX(),
+                          (float) current.getY(),
+                          (float) lastAngle));
                 } else {
                     // calculate angle to next position
                     double angleInRadians = Math.atan2(
@@ -112,12 +111,12 @@ public final class PathFactory {
                     final double angle =
                             (angleInRadians + HALF_PI) * (TO_DEGREES);
 
-                    pathPoints.add(
-                            new PathPoint(
-                                    (int) Math.round(current.getX()),
-                                    (int) Math.round(current.getY()),
-                                    (int) Math.round(angle)));
-                    lastAngle = angle;
+                  pathPoints.add(
+                      new PathPoint(
+                          (float) current.getX(),
+                          (float) current.getY(),
+                          (float) angle));
+                  lastAngle = angle;
                 }
             }
         }

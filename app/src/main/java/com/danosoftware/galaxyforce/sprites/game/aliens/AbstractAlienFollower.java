@@ -38,29 +38,29 @@ public class AbstractAlienFollower extends AbstractAlien implements IAlienFollow
 
 
     public AbstractAlienFollower(
-            AlienCharacter character,
-            Animation animation,
-            int x,
-            int y,
-            int energy,
-            FireBehaviour fireBehaviour,
-            PowerUpBehaviour powerUpBehaviour,
-            SpawnBehaviour spawnBehaviour,
-            HitBehaviour hitBehaviour,
-            ExplodeBehaviour explodeBehaviour,
-            SpinningBehaviour spinningBehaviour,
-            final int alienMoveInPixels,
-            int minimumDistance) {
+        AlienCharacter character,
+        Animation animation,
+        float x,
+        float y,
+        int energy,
+        FireBehaviour fireBehaviour,
+        PowerUpBehaviour powerUpBehaviour,
+        SpawnBehaviour spawnBehaviour,
+        HitBehaviour hitBehaviour,
+        ExplodeBehaviour explodeBehaviour,
+        SpinningBehaviour spinningBehaviour,
+        final int alienMoveInPixels,
+        int minimumDistance) {
 
-        super(
-                character,
-                animation,
-                x,
-                y,
-                energy,
-                fireBehaviour,
-                powerUpBehaviour,
-                spawnBehaviour,
+      super(
+          character,
+          animation,
+          x,
+          y,
+          energy,
+          fireBehaviour,
+          powerUpBehaviour,
+          spawnBehaviour,
                 hitBehaviour,
                 explodeBehaviour,
                 spinningBehaviour);
@@ -82,64 +82,67 @@ public class AbstractAlienFollower extends AbstractAlien implements IAlienFollow
     @Override
     public void follow(IAlien alienFollowed, float deltaTime) {
 
-        if (!started) {
-            activate();
-            this.started = true;
-        }
+      if (!started) {
+        activate();
+        this.started = true;
+      }
 
-        // calculate angle from this follower to the alien we are following
-        float newAngle = (float) Math.atan2(
-                alienFollowed.y() - y(),
-                alienFollowed.x() - x());
+      // calculate angle from this follower to the alien we are following
+      float newAngle = (float) Math.atan2(
+          alienFollowed.y() - y(),
+          alienFollowed.x() - x());
 
-        // calculate the deltas to be applied each move
-        int xDelta = (int) ((alienMoveInPixels) * (float) Math.cos(newAngle));
-        int yDelta = (int) ((alienMoveInPixels) * (float) Math.sin(newAngle));
+      // calculate the deltas to be applied each move
+      float xDelta = alienMoveInPixels * (float) Math.cos(newAngle);
+      float yDelta = alienMoveInPixels * (float) Math.sin(newAngle);
 
-        // calculate new position
-        int newX = x() + (int) (xDelta * deltaTime);
-        int newY = y() + (int) (yDelta * deltaTime);
+      // calculate new position
+      float newX = x() + (xDelta * deltaTime);
+      float newY = y() + (yDelta * deltaTime);
 
-        // calculate squared distance from alien we are following to new position
-        int distX = (alienFollowed.x() - newX);
-        int distY = (alienFollowed.y() - newY);
-        int distanceFromFollowedSquared = (distX * distX) + (distY * distY);
+      // calculate squared distance from alien we are following to new position
+      float distX = alienFollowed.x() - newX;
+      float distY = alienFollowed.y() - newY;
+      float distanceFromFollowedSquared = (distX * distX) + (distY * distY);
 
-        if (distanceFromFollowedSquared > minimumAllowedDistanceFromFollowedSquared) {
-            move(newX, newY);
+      if (distanceFromFollowedSquared > minimumAllowedDistanceFromFollowedSquared) {
+        move(newX, newY);
+      } else {
+        /*
+         * we are too close to the followed alien.
+         * we must throttle our speed and calculate a revised new position.
+         */
+
+        // calculate distance from our current position to planned new position
+        float plannedMoveX = (newX - x());
+        float plannedMoveY = (newY - y());
+        float plannedMoveDistanceSquared =
+            (plannedMoveX * plannedMoveX) + (plannedMoveY * plannedMoveY);
+
+        // calculate how much we should reduce our planned move by to
+        float reduceMoveDistanceSquared =
+            minimumAllowedDistanceFromFollowedSquared - distanceFromFollowedSquared;
+
+        float throttleRatio;
+        if (plannedMoveDistanceSquared < reduceMoveDistanceSquared) {
+          // handles small planned moves
+          throttleRatio = distanceFromFollowedSquared / minimumAllowedDistanceFromFollowedSquared;
         } else {
-            /*
-             * we are too close to the followed alien.
-             * we must throttle our speed and calculate a revised new position.
-             */
-
-            // calculate distance from our current position to planned new position
-            int plannedMoveX = (newX - x());
-            int plannedMoveY = (newY - y());
-            int plannedMoveDistanceSquared = (plannedMoveX * plannedMoveX) + (plannedMoveY * plannedMoveY);
-
-            // calculate how much we should reduce our planned move by to
-            int reduceMoveDistanceSquared = minimumAllowedDistanceFromFollowedSquared - distanceFromFollowedSquared;
-
-            float throttleRatio;
-            if (plannedMoveDistanceSquared < reduceMoveDistanceSquared) {
-                // handles small planned moves
-                throttleRatio = (float) distanceFromFollowedSquared / minimumAllowedDistanceFromFollowedSquared;
-            } else {
-                // handles large planed moves
-                // normally only needed when there's been a big timing delay and followed alien has moved a long way
-                throttleRatio = (float) (plannedMoveDistanceSquared - reduceMoveDistanceSquared) / plannedMoveDistanceSquared;
-            }
-
-            // calculate new position based on reduced speed
-            int reducedXDelta = (int) (xDelta * throttleRatio);
-            int reducedYDelta = (int) (yDelta * throttleRatio);
-
-            // move alien
-            moveByDelta(
-                    (int) (reducedXDelta * deltaTime),
-                    (int) (reducedYDelta * deltaTime));
+          // handles large planed moves
+          // normally only needed when there's been a big timing delay and followed alien has moved a long way
+          throttleRatio =
+              (plannedMoveDistanceSquared - reduceMoveDistanceSquared) / plannedMoveDistanceSquared;
         }
+
+        // calculate new position based on reduced speed
+        float reducedXDelta = xDelta * throttleRatio;
+        float reducedYDelta = yDelta * throttleRatio;
+
+        // move alien
+        moveByDelta(
+            (reducedXDelta * deltaTime),
+            (reducedYDelta * deltaTime));
+      }
     }
 
     /**

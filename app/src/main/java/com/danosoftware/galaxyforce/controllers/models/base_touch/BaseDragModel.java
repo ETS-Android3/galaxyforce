@@ -46,7 +46,7 @@ public class BaseDragModel implements TouchBaseControllerModel {
             // base will use this to calculate it's movements.
             this.targetX = touchX;
             this.targetY = touchY;
-            base.moveTarget((int) targetX, (int) targetY + BASE_Y_OFFSET);
+          base.moveTarget(targetX, targetY + BASE_Y_OFFSET);
         }
     }
 }

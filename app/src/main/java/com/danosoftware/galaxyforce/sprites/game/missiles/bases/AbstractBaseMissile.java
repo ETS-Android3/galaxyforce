@@ -15,25 +15,25 @@ public abstract class AbstractBaseMissile extends AbstractCollidingSprite implem
     private float stateTime;
 
     AbstractBaseMissile(
-            Animation animation,
-            int x,
-            int y) {
+        Animation animation,
+        float x,
+        float y) {
 
-        // adjust missile starting position by half the missile's height
-        super(
-                animation.getKeyFrame(
-                        0,
-                        Animation.ANIMATION_LOOPING),
-                x,
-                y + (
-                        animation.getKeyFrame(
-                                0,
-                                Animation.ANIMATION_LOOPING))
-                        .getProperties()
-                        .getHeight() / 2);
-        this.isDestroyed = false;
-        this.animation = animation;
-        this.stateTime = 0f;
+      // adjust missile starting position by half the missile's height
+      super(
+          animation.getKeyFrame(
+              0,
+              Animation.ANIMATION_LOOPING),
+          x,
+          y + (
+              animation.getKeyFrame(
+                  0,
+                  Animation.ANIMATION_LOOPING))
+              .getProperties()
+              .getHeight() / 2f);
+      this.isDestroyed = false;
+      this.animation = animation;
+      this.stateTime = 0f;
     }
 
     // by default, most base missiles will only hit an alien once and destroy themselves

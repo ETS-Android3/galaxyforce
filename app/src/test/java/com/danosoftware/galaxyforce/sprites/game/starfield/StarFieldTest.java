@@ -3,9 +3,8 @@ package com.danosoftware.galaxyforce.sprites.game.starfield;
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.junit.Assert.assertThat;
 
-import org.junit.Test;
-
 import java.util.List;
+import org.junit.Test;
 
 public class StarFieldTest {
 
@@ -61,40 +60,41 @@ public class StarFieldTest {
     @Test
     public void animationShouldMoveStar() {
 
-        // create starfield using a predictable template
-        int height = 1200;
-        StarFieldTemplate starFieldTemplate = new StarFieldTemplate(height, 250, 1200, 0, 0, StarSpeed.SLOW);
-        StarField starField = new StarField(starFieldTemplate, StarAnimationType.GAME);
+      // create starfield using a predictable template
+      int height = 1200;
+      StarFieldTemplate starFieldTemplate = new StarFieldTemplate(height, 250f, 1200f, 0, 0,
+          StarSpeed.SLOW);
+      StarField starField = new StarField(starFieldTemplate, StarAnimationType.GAME);
 
-        // confirm star's initial position
-        Star star = starField.getSprites().get(0);
-        assertThat(star.x(), equalTo(250));
-        assertThat(star.y(), equalTo(1200));
+      // confirm star's initial position
+      Star star = starField.getSprites().get(0);
+      assertThat(star.x(), equalTo(250f));
+      assertThat(star.y(), equalTo(1200f));
 
-        // after 5 seconds, star should have moved by 600 (120 speed x 5 seconds)
-        // star Y will now be at 600 (1200 - 600)
-        starField.animate(5f);
-        assertThat(star.x(), equalTo(250));
-        assertThat(star.y(), equalTo(600));
+      // after 5 seconds, star should have moved by 600 (120 speed x 5 seconds)
+      // star Y will now be at 600 (1200 - 600)
+      starField.animate(5f);
+      assertThat(star.x(), equalTo(250f));
+      assertThat(star.y(), equalTo(600f));
 
-        // after another 5 seconds, star should have moved by another 600 (120 speed x 5 seconds)
-        // star Y will compute position as 0
-        // star Y will wrap back to 1200 when it hits 0.
-        starField.animate(5f);
-        assertThat(star.x(), equalTo(250));
-        assertThat(star.y(), equalTo(1200));
+      // after another 5 seconds, star should have moved by another 600 (120 speed x 5 seconds)
+      // star Y will compute position as 0
+      // star Y will wrap back to 1200 when it hits 0.
+      starField.animate(5f);
+      assertThat(star.x(), equalTo(250f));
+      assertThat(star.y(), equalTo(1200f));
 
-        // let's try a long delay involving many wrap-backs
-        // we know star completes a 600 pixel journey in a 5 second delay (120 speed x 5 seconds = 600 pixels).
-        // after another 125 seconds, we expect star to be back at 600 (half-way up screen)
-        starField.animate(125f);
-        assertThat(star.x(), equalTo(250));
-        assertThat(star.y(), equalTo(600));
+      // let's try a long delay involving many wrap-backs
+      // we know star completes a 600 pixel journey in a 5 second delay (120 speed x 5 seconds = 600 pixels).
+      // after another 125 seconds, we expect star to be back at 600 (half-way up screen)
+      starField.animate(125f);
+      assertThat(star.x(), equalTo(250f));
+      assertThat(star.y(), equalTo(600f));
 
-        // we know star completes a full-height journey in a 10 second delay (120 speed x 10 sec = 1200 pixels).
-        // after another 1000 seconds, we expect star to be back at it's current position
-        starField.animate(1000f);
-        assertThat(star.x(), equalTo(250));
-        assertThat(star.y(), equalTo(600));
+      // we know star completes a full-height journey in a 10 second delay (120 speed x 10 sec = 1200 pixels).
+      // after another 1000 seconds, we expect star to be back at it's current position
+      starField.animate(1000f);
+      assertThat(star.x(), equalTo(250f));
+      assertThat(star.y(), equalTo(600f));
     }
 }

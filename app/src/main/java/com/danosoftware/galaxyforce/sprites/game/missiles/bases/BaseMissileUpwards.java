@@ -14,21 +14,21 @@ public class BaseMissileUpwards extends AbstractBaseMissile {
     private final int missileSpeed;
 
     public BaseMissileUpwards(
-            final int xStart,
-            final int yStart,
-            final Animation animation,
-            final BaseMissileSpeed baseMissileSpeed) {
-        super(
-                animation,
-                xStart,
-                yStart);
-        this.missileSpeed = baseMissileSpeed.getSpeed();
+        final float xStart,
+        final float yStart,
+        final Animation animation,
+        final BaseMissileSpeed baseMissileSpeed) {
+      super(
+          animation,
+          xStart,
+          yStart);
+      this.missileSpeed = baseMissileSpeed.getSpeed();
     }
 
     @Override
     public void animate(float deltaTime) {
 
-        moveYByDelta((int) (missileSpeed * deltaTime));
+      moveYByDelta(missileSpeed * deltaTime);
 
         // if missile is now off screen then destroy it
         if (offScreenTop(this)) {

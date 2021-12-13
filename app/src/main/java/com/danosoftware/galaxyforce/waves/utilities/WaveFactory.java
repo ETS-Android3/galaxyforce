@@ -36,6 +36,7 @@ import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.create
 import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.createStaggeredDroppers;
 import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.scatteredTopStart;
 import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.scatteredTopStartImmediateRestart;
+import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.waveWithGaps;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveAsteroidsHelper.createAsteroidField;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveDriftingHelper.createDriftingWave;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.DOWNWARDS;
@@ -56,6 +57,7 @@ import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
 import com.danosoftware.galaxyforce.flightpath.paths.Path;
 import com.danosoftware.galaxyforce.flightpath.paths.PathSpeed;
 import com.danosoftware.galaxyforce.flightpath.translators.FlipXPointTranslator;
+import com.danosoftware.galaxyforce.flightpath.translators.FlipYPointTranslator;
 import com.danosoftware.galaxyforce.flightpath.translators.OffsetYPointTranslator;
 import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
@@ -67,7 +69,6 @@ import com.danosoftware.galaxyforce.waves.config.SubWaveConfig;
 import com.danosoftware.galaxyforce.waves.config.SubWaveNoPathConfig;
 import com.danosoftware.galaxyforce.waves.config.SubWavePathConfig;
 import com.danosoftware.galaxyforce.waves.config.SubWaveRepeatMode;
-import com.danosoftware.galaxyforce.waves.config.aliens.AlienConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.exploding.MultiExplosionConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.exploding.SpawningExplosionConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.missiles.MissileFiringConfig;
@@ -900,7 +901,14 @@ public class WaveFactory {
             createSubWave(
                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
                 new SubWavePathConfig(
-                    SubWavePathRule.SPACE_INVADER,
+                    waveWithGaps(
+                        Path.SPACE_INVADER_EASY,
+                        PathSpeed.NORMAL,
+                        6,
+                        0.3f,
+                        4,
+                        0.3f * 7,
+                        null),
                     alienConfig(
                         AlienCharacter.WALKER,
                         AlienMissileSpeed.MEDIUM,
@@ -928,7 +936,17 @@ public class WaveFactory {
             createSubWave(
                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
                 new SubWavePathConfig(
-                    SubWavePathRule.SPACE_INVADER_REVERSE,
+                    waveWithGaps(
+                        Path.SPACE_INVADER_EASY,
+                        PathSpeed.NORMAL,
+                        6,
+                        0.3f,
+                        4,
+                        0.3f * 7,
+                        new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
+                            .add(new FlipYPointTranslator(GAME_HEIGHT))
+                    ),
                     alienConfig(
                         AlienCharacter.WALKER,
                         AlienMissileSpeed.MEDIUM,
@@ -1563,13 +1581,13 @@ public class WaveFactory {
                                     .builder()
                                     .alienConfigs(
                                         Arrays.asList(
-                                            (AlienConfig) directionalAlienConfig(
+                                            directionalAlienConfig(
                                                 AlienCharacter.HOPPER,
                                                 -HALF_PI - QUARTER_PI,
                                                 AlienSpeed.MEDIUM,
                                                 AlienMissileSpeed.FAST,
                                                 2.5f),
-                                            (AlienConfig) directionalAlienConfig(
+                                            directionalAlienConfig(
                                                 AlienCharacter.TINY_DANCER,
                                                 -HALF_PI + QUARTER_PI,
                                                 AlienSpeed.MEDIUM,
@@ -1697,11 +1715,11 @@ public class WaveFactory {
                                     .builder()
                                     .alienConfigs(
                                         Arrays.asList(
-                                            (AlienConfig) directionalAlienConfig(
+                                            directionalAlienConfig(
                                                 AlienCharacter.HOPPER,
                                                 -HALF_PI - QUARTER_PI,
                                                 AlienSpeed.MEDIUM),
-                                            (AlienConfig) directionalAlienConfig(
+                                            directionalAlienConfig(
                                                 AlienCharacter.TINY_DANCER,
                                                 -HALF_PI + QUARTER_PI,
                                                 AlienSpeed.MEDIUM)
@@ -1740,13 +1758,13 @@ public class WaveFactory {
                                     .builder()
                                     .alienConfigs(
                                         Arrays.asList(
-                                            (AlienConfig) directionalAlienConfig(
+                                            directionalAlienConfig(
                                                 AlienCharacter.HOPPER,
                                                 -HALF_PI - QUARTER_PI,
                                                 AlienSpeed.MEDIUM,
                                                 AlienMissileSpeed.FAST,
                                                 4f),
-                                            (AlienConfig) directionalAlienConfig(
+                                            directionalAlienConfig(
                                                 AlienCharacter.TINY_DANCER,
                                                 -HALF_PI + QUARTER_PI,
                                                 AlienSpeed.MEDIUM,
@@ -2258,7 +2276,7 @@ public class WaveFactory {
                             .minimumSpawnDelayTime(1f)
                             .maximumAdditionalRandomSpawnDelayTime(0.5f)
                             .spwanedPowerUpTypes(
-                                Arrays.asList(
+                                Collections.singletonList(
                                     PowerUpType.MISSILE_PARALLEL))
                             .build()),
                     NO_POWER_UPS
@@ -2383,13 +2401,13 @@ public class WaveFactory {
                                     .builder()
                                     .alienConfigs(
                                         Arrays.asList(
-                                            (AlienConfig) directionalAlienConfig(
+                                            directionalAlienConfig(
                                                 AlienCharacter.JUMPER,
                                                 -HALF_PI - QUARTER_PI,
                                                 AlienSpeed.MEDIUM,
                                                 AlienMissileSpeed.FAST,
                                                 4f),
-                                            (AlienConfig) directionalAlienConfig(
+                                            directionalAlienConfig(
                                                 AlienCharacter.PISTON,
                                                 -HALF_PI + QUARTER_PI,
                                                 AlienSpeed.MEDIUM,
@@ -2647,13 +2665,13 @@ public class WaveFactory {
                                         .builder()
                                         .alienConfigs(
                                             Arrays.asList(
-                                                (AlienConfig) directionalAlienConfig(
+                                                directionalAlienConfig(
                                                     AlienCharacter.BEAR,
                                                     -HALF_PI - QUARTER_PI,
                                                     AlienSpeed.FAST,
                                                     AlienMissileSpeed.SLOW,
                                                     4f),
-                                                (AlienConfig) directionalAlienConfig(
+                                                directionalAlienConfig(
                                                     AlienCharacter.JOKER,
                                                     -HALF_PI + QUARTER_PI,
                                                     AlienSpeed.FAST,
@@ -2726,6 +2744,29 @@ public class WaveFactory {
 
       case 39:
 
+        // space invader style attack with aliens in a batch.
+        // A timing-delay gap is inserted between each batch.
+        subWaves.add(
+            createSubWave(
+                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
+                new SubWavePathConfig(
+                    waveWithGaps(
+                        Path.SPACE_INVADER_EASY,
+                        PathSpeed.SLIGHTLY_FAST,
+                        6,
+                        0.3f,
+                        4,
+                        0.3f * 7,
+                        null),
+                    alienConfig(
+                        AlienCharacter.SQUEEZE_BOX,
+                        AlienMissileSpeed.FAST,
+                        2f
+                    ),
+                    Collections.singletonList(PowerUpType.SHIELD)
+                )
+            )
+        );
         // asteroid field
         subWaves.add(
             createSubWave(
@@ -2734,6 +2775,32 @@ public class WaveFactory {
                     PowerUpType.MISSILE_GUIDED,
                     PowerUpType.MISSILE_FAST,
                     PowerUpType.MISSILE_LASER))
+            )
+        );
+        // space invader style attack reverse (i.e. from bottom to top) with aliens in a batch.
+        // A timing-delay gap is inserted between each batch.
+        subWaves.add(
+            createSubWave(
+                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
+                new SubWavePathConfig(
+                    waveWithGaps(
+                        Path.SPACE_INVADER_EASY,
+                        PathSpeed.SLIGHTLY_FAST,
+                        6,
+                        0.3f,
+                        4,
+                        0.3f * 7,
+                        new PointTranslatorChain()
+                            .add(new FlipXPointTranslator(GAME_WIDTH))
+                            .add(new FlipYPointTranslator(GAME_HEIGHT))
+                    ),
+                    alienConfig(
+                        AlienCharacter.SQUEEZE_BOX,
+                        AlienMissileSpeed.FAST,
+                        2f
+                    ),
+                    Collections.singletonList(PowerUpType.SHIELD)
+                )
             )
         );
         subWaves.add(

@@ -45,6 +45,6 @@ public class SpinningByFixedAngularRotation implements SpinningBehaviour {
     public void spin(IAlien alien, float deltaTime) {
         // rotate alien
         angle = (angle + (deltaTime * anglularSpeed)) % 360;
-        alien.rotate((int) (angle));
+        alien.rotate(angle);
     }
 }

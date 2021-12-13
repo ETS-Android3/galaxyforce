@@ -14,11 +14,11 @@ public interface ISprite {
 
     int halfHeight();
 
-    int rotation();
+    float rotation();
 
-    int x();
+  float x();
 
-    int y();
+  float y();
 
     ISpriteIdentifier spriteId();
 }

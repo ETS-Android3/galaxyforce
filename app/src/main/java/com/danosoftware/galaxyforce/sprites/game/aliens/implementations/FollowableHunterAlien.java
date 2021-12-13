@@ -15,9 +15,7 @@ import com.danosoftware.galaxyforce.sprites.game.behaviours.spawn.SpawnBehaviour
 import com.danosoftware.galaxyforce.sprites.game.behaviours.spinner.SpinningBehaviourFactory;
 import com.danosoftware.galaxyforce.sprites.game.missiles.bases.IBaseMissile;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowableHunterConfig;
-
 import java.util.List;
-
 import lombok.Builder;
 import lombok.NonNull;
 
@@ -58,29 +56,29 @@ public class FollowableHunterAlien extends AbstractAlien {
 
     @Builder
     public FollowableHunterAlien(
-            @NonNull final ExplosionBehaviourFactory explosionFactory,
-            @NonNull final SpawnBehaviourFactory spawnFactory,
-            @NonNull final SpinningBehaviourFactory spinningFactory,
-            @NonNull final PowerUpBehaviourFactory powerUpFactory,
-            @NonNull final FireBehaviourFactory fireFactory,
-            @NonNull final HitBehaviourFactory hitFactory,
-            @NonNull GameModel model,
-            @NonNull final FollowableHunterConfig alienConfig,
-            final PowerUpType powerUpType,
-            @NonNull final Integer xStart,
-            @NonNull final Integer yStart,
-            @NonNull final Float timeDelayStart,
-            @NonNull final List<IAlienFollower> followers) {
+        @NonNull final ExplosionBehaviourFactory explosionFactory,
+        @NonNull final SpawnBehaviourFactory spawnFactory,
+        @NonNull final SpinningBehaviourFactory spinningFactory,
+        @NonNull final PowerUpBehaviourFactory powerUpFactory,
+        @NonNull final FireBehaviourFactory fireFactory,
+        @NonNull final HitBehaviourFactory hitFactory,
+        @NonNull GameModel model,
+        @NonNull final FollowableHunterConfig alienConfig,
+        final PowerUpType powerUpType,
+        @NonNull final Float xStart,
+        @NonNull final Float yStart,
+        @NonNull final Float timeDelayStart,
+        @NonNull final List<IAlienFollower> followers) {
 
-        super(
-                alienConfig.getAlienCharacter(),
-                alienConfig.getAlienCharacter().getAnimation(),
-                xStart,
-                yStart,
-                alienConfig.getEnergy(),
-                fireFactory.createFireBehaviour(
-                        alienConfig.getMissileConfig()),
-                powerUpFactory.createPowerUpBehaviour(
+      super(
+          alienConfig.getAlienCharacter(),
+          alienConfig.getAlienCharacter().getAnimation(),
+          xStart,
+          yStart,
+          alienConfig.getEnergy(),
+          fireFactory.createFireBehaviour(
+              alienConfig.getMissileConfig()),
+          powerUpFactory.createPowerUpBehaviour(
                         powerUpType),
                 spawnFactory.createSpawnBehaviour(
                         alienConfig.getSpawnConfig()),
@@ -130,28 +128,28 @@ public class FollowableHunterAlien extends AbstractAlien {
              * Guide alien every x seconds so the alien changes direction to
              * follow any changes in the base's position.
              */
-            if (timeSinceLastDirectionChange > ALIEN_DIRECTION_CHANGE_DELAY) {
+          if (timeSinceLastDirectionChange > ALIEN_DIRECTION_CHANGE_DELAY) {
 
-                // recalculate direction angle
-                this.angle = recalculateAngle(this.angle);
+            // recalculate direction angle
+            this.angle = recalculateAngle(this.angle);
 
-                // reset timer since last missile direction change
-                timeSinceLastDirectionChange = 0f;
-            }
+            // reset timer since last missile direction change
+            timeSinceLastDirectionChange = 0f;
+          }
 
-            // calculate the deltas to be applied each move
-            int xDelta = (int) (speedInPixelsPerSecond * (float) Math.cos(this.angle));
-            int yDelta = (int) (speedInPixelsPerSecond * (float) Math.sin(this.angle));
+          // calculate the deltas to be applied each move
+          float xDelta = speedInPixelsPerSecond * (float) Math.cos(this.angle);
+          float yDelta = speedInPixelsPerSecond * (float) Math.sin(this.angle);
 
-            // move alien by calculated deltas
-            moveByDelta(
-                    (int) (xDelta * deltaTime),
-                    (int) (yDelta * deltaTime)
-            );
+          // move alien by calculated deltas
+          moveByDelta(
+              xDelta * deltaTime,
+              yDelta * deltaTime
+          );
 
-            // update position of the following bodies so each are following the one before
-            IAlien followableAlien = this;
-            for (IAlienFollower follower : followers) {
+          // update position of the following bodies so each are following the one before
+          IAlien followableAlien = this;
+          for (IAlienFollower follower : followers) {
                 if (follower.isActive()) {
                     follower.follow(followableAlien, deltaTime);
                     followableAlien = follower;
