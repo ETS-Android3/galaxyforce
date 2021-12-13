@@ -29,6 +29,8 @@ import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningFixedAn
 import com.danosoftware.galaxyforce.waves.config.aliens.types.BoundariesConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.DirectionalDestroyableConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.DirectionalResettableConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.types.DriftingConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.types.DriftingConfig.DriftingConfigBuilder;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.ExplodingConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowableHunterConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowerConfig;
@@ -103,7 +105,6 @@ public class AlienConfigBuilder {
       case EGG:
       case BARRIER:
       case CYCLONE:
-      case SPACE_STATION:
       case GREMLIN:
       case PINCER:
       case SPARKLE:
@@ -148,6 +149,7 @@ public class AlienConfigBuilder {
       case BEAR:
       case ROTATOR:
       case INSECT_MOTHERSHIP:
+      case SPACE_STATION:
         return MissileFiringConfig
             .builder()
             .missileType(AlienMissileType.ROTATED)
@@ -194,6 +196,7 @@ public class AlienConfigBuilder {
       case MOLECULE_MINI:
       case ASTEROID:
       case ASTEROID_MINI:
+      case SPACE_STATION:
         return SpinningBySpeedConfig
             .builder()
             .build();
@@ -238,7 +241,17 @@ public class AlienConfigBuilder {
   private static ExplosionConfig explosionConfig(
       AlienCharacter character) {
 
-    return explosionConfig(character, AlienSpeed.MEDIUM);
+    return explosionConfig(character, AlienSpeed.MEDIUM, -HALF_PI);
+  }
+
+  /**
+   * Create explosion config for character
+   */
+  private static ExplosionConfig explosionConfig(
+      AlienCharacter character,
+      AlienSpeed speed) {
+
+    return explosionConfig(character, speed, -HALF_PI);
   }
 
   /**
@@ -246,7 +259,8 @@ public class AlienConfigBuilder {
    */
   private static ExplosionConfig explosionConfig(
       AlienCharacter character,
-      AlienSpeed speed) {
+      AlienSpeed speed,
+      float angle) {
 
     switch (character) {
       case CLOUD:
@@ -261,7 +275,8 @@ public class AlienConfigBuilder {
       case ASTEROID:
         return splitOnExplodeConfig(
             speed,
-            AlienCharacter.ASTEROID_MINI);
+            AlienCharacter.ASTEROID_MINI,
+            angle);
       case DRAGON_HEAD:
         return MultiExplosionConfig.builder()
             .numberOfExplosions(10)
@@ -325,7 +340,6 @@ public class AlienConfigBuilder {
       case TELLY:
       case HELMET:
       case EGG:
-      case SPACE_STATION:
       case CYCLONE:
       case GREMLIN:
       case SPARKLE:
@@ -351,6 +365,7 @@ public class AlienConfigBuilder {
       case BABY_DRAGON_HEAD:
       case CHARLIE:
       case SQUASHER:
+      case SPACE_STATION:
         return 2;
       case PINCER:
       case CONFUSER:
@@ -619,7 +634,8 @@ public class AlienConfigBuilder {
    */
   private static ExplosionConfig splitOnExplodeConfig(
       AlienSpeed alienSpeed,
-      AlienCharacter spawnCharacter
+      AlienCharacter spawnCharacter,
+      float angle
   ) {
     return SpawningExplosionConfig
         .builder()
@@ -634,11 +650,11 @@ public class AlienConfigBuilder {
                         Arrays.asList(
                             directionalAlienConfig(
                                 spawnCharacter,
-                                -HALF_PI - QUARTER_PI,
+                                angle - QUARTER_PI,
                                 alienSpeed),
                             directionalAlienConfig(
                                 spawnCharacter,
-                                -HALF_PI + QUARTER_PI,
+                                angle + QUARTER_PI,
                                 alienSpeed)))
                     .build())
                 .build())
@@ -844,6 +860,52 @@ public class AlienConfigBuilder {
         .explodingMissileCharacter(missileCharacter)
         .explosionConfig(explosionConfig)
         .spinningConfig(spinningConfig)
+        .build();
+  }
+
+  // creates alien config builder for aliens that drift across screen
+  public static DriftingConfigBuilder driftingAlienConfigBuilder(
+      final AlienCharacter character,
+      final AlienSpeed speed,
+      final float angle) {
+
+    final Integer energy = energy(character);
+    final ExplosionConfig explosionConfig = explosionConfig(character, speed, angle);
+    final SpinningConfig spinningConfig = spinningConfigBySpeed(character);
+
+    return DriftingConfig
+        .builder()
+        .alienCharacter(character)
+        .energy(energy)
+        .speed(speed)
+        .angle(angle)
+        .spinningConfig(spinningConfig)
+        .explosionConfig(explosionConfig);
+  }
+
+  // creates alien config for aliens that drift across screen
+  public static AlienConfig driftingAlienConfig(
+      final AlienCharacter character,
+      final AlienSpeed speed,
+      final float angle) {
+
+    return driftingAlienConfigBuilder(character, speed, angle)
+        .build();
+  }
+
+  // creates alien config for aliens that drift across screen and fires missiles
+  public static AlienConfig driftingAlienConfig(
+      final AlienCharacter character,
+      final AlienSpeed speed,
+      final float angle,
+      final AlienMissileSpeed missileSpeed,
+      final Float missileFrequency) {
+
+    final MissileConfig missileConfig = missileConfig(character, missileSpeed,
+        missileFrequency);
+
+    return driftingAlienConfigBuilder(character, speed, angle)
+        .missileConfig(missileConfig)
         .build();
   }
 }

@@ -37,8 +37,8 @@ import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.create
 import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.scatteredTopStart;
 import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.scatteredTopStartImmediateRestart;
 import static com.danosoftware.galaxyforce.waves.utilities.PathWaveHelper.waveWithGaps;
-import static com.danosoftware.galaxyforce.waves.utilities.WaveAsteroidsHelper.createAsteroidField;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveDriftingHelper.createDriftingWave;
+import static com.danosoftware.galaxyforce.waves.utilities.WaveDriftingHelper.createDriftingWaveWithVaryingSpeeds;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.DOWNWARDS;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.HALF_PI;
 import static com.danosoftware.galaxyforce.waves.utilities.WaveFactoryHelper.NO_POWER_UPS;
@@ -76,7 +76,6 @@ import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningAlienCo
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningAndExplodingAlienConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningLimitedActiveAlienConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningLimitedAlienConfig;
-import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningBySpeedConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.BoundariesConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.BoundaryLanePolicy;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.DirectionalDestroyableConfig;
@@ -2767,14 +2766,30 @@ public class WaveFactory {
                 )
             )
         );
-        // asteroid field
+        // asteroid field with flying alien
         subWaves.add(
             createSubWave(
                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                createAsteroidField(Arrays.asList(
-                    PowerUpType.MISSILE_GUIDED,
-                    PowerUpType.MISSILE_FAST,
-                    PowerUpType.MISSILE_LASER))
+                flatten(
+                    // asteroid field
+                    createDriftingWaveWithVaryingSpeeds(
+                        AlienCharacter.ASTEROID,
+                        Arrays.asList(
+                            PowerUpType.MISSILE_GUIDED,
+                            PowerUpType.MISSILE_FAST,
+                            PowerUpType.MISSILE_LASER)),
+                    // flying alien
+                    new SubWavePathConfig[]{
+                        new SubWavePathConfig(
+                            SubWavePathRule.DELAYED_SLOW_ARC,
+                            alienConfig(
+                                AlienCharacter.BATTLE_DROID,
+                                AlienMissileSpeed.MEDIUM,
+                                6.5f
+                            ),
+                            Collections.singletonList(PowerUpType.LIFE))
+                    }
+                )
             )
         );
         // space invader style attack reverse (i.e. from bottom to top) with aliens in a batch.
@@ -3207,14 +3222,30 @@ public class WaveFactory {
 
       case 48:
 
-        // asteroid field
+        // asteroid field with flying alien
         subWaves.add(
             createSubWave(
                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                createAsteroidField(Arrays.asList(
-                    PowerUpType.MISSILE_GUIDED,
-                    PowerUpType.MISSILE_FAST,
-                    PowerUpType.MISSILE_LASER))
+                flatten(
+                    // asteroid field
+                    createDriftingWaveWithVaryingSpeeds(
+                        AlienCharacter.ASTEROID,
+                        Arrays.asList(
+                            PowerUpType.MISSILE_GUIDED,
+                            PowerUpType.MISSILE_FAST,
+                            PowerUpType.MISSILE_LASER)),
+                    // flying alien
+                    new SubWavePathConfig[]{
+                        new SubWavePathConfig(
+                            SubWavePathRule.DELAYED_SLOW_ARC,
+                            alienConfig(
+                                AlienCharacter.BATTLE_DROID,
+                                AlienMissileSpeed.MEDIUM,
+                                6.5f
+                            ),
+                            Collections.singletonList(PowerUpType.LIFE))
+                    }
+                )
             )
         );
         break;
@@ -3241,27 +3272,20 @@ public class WaveFactory {
       case 50:
       case 51:
 
+        // drifting spinning space stations that fire missiles
         subWaves.add(
             createSubWave(
                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
                 createDriftingWave(
                     AlienCharacter.SPACE_STATION,
-                    2,
                     AlienSpeed.SLOW,
+                    AlienMissileSpeed.MEDIUM,
+                    10f,
                     Arrays.asList(
                         PowerUpType.MISSILE_GUIDED,
                         PowerUpType.MISSILE_FAST,
-                        PowerUpType.MISSILE_LASER),
-                    SpinningBySpeedConfig
-                        .builder()
-                        .build(),
-                    MissileFiringConfig
-                        .builder()
-                        .missileType(AlienMissileType.ROTATED)
-                        .missileCharacter(AlienMissileCharacter.LASER)
-                        .missileSpeed(AlienMissileSpeed.MEDIUM)
-                        .missileFrequency(10f)
-                        .build())
+                        PowerUpType.MISSILE_LASER)
+                )
             )
         );
         break;
@@ -3326,27 +3350,21 @@ public class WaveFactory {
             )
         );
       case 57:
+
+        // drifting spinning space stations that fire missiles
         subWaves.add(
             createSubWave(
                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
                 createDriftingWave(
                     AlienCharacter.SPACE_STATION,
-                    2,
                     AlienSpeed.SLOW,
+                    AlienMissileSpeed.MEDIUM,
+                    10f,
                     Arrays.asList(
                         PowerUpType.MISSILE_GUIDED,
                         PowerUpType.MISSILE_FAST,
-                        PowerUpType.MISSILE_LASER),
-                    SpinningBySpeedConfig
-                        .builder()
-                        .build(),
-                    MissileFiringConfig
-                        .builder()
-                        .missileType(AlienMissileType.ROTATED)
-                        .missileCharacter(AlienMissileCharacter.LASER)
-                        .missileSpeed(AlienMissileSpeed.MEDIUM)
-                        .missileFrequency(10f)
-                        .build())
+                        PowerUpType.MISSILE_LASER)
+                )
             )
         );
         break;
