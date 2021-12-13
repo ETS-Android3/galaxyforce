@@ -965,7 +965,7 @@ public enum SubWavePathRule {
    * Combines batches of waves with a timing delay between each batch. Allows a gap to be created
    * between batches of aliens.
    */
-  private static List<SubWavePathRuleProperties> waveWithGaps(
+  public static List<SubWavePathRuleProperties> waveWithGaps(
       final Path path,
       final PathSpeed speed,
       final int aliensInBatch,

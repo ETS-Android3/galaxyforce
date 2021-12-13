@@ -16,6 +16,6 @@ public class RotatingSprite extends AbstractMovingSprite {
     public void animate(float deltaTime) {
         // increase angle rotation
         angle = (angle + (deltaTime * 75)) % 360;
-        rotate((int) angle);
+        rotate(angle);
     }
 }

@@ -17,19 +17,19 @@ public class Star extends AbstractMovingSprite {
     private final Animation animation;
 
     Star(
-            int x,
-            int y,
-            Animation animation,
-            float animationStateTime) {
+        float x,
+        float y,
+        Animation animation,
+        float animationStateTime) {
 
-        // set star's start position and initial sprite from animation
-        super(
-                animation.getKeyFrame(animationStateTime, Animation.ANIMATION_LOOPING),
-                x,
-                y);
+      // set star's start position and initial sprite from animation
+      super(
+          animation.getKeyFrame(animationStateTime, Animation.ANIMATION_LOOPING),
+          x,
+          y);
 
-        this.animation = animation;
-        this.initialAnimationStateTime = animationStateTime;
+      this.animation = animation;
+      this.initialAnimationStateTime = animationStateTime;
     }
 
     /**

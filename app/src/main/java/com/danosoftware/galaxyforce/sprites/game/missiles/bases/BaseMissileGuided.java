@@ -12,50 +12,50 @@ import com.danosoftware.galaxyforce.view.Animation;
  */
 public class BaseMissileGuided extends AbstractBaseMissile {
 
-    private static final float PI_BY_TWO = (float) Math.PI / 2f;
-    private static final float TWO_PI = (float) Math.PI * 2f;
-    private static final float DEGREES_PER_PI = (float) (180f / Math.PI);
+  private static final float PI_BY_TWO = (float) Math.PI / 2f;
+  private static final float TWO_PI = (float) Math.PI * 2f;
+  private static final float DEGREES_PER_PI = (float) (180f / Math.PI);
 
-    /* time delay between missile direction changes */
-    private static final float MISSILE_DIRECTION_CHANGE_DELAY = 0.1f;
+  /* time delay between missile direction changes */
+  private static final float MISSILE_DIRECTION_CHANGE_DELAY = 0.1f;
 
-    /* maximum missile change direction in radians */
-    private static final float MAX_DIRECTION_CHANGE_ANGLE = 0.3f;
+  /* maximum missile change direction in radians */
+  private static final float MAX_DIRECTION_CHANGE_ANGLE = 0.3f;
 
-    /* distance missile can move in pixels each second */
-    private final int missileSpeed;
+  /* distance missile can move in pixels each second */
+  private final int missileSpeed;
 
-    /* alien targeted by missile */
-    private IAlien alien;
+  /* alien targeted by missile */
+  private IAlien alien;
 
-    /* reference to model */
-    private final GameModel model;
+  /* reference to model */
+  private final GameModel model;
 
-    /* offset applied to x and y every move */
-    private int xDelta;
-    private int yDelta;
+  /* offset applied to x and y every move */
+  private float xDelta;
+  private float yDelta;
 
-    /* current angle of missile direction */
-    private float angle;
+  /* current angle of missile direction */
+  private float angle;
 
-    /* variable to store time passed since last missile direction change */
-    private float timeSinceMissileDirectionChange;
+  /* variable to store time passed since last missile direction change */
+  private float timeSinceMissileDirectionChange;
 
-    public BaseMissileGuided(
-            final int xStart,
-            final int yStart,
-            final Animation animation,
-            final BaseMissileSpeed baseMissileSpeed,
-            final GameModel model) {
-        super(
-                animation,
-                xStart,
-                yStart);
-        this.model = model;
-        this.missileSpeed = baseMissileSpeed.getSpeed();
+  public BaseMissileGuided(
+      final float xStart,
+      final float yStart,
+      final Animation animation,
+      final BaseMissileSpeed baseMissileSpeed,
+      final GameModel model) {
+    super(
+        animation,
+        xStart,
+        yStart);
+    this.model = model;
+    this.missileSpeed = baseMissileSpeed.getSpeed();
 
-        // initial angle (i.e. straight up)
-        this.angle = PI_BY_TWO;
+    // initial angle (i.e. straight up)
+    this.angle = PI_BY_TWO;
 
         // calculate rotation and movement delta based on angle
         calculateMovements();
@@ -82,22 +82,22 @@ public class BaseMissileGuided extends AbstractBaseMissile {
                 chooseActiveAlien();
             }
 
-            // re-target alien based on current position
-            targetAlien();
+          // re-target alien based on current position
+          targetAlien();
 
-            // reset timer since last missile direction change
-            timeSinceMissileDirectionChange = 0f;
+          // reset timer since last missile direction change
+          timeSinceMissileDirectionChange = 0f;
         }
 
-        // move missile by calculated deltas
-        moveByDelta(
-                (int) (xDelta * deltaTime),
-                (int) (yDelta * deltaTime));
+      // move missile by calculated deltas
+      moveByDelta(
+          xDelta * deltaTime,
+          yDelta * deltaTime);
 
-        // if missile is now off screen then destroy it
-        if (offScreenAnySide(this)) {
-            destroy();
-        }
+      // if missile is now off screen then destroy it
+      if (offScreenAnySide(this)) {
+        destroy();
+      }
 
     }
 
@@ -149,12 +149,12 @@ public class BaseMissileGuided extends AbstractBaseMissile {
     }
 
     private void calculateMovements() {
-        // convert angle to degrees for sprite rotation.
-        // needs to be adjusted by 90 deg for correct rotation.
-        rotate((int) ((angle - PI_BY_TWO) * DEGREES_PER_PI));
+      // convert angle to degrees for sprite rotation.
+      // needs to be adjusted by 90 deg for correct rotation.
+      rotate((angle - PI_BY_TWO) * DEGREES_PER_PI);
 
-        // calculate the deltas to be applied each move
-        this.xDelta = (int) (missileSpeed * (float) Math.cos(angle));
-        this.yDelta = (int) (missileSpeed * (float) Math.sin(angle));
+      // calculate the deltas to be applied each move
+      this.xDelta = missileSpeed * (float) Math.cos(angle);
+      this.yDelta = missileSpeed * (float) Math.sin(angle);
     }
 }

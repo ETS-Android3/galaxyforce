@@ -48,22 +48,22 @@ public class BaseShieldPrimary extends AbstractMovingSprite implements IBaseShie
     private final VibrationService vibrator;
 
     public BaseShieldPrimary(
-            IBasePrimary base,
-            final SoundPlayerService sounds,
-            final VibrationService vibrator,
-            int xStart,
-            int yStart,
-            float syncTime) {
+        IBasePrimary base,
+        final SoundPlayerService sounds,
+        final VibrationService vibrator,
+        float xStart,
+        float yStart,
+        float syncTime) {
 
-        super(
-                getShieldAnimation(base)
-                        .getKeyFrame(syncTime, Animation.ANIMATION_LOOPING),
-                xStart,
-                yStart);
-        this.base = base;
-        this.stateTime = syncTime;
-        this.sounds = sounds;
-        this.vibrator = vibrator;
+      super(
+          getShieldAnimation(base)
+              .getKeyFrame(syncTime, Animation.ANIMATION_LOOPING),
+          xStart,
+          yStart);
+      this.base = base;
+      this.stateTime = syncTime;
+      this.sounds = sounds;
+      this.vibrator = vibrator;
     }
 
     @Override

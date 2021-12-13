@@ -15,7 +15,6 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.models.assets.BaseMissilesDto;
 import com.danosoftware.galaxyforce.models.screens.game.GameModel;
@@ -34,35 +33,33 @@ import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.textures.Texture;
 import com.danosoftware.galaxyforce.textures.TextureDetail;
 import com.danosoftware.galaxyforce.textures.TextureService;
-
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
-import java.util.List;
-
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Log.class, TextureService.class})
 public class BaseHelperTest {
 
-    private static final int INITIAL_X = 100;
-    private static final int INITIAL_Y = 200;
-    private static final int EXPECTED_HELPER_X_OFFSET = 64;
-    private static final int EXPECTED_HELPER_Y_OFFSET = 18;
-    private static final boolean SHIELD_UP = true;
-    private static final boolean SHIELD_DOWN = false;
-    private static final float SHIELD_SYNC_OFFSET = 0.5f;
+  private static final float INITIAL_X = 100f;
+  private static final float INITIAL_Y = 200f;
+  private static final int EXPECTED_HELPER_X_OFFSET = 64;
+  private static final int EXPECTED_HELPER_Y_OFFSET = 18;
+  private static final boolean SHIELD_UP = true;
+  private static final boolean SHIELD_DOWN = false;
+  private static final float SHIELD_SYNC_OFFSET = 0.5f;
 
-    private final IBasePrimary primaryBase = mock(IBasePrimary.class);
-    private final GameModel model = mock(GameModel.class);
-    private final SoundPlayerService sounds = mock(SoundPlayerService.class);
-    private final VibrationService vibrator = mock(VibrationService.class);
+  private final IBasePrimary primaryBase = mock(IBasePrimary.class);
+  private final GameModel model = mock(GameModel.class);
+  private final SoundPlayerService sounds = mock(SoundPlayerService.class);
+  private final VibrationService vibrator = mock(VibrationService.class);
 
     private IBaseHelper baseHelper;
 
@@ -107,18 +104,18 @@ public class BaseHelperTest {
 
     @Test()
     public void shouldMoveLeftBase() {
-        baseHelper = unShieldedHelper(LEFT);
-        baseHelper.move(300, 400);
-        assertThat(baseHelper.x(), is(300 - EXPECTED_HELPER_X_OFFSET));
-        assertThat(baseHelper.y(), is(400 + EXPECTED_HELPER_Y_OFFSET));
+      baseHelper = unShieldedHelper(LEFT);
+      baseHelper.move(300, 400);
+      assertThat(baseHelper.x(), is(300f - EXPECTED_HELPER_X_OFFSET));
+      assertThat(baseHelper.y(), is(400f + EXPECTED_HELPER_Y_OFFSET));
     }
 
     @Test()
     public void shouldMoveRightBase() {
-        baseHelper = unShieldedHelper(RIGHT);
-        baseHelper.move(300, 400);
-        assertThat(baseHelper.x(), is(300 + EXPECTED_HELPER_X_OFFSET));
-        assertThat(baseHelper.y(), is(400 + EXPECTED_HELPER_Y_OFFSET));
+      baseHelper = unShieldedHelper(RIGHT);
+      baseHelper.move(300, 400);
+      assertThat(baseHelper.x(), is(300f + EXPECTED_HELPER_X_OFFSET));
+      assertThat(baseHelper.y(), is(400f + EXPECTED_HELPER_Y_OFFSET));
     }
 
     @Test()

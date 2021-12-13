@@ -15,50 +15,50 @@ public class PowerUpFactory {
     /**
      * Return any random power-up.
      */
-    public static PowerUpsDto generateRandomPowerUp(int x, int y) {
-        // create array of possible power-ups
-        PowerUpType[] powerUps = PowerUpType.values();
+    public static PowerUpsDto generateRandomPowerUp(float x, float y) {
+      // create array of possible power-ups
+      PowerUpType[] powerUps = PowerUpType.values();
 
-        // use method requiring a power-up type array to generate powerup
-        return generateRandomPowerUp(x, y, powerUps);
+      // use method requiring a power-up type array to generate powerup
+      return generateRandomPowerUp(x, y, powerUps);
     }
 
-    /**
-     * Return a random power-up from the supplied array of power-up types.
-     */
-    public static PowerUpsDto generateRandomPowerUp(int x, int y, PowerUpType... powerUps) {
-        // select a random powerup type and generate the power-up
-        int index = (int) (random() * powerUps.length);
+  /**
+   * Return a random power-up from the supplied array of power-up types.
+   */
+  public static PowerUpsDto generateRandomPowerUp(float x, float y, PowerUpType... powerUps) {
+    // select a random powerup type and generate the power-up
+    int index = (int) (random() * powerUps.length);
 
-        return newPowerUp(powerUps[index], x, y);
-    }
+    return newPowerUp(powerUps[index], x, y);
+  }
 
-    /**
-     * Return a power-up using the supplied power-up type.
-     */
-    public static PowerUpsDto newPowerUp(PowerUpType powerUpType, int x, int y) {
+  /**
+   * Return a power-up using the supplied power-up type.
+   */
+  public static PowerUpsDto newPowerUp(PowerUpType powerUpType, float x, float y) {
 
-        final ISpriteIdentifier spriteId;
+    final ISpriteIdentifier spriteId;
 
-        switch (powerUpType) {
-            case HELPER_BASES:
-                spriteId = GameSpriteIdentifier.POWERUP_HELPER_BASES;
-                break;
-            case LIFE:
-                spriteId = GameSpriteIdentifier.POWERUP_LIFE;
-                break;
-            case MISSILE_BLAST:
-                spriteId = GameSpriteIdentifier.POWERUP_MISSILE_BLAST;
-                break;
-            case MISSILE_FAST:
-                spriteId = GameSpriteIdentifier.POWERUP_MISSILE_FAST;
-                break;
-            case MISSILE_GUIDED:
-                spriteId = GameSpriteIdentifier.POWERUP_MISSILE_GUIDED;
-                break;
-            case MISSILE_LASER:
-                spriteId = GameSpriteIdentifier.POWERUP_MISSILE_LASER;
-                break;
+    switch (powerUpType) {
+      case HELPER_BASES:
+        spriteId = GameSpriteIdentifier.POWERUP_HELPER_BASES;
+        break;
+      case LIFE:
+        spriteId = GameSpriteIdentifier.POWERUP_LIFE;
+        break;
+      case MISSILE_BLAST:
+        spriteId = GameSpriteIdentifier.POWERUP_MISSILE_BLAST;
+        break;
+      case MISSILE_FAST:
+        spriteId = GameSpriteIdentifier.POWERUP_MISSILE_FAST;
+        break;
+      case MISSILE_GUIDED:
+        spriteId = GameSpriteIdentifier.POWERUP_MISSILE_GUIDED;
+        break;
+      case MISSILE_LASER:
+        spriteId = GameSpriteIdentifier.POWERUP_MISSILE_LASER;
+        break;
             case MISSILE_PARALLEL:
                 spriteId = GameSpriteIdentifier.POWERUP_MISSILE_PARALLEL;
                 break;

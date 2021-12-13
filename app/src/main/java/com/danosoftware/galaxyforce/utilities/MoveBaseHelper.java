@@ -41,61 +41,61 @@ public class MoveBaseHelper {
     // distance base can move each second in pixels
     private static final int BASE_MOVE_PIXELS = 10 * 60;
 
-    // weighting that must be exceeded to trigger base left or right turn
-    private static final float WEIGHTING_TURN = 0.5f;
+  // weighting that must be exceeded to trigger base left or right turn
+  private static final float WEIGHTING_TURN = 0.5f;
 
-    // increased for tilt controller as weighting never goes close to zero in tilt mode
-    private static final float WEIGHTING_STEADY = 0.1f;
+  // increased for tilt controller as weighting never goes close to zero in tilt mode
+  private static final float WEIGHTING_STEADY = 0.1f;
 
-    // number of seconds for base to be steady for before resetting left or right turn
-    private static final float STEADY_DELAY = 0.1f;
+  // number of seconds for base to be steady for before resetting left or right turn
+  private static final float STEADY_DELAY = 0.1f;
 
-    // base being animated
-    private final IBasePrimary base;
+  // base being animated
+  private final IBasePrimary base;
 
-    // holds time base has been steady for (i.e. not turning left or right)
-    private float baseTurnSteadyTime;
+  // holds time base has been steady for (i.e. not turning left or right)
+  private float baseTurnSteadyTime;
 
-    // is base currently turning left or right?
-    private boolean baseTurning;
+  // is base currently turning left or right?
+  private boolean baseTurning;
 
-    // target position of where we want base to move to
-    private int targetX, targetY;
+  // target position of where we want base to move to
+  private float targetX, targetY;
 
-    // current weighting of base movement
-    private float weightingX, weightingY;
+  // current weighting of base movement
+  private float weightingX, weightingY;
 
-    // is base currently launching (i.e. moving to start position)
-    private boolean isLaunching;
+  // is base currently launching (i.e. moving to start position)
+  private boolean isLaunching;
 
 
-    public MoveBaseHelper(
-            final IBasePrimary base) {
+  public MoveBaseHelper(
+      final IBasePrimary base) {
 
-        this.base = base;
-        this.baseTurnSteadyTime = 0f;
-        this.baseTurning = false;
-        this.weightingX = 0f;
-        this.weightingY = 0f;
-        this.targetX = SCREEN_MID_X;
-        this.targetY = BASE_START_Y;
-        this.isLaunching = true;
-    }
+    this.base = base;
+    this.baseTurnSteadyTime = 0f;
+    this.baseTurning = false;
+    this.weightingX = 0f;
+    this.weightingY = 0f;
+    this.targetX = SCREEN_MID_X;
+    this.targetY = BASE_START_Y;
+    this.isLaunching = true;
+  }
 
-    public void updateTarget(int targetX, int targetY) {
-        this.targetX = targetX;
-        this.targetY = targetY;
-    }
+  public void updateTarget(float targetX, float targetY) {
+    this.targetX = targetX;
+    this.targetY = targetY;
+  }
 
-    /**
-     * Moves base
-     */
-    public void moveBase(float deltaTime) {
+  /**
+   * Moves base
+   */
+  public void moveBase(float deltaTime) {
 
-        if (isLaunching) {
-            launchBase(deltaTime);
-        } else {
-            moveActiveBase(deltaTime);
+    if (isLaunching) {
+      launchBase(deltaTime);
+    } else {
+      moveActiveBase(deltaTime);
         }
     }
 
@@ -104,39 +104,39 @@ public class MoveBaseHelper {
      */
     private void moveActiveBase(float deltaTime) {
 
-        updateWeighting(
-                targetX - base.x(),
-                targetY - base.y());
+      updateWeighting(
+          targetX - base.x(),
+          targetY - base.y());
 
-        /*
-         * can cause jittery movement if game is running very slowly as base
-         * can overshoot target but ensures that base movement doesn't slow
-         * down when game slows down.
-         */
-        float maxDistanceMoved = BASE_MOVE_PIXELS * deltaTime;
-        int x = base.x() + (int) (maxDistanceMoved * weightingX);
-        int y = base.y() + (int) (maxDistanceMoved * weightingY);
+      /*
+       * can cause jittery movement if game is running very slowly as base
+       * can overshoot target but ensures that base movement doesn't slow
+       * down when game slows down.
+       */
+      float maxDistanceMoved = BASE_MOVE_PIXELS * deltaTime;
+      float x = base.x() + (maxDistanceMoved * weightingX);
+      float y = base.y() + (maxDistanceMoved * weightingY);
 
-        // don't allow weightings to over-shoot targets
-        if (weightingX > 0 && x > targetX) {
-            x = targetX;
-        }
-        if (weightingX < 0 && x < targetX) {
-            x = targetX;
-        }
-        if (weightingY > 0 && y > targetY) {
-            y = targetY;
-        }
-        if (weightingY < 0 && y < targetY) {
-            y = targetY;
-        }
+      // don't allow weightings to over-shoot targets
+      if (weightingX > 0 && x > targetX) {
+        x = targetX;
+      }
+      if (weightingX < 0 && x < targetX) {
+        x = targetX;
+      }
+      if (weightingY > 0 && y > targetY) {
+        y = targetY;
+      }
+      if (weightingY < 0 && y < targetY) {
+        y = targetY;
+      }
 
-        // don't allow base to go off screen top
-        if ((y + base.halfHeight()) > GAME_HEIGHT) {
-            y = (GAME_HEIGHT - base.halfHeight());
-        }
+      // don't allow base to go off screen top
+      if ((y + base.halfHeight()) > GAME_HEIGHT) {
+        y = (GAME_HEIGHT - base.halfHeight());
+      }
 
-        // move base to new position
+      // move base to new position
         base.move(x, y);
 
         /*
@@ -179,20 +179,20 @@ public class MoveBaseHelper {
      */
     private void launchBase(float deltaTime) {
 
-        updateWeighting(
-                SCREEN_MID_X - base.x(),
-                BASE_START_Y - base.y());
+      updateWeighting(
+          SCREEN_MID_X - base.x(),
+          BASE_START_Y - base.y());
 
-        /*
-         * can cause jittery movement if game is running very slowly as base
-         * can overshoot target but ensures that base movement doesn't slow
-         * down when game slows down.
-         */
-        float maxDistanceMoved = BASE_MOVE_PIXELS * deltaTime;
-        int x = base.x() + (int) (maxDistanceMoved * weightingX);
-        int y = base.y() + (int) (maxDistanceMoved * weightingY);
+      /*
+       * can cause jittery movement if game is running very slowly as base
+       * can overshoot target but ensures that base movement doesn't slow
+       * down when game slows down.
+       */
+      float maxDistanceMoved = BASE_MOVE_PIXELS * deltaTime;
+      float x = base.x() + (maxDistanceMoved * weightingX);
+      float y = base.y() + (maxDistanceMoved * weightingY);
 
-        // has base reached launch target
+      // has base reached launch target
       if (abs(base.y() - BASE_START_Y) <= BASE_MOVE_RADIUS_LARGE
           || base.y() >= BASE_START_Y) {
         base.move(SCREEN_MID_X, BASE_START_Y);

@@ -43,26 +43,25 @@ public class StarFieldTemplate {
     }
 
     /**
-     * Constructor with predictable initial starfield properties.
-     * Normally only used for testing.
+     * Constructor with predictable initial starfield properties. Normally only used for testing.
      */
     public StarFieldTemplate(
-            int height,
-            int x,
-            int y,
-            int animationIndex,
-            int animationStateTime,
-            StarSpeed starSpeed) {
-        this.height = height;
-        this.timeElapsed = 0f;
+        int height,
+        float x,
+        float y,
+        int animationIndex,
+        int animationStateTime,
+        StarSpeed starSpeed) {
+      this.height = height;
+      this.timeElapsed = 0f;
 
-        this.starTemplates = new ArrayList<>();
-        for (int i = 0; i < MAX_STARS; i++) {
-            starTemplates.add(new StarTemplate(
-                    x,
-                    y,
-                    animationIndex,
-                    animationStateTime,
+      this.starTemplates = new ArrayList<>();
+      for (int i = 0; i < MAX_STARS; i++) {
+        starTemplates.add(new StarTemplate(
+            x,
+            y,
+            animationIndex,
+            animationStateTime,
                     starSpeed));
         }
     }

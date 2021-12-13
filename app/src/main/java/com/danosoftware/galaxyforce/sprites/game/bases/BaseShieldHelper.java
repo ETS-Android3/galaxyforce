@@ -8,28 +8,28 @@ public class BaseShieldHelper extends AbstractMovingSprite implements IBaseShiel
 
     // shield animation that pulses every second
     private static final Animation SHIELD_PULSE = new Animation(
-            0.25f,
-            GameSpriteIdentifier.HELPER_SHIELD_ONE,
-            GameSpriteIdentifier.HELPER_SHIELD_TWO,
-            GameSpriteIdentifier.HELPER_SHIELD_THREE,
-            GameSpriteIdentifier.HELPER_SHIELD_FOUR);
+        0.25f,
+        GameSpriteIdentifier.HELPER_SHIELD_ONE,
+        GameSpriteIdentifier.HELPER_SHIELD_TWO,
+        GameSpriteIdentifier.HELPER_SHIELD_THREE,
+        GameSpriteIdentifier.HELPER_SHIELD_FOUR);
 
-    // state time used to help select the current animation frame
-    private float stateTime;
+  // state time used to help select the current animation frame
+  private float stateTime;
 
-    public BaseShieldHelper(int xStart, int yStart, float syncTime) {
-        super(SHIELD_PULSE.getKeyFrame(syncTime, Animation.ANIMATION_LOOPING), xStart, yStart);
-        this.stateTime = syncTime;
-    }
+  public BaseShieldHelper(float xStart, float yStart, float syncTime) {
+    super(SHIELD_PULSE.getKeyFrame(syncTime, Animation.ANIMATION_LOOPING), xStart, yStart);
+    this.stateTime = syncTime;
+  }
 
-    @Override
-    public void animate(float deltaTime) {
-        // increase state time by delta
-        stateTime += deltaTime;
+  @Override
+  public void animate(float deltaTime) {
+    // increase state time by delta
+    stateTime += deltaTime;
 
-        // set base sprite using animation loop and time through animation
-        changeType(SHIELD_PULSE.getKeyFrame(stateTime, Animation.ANIMATION_LOOPING));
-    }
+    // set base sprite using animation loop and time through animation
+    changeType(SHIELD_PULSE.getKeyFrame(stateTime, Animation.ANIMATION_LOOPING));
+  }
 
     /**
      * Shields can be added at different times. A base with a shield may gain

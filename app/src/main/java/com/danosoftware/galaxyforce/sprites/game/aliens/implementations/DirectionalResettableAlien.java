@@ -15,90 +15,90 @@ import lombok.Builder;
 import lombok.NonNull;
 
 /**
- * Alien that moves from starting position across the screen in a
- * set direction until it moves off-screen. The alien will then be reset and replayed.
+ * Alien that moves from starting position across the screen in a set direction until it moves
+ * off-screen. The alien will then be reset and replayed.
  */
 public class DirectionalResettableAlien extends AbstractResettableAlien {
 
-    private final int startingX;
-    private final int startingY;
-    private boolean restartImmediately;
+  private final float startingX;
+  private final float startingY;
+  private final boolean restartImmediately;
 
-    /* how many seconds to delay before alien starts to follow path */
-    private float timeDelayStart;
+  /* how many seconds to delay before alien starts to follow path */
+  private float timeDelayStart;
 
-    /* original time delay before alien starts in cases where alien is reset */
-    private final float originalTimeDelayStart;
+  /* original time delay before alien starts in cases where alien is reset */
+  private final float originalTimeDelayStart;
 
-    // offset applied to x and y every move
-    private final int xDelta;
-    private final int yDelta;
+  // offset applied to x and y every move
+  private final float xDelta;
+  private final float yDelta;
 
-    @Builder
-    public DirectionalResettableAlien(
-            @NonNull final ExplosionBehaviourFactory explosionFactory,
-            @NonNull final SpawnBehaviourFactory spawnFactory,
-            @NonNull final SpinningBehaviourFactory spinningFactory,
-            @NonNull final PowerUpBehaviourFactory powerUpFactory,
-            @NonNull final FireBehaviourFactory fireFactory,
-            @NonNull final HitBehaviourFactory hitFactory,
-            @NonNull final DirectionalResettableConfig alienConfig,
-            final PowerUpType powerUpType,
-            @NonNull final Integer xStart,
-            @NonNull final Integer yStart,
-            @NonNull final Float timeDelayStart,
-            @NonNull final Boolean restartImmediately) {
+  @Builder
+  public DirectionalResettableAlien(
+      @NonNull final ExplosionBehaviourFactory explosionFactory,
+      @NonNull final SpawnBehaviourFactory spawnFactory,
+      @NonNull final SpinningBehaviourFactory spinningFactory,
+      @NonNull final PowerUpBehaviourFactory powerUpFactory,
+      @NonNull final FireBehaviourFactory fireFactory,
+      @NonNull final HitBehaviourFactory hitFactory,
+      @NonNull final DirectionalResettableConfig alienConfig,
+      final PowerUpType powerUpType,
+      @NonNull final Float xStart,
+      @NonNull final Float yStart,
+      @NonNull final Float timeDelayStart,
+      @NonNull final Boolean restartImmediately) {
 
-        super(
-                alienConfig.getAlienCharacter(),
-                alienConfig.getAlienCharacter().getAnimation(),
-                xStart,
-                yStart,
-                alienConfig.getEnergy(),
-                fireFactory.createFireBehaviour(
-                        alienConfig.getMissileConfig()),
-                powerUpFactory.createPowerUpBehaviour(
+    super(
+        alienConfig.getAlienCharacter(),
+        alienConfig.getAlienCharacter().getAnimation(),
+        xStart,
+        yStart,
+        alienConfig.getEnergy(),
+        fireFactory.createFireBehaviour(
+            alienConfig.getMissileConfig()),
+        powerUpFactory.createPowerUpBehaviour(
                         powerUpType),
                 spawnFactory.createSpawnBehaviour(
-                        alienConfig.getSpawnConfig()),
-                hitFactory.createHitBehaviour(
-                        alienConfig.getAlienCharacter().getHitAnimation()),
-                explosionFactory.createExplosionBehaviour(
-                        alienConfig.getExplosionConfig(),
-                        alienConfig.getAlienCharacter()),
-                spinningFactory.createSpinningBehaviour(
-                        alienConfig.getSpinningConfig(),
-                        alienConfig.getSpeed()));
+                    alienConfig.getSpawnConfig()),
+        hitFactory.createHitBehaviour(
+            alienConfig.getAlienCharacter().getHitAnimation()),
+        explosionFactory.createExplosionBehaviour(
+            alienConfig.getExplosionConfig(),
+            alienConfig.getAlienCharacter()),
+        spinningFactory.createSpinningBehaviour(
+            alienConfig.getSpinningConfig(),
+            alienConfig.getSpeed()));
 
-        waiting();
-        this.startingX = x;
-        this.startingY = y;
-        this.restartImmediately = restartImmediately;
-        this.timeDelayStart = timeDelayStart;
-        this.originalTimeDelayStart = timeDelayStart;
+    waiting();
+    this.startingX = x;
+    this.startingY = y;
+    this.restartImmediately = restartImmediately;
+    this.timeDelayStart = timeDelayStart;
+    this.originalTimeDelayStart = timeDelayStart;
 
-        // calculate the deltas to be applied each move
-        final int movePixelsPerSecond = alienConfig.getSpeed().getSpeedInPixelsPerSeconds();
-        final float angle = alienConfig.getAngle();
-        this.xDelta = (int) (movePixelsPerSecond * (float) Math.cos(angle));
-        this.yDelta = (int) (movePixelsPerSecond * (float) Math.sin(angle));
-    }
+    // calculate the deltas to be applied each move
+    final int movePixelsPerSecond = alienConfig.getSpeed().getSpeedInPixelsPerSeconds();
+    final float angle = alienConfig.getAngle();
+    this.xDelta = movePixelsPerSecond * (float) Math.cos(angle);
+    this.yDelta = movePixelsPerSecond * (float) Math.sin(angle);
+  }
 
     @Override
     public void animate(float deltaTime) {
         super.animate(deltaTime);
 
         if (isActive()) {
-            if (isTravellingOffScreen(this, xDelta, yDelta)) {
-                if (restartImmediately) {
-                    reset(originalTimeDelayStart);
-                } else {
-                    endOfPass();
-                }
+          if (isTravellingOffScreen(this, xDelta, yDelta)) {
+            if (restartImmediately) {
+              reset(originalTimeDelayStart);
+            } else {
+              endOfPass();
             }
-            moveByDelta(
-                    (int) (xDelta * deltaTime),
-                    (int) (yDelta * deltaTime));
+          }
+          moveByDelta(
+              xDelta * deltaTime,
+              yDelta * deltaTime);
         } else if (isWaiting()) {
             // countdown until activation time
             timeDelayStart -= deltaTime;

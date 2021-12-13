@@ -128,41 +128,41 @@ public class AlienFactory {
      * Creates an alien with no path in the specified position.
      */
     public List<IAlien> createAlien(
-            final AlienConfig alienConfig,
-            final PowerUpType powerUp,
-            final boolean xRandom,
-            final boolean yRandom,
-            final int xStart,
-            final int yStart,
-            final float delay,
-            final boolean restartImmediately) {
+        final AlienConfig alienConfig,
+        final PowerUpType powerUp,
+        final boolean xRandom,
+        final boolean yRandom,
+        final float xStart,
+        final float yStart,
+        final float delay,
+        final boolean restartImmediately) {
 
-        List<IAlien> aliens = new ArrayList<>();
-        final AlienType alienType = alienConfig.getAlienType();
+      List<IAlien> aliens = new ArrayList<>();
+      final AlienType alienType = alienConfig.getAlienType();
 
-        // choose a x start position
-        int xStartPos;
-        if (xRandom) {
-            /*
-             * set random start position - but don't allow creation right at
-             * edge where it may be impossible to hit. ensure min 32 pixels from
+      // choose a x start position
+      float xStartPos;
+      if (xRandom) {
+        /*
+         * set random start position - but don't allow creation right at
+         * edge where it may be impossible to hit. ensure min 32 pixels from
              * screen edges
              */
-            xStartPos = 32 + (int) (random() * (GameConstants.GAME_WIDTH - 64));
-        } else {
+          xStartPos = 32 + (float) (random() * (GameConstants.GAME_WIDTH - 64));
+      } else {
             xStartPos = xStart;
         }
 
         // choose a y start position
-        int yStartPos;
-        if (yRandom) {
+      float yStartPos;
+      if (yRandom) {
             /*
              * set random start position - but don't allow creation right at
              * edge where it may be impossible to hit. ensure min 32 pixels from
              * screen edges
              */
-            yStartPos = 32 + (int) (random() * (GameConstants.GAME_HEIGHT - 64));
-        } else {
+          yStartPos = 32 + (float) (random() * (GameConstants.GAME_HEIGHT - 64));
+      } else {
             yStartPos = yStart;
         }
 
@@ -352,63 +352,63 @@ public class AlienFactory {
                                 .build());
                 break;
 
-            default:
-                String errorMessage = "Error: Unrecognised AlienType: '" + alienType + "'";
-                Log.e(TAG, errorMessage);
-                throw new IllegalStateException(errorMessage);
+          default:
+            String errorMessage = "Error: Unrecognised AlienType: '" + alienType + "'";
+            Log.e(TAG, errorMessage);
+            throw new IllegalStateException(errorMessage);
         }
 
-        return aliens;
+      return aliens;
     }
 
-    /**
-     * Creates a spawned alien with no path in the specified position. Simple
-     * implementation that has no random elements or direction.
-     * <p>
-     * Returns spawned alien bean containing alien and sound effect.
-     */
-    public SpawnedAliensDto createSpawnedAlien(
-            final AlienConfig alienConfig,
-            final PowerUpType powerUpType,
-            final int xStart,
-            final int yStart) {
+  /**
+   * Creates a spawned alien with no path in the specified position. Simple implementation that has
+   * no random elements or direction.
+   * <p>
+   * Returns spawned alien bean containing alien and sound effect.
+   */
+  public SpawnedAliensDto createSpawnedAlien(
+      final AlienConfig alienConfig,
+      final PowerUpType powerUpType,
+      final float xStart,
+      final float yStart) {
 
-        final List<IAlien> aliens = createAlien(
-                alienConfig,
-                powerUpType,
-                false,
-                false,
-                xStart,
-                yStart,
-                0f,
-                false);
+    final List<IAlien> aliens = createAlien(
+        alienConfig,
+        powerUpType,
+        false,
+        false,
+        xStart,
+        yStart,
+        0f,
+        false);
 
-        List<IAlien> reversedAlienList = new ArrayList<>();
-        for (IAlien eachAlien : Reversed.reversed(aliens)) {
-            reversedAlienList.add(eachAlien);
-        }
-
-        return new SpawnedAliensDto(reversedAlienList, SoundEffect.ALIEN_SPAWN);
+    List<IAlien> reversedAlienList = new ArrayList<>();
+    for (IAlien eachAlien : Reversed.reversed(aliens)) {
+      reversedAlienList.add(eachAlien);
     }
 
-    public SpawnedAliensDto createStaticExplosion(
-            final StaticExplosionConfig alienConfig,
-            final int x,
-            final int y) {
+    return new SpawnedAliensDto(reversedAlienList, SoundEffect.ALIEN_SPAWN);
+  }
 
-        IAlien alien = StaticExplosion
-                .builder()
-                .explosionFactory(explosionFactory)
-                .spawnFactory(spawnFactory)
-                .spinningFactory(spinningFactory)
-                .powerUpFactory(powerUpFactory)
-                .fireFactory(fireFactory)
-                .hitFactory(hitFactory)
-                .alienConfig(alienConfig)
-                .x(x)
-                .y(y)
-                .build();
+  public SpawnedAliensDto createStaticExplosion(
+      final StaticExplosionConfig alienConfig,
+      final float x,
+      final float y) {
 
-        return new SpawnedAliensDto(Collections.singletonList(alien), SoundEffect.EXPLOSION);
-    }
+    IAlien alien = StaticExplosion
+        .builder()
+        .explosionFactory(explosionFactory)
+        .spawnFactory(spawnFactory)
+        .spinningFactory(spinningFactory)
+        .powerUpFactory(powerUpFactory)
+        .fireFactory(fireFactory)
+        .hitFactory(hitFactory)
+        .alienConfig(alienConfig)
+        .x(x)
+        .y(y)
+        .build();
+
+    return new SpawnedAliensDto(Collections.singletonList(alien), SoundEffect.EXPLOSION);
+  }
 }

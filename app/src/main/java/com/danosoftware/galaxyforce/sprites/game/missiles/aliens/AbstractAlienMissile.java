@@ -12,24 +12,24 @@ public abstract class AbstractAlienMissile extends AbstractCollidingSprite imple
     private float stateTime;
 
     AbstractAlienMissile(
-            Animation animation,
-            int x,
-            int y) {
+        Animation animation,
+        float x,
+        float y) {
 
-        super(
-                animation.getKeyFrame(
-                        0,
-                        Animation.ANIMATION_LOOPING),
-                x,
-                y - (
-                        animation.getKeyFrame(
-                                0,
-                                Animation.ANIMATION_LOOPING))
-                        .getProperties()
-                        .getHeight() / 2);
-        this.isDestroyed = false;
-        this.animation = animation;
-        this.stateTime = 0f;
+      super(
+          animation.getKeyFrame(
+              0,
+              Animation.ANIMATION_LOOPING),
+          x,
+          y - (
+              animation.getKeyFrame(
+                  0,
+                  Animation.ANIMATION_LOOPING))
+              .getProperties()
+              .getHeight() / 2f);
+      this.isDestroyed = false;
+      this.animation = animation;
+      this.stateTime = 0f;
     }
 
     @Override

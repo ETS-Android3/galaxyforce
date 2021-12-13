@@ -14,12 +14,10 @@ import com.danosoftware.galaxyforce.view.Animation;
 import com.danosoftware.galaxyforce.waves.AlienCharacter;
 import com.danosoftware.galaxyforce.waves.config.aliens.exploding.ExplosionConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.StaticExplosionConfig;
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
-
 import lombok.Getter;
 
 /**
@@ -99,15 +97,15 @@ public class ExplodeMultiple implements ExplodeBehaviour {
             final Random random = new Random();
 
             for (int i = 0; i < numberOfExplosions; i++) {
-                final float angle = angleDelta * i;
-                final int radius = Math.max(alien.halfHeight(), alien.halfWidth());
-                final int x = alien.x() + (int) (radius * (float) Math.cos(angle));
-                final int y = alien.y() - (int) (radius * (float) Math.sin(angle));
-                timedExplosions.add(
-                        new TimedExplosion(
-                                x,
-                                y,
-                                random.nextFloat() * maximumExplosionStartTime));
+              final float angle = angleDelta * i;
+              final int radius = Math.max(alien.halfHeight(), alien.halfWidth());
+              final float x = alien.x() + (radius * (float) Math.cos(angle));
+              final float y = alien.y() - (radius * (float) Math.sin(angle));
+              timedExplosions.add(
+                  new TimedExplosion(
+                      x,
+                      y,
+                      random.nextFloat() * maximumExplosionStartTime));
             }
 
             // pick a random timed-explosion and reset start time to 0.
@@ -173,19 +171,20 @@ public class ExplodeMultiple implements ExplodeBehaviour {
         return mainAnimation.isAnimationComplete() && timedExplosions.isEmpty();
     }
 
-    @Getter
-    private static class TimedExplosion {
-        private final int x;
-        private final int y;
-        private final float explodeTime;
+  @Getter
+  private static class TimedExplosion {
 
-        private TimedExplosion(
-                final int x,
-                final int y,
-                final float explodeTime) {
-            this.x = x;
-            this.y = y;
-            this.explodeTime = explodeTime;
-        }
+    private final float x;
+    private final float y;
+    private final float explodeTime;
+
+    private TimedExplosion(
+        final float x,
+        final float y,
+        final float explodeTime) {
+      this.x = x;
+      this.y = y;
+      this.explodeTime = explodeTime;
+    }
     }
 }

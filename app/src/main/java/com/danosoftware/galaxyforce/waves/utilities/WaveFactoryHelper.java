@@ -17,6 +17,8 @@ public class WaveFactoryHelper {
   public static final float DOWNWARDS = -HALF_PI;
   public static final float PI = (float) (Math.PI);
   public static final float QUARTER_PI = (float) (Math.PI / 4f);
+  public static final float EIGHTH_PI = (float) (Math.PI / 8f);
+  public static final float SIXTEENTH_PI = (float) (Math.PI / 16f);
 
   /*
    * Flatten an array of sub-wave configs into a single array

@@ -13,7 +13,6 @@ import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifi
 import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.BASE_RIGHT;
 
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.enumerations.BaseMissileType;
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
@@ -37,7 +36,6 @@ import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.utilities.MoveBaseHelper;
 import com.danosoftware.galaxyforce.view.Animation;
-
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -275,15 +273,15 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
      * Set movement weightings of base
      */
     @Override
-    public void moveTarget(int targetX, int targetY) {
+    public void moveTarget(float targetX, float targetY) {
         /*
          only allow target changes when ACTIVE.
          when in MOVING_TO_START_POSITION state, base must move to a set
          position before becoming ACTIVE
           */
-        if (state == ACTIVE) {
-            moveHelper.updateTarget(targetX, targetY);
-        }
+      if (state == ACTIVE) {
+        moveHelper.updateTarget(targetX, targetY);
+      }
     }
 
     @Override

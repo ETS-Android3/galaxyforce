@@ -9,7 +9,6 @@ import com.danosoftware.galaxyforce.sprites.game.behaviours.spawn.SpawnBehaviour
 import com.danosoftware.galaxyforce.sprites.game.behaviours.spinner.SpinningBehaviourFactory;
 import com.danosoftware.galaxyforce.waves.AlienCharacter;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.StaticExplosionConfig;
-
 import lombok.Builder;
 import lombok.NonNull;
 
@@ -22,30 +21,30 @@ public class StaticExplosion extends AbstractAlien {
 
     @Builder
     public StaticExplosion(
-            @NonNull final ExplosionBehaviourFactory explosionFactory,
-            @NonNull final SpawnBehaviourFactory spawnFactory,
-            @NonNull final SpinningBehaviourFactory spinningFactory,
-            @NonNull final PowerUpBehaviourFactory powerUpFactory,
-            @NonNull final FireBehaviourFactory fireFactory,
-            @NonNull final HitBehaviourFactory hitFactory,
-            @NonNull final StaticExplosionConfig alienConfig,
-            @NonNull final Integer x,
-            @NonNull final Integer y) {
+        @NonNull final ExplosionBehaviourFactory explosionFactory,
+        @NonNull final SpawnBehaviourFactory spawnFactory,
+        @NonNull final SpinningBehaviourFactory spinningFactory,
+        @NonNull final PowerUpBehaviourFactory powerUpFactory,
+        @NonNull final FireBehaviourFactory fireFactory,
+        @NonNull final HitBehaviourFactory hitFactory,
+        @NonNull final StaticExplosionConfig alienConfig,
+        @NonNull final Float x,
+        @NonNull final Float y) {
 
-        super(
-                AlienCharacter.NULL,
-                alienConfig.getAlienCharacter().getAnimation(),
-                x,
-                y,
-                0,
-                fireFactory.createFireBehaviour(null),
-                powerUpFactory.createPowerUpBehaviour(null),
-                spawnFactory.createSpawnBehaviour(null),
-                hitFactory.createHitBehaviour(
-                        alienConfig.getAlienCharacter().getHitAnimation()),
-                explosionFactory.createExplosionBehaviour(
-                        alienConfig.getExplosionConfig(),
-                        alienConfig.getAlienCharacter()),
-                spinningFactory.createSpinningBehaviour(null));
+      super(
+          AlienCharacter.NULL,
+          alienConfig.getAlienCharacter().getAnimation(),
+          x,
+          y,
+          0,
+          fireFactory.createFireBehaviour(null),
+          powerUpFactory.createPowerUpBehaviour(null),
+          spawnFactory.createSpawnBehaviour(null),
+          hitFactory.createHitBehaviour(
+              alienConfig.getAlienCharacter().getHitAnimation()),
+          explosionFactory.createExplosionBehaviour(
+              alienConfig.getExplosionConfig(),
+              alienConfig.getAlienCharacter()),
+          spinningFactory.createSpinningBehaviour(null));
     }
 }
