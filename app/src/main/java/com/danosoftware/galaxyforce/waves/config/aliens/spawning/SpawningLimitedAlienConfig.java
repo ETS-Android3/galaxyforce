@@ -14,7 +14,7 @@ public class SpawningLimitedAlienConfig extends SpawnConfig {
   private final AlienConfig spawnedAlienConfig;
   private final float minimumSpawnDelayTime;
   private final float maximumAdditionalRandomSpawnDelayTime;
-  private final List<PowerUpType> spwanedPowerUpTypes;
+  private final List<PowerUpType> spawnedPowerUpTypes;
   private final int maximumActiveSpawnedAliens;
   // optional alien character to limit on.
   // if not provided, will base count on all spawned aliens
@@ -23,7 +23,7 @@ public class SpawningLimitedAlienConfig extends SpawnConfig {
   @Builder
   public SpawningLimitedAlienConfig(
       @NonNull final AlienConfig spawnedAlienConfig,
-      @NonNull final List<PowerUpType> spwanedPowerUpTypes,
+      @NonNull final List<PowerUpType> spawnedPowerUpTypes,
       @NonNull final Float minimumSpawnDelayTime,
       @NonNull final Float maximumAdditionalRandomSpawnDelayTime,
       @NonNull final Integer maximumActiveSpawnedAliens,
@@ -31,7 +31,7 @@ public class SpawningLimitedAlienConfig extends SpawnConfig {
 
     super(SpawnType.SPAWN_LIMITED);
     this.spawnedAlienConfig = spawnedAlienConfig;
-    this.spwanedPowerUpTypes = spwanedPowerUpTypes;
+    this.spawnedPowerUpTypes = spawnedPowerUpTypes;
     this.minimumSpawnDelayTime = minimumSpawnDelayTime;
     this.maximumAdditionalRandomSpawnDelayTime = maximumAdditionalRandomSpawnDelayTime;
     this.maximumActiveSpawnedAliens = maximumActiveSpawnedAliens;

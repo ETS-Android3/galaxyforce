@@ -13,7 +13,7 @@ public class FlashingTextImpl implements FlashingText {
   private final float flashDelay;
 
   // time since flash state last changed
-  private float timeSinceflashStateChange;
+  private float timeSinceFlashStateChange;
 
   // current flash state - show text or hide text
   private boolean showText;
@@ -26,24 +26,24 @@ public class FlashingTextImpl implements FlashingText {
   public FlashingTextImpl(List<Text> flashingText, float flashDelay, boolean showText) {
     this.flashingText = flashingText;
     this.flashDelay = flashDelay;
-    this.timeSinceflashStateChange = 0f;
+    this.timeSinceFlashStateChange = 0f;
     this.showText = showText;
   }
 
   @Override
   public void update(float deltaTime) {
 
-    timeSinceflashStateChange += deltaTime;
+    timeSinceFlashStateChange += deltaTime;
 
     /*
      * check to see if flash state should change.
      */
-    if (timeSinceflashStateChange > flashDelay) {
+    if (timeSinceFlashStateChange > flashDelay) {
       // invert current flash state
       showText = (!showText);
 
       // reset time since state change
-      timeSinceflashStateChange = 0f;
+      timeSinceFlashStateChange = 0f;
     }
 
   }

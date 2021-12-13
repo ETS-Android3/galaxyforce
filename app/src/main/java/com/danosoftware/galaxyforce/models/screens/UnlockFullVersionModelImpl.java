@@ -307,7 +307,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
   @Override
   public List<ISprite> getSprites() {
 
-    List<ISprite> sprites = new ArrayList<ISprite>(starField.getSprites());
+    List<ISprite> sprites = new ArrayList<>(starField.getSprites());
     sprites.add(logo);
 
     for (SpriteTextButton button : buttons) {
@@ -367,7 +367,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
 
   @Override
   public void resume() {
-    // query upgrade price by requesting the full-game purchase SKU details asyncronously.
+    // query upgrade price by requesting the full-game purchase SKU details asynchronously.
     // onSkuDetailsRetrieved() will be invoked when SKU details are available.
     billingService.queryFullGameSkuDetailsAsync(this);
   }

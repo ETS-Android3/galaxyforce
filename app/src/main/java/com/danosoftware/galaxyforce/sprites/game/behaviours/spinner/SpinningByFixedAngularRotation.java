@@ -15,7 +15,7 @@ public class SpinningByFixedAngularRotation implements SpinningBehaviour {
     private float angle;
 
     /* speed of sprite rotation */
-    private final int anglularSpeed;
+    private final int angularSpeed;
 
     /**
      * construct fixed speed spinning behaviour based on supplied alien speed
@@ -33,7 +33,7 @@ public class SpinningByFixedAngularRotation implements SpinningBehaviour {
 
         // set random starting rotation angle
         this.angle = (float) (random() * 360);
-        this.anglularSpeed = angularSpeed;
+        this.angularSpeed = angularSpeed;
     }
 
     @Override
@@ -44,7 +44,7 @@ public class SpinningByFixedAngularRotation implements SpinningBehaviour {
     @Override
     public void spin(IAlien alien, float deltaTime) {
         // rotate alien
-        angle = (angle + (deltaTime * anglularSpeed)) % 360;
+        angle = (angle + (deltaTime * angularSpeed)) % 360;
         alien.rotate(angle);
     }
 }

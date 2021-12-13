@@ -203,12 +203,12 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
       allSprites.add(
           new SplashSprite(
               iconXPos,
-              175 + (1 * 170),
+              175 + 170,
               icon));
       allText.add(Text.newTextAbsolutePosition(
           text,
           xPos,
-          175 + (1 * 170)));
+          175 + 170));
 
       ToggleButtonGroup googlePlayToggleGroup = new ToggleOption(
           this,

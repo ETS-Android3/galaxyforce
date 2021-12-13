@@ -134,8 +134,7 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
   @Override
   public List<ISprite> getSprites() {
 
-    List<ISprite> sprites = new ArrayList<>();
-    sprites.addAll(starField.getSprites());
+    List<ISprite> sprites = new ArrayList<>(starField.getSprites());
     sprites.add(planet);
     sprites.add(logo);
 

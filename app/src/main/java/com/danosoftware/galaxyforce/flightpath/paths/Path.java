@@ -59,9 +59,8 @@ public enum Path {
     STRAIGHT_DOWN("straightDown.json"),
 
     /**
-     * straight line across screen from left to right and then back again.
-     * Designed to be adjusted in y-axis so horiontal path at any y-position can
-     * be used.
+     * straight line across screen from left to right and then back again. Designed to be adjusted in
+     * y-axis so horizontal path at any y-position can be used.
      */
     LEFT_AND_RIGHT("leftAndRight.json"),
 

@@ -121,7 +121,7 @@ public class GamePlayModelImpl implements Model, GameModel {
   // used to track if any lives were lost in current wave for achievements
   // set to true when a new wave starts
   // set to false whenever a life is lost
-  private boolean nolivesLostInWave;
+  private boolean noLivesLostInWave;
 
   public GamePlayModelImpl(
       Game game,
@@ -387,7 +387,7 @@ public class GamePlayModelImpl implements Model, GameModel {
           CompletedWaveAchievements
               .builder()
               .wave(wave)
-              .nolivesLostInWave(nolivesLostInWave)
+              .noLivesLostInWave(noLivesLostInWave)
               .build()
       );
 
@@ -442,7 +442,7 @@ public class GamePlayModelImpl implements Model, GameModel {
      * as set-up level will bypass the new base state.
      */
     if (primaryBase.isDestroyed()) {
-      nolivesLostInWave = false;
+      noLivesLostInWave = false;
       /*
        * if destroyed object primary base then add new base and change
        * model state.
@@ -547,7 +547,7 @@ public class GamePlayModelImpl implements Model, GameModel {
     setupGetReady();
 
     // reset lives lost for new wave
-    this.nolivesLostInWave = true;
+    this.noLivesLostInWave = true;
   }
 
   /**

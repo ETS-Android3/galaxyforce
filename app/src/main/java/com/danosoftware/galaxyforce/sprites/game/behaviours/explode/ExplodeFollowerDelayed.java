@@ -34,7 +34,7 @@ public class ExplodeFollowerDelayed implements ExplodeBehaviour {
     // delayed time when explosion should start
     private final float explosionStartTime;
 
-    private float totalTimeElasped;
+    private float totalTimeElapsed;
 
     // time since explosion actually started
     private float timeSinceExplosionStarted;
@@ -63,7 +63,7 @@ public class ExplodeFollowerDelayed implements ExplodeBehaviour {
     // we want the explosion to be delayed to sync with the head.
     @Override
     public void startExplosionFollower(IAlienFollower alien) {
-        totalTimeElasped = 0f;
+        totalTimeElapsed = 0f;
         timeSinceExplosionStarted = 0f;
         startedExplosion = false;
         spriteToExplode = alien.spriteId();
@@ -71,10 +71,10 @@ public class ExplodeFollowerDelayed implements ExplodeBehaviour {
 
     @Override
     public ISpriteIdentifier getExplosion(float deltaTime) {
-        totalTimeElasped += deltaTime;
+        totalTimeElapsed += deltaTime;
 
         // the explosion will only start once time has been exceeded
-        if (!startedExplosion && totalTimeElasped >= explosionStartTime) {
+        if (!startedExplosion && totalTimeElapsed >= explosionStartTime) {
             startedExplosion = true;
         }
 

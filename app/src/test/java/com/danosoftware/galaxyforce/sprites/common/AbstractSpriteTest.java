@@ -9,7 +9,6 @@ import static org.mockito.Mockito.when;
 
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteProperties;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -88,7 +87,7 @@ public class AbstractSpriteTest {
         int halfHeight = sprite.halfHeight();
         int halfWidth = sprite.halfWidth();
 
-        // multiple unneccessary calls - should all be cached
+        // multiple unnecessary calls - should all be cached
         sprite.height();
         sprite.width();
         sprite.halfHeight();

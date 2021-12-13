@@ -25,7 +25,7 @@ import lombok.NonNull;
 public class ExplodingAlien extends AbstractAlien {
 
     /* how many seconds before bomb explodes */
-    private final float timeBeforeExpolosion;
+    private final float timeBeforeExplosion;
 
     // exploding missile
     private final AlienMissileCharacter explodingMissileCharacter;
@@ -71,13 +71,13 @@ public class ExplodingAlien extends AbstractAlien {
           spinningFactory.createSpinningBehaviour(
               alienConfig.getSpinningConfig()));
 
-        this.model = model;
-        this.timeBeforeExpolosion = alienConfig.getExplosionTime();
-        this.explodingMissileCharacter = alienConfig.getExplodingMissileCharacter();
+      this.model = model;
+      this.timeBeforeExplosion = alienConfig.getExplosionTime();
+      this.explodingMissileCharacter = alienConfig.getExplodingMissileCharacter();
 
-        // reset timer
-        timer = 0f;
-        isExploding = false;
+      // reset timer
+      timer = 0f;
+      isExploding = false;
     }
 
     @Override
@@ -86,19 +86,19 @@ public class ExplodingAlien extends AbstractAlien {
         super.animate(deltaTime);
 
         if (!isExploding) {
-            timer += deltaTime;
-            if (timer > timeBeforeExpolosion) {
-                explode();
-                // send missiles to model
-                AlienMissilesDto missiles = AlienMissileFactory.createAlienMissile(
-                        model.getBase(),
-                        this,
-                        AlienMissileType.SPRAY,
-                        AlienMissileSpeed.MEDIUM,
-                        explodingMissileCharacter);
-                model.fireAlienMissiles(missiles);
-                isExploding = true;
-            }
+          timer += deltaTime;
+          if (timer > timeBeforeExplosion) {
+            explode();
+            // send missiles to model
+            AlienMissilesDto missiles = AlienMissileFactory.createAlienMissile(
+                model.getBase(),
+                this,
+                AlienMissileType.SPRAY,
+                AlienMissileSpeed.MEDIUM,
+                explodingMissileCharacter);
+            model.fireAlienMissiles(missiles);
+            isExploding = true;
+          }
         }
     }
 }

@@ -55,7 +55,7 @@ public class PathWaveHelper {
    * The aliens are offset meaning they keep their positions in relation to each other. The aliens
    * starting position is calculated so that all aliens start off the top of the screen edge.
    * <p>
-   * Aliens are always centred horiziontally. However, setting fillSpace allows the aliens to also
+   * Aliens are always centred horizontally. However, setting fillSpace allows the aliens to also
    * be spaced to fill the row space available.
    *
    * @param path               - path aliens will follow.
@@ -299,8 +299,8 @@ public class PathWaveHelper {
    * The aliens are delayed meaning each row is delayed by a different amount so they appear to
    * follow each other.
    * <p>
-   * Aliens are always centred horiziontally. However, setting fillSpace allows the aliens to also
-   * be spaced to fill the row space available.
+   * Aliens are always centred horizontally. However, setting fillSpace allows the aliens to also be
+   * spaced to fill the row space available.
    *
    * @param path            - path aliens will follow.
    * @param pathSpeed       - speed of aliens.
@@ -562,7 +562,7 @@ public class PathWaveHelper {
             path,
             speed,
             2,
-            1f * delayMultiplier,
+            delayMultiplier,
             delayStart,
             false,
             new PointTranslatorChain()
@@ -862,7 +862,7 @@ public class PathWaveHelper {
         path,
         speed,
         numberOfAliens,
-        speed.getMultiplier() * 1f,
+        speed.getMultiplier(),
         delayStart,
         false,
         new PointTranslatorChain()
@@ -872,7 +872,7 @@ public class PathWaveHelper {
         path,
         speed,
         numberOfAliens,
-        speed.getMultiplier() * 1f,
+        speed.getMultiplier(),
         speed.getMultiplier() * 0.5f,
         false,
         new PointTranslatorChain()

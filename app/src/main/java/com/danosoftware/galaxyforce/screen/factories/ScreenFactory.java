@@ -200,7 +200,7 @@ public class ScreenFactory {
    */
   private Model createGameModel(Controller controller, int startingWave) {
     final AchievementService achievements = new AchievementService(playService);
-    Model gameModel = new GamePlayModelImpl(
+    GamePlayModelImpl gameModel = new GamePlayModelImpl(
         game,
         controller,
         startingWave,
@@ -213,7 +213,7 @@ public class ScreenFactory {
         starFieldTemplate);
 
     if (SHOW_FPS) {
-      return new GamePlayModelFrameRateDecorator((GamePlayModelImpl) gameModel);
+      return new GamePlayModelFrameRateDecorator(gameModel);
     }
 
     return gameModel;

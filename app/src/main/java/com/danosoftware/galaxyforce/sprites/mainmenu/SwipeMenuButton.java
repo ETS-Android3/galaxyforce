@@ -65,10 +65,10 @@ public class SwipeMenuButton implements SpriteTextButton {
          * the existing button's state.
          */
         return new Rectangle(
-                swipeOffset + buttonSprite.x() - buttonSprite.width() / 2,
-                buttonSprite.y() - buttonSprite.height() / 2,
-                buttonSprite.width(),
-                buttonSprite.height());
+            swipeOffset + buttonSprite.x() - buttonSprite.width() / 2f,
+            buttonSprite.y() - buttonSprite.height() / 2f,
+            buttonSprite.width(),
+            buttonSprite.height());
     }
 
     @Override

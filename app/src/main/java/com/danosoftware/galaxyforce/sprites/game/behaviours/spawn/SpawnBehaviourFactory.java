@@ -39,13 +39,13 @@ public class SpawnBehaviourFactory {
 
             // behaviour that spawns aliens using spawnedAlienConfig
             return new SpawnRandomDelay(
-                    alienFactory,
-                    powerUpAllocatorFactory,
-                    model,
-                    spawningConfig.getSpawnedAlienConfig(),
-                    spawningConfig.getSpwanedPowerUpTypes(),
-                    spawningConfig.getMinimumSpawnDelayTime(),
-                    spawningConfig.getMaximumAdditionalRandomSpawnDelayTime());
+                alienFactory,
+                powerUpAllocatorFactory,
+                model,
+                spawningConfig.getSpawnedAlienConfig(),
+                spawningConfig.getSpawnedPowerUpTypes(),
+                spawningConfig.getMinimumSpawnDelayTime(),
+                spawningConfig.getMaximumAdditionalRandomSpawnDelayTime());
         }
 
         if (spawnConfig != null
@@ -56,15 +56,15 @@ public class SpawnBehaviourFactory {
 
             // behaviour that spawns aliens using a limited spawnedAlienConfig
             return new SpawnRandomDelayLimiter(
-                    alienFactory,
-                    powerUpAllocatorFactory,
-                    model,
-                    spawningConfig.getSpawnedAlienConfig(),
-                    spawningConfig.getSpwanedPowerUpTypes(),
-                    spawningConfig.getMinimumSpawnDelayTime(),
-                    spawningConfig.getMaximumAdditionalRandomSpawnDelayTime(),
-                    spawningConfig.getMaximumActiveSpawnedAliens(),
-                    spawningConfig.getLimitedCharacter());
+                alienFactory,
+                powerUpAllocatorFactory,
+                model,
+                spawningConfig.getSpawnedAlienConfig(),
+                spawningConfig.getSpawnedPowerUpTypes(),
+                spawningConfig.getMinimumSpawnDelayTime(),
+                spawningConfig.getMaximumAdditionalRandomSpawnDelayTime(),
+                spawningConfig.getMaximumActiveSpawnedAliens(),
+                spawningConfig.getLimitedCharacter());
         }
 
         if (spawnConfig != null
@@ -75,15 +75,15 @@ public class SpawnBehaviourFactory {
 
             // behaviour that spawns aliens using a limited spawnedAlienConfig
             return new SpawnRandomDelayActiveAlienLimiter(
-                    alienFactory,
-                    powerUpAllocatorFactory,
-                    model,
-                    spawningConfig.getSpawnedAlienConfig(),
-                    spawningConfig.getSpwanedPowerUpTypes(),
-                    spawningConfig.getMinimumSpawnDelayTime(),
-                    spawningConfig.getMaximumAdditionalRandomSpawnDelayTime(),
-                    spawningConfig.getMaximumActiveSpawnedAliens(),
-                    spawningConfig.getLimitedCharacter());
+                alienFactory,
+                powerUpAllocatorFactory,
+                model,
+                spawningConfig.getSpawnedAlienConfig(),
+                spawningConfig.getSpawnedPowerUpTypes(),
+                spawningConfig.getMinimumSpawnDelayTime(),
+                spawningConfig.getMaximumAdditionalRandomSpawnDelayTime(),
+                spawningConfig.getMaximumActiveSpawnedAliens(),
+                spawningConfig.getLimitedCharacter());
         }
 
         if (spawnConfig != null

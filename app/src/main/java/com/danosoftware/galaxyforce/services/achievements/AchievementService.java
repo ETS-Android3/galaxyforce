@@ -123,7 +123,7 @@ public class AchievementService {
         unlockPendingAchievements();
 
         totalWavesCompletedInCurrentGame++;
-        if (completedWaveAchievements.isNolivesLostInWave()) {
+        if (completedWaveAchievements.isNoLivesLostInWave()) {
             sequentialWavesCompletedWithoutLosingALife++;
         } else {
             sequentialWavesCompletedWithoutLosingALife = 0;
@@ -159,7 +159,7 @@ public class AchievementService {
         }
 
         // trigger unlocks based on waves completed in one life
-        final boolean completedWaveInOneLife = completedWaveAchievements.isNolivesLostInWave();
+        final boolean completedWaveInOneLife = completedWaveAchievements.isNoLivesLostInWave();
         if (completedWaveInOneLife && oneLifeCompletedWaveAchievementsMap.containsKey(completedWave)) {
             unlockAchievement(oneLifeCompletedWaveAchievementsMap.get(completedWave));
         }

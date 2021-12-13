@@ -46,10 +46,10 @@ public class ButtonSprite extends AbstractSprite implements IButtonSprite {
     private Rectangle bounds() {
         if (spriteId().getProperties() != null) {
             bounds = new Rectangle(
-                    x - (width() / 2) - buffer,
-                    y - (height() / 2) - buffer,
-                    width() + (buffer * 2),
-                    height() + (buffer * 2));
+                x - (width() / 2f) - buffer,
+                y - (height() / 2f) - buffer,
+                width() + (buffer * 2),
+                height() + (buffer * 2));
             boundsCached = true;
             return bounds;
         }

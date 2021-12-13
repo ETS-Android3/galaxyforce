@@ -22,7 +22,7 @@ public class SpawnRandomDelay implements SpawnBehaviour {
     /* reference to game model */
     private final GameModel model;
 
-    /* minimum delay between alien spqwning in seconds */
+    /* minimum delay between alien spawning in seconds */
     private final float minSpawnDelay;
 
     /*

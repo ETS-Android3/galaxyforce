@@ -21,7 +21,7 @@ public class SubWavePathRuleProperties {
   private final float delayBetweenAliens;
 
   // timing delay before sub-wave starts
-  private final float delayOffet;
+  private final float delayOffset;
 
   // restart alien immediately when it reaches the end of it's path?
   // alternatively will wait until entire in-progress subwave finishes
@@ -39,13 +39,13 @@ public class SubWavePathRuleProperties {
       final PathSpeed pathSpeed,
       final int numberOfAliens,
       final float delayBetweenAliens,
-      final float delayOffet,
+      final float delayOffset,
       final boolean restartImmediately) {
     this.path = path;
     this.pathSpeed = pathSpeed;
     this.numberOfAliens = numberOfAliens;
     this.delayBetweenAliens = delayBetweenAliens;
-    this.delayOffet = delayOffet;
+    this.delayOffset = delayOffset;
     this.restartImmediately = restartImmediately;
 
     // creates an empty translator chain
@@ -61,14 +61,14 @@ public class SubWavePathRuleProperties {
       final PathSpeed pathSpeed,
       final int numberOfAliens,
       final float delayBetweenAliens,
-      final float delayOffet,
+      final float delayOffset,
       final boolean restartImmediately,
       final PointTranslatorChain translators) {
     this.path = path;
     this.pathSpeed = pathSpeed;
     this.numberOfAliens = numberOfAliens;
     this.delayBetweenAliens = delayBetweenAliens;
-    this.delayOffet = delayOffet;
+    this.delayOffset = delayOffset;
     this.restartImmediately = restartImmediately;
     this.translators = translators;
   }
@@ -89,8 +89,8 @@ public class SubWavePathRuleProperties {
     return delayBetweenAliens;
   }
 
-  public float getDelayOffet() {
-    return delayOffet;
+  public float getDelayOffset() {
+    return delayOffset;
   }
 
   public boolean isRestartImmediately() {

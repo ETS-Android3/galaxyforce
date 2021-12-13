@@ -37,14 +37,12 @@ import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowableHunterCo
 import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowerConfig;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocator;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocatorFactory;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.ArgumentMatchers;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.ArgumentMatchers;
 
 public class FollowableHunterConfigTest {
 
@@ -60,8 +58,8 @@ public class FollowableHunterConfigTest {
     @Before
     public void setUp() {
         when(powerUpAllocatorFactory.createAllocator(
-                ArgumentMatchers.<PowerUpType>anyList(),
-                anyInt()))
+            ArgumentMatchers.anyList(),
+            anyInt()))
                 .thenReturn(powerUpAllocator);
     }
 
@@ -138,10 +136,10 @@ public class FollowableHunterConfigTest {
                         .speed(AlienSpeed.SLOW)
                         .build())
                 .spawnConfig(new SpawningAlienConfig(
-                        mock(AlienConfig.class),
-                        new ArrayList<PowerUpType>(),
-                        0f,
-                        0f))
+                    mock(AlienConfig.class),
+                    new ArrayList<>(),
+                    0f,
+                    0f))
                 .missileConfig(new MissileFiringConfig(
                         AlienMissileType.DOWNWARDS,
                         AlienMissileSpeed.MEDIUM,

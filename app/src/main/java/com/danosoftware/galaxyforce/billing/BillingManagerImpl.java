@@ -101,16 +101,13 @@ public class BillingManagerImpl implements PurchasesUpdatedListener, BillingMana
    */
   @Override
   public void initiatePurchaseFlow(final SkuDetails skuDetails) {
-    Runnable purchaseFlowRequest = new Runnable() {
-      @Override
-      public void run() {
-        Log.d(TAG, "Launching in-app purchase flow for: " + skuDetails.getSku());
-        BillingFlowParams purchaseParams = BillingFlowParams
-            .newBuilder()
-            .setSkuDetails(skuDetails)
-            .build();
-        mBillingClient.launchBillingFlow(mActivity, purchaseParams);
-      }
+    Runnable purchaseFlowRequest = () -> {
+      Log.d(TAG, "Launching in-app purchase flow for: " + skuDetails.getSku());
+      BillingFlowParams purchaseParams = BillingFlowParams
+          .newBuilder()
+          .setSkuDetails(skuDetails)
+          .build();
+      mBillingClient.launchBillingFlow(mActivity, purchaseParams);
     };
     executeRetryableBillingRequest(purchaseFlowRequest);
   }
@@ -133,22 +130,19 @@ public class BillingManagerImpl implements PurchasesUpdatedListener, BillingMana
       final List<String> skuList,
       final SkuDetailsResponseListener listener) {
     // Creating a runnable from the request to use it inside our connection retry policy below
-    Runnable queryRequest = new Runnable() {
-      @Override
-      public void run() {
-        // Query the purchase async
-        SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
-        params.setSkusList(skuList).setType(itemType);
-        mBillingClient.querySkuDetailsAsync(params.build(),
-            new SkuDetailsResponseListener() {
-              @Override
-              public void onSkuDetailsResponse(
-                  @NonNull BillingResult billingResult,
-                  @Nullable List<SkuDetails> skuDetailsList) {
-                listener.onSkuDetailsResponse(billingResult, skuDetailsList);
-              }
-            });
-      }
+    Runnable queryRequest = () -> {
+      // Query the purchase async
+      SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
+      params.setSkusList(skuList).setType(itemType);
+      mBillingClient.querySkuDetailsAsync(params.build(),
+          new SkuDetailsResponseListener() {
+            @Override
+            public void onSkuDetailsResponse(
+                @NonNull BillingResult billingResult,
+                @Nullable List<SkuDetails> skuDetailsList) {
+              listener.onSkuDetailsResponse(billingResult, skuDetailsList);
+            }
+          });
     };
     executeRetryableBillingRequest(queryRequest);
   }
@@ -167,27 +161,18 @@ public class BillingManagerImpl implements PurchasesUpdatedListener, BillingMana
     mTokensToBeConsumed.add(purchaseToken);
 
     // Generating Consume Response listener
-    final ConsumeResponseListener onConsumeListener = new ConsumeResponseListener() {
-      @Override
-      public void onConsumeResponse(
-          @NonNull BillingResult billingResult,
-          @NonNull String purchaseToken) {
-        mBillingUpdatesListener.onConsumeFinished(purchaseToken, billingResult);
-      }
-    };
+    final ConsumeResponseListener onConsumeListener = (billingResult, purchaseTkn) ->
+        mBillingUpdatesListener.onConsumeFinished(purchaseTkn, billingResult);
 
     // Creating a runnable from the request to use it inside our connection retry policy below
-    Runnable consumeRequest = new Runnable() {
-      @Override
-      public void run() {
-        // Consume the purchase async
-        ConsumeParams consumeParams =
-            ConsumeParams
-                .newBuilder()
-                .setPurchaseToken(purchaseToken)
-                .build();
-        mBillingClient.consumeAsync(consumeParams, onConsumeListener);
-      }
+    Runnable consumeRequest = () -> {
+      // Consume the purchase async
+      ConsumeParams consumeParams =
+          ConsumeParams
+              .newBuilder()
+              .setPurchaseToken(purchaseToken)
+              .build();
+      mBillingClient.consumeAsync(consumeParams, onConsumeListener);
     };
 
     executeRetryableBillingRequest(consumeRequest);
@@ -211,14 +196,11 @@ public class BillingManagerImpl implements PurchasesUpdatedListener, BillingMana
     Log.d(TAG, "Got a verified purchase: " + purchase);
 
     // we must acknowledge a purchase or it will be automatically cancelled
-    AcknowledgePurchaseResponseListener acknowledgePurchaseResponseListener = new AcknowledgePurchaseResponseListener() {
-      @Override
-      public void onAcknowledgePurchaseResponse(@NonNull BillingResult billingResult) {
-        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-          Log.i(TAG, "Acknowledged purchase: " + purchase);
-        } else {
-          Log.w(TAG, "Failed to acknowledge purchase: " + purchase);
-        }
+    AcknowledgePurchaseResponseListener acknowledgePurchaseResponseListener = billingResult -> {
+      if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+        Log.i(TAG, "Acknowledged purchase: " + purchase);
+      } else {
+        Log.w(TAG, "Failed to acknowledge purchase: " + purchase);
       }
     };
     if (purchase.getPurchaseState() == Purchase.PurchaseState.PURCHASED) {
@@ -269,21 +251,18 @@ public class BillingManagerImpl implements PurchasesUpdatedListener, BillingMana
    */
   @Override
   public void queryPurchases() {
-    Runnable queryToExecute = new Runnable() {
-      @Override
-      public void run() {
-        long time = System.currentTimeMillis();
-        PurchasesResult purchasesResult = mBillingClient.queryPurchases(SkuType.INAPP);
-        Log.i(TAG, "Querying purchases elapsed time: " + (System.currentTimeMillis() - time)
-            + "ms");
-        if (purchasesResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-          Log.i(TAG, "queryPurchases() was successful");
-        } else {
-          Log.w(TAG, "queryPurchases() got an error response code: "
-              + purchasesResult.getResponseCode());
-        }
-        onQueryPurchasesFinished(purchasesResult);
+    Runnable queryToExecute = () -> {
+      long time = System.currentTimeMillis();
+      PurchasesResult purchasesResult = mBillingClient.queryPurchases(SkuType.INAPP);
+      Log.i(TAG, "Querying purchases elapsed time: " + (System.currentTimeMillis() - time)
+          + "ms");
+      if (purchasesResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+        Log.i(TAG, "queryPurchases() was successful");
+      } else {
+        Log.w(TAG, "queryPurchases() got an error response code: "
+            + purchasesResult.getResponseCode());
       }
+      onQueryPurchasesFinished(purchasesResult);
     };
     executeRetryableBillingRequest(queryToExecute);
   }

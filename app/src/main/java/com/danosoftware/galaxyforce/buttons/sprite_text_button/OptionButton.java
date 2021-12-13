@@ -63,7 +63,7 @@ public class OptionButton implements SpriteTextButton {
   public void buttonReleased() {
     // only release button if current button is not the current option
     // selected. Stops the currently selected controller from being
-    // accidently
+    // accidentally
     // unselected leaving nothing selected.
     if (optionType != toggleButtonGroup.getSelectedOption()) {
       levelSprite.changeType(spriteButtonUp);

@@ -4,7 +4,6 @@ import com.danosoftware.galaxyforce.services.googleplay.GooglePlaySavedGame;
 import com.danosoftware.galaxyforce.services.googleplay.GooglePlayServices;
 import com.danosoftware.galaxyforce.services.preferences.IPreferences;
 import com.danosoftware.galaxyforce.utilities.WaveUtilities;
-
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -110,13 +109,10 @@ public class SavedGameImpl implements SavedGame {
     }
 
     private void saveLocalDevice(final int gameLevel) {
-        Executors.newSingleThreadExecutor().execute(new Runnable() {
-            @Override
-            public void run() {
-                Map<String, Integer> keyValueMap = new HashMap<>();
-                keyValueMap.put(GAME_LEVEL_KEY, gameLevel);
-                preferences.storePreference(keyValueMap);
-            }
+        Executors.newSingleThreadExecutor().execute(() -> {
+            Map<String, Integer> keyValueMap = new HashMap<>();
+            keyValueMap.put(GAME_LEVEL_KEY, gameLevel);
+            preferences.storePreference(keyValueMap);
         });
     }
 
