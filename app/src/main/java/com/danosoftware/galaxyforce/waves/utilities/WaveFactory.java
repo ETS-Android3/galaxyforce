@@ -142,10 +142,10 @@ public class WaveFactory {
 
     switch (wave) {
 
-      /**
-       * Wave 1
-       * Combination of wavey lines in both directions
-       * and descending aliens.
+      /*
+        Wave 1
+        Combination of wavey lines in both directions
+        and descending aliens.
        */
       case 1:
         subWaves.add(
@@ -230,10 +230,10 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 2
-       * Rows of aliens moving left to right.
-       * Descending aliens at edges of screen.
+      /*
+        Wave 2
+        Rows of aliens moving left to right.
+        Descending aliens at edges of screen.
        */
       case 2:
         // 5 rows of aliens moving left-to-right and then back
@@ -329,11 +329,11 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 3
-       * Triangle attacks from each side.
-       * Central descending aliens
-       * Triangle attacks from both sides at same time
+      /*
+        Wave 3
+        Triangle attacks from each side.
+        Central descending aliens
+        Triangle attacks from both sides at same time
        */
       case 3:
         // triangular attack from left-to-right
@@ -406,10 +406,10 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 4
-       * Descending aliens in diamond and flat formations.
-       * Mini-asteroid field.
+      /*
+        Wave 4
+        Descending aliens in diamond and flat formations.
+        Mini-asteroid field.
        */
       case 4:
         // diamond and row formations of aliens descend from the top of the screen
@@ -508,9 +508,9 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 5
-       * Cross-over attacks from left, right and then both sides
+      /*
+        Wave 5
+        Cross-over attacks from left, right and then both sides
        */
       case 5:
         subWaves.add(
@@ -551,11 +551,11 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 6
-       * Insect Motherships move at top of screen while spawning aliens that drop downwards.
-       * Staggered descending aliens.
-       * Insect Motherships move at top of screen while spawning aliens that drop downwards.
+      /*
+        Wave 6
+        Insect Motherships move at top of screen while spawning aliens that drop downwards.
+        Staggered descending aliens.
+        Insect Motherships move at top of screen while spawning aliens that drop downwards.
        */
       case 6:
         // spawning insect mothership
@@ -638,10 +638,10 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 7
-       * Mini-barrier maze.
-       * Selections of aliens descending in formation and then bouncing back-up
+      /*
+        Wave 7
+        Mini-barrier maze.
+        Selections of aliens descending in formation and then bouncing back-up
        */
       case 7:
         // navigate through empty barrier maze
@@ -728,11 +728,11 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 8
-       * Group figure-of-eight attack
-       * Selection of aliens move from left to right in formation
-       * Group figure-of-eight attack
+      /*
+        Wave 8
+        Group figure-of-eight attack
+        Selection of aliens move from left to right in formation
+        Group figure-of-eight attack
        */
       case 8:
         // group figure-of-eight attack
@@ -843,10 +843,10 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 9
-       * Square path of aliens moving clockwise around screen.
-       * Diagonal crossing path of aliens
+      /*
+        Wave 9
+        Square path of aliens moving clockwise around screen.
+        Diagonal crossing path of aliens
        */
       case 9:
         // Square path around edge of screen
@@ -885,11 +885,11 @@ public class WaveFactory {
 
         break;
 
-      /**
-       * Wave 10
-       * Space Invader descending attack from top.
-       * Cross-over attack from both sides
-       * Space Invader descending attack from bottom.
+      /*
+        Wave 10
+        Space Invader descending attack from top.
+        Cross-over attack from both sides
+        Space Invader descending attack from bottom.
        */
       case 10:
         // Space invaders attack from top, moving from left/right and gradually descending.
@@ -953,9 +953,9 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 11
-       * Aliens drops in symmetrical columns and then bounce up.
+      /*
+        Wave 11
+        Aliens drops in symmetrical columns and then bounce up.
        */
       case 11:
         // Aliens drops in symmetrical columns and then bounce up
@@ -1001,9 +1001,9 @@ public class WaveFactory {
                     Collections.singletonList(PowerUpType.MISSILE_PARALLEL))));
         break;
 
-      /**
-       * Wave 12
-       * Single long-tailed dragon that chases base around the screen.
+      /*
+        Wave 12
+        Single long-tailed dragon that chases base around the screen.
        */
       case 12:
         // Long-tailed hunter dragon
@@ -1033,11 +1033,11 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 13
-       * Single column spiral attack from top
-       * Interleaved rows of aliens moving in different directions.
-       * Double column spiral attack from top
+      /*
+        Wave 13
+        Single column spiral attack from top
+        Interleaved rows of aliens moving in different directions.
+        Double column spiral attack from top
        */
       case 13:
         subWaves.add(
@@ -1159,9 +1159,9 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 14
-       * Easy maze of blocks descending from the top.
+      /*
+        Wave 14
+        Easy maze of blocks descending from the top.
        */
       case 14:
         // easy maze of blocks
@@ -1180,11 +1180,11 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 15
-       * Single layer of bouncing aliens.
-       * Wave of descending aliens in diamonds and rows.
-       * Double layer of bouncing aliens.
+      /*
+        Wave 15
+        Single layer of bouncing aliens.
+        Wave of descending aliens in diamonds and rows.
+        Double layer of bouncing aliens.
        */
       case 15:
         subWaves.add(
@@ -1257,11 +1257,11 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 16
-       * Insect mothership spawns (up to 5) hunter insects that attack in 3 vertical lanes but do not fire
-       * Vertically descending rows of aliens
-       * Insect mothership spawns (up to 5) hunter insects that attack in 3 vertical lanes and do fire
+      /*
+        Wave 16
+        Insect mothership spawns (up to 5) hunter insects that attack in 3 vertical lanes but do not fire
+        Vertically descending rows of aliens
+        Insect mothership spawns (up to 5) hunter insects that attack in 3 vertical lanes and do fire
        */
       case 16:
         // insect mothership spawns hunter insects that attack in 3 vertical lanes but do not fire
@@ -1366,11 +1366,11 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 17
-       * Valley dive attack interleaved aliens from top.
-       * Mini asteroid field
-       * Valley dive attack interleaved aliens from bottom.
+      /*
+        Wave 17
+        Valley dive attack interleaved aliens from top.
+        Mini asteroid field
+        Valley dive attack interleaved aliens from bottom.
        */
       case 17:
         subWaves.add(
@@ -1445,10 +1445,10 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 18
-       * Base chased by two flying books. One book occupies left half or screen.
-       * Other book occupies right half of screen.
+      /*
+        Wave 18
+        Base chased by two flying books. One book occupies left half or screen.
+        Other book occupies right half of screen.
        */
       case 18:
         subWaves.add(
@@ -1480,10 +1480,10 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 19
-       * Bell curve wave with aliens flying from left-to-right
-       * Maze with aliens flying in formation and firing at top
+      /*
+        Wave 19
+        Bell curve wave with aliens flying from left-to-right
+        Maze with aliens flying in formation and firing at top
        */
       case 19:
 
@@ -1530,11 +1530,11 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 20
-       * Figure of eight formation attack.
-       * Alien spirals down centre of screen. Spawns multiple aliens that travel
-       * diagonally across screen (left-down and right-down) while firing.
+      /*
+        Wave 20
+        Figure of eight formation attack.
+        Alien spirals down centre of screen. Spawns multiple aliens that travel
+        diagonally across screen (left-down and right-down) while firing.
        */
       case 20:
 
@@ -1600,10 +1600,10 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 21
-       * Descending aliens staggered in 2 columns.
-       * Fast firing alien protected in a box of defender aliens.
+      /*
+        Wave 21
+        Descending aliens staggered in 2 columns.
+        Fast firing alien protected in a box of defender aliens.
        */
       case 21:
 
@@ -1676,12 +1676,12 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 22
-       * 2 alien travels down centre of screen spawning multiple aliens that travel diagonally
-       * across screen (left-down and right-down) while firing.
-       * 2 alien travel in row down screen spawning multiple aliens that travel diagonally
-       * across screen (left-down and right-down).
+      /*
+        Wave 22
+        2 alien travels down centre of screen spawning multiple aliens that travel diagonally
+        across screen (left-down and right-down) while firing.
+        2 alien travel in row down screen spawning multiple aliens that travel diagonally
+        across screen (left-down and right-down).
        */
       case 22:
 
@@ -1777,11 +1777,11 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 23
-       * slow looper attack from both sides firing directional missiles.
-       * fast bell curve attack.
-       * fast curving attack from top-to-bottom with aliens on both sides
+      /*
+        Wave 23
+        slow looper attack from both sides firing directional missiles.
+        fast bell curve attack.
+        fast curving attack from top-to-bottom with aliens on both sides
        */
       case 23:
 
@@ -1831,11 +1831,11 @@ public class WaveFactory {
                     NO_POWER_UPS)));
         break;
 
-      /**
-       * Wave 24
-       * Clouds - Rain and Lightning
-       * 1) Single Row of Clouds
-       * 2) Double Row of Clouds
+      /*
+        Wave 24
+        Clouds - Rain and Lightning
+        1) Single Row of Clouds
+        2) Double Row of Clouds
        */
       case 24:
         subWaves.add(
@@ -1891,9 +1891,9 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 25
-       * Descending aliens in diamond and row formations.
+      /*
+        Wave 25
+        Descending aliens in diamond and row formations.
        */
       case 25:
 
@@ -1964,11 +1964,11 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 26
-       * Maze of blocks.
-       * Cross-over alien attack.
-       * Maze of blocks with aliens blocking gaps.
+      /*
+        Wave 26
+        Maze of blocks.
+        Cross-over alien attack.
+        Maze of blocks with aliens blocking gaps.
        */
       case 26:
         // maze
@@ -2022,11 +2022,11 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 27
-       * Formation of aliens rows with diving aliens coming from top of screen.
-       * Cross-over aliens coming from both sides.
-       * Double columns of dropping and bouncing aliens.
+      /*
+        Wave 27
+        Formation of aliens rows with diving aliens coming from top of screen.
+        Cross-over aliens coming from both sides.
+        Double columns of dropping and bouncing aliens.
        */
       case 27:
 
@@ -2106,10 +2106,10 @@ public class WaveFactory {
                     Collections.singletonList(PowerUpType.MISSILE_GUIDED))));
         break;
 
-      /**
-       * Wave 28
-       * Alien protected by aliens in box formation.
-       * Asteroid field of various sizes.
+      /*
+        Wave 28
+        Alien protected by aliens in box formation.
+        Asteroid field of various sizes.
        */
       case 28:
 
@@ -2177,10 +2177,10 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 29
-       * Aliens dropping down from top on both sides.
-       * Alien rows attacking with book hunter.
+      /*
+        Wave 29
+        Aliens dropping down from top on both sides.
+        Alien rows attacking with book hunter.
        */
       case 29:
         // aliens dropping down from top on both sides
@@ -2249,10 +2249,10 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 30
-       * Bomber Run - alien follows path spawning bombs that explode after a few seconds.
-       * Bomber Run - two aliens follow path spawning bombs that explode after a few seconds.
+      /*
+        Wave 30
+        Bomber Run - alien follows path spawning bombs that explode after a few seconds.
+        Bomber Run - two aliens follow path spawning bombs that explode after a few seconds.
        */
       case 30:
         subWaves.add(
@@ -2306,10 +2306,10 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 31
-       * Aliens flying in bell curve (one direction)
-       * Clouds at top with diamond dropper aliens
+      /*
+        Wave 31
+        Aliens flying in bell curve (one direction)
+        Clouds at top with diamond dropper aliens
        */
       case 31:
         // aliens flying in bell curve (one direction)
@@ -2367,10 +2367,10 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 32
-       * Staggered dropping aliens that spawn aliens.
-       * Aliens flying in bell curve (both directions).
+      /*
+        Wave 32
+        Staggered dropping aliens that spawn aliens.
+        Aliens flying in bell curve (both directions).
        */
       case 32:
         // Staggered dropping aliens that spawn aliens.
@@ -2437,9 +2437,9 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 33
-       * Complex Maze. Quick changes in direction.
+      /*
+        Wave 33
+        Complex Maze. Quick changes in direction.
        */
       case 33:
         subWaves.add(
@@ -2457,10 +2457,10 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 34
-       * Barrier maze with guards blocking gaps.
-       * Aliens dive down in tear drop attack.
+      /*
+        Wave 34
+        Barrier maze with guards blocking gaps.
+        Aliens dive down in tear drop attack.
        */
       case 34:
         // barrier maze with guards blocking gaps
@@ -2493,9 +2493,9 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 35
-       * Multiple rows of different aliens bouncing down and up again
+      /*
+        Wave 35
+        Multiple rows of different aliens bouncing down and up again
        */
       case 35:
         subWaves.add(
@@ -2551,10 +2551,10 @@ public class WaveFactory {
         );
         break;
 
-      /**
-       * Wave 36
-       * Hunter dragon chases base and lays eggs that spawn baby dragons.
-       * A maximum of two baby dragons can be spawned at one time.
+      /*
+        Wave 36
+        Hunter dragon chases base and lays eggs that spawn baby dragons.
+        A maximum of two baby dragons can be spawned at one time.
        */
       case 36:
         // Long-tailed hunter dragon
@@ -2627,9 +2627,9 @@ public class WaveFactory {
 
       case 37:
 
-        /**
-         * Alien drops from top to bottom spawning aliens that move diagonally
-         * down the screen while firing missiles targeted at the base.
+        /*
+          Alien drops from top to bottom spawning aliens that move diagonally
+          down the screen while firing missiles targeted at the base.
          */
         subWaves.add(
             createSubWave(
@@ -2686,9 +2686,9 @@ public class WaveFactory {
 
       case 38:
 
-        /**
-         * Aliens rise on both sides of screen and the cross to the other side.
-         * Repeat in reverse direction. Very few gaps between aliens to attack.
+        /*
+          Aliens rise on both sides of screen and the cross to the other side.
+          Repeat in reverse direction. Very few gaps between aliens to attack.
          */
         subWaves.add(
             createSubWave(
@@ -2995,10 +2995,10 @@ public class WaveFactory {
         break;
 
       case 46:
-        /**
-         * Wave 46
-         * Two motherships move across screen. Top one fires. Bottom one spawns aliens.
-         * Two motherships move across screen together. Other aliens attack in triangular formation.
+        /*
+          Wave 46
+          Two motherships move across screen. Top one fires. Bottom one spawns aliens.
+          Two motherships move across screen together. Other aliens attack in triangular formation.
          */
         subWaves.add(
             createSubWave(
