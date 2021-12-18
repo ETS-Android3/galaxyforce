@@ -15,7 +15,7 @@ public interface Game {
 
   void dispose();
 
-  void draw(float deltaTime);
+  void draw();
 
   void update(float deltaTime);
 

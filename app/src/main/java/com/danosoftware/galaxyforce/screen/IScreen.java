@@ -6,7 +6,7 @@ public interface IScreen {
   /**
    * draw components of current screen
    */
-  void draw(float deltaTime);
+  void draw();
 
   /**
    * update model associated with current screen
