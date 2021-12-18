@@ -69,8 +69,6 @@ import com.danosoftware.galaxyforce.waves.config.SubWaveConfig;
 import com.danosoftware.galaxyforce.waves.config.SubWaveNoPathConfig;
 import com.danosoftware.galaxyforce.waves.config.SubWavePathConfig;
 import com.danosoftware.galaxyforce.waves.config.SubWaveRepeatMode;
-import com.danosoftware.galaxyforce.waves.config.aliens.exploding.MultiExplosionConfig;
-import com.danosoftware.galaxyforce.waves.config.aliens.exploding.SpawningExplosionConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.missiles.MissileFiringConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningAlienConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningAndExplodingAlienConfig;
@@ -78,7 +76,6 @@ import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningLimited
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningLimitedAlienConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.BoundariesConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.BoundaryLanePolicy;
-import com.danosoftware.galaxyforce.waves.config.aliens.types.DirectionalDestroyableConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowableHunterConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowerConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.PathConfig;
@@ -3433,86 +3430,15 @@ public class WaveFactory {
 
       case 59:
       case 60:
-
         subWaves.add(
             createSubWave(
                 SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
                 new SubWavePathConfig(
                     SubWavePathRule.NORMAL_ARC,
-                    PathConfig
-                        .builder()
-                        .alienCharacter(AlienCharacter.BIG_BOSS)
-                        .energy(1)
-                        .explosionConfig(MultiExplosionConfig.builder()
-                            .numberOfExplosions(10)
-                            .maximumExplosionStartTime(1.5f)
-                            .build())
-                        .missileConfig(
-                            MissileFiringConfig
-                                .builder()
-                                .missileType(AlienMissileType.DOWNWARDS)
-                                .missileCharacter(AlienMissileCharacter.LASER)
-                                .missileSpeed(AlienMissileSpeed.MEDIUM)
-                                .missileFrequency(6.5f)
-                                .build())
-                        .build(),
-                    Collections.singletonList(PowerUpType.LIFE)
-                )
-            )
-        );
-        subWaves.add(
-            createSubWave(
-                SubWaveRepeatMode.REPEAT_UNTIL_DESTROYED,
-                new SubWavePathConfig(
-                    SubWavePathRule.NORMAL_ARC,
-                    PathConfig
-                        .builder()
-                        .alienCharacter(AlienCharacter.BIG_BOSS)
-                        .energy(1)
-                        .explosionConfig(MultiExplosionConfig.builder()
-                            .numberOfExplosions(10)
-                            .maximumExplosionStartTime(1.5f)
-                            .explosionConfig(SpawningExplosionConfig
-                                .builder()
-                                .spawnConfig(
-                                    SpawningAlienConfig
-                                        .builder()
-                                        .spawnedAlienConfig(
-                                            DirectionalDestroyableConfig
-                                                .builder()
-                                                .alienCharacter(AlienCharacter.INSECT)
-                                                .energy(1)
-                                                .angle(DOWNWARDS)
-                                                .missileConfig(
-                                                    MissileFiringConfig
-                                                        .builder()
-                                                        .missileType(AlienMissileType.DOWNWARDS)
-                                                        .missileCharacter(
-                                                            AlienMissileCharacter.LASER)
-                                                        .missileSpeed(AlienMissileSpeed.MEDIUM)
-                                                        .missileFrequency(1.5f)
-                                                        .build())
-                                                .speed(AlienSpeed.SLOW)
-                                                .build())
-                                        .minimumSpawnDelayTime(0.5f)
-                                        .maximumAdditionalRandomSpawnDelayTime(0.25f)
-                                        .spawnedPowerUpTypes(
-                                            Arrays.asList(
-                                                PowerUpType.MISSILE_GUIDED,
-                                                PowerUpType.MISSILE_FAST,
-                                                PowerUpType.MISSILE_PARALLEL))
-                                        .build())
-                                .build())
-                            .build())
-                        .missileConfig(
-                            MissileFiringConfig
-                                .builder()
-                                .missileType(AlienMissileType.DOWNWARDS)
-                                .missileCharacter(AlienMissileCharacter.LASER)
-                                .missileSpeed(AlienMissileSpeed.MEDIUM)
-                                .missileFrequency(6.5f)
-                                .build())
-                        .build(),
+                    alienConfig(
+                        AlienCharacter.BIG_BOSS,
+                        AlienMissileSpeed.MEDIUM,
+                        6.5f),
                     Collections.singletonList(PowerUpType.LIFE)
                 )
             )

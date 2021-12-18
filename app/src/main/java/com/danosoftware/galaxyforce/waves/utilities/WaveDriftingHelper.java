@@ -207,8 +207,8 @@ public class WaveDriftingHelper {
         Collections.singletonList(subWaveRuleProperties),
         driftingAlienConfig(
             character,
-            speed,
-            angle),
+            angle,
+            speed),
         powerUp == null ? NO_POWER_UPS : Collections.singletonList(powerUp)
     );
   }
@@ -231,8 +231,8 @@ public class WaveDriftingHelper {
         Collections.singletonList(subWaveRuleProperties),
         driftingAlienConfig(
             character,
-            speed,
             angle,
+            speed,
             missileSpeed,
             missileFrequency),
         powerUp == null ? NO_POWER_UPS : Collections.singletonList(powerUp)
