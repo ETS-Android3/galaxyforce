@@ -173,8 +173,8 @@ public class GameImpl implements Game {
   }
 
   @Override
-  public void draw(float deltaTime) {
-    screen.draw(deltaTime);
+  public void draw() {
+    screen.draw();
   }
 
   @Override

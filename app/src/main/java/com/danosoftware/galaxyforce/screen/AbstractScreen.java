@@ -84,7 +84,7 @@ public abstract class AbstractScreen implements IScreen {
   }
 
   @Override
-  public void draw(float deltaTime) {
+  public void draw() {
     GL10 gl = glGraphics.getGl();
 
     // clear screen
@@ -107,24 +107,27 @@ public abstract class AbstractScreen implements IScreen {
     for (ISprite sprite : model.getSprites()) {
       ISpriteIdentifier spriteId = sprite.spriteId();
       ISpriteProperties props = spriteId.getProperties();
+      TextureRegion textureRegion = textureRegions.get(spriteId);
 
-      if (sprite.rotation() != 0) {
-        // use sprite with rotation method
-        batcher.drawSprite(
-            sprite.x(),
-            sprite.y(),
-            props.getWidth(),
-            props.getHeight(),
-            sprite.rotation(),
-            textureRegions.get(spriteId));
-      } else {
-        // use normal sprite method
-        batcher.drawSprite(
-            sprite.x(),
-            sprite.y(),
-            props.getWidth(),
-            props.getHeight(),
-            textureRegions.get(spriteId));
+      if (textureRegion != null) {
+        if (sprite.rotation() != 0) {
+          // use sprite with rotation method
+          batcher.drawSprite(
+              sprite.x(),
+              sprite.y(),
+              props.getWidth(),
+              props.getHeight(),
+              sprite.rotation(),
+              textureRegion);
+        } else {
+          // use normal sprite method
+          batcher.drawSprite(
+              sprite.x(),
+              sprite.y(),
+              props.getWidth(),
+              props.getHeight(),
+              textureRegion);
+        }
       }
     }
 

@@ -16,7 +16,6 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-
 import com.danosoftware.galaxyforce.billing.BillingManager;
 import com.danosoftware.galaxyforce.billing.BillingManagerImpl;
 import com.danosoftware.galaxyforce.billing.BillingService;
@@ -34,7 +33,6 @@ import com.danosoftware.galaxyforce.view.GLGraphics;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.Task;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -180,7 +178,6 @@ public class MainActivity extends Activity {
         }
     }
 
-    @SuppressWarnings("deprecation")
     private void setupScreen() {
         // set application to use full screen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
@@ -193,7 +190,6 @@ public class MainActivity extends Activity {
 
     // setSystemUiVisibility() is deprecated but WindowInsetsController replacement requires API 30.
     // not replaced to simply support older APIs.
-    @SuppressWarnings("deprecation")
     private void hideSystemUI() {
         // See https://developer.android.com/training/system-ui/immersive
         // Using "sticky immersive"
@@ -242,7 +238,7 @@ public class MainActivity extends Activity {
                 startTime = System.nanoTime();
 
                 game.update(deltaTime);
-                game.draw(deltaTime);
+                game.draw();
             }
 
             if (stateCheck == ActivityState.PAUSED) {

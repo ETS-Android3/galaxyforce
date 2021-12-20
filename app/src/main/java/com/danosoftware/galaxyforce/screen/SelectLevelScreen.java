@@ -11,6 +11,7 @@ import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteProperties;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.textures.TextureMap;
+import com.danosoftware.galaxyforce.textures.TextureRegion;
 import com.danosoftware.galaxyforce.textures.TextureService;
 import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLGraphics;
@@ -45,7 +46,7 @@ public class SelectLevelScreen extends AbstractScreen {
    * to right.
    */
   @Override
-  public void draw(float deltaTime) {
+  public void draw() {
     GL10 gl = glGraphics.getGl();
 
     // clear screen
@@ -75,24 +76,30 @@ public class SelectLevelScreen extends AbstractScreen {
     for (ISprite sprite : levelModel.getStaticSprites()) {
       ISpriteIdentifier spriteId = sprite.spriteId();
       ISpriteProperties props = spriteId.getProperties();
-      batcher.drawSprite(
-          sprite.x() + cameraOffset,
-          sprite.y(),
-          props.getWidth(),
-          props.getHeight(),
-          textureRegions.get(spriteId));
+      TextureRegion textureRegion = textureRegions.get(spriteId);
+      if (textureRegion != null) {
+        batcher.drawSprite(
+            sprite.x() + cameraOffset,
+            sprite.y(),
+            props.getWidth(),
+            props.getHeight(),
+            textureRegion);
+      }
     }
 
     // gets sprites from model
     for (ISprite sprite : model.getSprites()) {
       ISpriteIdentifier spriteId = sprite.spriteId();
       ISpriteProperties props = spriteId.getProperties();
-      batcher.drawSprite(
-          sprite.x(),
-          sprite.y(),
-          props.getWidth(),
-          props.getHeight(),
-          textureRegions.get(spriteId));
+      TextureRegion textureRegion = textureRegions.get(spriteId);
+      if (textureRegion != null) {
+        batcher.drawSprite(
+            sprite.x(),
+            sprite.y(),
+            props.getWidth(),
+            props.getHeight(),
+            textureRegion);
+      }
     }
 
     /*
