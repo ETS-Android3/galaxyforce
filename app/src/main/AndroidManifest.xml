@@ -43,6 +43,10 @@ See: https://developer.android.com/guide/topics/manifest/manifest-intro.html
             </intent-filter>
         </activity>
 
+        <!-- Profileable to enable Macrobenchmark profiling -->
+        <!-- Suppress AndroidElementNotAllowed -->
+        <profileable android:shell="true" />
+
     </application>
 
 </manifest>

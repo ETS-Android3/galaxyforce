@@ -117,6 +117,18 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
                     'proguard-rules.txt'
         }
+        benchmark {
+            // uses gradle properties to populate API keys in BuildConfig
+            buildConfigField 'String', "public_key1", "\"$PUBLIC_KEY1\""
+            buildConfigField 'String', "public_key2", "\"$PUBLIC_KEY2\""
+            buildConfigField 'String', "public_key3", "\"$PUBLIC_KEY3\""
+            buildConfigField 'String', "public_key4", "\"$PUBLIC_KEY4\""
+
+            minifyEnabled true // Enables code shrinking for the release build type.
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'),
+                    'proguard-rules.txt'
+            signingConfig signingConfigs.debug
+        }
     }
 }
 
