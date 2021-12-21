@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
+import android.os.Trace;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -237,8 +238,12 @@ public class MainActivity extends Activity {
                 float deltaTime = (System.nanoTime() - startTime) / 1000000000.0f;
                 startTime = System.nanoTime();
 
+                Trace.beginSection("onDrawFrame.update");
                 game.update(deltaTime);
+                Trace.endSection();
+                Trace.beginSection("onDrawFrame.draw");
                 game.draw();
+                Trace.endSection();
             }
 
             if (stateCheck == ActivityState.PAUSED) {

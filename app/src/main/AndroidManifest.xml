@@ -41,6 +41,10 @@ See: https://developer.android.com/guide/topics/manifest/manifest-intro.html
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+                <action android:name="com.danosoftware.galaxyforce.MAIN_ACTIVITY" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
 
         <!-- Profileable to enable Macrobenchmark profiling -->
