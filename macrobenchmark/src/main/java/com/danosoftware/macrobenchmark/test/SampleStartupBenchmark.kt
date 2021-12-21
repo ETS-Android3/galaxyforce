@@ -28,7 +28,7 @@ class SampleStartupBenchmark {
         pressHome()
         val intent = Intent()
         intent.setPackage("com.danosoftware.galaxyforce")
-        intent.setAction("com.danosoftware.galaxyforce.MAIN_ACTIVITY")
+        intent.setAction("com.danosoftware.galaxyforce.BENCHMARK")
         startActivityAndWait(intent)
     }
 
@@ -45,7 +45,7 @@ class SampleStartupBenchmark {
             pressHome()
             val intent = Intent()
             intent.setPackage("com.danosoftware.galaxyforce")
-            intent.setAction("com.danosoftware.galaxyforce.MAIN_ACTIVITY")
+            intent.setAction("com.danosoftware.galaxyforce.BENCHMARK")
             startActivityAndWait(intent)
             device.click(50, 50)
             device.waitForIdle()
