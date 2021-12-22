@@ -25,6 +25,7 @@ import com.danosoftware.galaxyforce.billing.BillingUpdatesListener;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.games.Game;
 import com.danosoftware.galaxyforce.games.GameImpl;
+import com.danosoftware.galaxyforce.games.GameLoopTest;
 import com.danosoftware.galaxyforce.services.configurations.ConfigurationService;
 import com.danosoftware.galaxyforce.services.configurations.ConfigurationServiceImpl;
 import com.danosoftware.galaxyforce.services.googleplay.GooglePlayServices;
@@ -96,7 +97,17 @@ public class MainActivity extends Activity {
         this.mPlayServices = new GooglePlayServices(this, configurationService);
 
         // create instance of game
-        game = new GameImpl(this, glGraphics, glView, billingService, mPlayServices, configurationService);
+        Intent launchIntent = getIntent();
+        String launchIntentAction = launchIntent.getAction();
+        if (launchIntentAction != null &&
+            (launchIntentAction.equals("com.google.intent.action.TEST_LOOP") ||
+                launchIntentAction.equals("com.danosoftware.galaxyforce.BENCHMARK"))) {
+            game = new GameLoopTest(this, glGraphics, glView, billingService, mPlayServices,
+                configurationService);
+        } else {
+            game = new GameImpl(this, glGraphics, glView, billingService, mPlayServices,
+                configurationService);
+        }
     }
 
     /* runs after onCreate or resuming after being in background */
