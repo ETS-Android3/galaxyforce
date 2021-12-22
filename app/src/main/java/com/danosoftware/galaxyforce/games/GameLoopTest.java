@@ -1,5 +1,6 @@
 package com.danosoftware.galaxyforce.games;
 
+import android.app.Activity;
 import android.content.Context;
 import android.opengl.GLSurfaceView;
 import com.danosoftware.galaxyforce.billing.BillingService;
@@ -13,7 +14,9 @@ import com.danosoftware.galaxyforce.view.GLGraphics;
  */
 public class GameLoopTest extends GameImpl {
 
-  boolean hasSwitched = false;
+  private boolean hasSwitched = false;
+  private float timeElasped = 0f;
+  final private Activity activity;
 
   public GameLoopTest(
       Context context,
@@ -24,14 +27,19 @@ public class GameLoopTest extends GameImpl {
       ConfigurationService configurationService) {
 
     super(context, glGraphics, glView, billingService, playService, configurationService);
+    this.activity = (Activity) context;
   }
 
   @Override
   public void update(float deltaTime) {
     super.update(deltaTime);
+    timeElasped += deltaTime;
     if (!hasSwitched) {
       this.changeToGameScreen(1);
       hasSwitched = true;
+    }
+    if (timeElasped >= 30f) {
+      activity.finish();
     }
   }
 }
