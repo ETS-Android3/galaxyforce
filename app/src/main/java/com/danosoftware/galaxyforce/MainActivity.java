@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
+import android.os.Trace;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -24,6 +25,7 @@ import com.danosoftware.galaxyforce.billing.BillingUpdatesListener;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.games.Game;
 import com.danosoftware.galaxyforce.games.GameImpl;
+import com.danosoftware.galaxyforce.games.GameLoopTest;
 import com.danosoftware.galaxyforce.services.configurations.ConfigurationService;
 import com.danosoftware.galaxyforce.services.configurations.ConfigurationServiceImpl;
 import com.danosoftware.galaxyforce.services.googleplay.GooglePlayServices;
@@ -95,7 +97,16 @@ public class MainActivity extends Activity {
         this.mPlayServices = new GooglePlayServices(this, configurationService);
 
         // create instance of game
-        game = new GameImpl(this, glGraphics, glView, billingService, mPlayServices, configurationService);
+        Intent launchIntent = getIntent();
+        String launchIntentAction = launchIntent.getAction();
+        if (launchIntentAction != null &&
+            launchIntentAction.equals("com.google.intent.action.TEST_LOOP")) {
+            game = new GameLoopTest(this, glGraphics, glView, billingService, mPlayServices,
+                configurationService);
+        } else {
+            game = new GameImpl(this, glGraphics, glView, billingService, mPlayServices,
+                configurationService);
+        }
     }
 
     /* runs after onCreate or resuming after being in background */
@@ -237,8 +248,12 @@ public class MainActivity extends Activity {
                 float deltaTime = (System.nanoTime() - startTime) / 1000000000.0f;
                 startTime = System.nanoTime();
 
+                Trace.beginSection("onDrawFrame.update");
                 game.update(deltaTime);
+                Trace.endSection();
+                Trace.beginSection("onDrawFrame.draw");
                 game.draw();
+                Trace.endSection();
             }
 
             if (stateCheck == ActivityState.PAUSED) {
