@@ -129,9 +129,10 @@ To run the benchmark reports:
 
 ![Benchmark Variant](assets/benchmarkVariant.png "Benchmark Variant")
 
-- Run the benchmark test called `AppBenchmark` from Android Studio.
+- Run the benchmark test called `AppBenchmark` from Android Studio (located within `macrobenchmark`
+  module).
 
-The test will benchmark startup time and frame timimgs on the device over a number of iterations.
+The test will benchmark startup time and frame timings on the device over a number of iterations.
 This can take several minutes.
 
 When finished a report will be displayed, similar to the one below:
