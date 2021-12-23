@@ -112,6 +112,48 @@ file from the bundle is used.
 
 ***
 
+## Benchmarking Performance
+
+This application uses Macrobench to benchmark performance.
+
+The application has been set-up by following the instructions
+at [macrobenchmark](https://developer.android.com/studio/profile/macrobenchmark). A new module
+called `macrobenchmark` has been created to handle benchmarking of the app.
+
+To run the benchmark reports:
+
+- Ensure you are connected to a real device via Android Studio.
+- Open the build variants view in Android Studio (`View` -> `Tools Windows` -> `Build Variants`)
+- Change both build variants for `app` and `macrobenchmark` to `benchmark` (Note: `app` would
+  normally be set to `debug` when developing).
+
+![Benchmark Variant](assets/benchmarkVariant.png "Benchmark Variant")
+
+- Run the benchmark test called `AppBenchmark` from Android Studio.
+
+The test will benchmark startup time and frame timimgs on the device over a number of iterations.
+This can take several minutes.
+
+When finished a report will be displayed, similar to the one below:
+
+```
+AppBenchmark_startup
+  timeToInitialDisplayMs   min 387.4,   median 398.8,   max 441.5
+    Traces: Iteration 0 1 2 3 4
+
+AppBenchmark_timing
+  frameCpuTimeMs   P50  10.9,   P90  41.0,   P95  41.6,   P99  54.2
+  frameOverrunMs   P50   5.6,   P90  44.2,   P95  55.2,   P99  66.2
+    Traces: Iteration 0 1 2 3 4
+```
+
+You can click on any iterations to investigate and profile the performance.
+
+For good FPS performance (60 FPS), the app should render frames in under 16ms. Focus on
+any `onDrawFrame` methods that take longer than this.
+
+***
+
 ## Creating Alien Characters
 
 [Pixel Mash](https://nevercenter.com/pixelmash/) has been used to create alien characters used
