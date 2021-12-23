@@ -100,8 +100,7 @@ public class MainActivity extends Activity {
         Intent launchIntent = getIntent();
         String launchIntentAction = launchIntent.getAction();
         if (launchIntentAction != null &&
-            (launchIntentAction.equals("com.google.intent.action.TEST_LOOP") ||
-                launchIntentAction.equals("com.danosoftware.galaxyforce.BENCHMARK"))) {
+            launchIntentAction.equals("com.google.intent.action.TEST_LOOP")) {
             game = new GameLoopTest(this, glGraphics, glView, billingService, mPlayServices,
                 configurationService);
         } else {

@@ -30,7 +30,7 @@ android {
     // Enable the benchmark to run separately from the app process
     experimentalProperties["android.experimental.self-instrumenting"] = true
     buildTypes {
-        // Declare a build type (release) to match the target app's build type
+        // Declare a build type to match the target app's build type
         benchmark {
             debuggable = true
             signingConfig = debug.signingConfig
@@ -51,7 +51,7 @@ dependencies {
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'androidx.appcompat:appcompat:1.4.0'
     implementation 'com.google.android.material:material:1.4.0'
-    implementation 'junit:junit:4.+'
+    implementation 'junit:junit:4.13.2'
     implementation 'androidx.test.ext:junit:1.1.3'
     implementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'androidx.benchmark:benchmark-macro-junit4:1.1.0-alpha13'
