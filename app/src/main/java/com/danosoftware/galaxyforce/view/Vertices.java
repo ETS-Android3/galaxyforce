@@ -27,14 +27,9 @@ class Vertices {
     ByteBuffer buffer = ByteBuffer.allocateDirect(maxVertices * vertexSize);
     buffer.order(ByteOrder.nativeOrder());
     vertices = buffer.asIntBuffer();
-
-    if (maxIndices > 0) {
-      buffer = ByteBuffer.allocateDirect(maxIndices * Short.SIZE / 8);
-      buffer.order(ByteOrder.nativeOrder());
-      indices = buffer.asShortBuffer();
-    } else {
-      indices = null;
-    }
+    buffer = ByteBuffer.allocateDirect(maxIndices * Short.SIZE / 8);
+    buffer.order(ByteOrder.nativeOrder());
+    indices = buffer.asShortBuffer();
   }
 
   public void setVertices(float[] vertices, int offset, int length) {

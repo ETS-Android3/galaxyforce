@@ -1,23 +1,32 @@
 package com.danosoftware.galaxyforce.view;
 
+import android.util.Log;
 import com.danosoftware.galaxyforce.textures.Texture;
 import com.danosoftware.galaxyforce.textures.TextureRegion;
 import javax.microedition.khronos.opengles.GL10;
 
 public class SpriteBatcher {
 
-  private final float[] verticesBuffer;
-  private final Vertices vertices;
+  private float[] verticesBuffer;
+  private Vertices vertices;
   private int bufferIndex;
   private int numSprites;
+  private int maxSprites;
+  private final GLGraphics glGraphics;
 
-  public SpriteBatcher(GLGraphics glGraphics, int maxSprites) {
-    this.verticesBuffer = new float[maxSprites * 4 * 4];
-    this.vertices = new Vertices(glGraphics, maxSprites * 4, maxSprites * 6, false, true);
+  public SpriteBatcher(GLGraphics glGraphics) {
+    this.glGraphics = glGraphics;
+    setUpVertices(0);
+  }
+
+  private void setUpVertices(int spriteCount) {
+    this.maxSprites = spriteCount;
+    this.verticesBuffer = new float[spriteCount * 4 * 4];
+    this.vertices = new Vertices(glGraphics, spriteCount * 4, spriteCount * 6, false, true);
     this.bufferIndex = 0;
     this.numSprites = 0;
 
-    short[] indices = new short[maxSprites * 6];
+    short[] indices = new short[spriteCount * 6];
     int len = indices.length;
     short j = 0;
     for (int i = 0; i < len; i += 6, j += 4) {
@@ -28,10 +37,11 @@ public class SpriteBatcher {
       indices[i + 4] = (short) (j + 3);
       indices[i + 5] = j;
     }
-    vertices.setIndices(indices, 0, indices.length);
+    this.vertices.setIndices(indices, 0, indices.length);
   }
 
-  public void beginBatch(Texture texture) {
+  public void beginBatch(Texture texture, int spriteCount) {
+    setUpVertices(spriteCount);
     texture.bind();
     numSprites = 0;
     bufferIndex = 0;
@@ -45,6 +55,12 @@ public class SpriteBatcher {
   }
 
   public void drawSprite(float x, float y, float width, float height, TextureRegion region) {
+    if (numSprites >= maxSprites) {
+      Log.e("SpriteBatcher",
+          "Attempt to draw sprite beyond allowed maximum of " + maxSprites + " sprites");
+      return;
+    }
+
     float halfWidth = width / 2;
     float halfHeight = height / 2;
     float x1 = x - halfWidth;

@@ -21,6 +21,7 @@ import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLGraphics;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -101,10 +102,15 @@ public abstract class AbstractScreen implements IScreen {
     gl.glEnable(GL10.GL_BLEND);
     gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
-    batcher.beginBatch(texture);
+    // count sprites to draw
+    final List<ISprite> sprites = model.getSprites();
+    final List<Text> texts = model.getText();
+    final int spriteCount = sprites.size() + countCharacters(texts);
+
+    batcher.beginBatch(texture, spriteCount);
 
     // gets sprites from model
-    for (ISprite sprite : model.getSprites()) {
+    for (ISprite sprite : sprites) {
       ISpriteIdentifier spriteId = sprite.spriteId();
       ISpriteProperties props = spriteId.getProperties();
       TextureRegion textureRegion = textureRegions.get(spriteId);
@@ -132,7 +138,7 @@ public abstract class AbstractScreen implements IScreen {
     }
 
     // draw any text
-    for (Text text : model.getText()) {
+    for (Text text : texts) {
       gameFont.drawText(
           batcher,
           text.getText(),
@@ -219,5 +225,13 @@ public abstract class AbstractScreen implements IScreen {
   public boolean handleBackButton() {
     model.goBack();
     return true;
+  }
+
+  private int countCharacters(List<Text> texts) {
+    int charCount = 0;
+    for (Text text : texts) {
+      charCount += text.getText().length();
+    }
+    return charCount;
   }
 }
