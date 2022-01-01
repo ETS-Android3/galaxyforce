@@ -119,12 +119,12 @@ public class SoundPlayerServiceImpl implements SoundPlayerService, SoundPool.OnL
 
         String filename = soundEffect.getFileName();
 
-        try {
-            AssetFileDescriptor assetDescriptor = assets.openFd("sounds/" + filename);
+        try (AssetFileDescriptor assetDescriptor = assets.openFd("sounds/" + filename)) {
             soundPool.setOnLoadCompleteListener(this);
             int sampleId = soundPool.load(assetDescriptor, 0);
             effectsBank.put(soundEffect, sampleId);
-            Log.i(GameConstants.LOG_TAG, "Loading Sound Effect: " + soundEffect.name() + " with ID: " + sampleId);
+            Log.i(GameConstants.LOG_TAG,
+                "Loading Sound Effect: " + soundEffect.name() + " with ID: " + sampleId);
         } catch (IOException e) {
             throw new GalaxyForceException("Couldn't load sound '" + filename + "'");
         }

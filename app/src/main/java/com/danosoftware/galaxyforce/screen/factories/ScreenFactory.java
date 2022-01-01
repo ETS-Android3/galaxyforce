@@ -47,8 +47,6 @@ import java.util.List;
 
 public class ScreenFactory {
 
-  private static final int MAX_SPRITES = 1000;
-
   private final SpriteBatcher batcher;
   private final Camera2D camera;
   private final GLGraphics glGraphics;
@@ -92,7 +90,7 @@ public class ScreenFactory {
     this.game = game;
     this.input = input;
     this.versionName = versionName;
-    this.batcher = new SpriteBatcher(glGraphics, MAX_SPRITES);
+    this.batcher = new SpriteBatcher(glGraphics);
     this.camera = new Camera2D(glGraphics, GameConstants.GAME_WIDTH, GameConstants.GAME_HEIGHT);
     this.starFieldTemplate = new StarFieldTemplate(GameConstants.GAME_WIDTH,
         GameConstants.GAME_HEIGHT);
