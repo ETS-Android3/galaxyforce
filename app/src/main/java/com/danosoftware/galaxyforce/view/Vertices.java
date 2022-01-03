@@ -2,6 +2,7 @@ package com.danosoftware.galaxyforce.view;
 
 import android.opengl.GLES20;
 import android.util.Log;
+import com.danosoftware.galaxyforce.BuildConfig;
 import com.danosoftware.galaxyforce.utilities.GlUtils;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -114,7 +115,9 @@ class Vertices {
       GLES20.glEnableVertexAttribArray(GLShaderHelper.sTexturePositionHandle);
 
       // report any errors seen during binding
-      GlUtils.checkGlError("bindSpriteVertices");
+      if (BuildConfig.DEBUG) {
+        GlUtils.checkGlError("bindSpriteVertices");
+      }
     }
   }
 
@@ -128,7 +131,9 @@ class Vertices {
     }
 
     // report any errors seen during drawing
-    GlUtils.checkGlError("drawSpriteVertices");
+    if (BuildConfig.DEBUG) {
+      GlUtils.checkGlError("drawSpriteVertices");
+    }
   }
 
   public void unbind() {
@@ -143,6 +148,8 @@ class Vertices {
     }
 
     // report any errors seen during unbinding
-    GlUtils.checkGlError("unbindSpriteVertices");
+    if (BuildConfig.DEBUG) {
+      GlUtils.checkGlError("unbindSpriteVertices");
+    }
   }
 }
