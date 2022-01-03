@@ -18,14 +18,11 @@ import com.danosoftware.galaxyforce.textures.TextureDetail;
 import com.danosoftware.galaxyforce.textures.TextureMap;
 import com.danosoftware.galaxyforce.textures.TextureRegion;
 import com.danosoftware.galaxyforce.textures.TextureService;
-import com.danosoftware.galaxyforce.utilities.GlUtils;
 import com.danosoftware.galaxyforce.view.Camera2D;
-import com.danosoftware.galaxyforce.view.GLGraphics;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.microedition.khronos.opengles.GL10;
 
 public abstract class AbstractScreen implements IScreen {
 
@@ -51,8 +48,6 @@ public abstract class AbstractScreen implements IScreen {
    * Some models/controllers require views to be created before they can be constructed.
    */
   final Model model;
-  // reference to openGL graphics
-  final GLGraphics glGraphics;
   // sprite batcher used for displaying sprites
   final SpriteBatcher batcher;
   // camera used for display views
@@ -72,13 +67,11 @@ public abstract class AbstractScreen implements IScreen {
       Controller controller,
       TextureService textureService,
       TextureMap textureMap,
-      GLGraphics glGraphics,
       Camera2D camera,
       SpriteBatcher batcher) {
 
     this.textureService = textureService;
     this.textureMap = textureMap;
-    this.glGraphics = glGraphics;
     this.batcher = batcher;
     this.camera = camera;
     this.controller = controller;
@@ -88,7 +81,6 @@ public abstract class AbstractScreen implements IScreen {
 
   @Override
   public void draw() {
-    GL10 gl = glGraphics.getGl();
 
     // clear screen
     final RgbColour backgroundColour = model.background();
@@ -96,31 +88,14 @@ public abstract class AbstractScreen implements IScreen {
         backgroundColour.getRed(),
         backgroundColour.getGreen(),
         backgroundColour.getBlue(),
-        BACKGROUND_ALPHA
-    );
+        BACKGROUND_ALPHA);
     GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-    GlUtils.checkGlError("clear");
-
-//
-//    gl.glClearColor(
-//        backgroundColour.getRed(),
-//        backgroundColour.getGreen(),
-//        backgroundColour.getBlue(),
-//        BACKGROUND_ALPHA);
-//    gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
     camera.setViewportAndMatrices();
-//    GLES20.glEnable(GLES20.GL_TEXTURE_2D); // is this needed???
-    GlUtils.checkGlError("texture");
-    GLES20.glEnable(GLES20.GL_BLEND);
-    GlUtils.checkGlError("blend");
-    // Blend based on the fragment's alpha value.
-    GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-    GlUtils.checkGlError("screen");
 
-//    gl.glEnable(GL10.GL_TEXTURE_2D);
-//    gl.glEnable(GL10.GL_BLEND);
-//    gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+    // Enable alpha blending and blend based on the fragment's alpha value
+    GLES20.glEnable(GLES20.GL_BLEND);
+    GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 
     // count sprites to draw
     final List<ISprite> sprites = model.getSprites();
@@ -169,8 +144,9 @@ public abstract class AbstractScreen implements IScreen {
     }
 
     batcher.endBatch();
+
+    // Turn alpha blending off
     GLES20.glDisable(GLES20.GL_BLEND);
-    //gl.glDisable(GL10.GL_BLEND);
   }
 
   @Override

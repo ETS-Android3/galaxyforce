@@ -49,7 +49,6 @@ public class ScreenFactory {
 
   private final SpriteBatcher batcher;
   private final Camera2D camera;
-  private final GLGraphics glGraphics;
   private final BillingService billingService;
   private final ConfigurationService configurationService;
   private final SoundPlayerService sounds;
@@ -78,7 +77,6 @@ public class ScreenFactory {
       Input input,
       String versionName) {
 
-    this.glGraphics = glGraphics;
     this.billingService = billingService;
     this.configurationService = configurationService;
     this.sounds = sounds;
@@ -90,12 +88,11 @@ public class ScreenFactory {
     this.game = game;
     this.input = input;
     this.versionName = versionName;
-    this.batcher = new SpriteBatcher(glGraphics);
+    this.batcher = new SpriteBatcher();
     this.camera = new Camera2D(glGraphics, GameConstants.GAME_WIDTH, GameConstants.GAME_HEIGHT);
     this.starFieldTemplate = new StarFieldTemplate(GameConstants.GAME_WIDTH,
         GameConstants.GAME_HEIGHT);
     this.textureService = new TextureService(
-        glGraphics,
         new TextureRegionXmlParser(assets),
         new TextureLoader(assets));
   }
@@ -115,7 +112,6 @@ public class ScreenFactory {
             controller,
             textureService,
             TextureMap.MENU,
-            glGraphics,
             camera,
             batcher);
 
@@ -125,7 +121,6 @@ public class ScreenFactory {
             controller,
             textureService,
             TextureMap.MENU,
-            glGraphics,
             camera,
             batcher);
 
@@ -136,7 +131,6 @@ public class ScreenFactory {
             controller,
             textureService,
             TextureMap.MENU,
-            glGraphics,
             camera,
             batcher);
 
@@ -149,7 +143,6 @@ public class ScreenFactory {
             controller,
             textureService,
             TextureMap.MENU,
-            glGraphics,
             camera,
             batcher);
 
@@ -159,7 +152,6 @@ public class ScreenFactory {
             controller,
             textureService,
             TextureMap.MENU,
-            glGraphics,
             camera,
             batcher);
 
@@ -169,7 +161,6 @@ public class ScreenFactory {
             controller,
             textureService,
             TextureMap.MENU,
-            glGraphics,
             camera,
             batcher);
 
@@ -188,7 +179,6 @@ public class ScreenFactory {
         controller,
         textureService,
         TextureMap.GAME,
-        glGraphics,
         camera,
         batcher);
   }
@@ -224,7 +214,6 @@ public class ScreenFactory {
         controller,
         textureService,
         TextureMap.GAME,
-        glGraphics,
         camera,
         batcher);
   }
@@ -236,7 +225,6 @@ public class ScreenFactory {
         controller,
         textureService,
         TextureMap.GAME,
-        glGraphics,
         camera,
         batcher);
   }

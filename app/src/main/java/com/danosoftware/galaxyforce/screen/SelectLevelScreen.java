@@ -15,10 +15,8 @@ import com.danosoftware.galaxyforce.textures.TextureMap;
 import com.danosoftware.galaxyforce.textures.TextureRegion;
 import com.danosoftware.galaxyforce.textures.TextureService;
 import com.danosoftware.galaxyforce.view.Camera2D;
-import com.danosoftware.galaxyforce.view.GLGraphics;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 import java.util.List;
-import javax.microedition.khronos.opengles.GL10;
 
 public class SelectLevelScreen extends AbstractScreen {
 
@@ -35,11 +33,10 @@ public class SelectLevelScreen extends AbstractScreen {
       Controller controller,
       TextureService textureService,
       TextureMap textureMap,
-      GLGraphics glGraphics,
       Camera2D camera,
       SpriteBatcher batcher) {
 
-    super(model, controller, textureService, textureMap, glGraphics, camera, batcher);
+    super(model, controller, textureService, textureMap, camera, batcher);
     this.levelModel = model;
   }
 
@@ -49,7 +46,6 @@ public class SelectLevelScreen extends AbstractScreen {
    */
   @Override
   public void draw() {
-    GL10 gl = glGraphics.getGl();
 
     // clear screen
     final RgbColour backgroundColour = GameConstants.DEFAULT_BACKGROUND_COLOUR;
@@ -57,28 +53,17 @@ public class SelectLevelScreen extends AbstractScreen {
         backgroundColour.getRed(),
         backgroundColour.getGreen(),
         backgroundColour.getBlue(),
-        BACKGROUND_ALPHA
-    );
+        BACKGROUND_ALPHA);
     GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-
-//    gl.glClearColor(
-//        backgroundColour.getRed(),
-//        backgroundColour.getGreen(),
-//        backgroundColour.getBlue(),
-//        BACKGROUND_ALPHA);
-//    gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
     // move camera's x position on screen by model's current scroll speed
     float cameraOffset = levelModel.getScrollPosition();
     camera.moveX(SCREEN_CENTRE + cameraOffset);
 
     camera.setViewportAndMatrices();
-//    gl.glEnable(GL10.GL_TEXTURE_2D);
-//    gl.glEnable(GL10.GL_BLEND);
-//    gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
-//    GLES20.glEnable(GLES20.GL_TEXTURE_2D); // is this needed???
+
+    // Enable alpha blending and blend based on the fragment's alpha value
     GLES20.glEnable(GLES20.GL_BLEND);
-    // Blend based on the fragment's alpha value.
     GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 
     // count sprites to draw
@@ -152,7 +137,8 @@ public class SelectLevelScreen extends AbstractScreen {
     }
 
     batcher.endBatch();
-//    gl.glDisable(GL10.GL_BLEND);
+
+    // Turn alpha blending off
     GLES20.glDisable(GLES20.GL_BLEND);
   }
 

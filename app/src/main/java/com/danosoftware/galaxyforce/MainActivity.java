@@ -12,7 +12,6 @@ import android.content.Intent;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
-import android.opengl.Matrix;
 import android.os.Bundle;
 import android.os.Trace;
 import android.util.Log;
@@ -82,8 +81,7 @@ public class MainActivity extends Activity {
         setupScreen();
 
         // set-up GL view
-        glView = new MyGLSurfaceView(this);
-//        glView.setRenderer(new GLRenderer());
+        glView = new GameGLSurfaceView(this);
         setContentView(glView);
         this.glGraphics = new GLGraphics(glView);
 
@@ -238,10 +236,6 @@ public class MainActivity extends Activity {
     private class GLRenderer implements Renderer {
 
         private static final String LOCAL_TAG = "GLRenderer";
-
-        // Orthographic projection matrix.  Must be updated when the available screen area
-        // changes (e.g. when the device is rotated).
-        final float mProjectionMatrix[] = new float[16];
         long startTime;
 
         @Override
@@ -255,8 +249,6 @@ public class MainActivity extends Activity {
             if (stateCheck == ActivityState.RUNNING) {
                 float deltaTime = (System.nanoTime() - startTime) / 1000000000.0f;
                 startTime = System.nanoTime();
-
-                GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
                 Trace.beginSection("onDrawFrame.update");
                 game.update(deltaTime);
@@ -290,25 +282,16 @@ public class MainActivity extends Activity {
         public void onSurfaceChanged(GL10 unused, int width, int height) {
             Log.i(GameConstants.LOG_TAG,
                 LOCAL_TAG + ": onSurfaceChanged. width: " + width + ". height: " + height + ".");
-            GLES20.glViewport(0, 0, width, height);
-
-            // Create an orthographic projection that maps the desired arena size to the viewport
-            // dimensions.
-            Matrix.orthoM(mProjectionMatrix, 0, 0, GameConstants.GAME_WIDTH,
-                0, GameConstants.GAME_HEIGHT, -1, 1);
-
-            // Set our shader program
-            //GLES20.glUseProgram(GLShaderHelper.sProgramHandle);
         }
 
         @Override
         public void onSurfaceCreated(GL10 unused, EGLConfig config) {
             Log.i(GameConstants.LOG_TAG, LOCAL_TAG + ": onSurfaceCreated");
 
-            // create and initialise GL shaders
+            // create and initialise our GL shaders program
             GLShaderHelper.createProgram();
 
-            // Set our shader program
+            // Use our shader program for GL
             GLES20.glUseProgram(GLShaderHelper.sProgramHandle);
 
             // set game background colour.
@@ -325,8 +308,6 @@ public class MainActivity extends Activity {
             // Don't need backface culling.
             GLES20.glDisable(GLES20.GL_CULL_FACE);
 
-            //glGraphics.setGl(gl);
-
             synchronized (stateChanged) {
                 if (state == ActivityState.INITIALISED) {
                     game.start();
@@ -338,19 +319,21 @@ public class MainActivity extends Activity {
         }
     }
 
-    private class MyGLSurfaceView extends GLSurfaceView {
+    /**
+     * Inner class for GL Surface View
+     */
+    private class GameGLSurfaceView extends GLSurfaceView {
 
         private final GLRenderer renderer;
 
-        public MyGLSurfaceView(Context context) {
+        public GameGLSurfaceView(Context context) {
             super(context);
 
             // Create an OpenGL ES 2.0 context
             setEGLContextClientVersion(2);
 
-            renderer = new GLRenderer();
-
             // Set the Renderer for drawing on the GLSurfaceView
+            renderer = new GLRenderer();
             setRenderer(renderer);
         }
     }
