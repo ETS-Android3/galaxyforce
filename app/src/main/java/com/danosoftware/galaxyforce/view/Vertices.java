@@ -1,5 +1,7 @@
 package com.danosoftware.galaxyforce.view;
 
+import android.opengl.GLES20;
+import com.danosoftware.galaxyforce.utilities.GlUtils;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
@@ -7,6 +9,12 @@ import java.nio.ShortBuffer;
 import javax.microedition.khronos.opengles.GL10;
 
 class Vertices {
+
+  private static final int BYTES_PER_FLOAT = 4;
+  private static final int BYTES_PER_SHORT = 2;
+  private static final int POSITION_DATA_SIZE_IN_ELEMENTS = 2;
+//  private static final int STRIDE = (POSITION_DATA_SIZE_IN_ELEMENTS + NORMAL_DATA_SIZE_IN_ELEMENTS + COLOR_DATA_SIZE_IN_ELEMENTS)
+//      * BYTES_PER_FLOAT;
 
   private final GLGraphics glGraphics;
   private final boolean hasColor;
@@ -21,12 +29,18 @@ class Vertices {
     this.glGraphics = glGraphics;
     this.hasColor = hasColor;
     this.hasTexCoords = hasTexCoords;
+    // each vertex requires 2 values for x,y position
+    // plus an optional 4 values for RGBA colour (if colour required)
+    // plus an optional 2 values for texture co-ordinates (if texture required)
+    // each float value requires 4 bytes
     this.vertexSize = (2 + (hasColor ? 4 : 0) + (hasTexCoords ? 2 : 0)) * 4;
     this.tmpBuffer = new int[maxVertices * vertexSize / 4];
 
+    // allocate a buffer with a byte-size big enough to hold all vertices (floats)
     ByteBuffer buffer = ByteBuffer.allocateDirect(maxVertices * vertexSize);
     buffer.order(ByteOrder.nativeOrder());
     vertices = buffer.asIntBuffer();
+    // allocate a buffer with a byte-size big enough to hold all indices (shorts)
     buffer = ByteBuffer.allocateDirect(maxIndices * Short.SIZE / 8);
     buffer.order(ByteOrder.nativeOrder());
     indices = buffer.asShortBuffer();
@@ -69,14 +83,59 @@ class Vertices {
   }
 
   public void draw(int primitiveType, int offset, int numVertices) {
-    GL10 gl = glGraphics.getGl();
 
-    if (indices != null) {
-      indices.position(offset);
-      gl.glDrawElements(primitiveType, numVertices, GL10.GL_UNSIGNED_SHORT, indices);
-    } else {
-      gl.glDrawArrays(primitiveType, offset, numVertices);
-    }
+    // Tell the texture uniform sampler to use this texture in the shader by binding to texture unit 0.
+    //GLES20.glUniform1i(GLShaderHelper.sTextureHandle, 0);
+
+//    GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, vertices[0]);
+
+//    GLES20.glVertexAttribPointer(GLShaderHelper.sPositionHandle, POSITION_DATA_SIZE_IN_ELEMENTS, GLES20.GL_FLOAT, false,
+//        vertexSize, 0);
+    vertices.position(0);
+    GLES20.glVertexAttribPointer(GLShaderHelper.sPositionHandle, POSITION_DATA_SIZE_IN_ELEMENTS,
+        GLES20.GL_FLOAT, false,
+        vertexSize, vertices);
+    GLES20.glEnableVertexAttribArray(GLShaderHelper.sPositionHandle);
+    GlUtils.checkGlError("glDrawArrays");
+
+    vertices.position(hasColor ? 6 : 2);
+    GLES20.glVertexAttribPointer(GLShaderHelper.sTexturePositionHandle,
+        POSITION_DATA_SIZE_IN_ELEMENTS, GLES20.GL_FLOAT, false, vertexSize, vertices);
+    GLES20.glEnableVertexAttribArray(GLShaderHelper.sTexturePositionHandle);
+    GlUtils.checkGlError("glDrawArrays");
+
+    // Draw
+    //GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, indices[0]);
+    GLES20.glDrawElements(GLES20.GL_TRIANGLES, numVertices, GLES20.GL_UNSIGNED_SHORT, indices);
+    GlUtils.checkGlError("glDrawArrays");
+
+    GLES20.glBindBuffer(GLES20.GL_ARRAY_BUFFER, 0);
+    GLES20.glBindBuffer(GLES20.GL_ELEMENT_ARRAY_BUFFER, 0);
+    GlUtils.checkGlError("glDrawArrays");
+
+    //GL10 gl = glGraphics.getGl();
+
+//    if (indices != null) {
+//      indices.position(offset);
+//      gl.glDrawElements(primitiveType, numVertices, GL10.GL_UNSIGNED_SHORT, indices);
+//    } else {
+//      gl.glDrawArrays(primitiveType, offset, numVertices);
+//    }
+
+    // Pass the triangle coordinate data to vertex shader
+//    GLES20.glVertexAttribPointer(GLShaderHelper.sPositionHandle, 2, GLES20.GL_FLOAT, false, 0, vertexBuffer);
+//    GlUtils.checkGlError("glDrawArrays");
+
+    // Pass the texture coordinate data to fragment shader
+//    GLES20.glVertexAttribPointer(GLShaderHelper.sTexturePositionHandle, 2, GLES20.GL_FLOAT, false, 0, uvBuffer);
+//    GlUtils.checkGlError("glDrawArrays");
+
+    // set view matrix??
+    //GLES20.glUniformMatrix4fv(u_MVPMatrix, 1, false, mtrxMVP, 0);
+
+    // Draw the triangles
+//    GLES20.glDrawElements(GLES20.GL_TRIANGLES, numVertices, GLES20.GL_UNSIGNED_SHORT, indices);
+//    GlUtils.checkGlError("glDrawArrays");
   }
 
   public void unbind() {

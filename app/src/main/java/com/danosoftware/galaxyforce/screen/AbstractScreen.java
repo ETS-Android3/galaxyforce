@@ -2,6 +2,7 @@ package com.danosoftware.galaxyforce.screen;
 
 import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_ALPHA;
 
+import android.opengl.GLES20;
 import android.util.Log;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
@@ -17,6 +18,7 @@ import com.danosoftware.galaxyforce.textures.TextureDetail;
 import com.danosoftware.galaxyforce.textures.TextureMap;
 import com.danosoftware.galaxyforce.textures.TextureRegion;
 import com.danosoftware.galaxyforce.textures.TextureService;
+import com.danosoftware.galaxyforce.utilities.GlUtils;
 import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLGraphics;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
@@ -90,17 +92,35 @@ public abstract class AbstractScreen implements IScreen {
 
     // clear screen
     final RgbColour backgroundColour = model.background();
-    gl.glClearColor(
+    GLES20.glClearColor(
         backgroundColour.getRed(),
         backgroundColour.getGreen(),
         backgroundColour.getBlue(),
-        BACKGROUND_ALPHA);
-    gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+        BACKGROUND_ALPHA
+    );
+    GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+    GlUtils.checkGlError("clear");
+
+//
+//    gl.glClearColor(
+//        backgroundColour.getRed(),
+//        backgroundColour.getGreen(),
+//        backgroundColour.getBlue(),
+//        BACKGROUND_ALPHA);
+//    gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
     camera.setViewportAndMatrices();
-    gl.glEnable(GL10.GL_TEXTURE_2D);
-    gl.glEnable(GL10.GL_BLEND);
-    gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+//    GLES20.glEnable(GLES20.GL_TEXTURE_2D); // is this needed???
+    GlUtils.checkGlError("texture");
+    GLES20.glEnable(GLES20.GL_BLEND);
+    GlUtils.checkGlError("blend");
+    // Blend based on the fragment's alpha value.
+    GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+    GlUtils.checkGlError("screen");
+
+//    gl.glEnable(GL10.GL_TEXTURE_2D);
+//    gl.glEnable(GL10.GL_BLEND);
+//    gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
 
     // count sprites to draw
     final List<ISprite> sprites = model.getSprites();
@@ -149,7 +169,8 @@ public abstract class AbstractScreen implements IScreen {
     }
 
     batcher.endBatch();
-    gl.glDisable(GL10.GL_BLEND);
+    GLES20.glDisable(GLES20.GL_BLEND);
+    //gl.glDisable(GL10.GL_BLEND);
   }
 
   @Override

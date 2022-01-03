@@ -7,9 +7,12 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_RE
 import static com.danosoftware.galaxyforce.constants.GameConstants.RC_SIGN_IN;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
+import android.opengl.Matrix;
 import android.os.Bundle;
 import android.os.Trace;
 import android.util.Log;
@@ -32,6 +35,7 @@ import com.danosoftware.galaxyforce.services.googleplay.GooglePlayServices;
 import com.danosoftware.galaxyforce.services.preferences.IPreferences;
 import com.danosoftware.galaxyforce.services.preferences.PreferencesString;
 import com.danosoftware.galaxyforce.view.GLGraphics;
+import com.danosoftware.galaxyforce.view.GLShaderHelper;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.Task;
@@ -78,8 +82,8 @@ public class MainActivity extends Activity {
         setupScreen();
 
         // set-up GL view
-        glView = new GLSurfaceView(this);
-        glView.setRenderer(new GLRenderer());
+        glView = new MyGLSurfaceView(this);
+//        glView.setRenderer(new GLRenderer());
         setContentView(glView);
         this.glGraphics = new GLGraphics(glView);
 
@@ -234,10 +238,14 @@ public class MainActivity extends Activity {
     private class GLRenderer implements Renderer {
 
         private static final String LOCAL_TAG = "GLRenderer";
+
+        // Orthographic projection matrix.  Must be updated when the available screen area
+        // changes (e.g. when the device is rotated).
+        final float mProjectionMatrix[] = new float[16];
         long startTime;
 
         @Override
-        public void onDrawFrame(GL10 gl) {
+        public void onDrawFrame(GL10 unused) {
             ActivityState stateCheck;
 
             synchronized (stateChanged) {
@@ -247,6 +255,8 @@ public class MainActivity extends Activity {
             if (stateCheck == ActivityState.RUNNING) {
                 float deltaTime = (System.nanoTime() - startTime) / 1000000000.0f;
                 startTime = System.nanoTime();
+
+                GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
                 Trace.beginSection("onDrawFrame.update");
                 game.update(deltaTime);
@@ -277,23 +287,45 @@ public class MainActivity extends Activity {
         }
 
         @Override
-        public void onSurfaceChanged(GL10 gl, int width, int height) {
-            Log.i(GameConstants.LOG_TAG, LOCAL_TAG + ": onSurfaceChanged. width: " + width + ". height: " + height + ".");
+        public void onSurfaceChanged(GL10 unused, int width, int height) {
+            Log.i(GameConstants.LOG_TAG,
+                LOCAL_TAG + ": onSurfaceChanged. width: " + width + ". height: " + height + ".");
+            GLES20.glViewport(0, 0, width, height);
+
+            // Create an orthographic projection that maps the desired arena size to the viewport
+            // dimensions.
+            Matrix.orthoM(mProjectionMatrix, 0, 0, GameConstants.GAME_WIDTH,
+                0, GameConstants.GAME_HEIGHT, -1, 1);
+
+            // Set our shader program
+            //GLES20.glUseProgram(GLShaderHelper.sProgramHandle);
         }
 
         @Override
-        public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+        public void onSurfaceCreated(GL10 unused, EGLConfig config) {
             Log.i(GameConstants.LOG_TAG, LOCAL_TAG + ": onSurfaceCreated");
+
+            // create and initialise GL shaders
+            GLShaderHelper.createProgram();
+
+            // Set our shader program
+            GLES20.glUseProgram(GLShaderHelper.sProgramHandle);
 
             // set game background colour.
             // i.e. colour used when screen is cleared before each frame
-            gl.glClearColor(
-                    BACKGROUND_RED,
-                    BACKGROUND_GREEN,
-                    BACKGROUND_BLUE,
-                    BACKGROUND_ALPHA);
+            GLES20.glClearColor(
+                BACKGROUND_RED,
+                BACKGROUND_GREEN,
+                BACKGROUND_BLUE,
+                BACKGROUND_ALPHA);
 
-            glGraphics.setGl(gl);
+            // Disable depth testing -- we're 2D only.
+            GLES20.glDisable(GLES20.GL_DEPTH_TEST);
+
+            // Don't need backface culling.
+            GLES20.glDisable(GLES20.GL_CULL_FACE);
+
+            //glGraphics.setGl(gl);
 
             synchronized (stateChanged) {
                 if (state == ActivityState.INITIALISED) {
@@ -303,6 +335,23 @@ public class MainActivity extends Activity {
                 game.resume();
                 startTime = System.nanoTime();
             }
+        }
+    }
+
+    private class MyGLSurfaceView extends GLSurfaceView {
+
+        private final GLRenderer renderer;
+
+        public MyGLSurfaceView(Context context) {
+            super(context);
+
+            // Create an OpenGL ES 2.0 context
+            setEGLContextClientVersion(2);
+
+            renderer = new GLRenderer();
+
+            // Set the Renderer for drawing on the GLSurfaceView
+            setRenderer(renderer);
         }
     }
 }

@@ -2,6 +2,7 @@ package com.danosoftware.galaxyforce.screen;
 
 import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_ALPHA;
 
+import android.opengl.GLES20;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
@@ -52,21 +53,33 @@ public class SelectLevelScreen extends AbstractScreen {
 
     // clear screen
     final RgbColour backgroundColour = GameConstants.DEFAULT_BACKGROUND_COLOUR;
-    gl.glClearColor(
+    GLES20.glClearColor(
         backgroundColour.getRed(),
         backgroundColour.getGreen(),
         backgroundColour.getBlue(),
-        BACKGROUND_ALPHA);
-    gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
+        BACKGROUND_ALPHA
+    );
+    GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
+
+//    gl.glClearColor(
+//        backgroundColour.getRed(),
+//        backgroundColour.getGreen(),
+//        backgroundColour.getBlue(),
+//        BACKGROUND_ALPHA);
+//    gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 
     // move camera's x position on screen by model's current scroll speed
     float cameraOffset = levelModel.getScrollPosition();
     camera.moveX(SCREEN_CENTRE + cameraOffset);
 
     camera.setViewportAndMatrices();
-    gl.glEnable(GL10.GL_TEXTURE_2D);
-    gl.glEnable(GL10.GL_BLEND);
-    gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+//    gl.glEnable(GL10.GL_TEXTURE_2D);
+//    gl.glEnable(GL10.GL_BLEND);
+//    gl.glBlendFunc(GL10.GL_SRC_ALPHA, GL10.GL_ONE_MINUS_SRC_ALPHA);
+//    GLES20.glEnable(GLES20.GL_TEXTURE_2D); // is this needed???
+    GLES20.glEnable(GLES20.GL_BLEND);
+    // Blend based on the fragment's alpha value.
+    GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 
     // count sprites to draw
     final List<ISprite> levelSprites = levelModel.getStaticSprites();
@@ -139,7 +152,8 @@ public class SelectLevelScreen extends AbstractScreen {
     }
 
     batcher.endBatch();
-    gl.glDisable(GL10.GL_BLEND);
+//    gl.glDisable(GL10.GL_BLEND);
+    GLES20.glDisable(GLES20.GL_BLEND);
   }
 
   @Override
