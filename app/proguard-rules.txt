@@ -32,5 +32,11 @@
     public static int i(...);
 }
 
+# This will strip `Trace.beginSection` and `Trace.endSection` used during performance measurements.
+-assumenosideeffects public class android.os.Trace {
+    public void beginSection(...);
+    public void endSection(...);
+}
+
 # Helps debugging obsfucated code after mapping
 -keepattributes LineNumberTable,SourceFile

@@ -12,4 +12,5 @@
 /app/debug
 /captures
 .externalNativeBuild
-/app/src/main/res/values/billing.xml 
+/app/src/main/res/values/billing.xml
+*.hprof
