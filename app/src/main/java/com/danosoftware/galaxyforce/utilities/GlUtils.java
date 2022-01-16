@@ -97,6 +97,8 @@ public class GlUtils {
      * </pre>
      * <p>
      * If an error was detected, this will throw an exception.
+     * <p>
+     * NOTE: ProGuard is configured to remove any calls to this method from release build.
      *
      * @param msg string to display in the error message (usually the name of the last GL operation)
      */

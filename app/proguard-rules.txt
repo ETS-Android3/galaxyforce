@@ -38,5 +38,10 @@
     public void endSection(...);
 }
 
+# This will strip `GlUtils.checkGlError` used to check for GLES20 errors.
+-assumenosideeffects public class com.danosoftware.galaxyforce.utilities.GlUtils {
+    public void checkGlError(...);
+}
+
 # Helps debugging obsfucated code after mapping
 -keepattributes LineNumberTable,SourceFile

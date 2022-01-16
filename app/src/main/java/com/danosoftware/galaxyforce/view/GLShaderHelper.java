@@ -2,7 +2,6 @@ package com.danosoftware.galaxyforce.view;
 
 import android.opengl.GLES20;
 import android.util.Log;
-import com.danosoftware.galaxyforce.BuildConfig;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
 import com.danosoftware.galaxyforce.utilities.GlUtils;
 
@@ -58,10 +57,8 @@ public class GLShaderHelper {
     // get handle to vertex shader's transformation matrix
     sMVPMatrixHandle = GLES20.glGetUniformLocation(sProgramHandle, "u_MVPMatrix");
 
-    // capture any GL errors while creating program
-    if (BuildConfig.DEBUG) {
-      GlUtils.checkGlError("createProgram");
-    }
+    // capture any GL errors while creating program - removed in release
+    GlUtils.checkGlError("createProgram");
   }
 
   /**

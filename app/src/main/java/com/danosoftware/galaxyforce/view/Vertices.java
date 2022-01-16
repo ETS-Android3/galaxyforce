@@ -2,11 +2,10 @@ package com.danosoftware.galaxyforce.view;
 
 import android.opengl.GLES20;
 import android.util.Log;
-import com.danosoftware.galaxyforce.BuildConfig;
 import com.danosoftware.galaxyforce.utilities.GlUtils;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.IntBuffer;
+import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
 
 class Vertices {
@@ -23,8 +22,7 @@ class Vertices {
   private final boolean hasColor;
   private final boolean hasTexCoords;
   private final int vertexStride;
-  private final IntBuffer vertices;
-  private final int[] tmpBuffer;
+  private final FloatBuffer vertices;
   private final ShortBuffer indices;
 
   public Vertices(int maxVertices, int maxIndices, boolean hasColor,
@@ -40,12 +38,11 @@ class Vertices {
         + (hasColor ? COLOUR_ELEMENTS_PER_VERTEX : 0)
         + (hasTexCoords ? TEXTURE_COORDS_PER_VERTEX : 0))
         * BYTES_PER_FLOAT;
-    this.tmpBuffer = new int[maxVertices * vertexStride / BYTES_PER_FLOAT];
 
     // allocate a buffer with a byte-size big enough to hold all vertices (floats)
     ByteBuffer buffer = ByteBuffer.allocateDirect(maxVertices * vertexStride);
     buffer.order(ByteOrder.nativeOrder());
-    vertices = buffer.asIntBuffer();
+    vertices = buffer.asFloatBuffer();
     // allocate a buffer with a byte-size big enough to hold all indices (shorts)
     buffer = ByteBuffer.allocateDirect(maxIndices * BYTES_PER_SHORT);
     buffer.order(ByteOrder.nativeOrder());
@@ -54,11 +51,7 @@ class Vertices {
 
   public void setVertices(float[] vertices, int offset, int length) {
     this.vertices.clear();
-    int len = offset + length;
-    for (int i = offset, j = 0; i < len; i++, j++) {
-      tmpBuffer[j] = Float.floatToRawIntBits(vertices[i]);
-    }
-    this.vertices.put(tmpBuffer, 0, length);
+    this.vertices.put(vertices, offset, length);
     this.vertices.flip();
   }
 
@@ -114,10 +107,8 @@ class Vertices {
           vertices);
       GLES20.glEnableVertexAttribArray(GLShaderHelper.sTexturePositionHandle);
 
-      // report any errors seen during binding
-      if (BuildConfig.DEBUG) {
-        GlUtils.checkGlError("bindSpriteVertices");
-      }
+      // report any errors seen during binding - removed in release
+      GlUtils.checkGlError("bindSpriteVertices");
     }
   }
 
@@ -130,10 +121,8 @@ class Vertices {
       GLES20.glDrawArrays(primitiveType, offset, numVertices);
     }
 
-    // report any errors seen during drawing
-    if (BuildConfig.DEBUG) {
-      GlUtils.checkGlError("drawSpriteVertices");
-    }
+    // report any errors seen during drawing - removed in release
+    GlUtils.checkGlError("drawSpriteVertices");
   }
 
   public void unbind() {
@@ -147,9 +136,7 @@ class Vertices {
       GLES20.glDisableVertexAttribArray(GLShaderHelper.sTexturePositionHandle);
     }
 
-    // report any errors seen during unbinding
-    if (BuildConfig.DEBUG) {
-      GlUtils.checkGlError("unbindSpriteVertices");
-    }
+    // report any errors seen during unbinding - removed in release
+    GlUtils.checkGlError("unbindSpriteVertices");
   }
 }

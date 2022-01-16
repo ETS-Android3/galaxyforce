@@ -74,9 +74,8 @@ public class MainActivity extends Activity {
     /* runs when application initially starts */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Create Application");
+        super.onCreate(savedInstanceState);
 
         setupScreen();
 
@@ -109,6 +108,8 @@ public class MainActivity extends Activity {
             game = new GameImpl(this, glGraphics, glView, billingService, mPlayServices,
                 configurationService);
         }
+
+        Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Application Created");
     }
 
     /* runs after onCreate or resuming after being in background */
@@ -153,19 +154,21 @@ public class MainActivity extends Activity {
             }
 
         }
-
         glView.onPause();
         super.onPause();
+        Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Application Paused");
     }
 
     @Override
     protected void onDestroy() {
+        Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Destroying Application");
         super.onDestroy();
 
         Log.i(ACTIVITY_TAG, "Destroying Billing Manager.");
         if (mBillingManager != null) {
             mBillingManager.destroy();
         }
+        Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Application Destroyed");
     }
 
     @Override
@@ -259,6 +262,7 @@ public class MainActivity extends Activity {
             }
 
             if (stateCheck == ActivityState.PAUSED) {
+                Log.i(GameConstants.LOG_TAG, "Render Pause");
                 game.pause();
 
                 synchronized (stateChanged) {
@@ -268,6 +272,7 @@ public class MainActivity extends Activity {
             }
 
             if (stateCheck == ActivityState.FINISHED) {
+                Log.i(GameConstants.LOG_TAG, "Render Finish");
                 game.pause();
                 game.dispose();
 
