@@ -7,7 +7,9 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_RE
 import static com.danosoftware.galaxyforce.constants.GameConstants.RC_SIGN_IN;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
@@ -32,6 +34,7 @@ import com.danosoftware.galaxyforce.services.googleplay.GooglePlayServices;
 import com.danosoftware.galaxyforce.services.preferences.IPreferences;
 import com.danosoftware.galaxyforce.services.preferences.PreferencesString;
 import com.danosoftware.galaxyforce.view.GLGraphics;
+import com.danosoftware.galaxyforce.view.GLShaderHelper;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.Task;
@@ -71,15 +74,13 @@ public class MainActivity extends Activity {
     /* runs when application initially starts */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Create Application");
+        super.onCreate(savedInstanceState);
 
         setupScreen();
 
         // set-up GL view
-        glView = new GLSurfaceView(this);
-        glView.setRenderer(new GLRenderer());
+        glView = new GameGLSurfaceView(this);
         setContentView(glView);
         this.glGraphics = new GLGraphics(glView);
 
@@ -107,6 +108,8 @@ public class MainActivity extends Activity {
             game = new GameImpl(this, glGraphics, glView, billingService, mPlayServices,
                 configurationService);
         }
+
+        Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Application Created");
     }
 
     /* runs after onCreate or resuming after being in background */
@@ -151,19 +154,21 @@ public class MainActivity extends Activity {
             }
 
         }
-
         glView.onPause();
         super.onPause();
+        Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Application Paused");
     }
 
     @Override
     protected void onDestroy() {
+        Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Destroying Application");
         super.onDestroy();
 
         Log.i(ACTIVITY_TAG, "Destroying Billing Manager.");
         if (mBillingManager != null) {
             mBillingManager.destroy();
         }
+        Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Application Destroyed");
     }
 
     @Override
@@ -237,7 +242,7 @@ public class MainActivity extends Activity {
         long startTime;
 
         @Override
-        public void onDrawFrame(GL10 gl) {
+        public void onDrawFrame(GL10 unused) {
             ActivityState stateCheck;
 
             synchronized (stateChanged) {
@@ -257,6 +262,7 @@ public class MainActivity extends Activity {
             }
 
             if (stateCheck == ActivityState.PAUSED) {
+                Log.i(GameConstants.LOG_TAG, "Render Pause");
                 game.pause();
 
                 synchronized (stateChanged) {
@@ -266,6 +272,7 @@ public class MainActivity extends Activity {
             }
 
             if (stateCheck == ActivityState.FINISHED) {
+                Log.i(GameConstants.LOG_TAG, "Render Finish");
                 game.pause();
                 game.dispose();
 
@@ -277,23 +284,34 @@ public class MainActivity extends Activity {
         }
 
         @Override
-        public void onSurfaceChanged(GL10 gl, int width, int height) {
-            Log.i(GameConstants.LOG_TAG, LOCAL_TAG + ": onSurfaceChanged. width: " + width + ". height: " + height + ".");
+        public void onSurfaceChanged(GL10 unused, int width, int height) {
+            Log.i(GameConstants.LOG_TAG,
+                LOCAL_TAG + ": onSurfaceChanged. width: " + width + ". height: " + height + ".");
         }
 
         @Override
-        public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+        public void onSurfaceCreated(GL10 unused, EGLConfig config) {
             Log.i(GameConstants.LOG_TAG, LOCAL_TAG + ": onSurfaceCreated");
+
+            // create and initialise our GL shaders program
+            GLShaderHelper.createProgram();
+
+            // Use our shader program for GL
+            GLES20.glUseProgram(GLShaderHelper.sProgramHandle);
 
             // set game background colour.
             // i.e. colour used when screen is cleared before each frame
-            gl.glClearColor(
-                    BACKGROUND_RED,
-                    BACKGROUND_GREEN,
-                    BACKGROUND_BLUE,
-                    BACKGROUND_ALPHA);
+            GLES20.glClearColor(
+                BACKGROUND_RED,
+                BACKGROUND_GREEN,
+                BACKGROUND_BLUE,
+                BACKGROUND_ALPHA);
 
-            glGraphics.setGl(gl);
+            // Disable depth testing -- we're 2D only.
+            GLES20.glDisable(GLES20.GL_DEPTH_TEST);
+
+            // Don't need backface culling.
+            GLES20.glDisable(GLES20.GL_CULL_FACE);
 
             synchronized (stateChanged) {
                 if (state == ActivityState.INITIALISED) {
@@ -303,6 +321,25 @@ public class MainActivity extends Activity {
                 game.resume();
                 startTime = System.nanoTime();
             }
+        }
+    }
+
+    /**
+     * Inner class for GL Surface View
+     */
+    private class GameGLSurfaceView extends GLSurfaceView {
+
+        private final GLRenderer renderer;
+
+        public GameGLSurfaceView(Context context) {
+            super(context);
+
+            // Create an OpenGL ES 2.0 context
+            setEGLContextClientVersion(2);
+
+            // Set the Renderer for drawing on the GLSurfaceView
+            renderer = new GLRenderer();
+            setRenderer(renderer);
         }
     }
 }

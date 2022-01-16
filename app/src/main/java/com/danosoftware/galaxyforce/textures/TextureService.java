@@ -1,9 +1,6 @@
 package com.danosoftware.galaxyforce.textures;
 
 import android.util.Log;
-
-import com.danosoftware.galaxyforce.view.GLGraphics;
-
 import java.util.EnumMap;
 
 /**
@@ -19,17 +16,12 @@ public class TextureService {
     // PNG texture image file loader
     private final TextureLoader textureLoader;
 
-    // Open GL graphics
-    private final GLGraphics glGraphics;
-
     // cache of texture maps and their texture utilities
     private final EnumMap<TextureMap, Texture> textureMaps;
 
     public TextureService(
-            final GLGraphics glGraphics,
             final TextureRegionXmlParser xmlParser,
             final TextureLoader textureLoader) {
-        this.glGraphics = glGraphics;
         this.xmlParser = xmlParser;
         this.textureLoader = textureLoader;
         this.textureMaps = new EnumMap<>(TextureMap.class);
@@ -50,7 +42,7 @@ public class TextureService {
             texture.reload();
         } else {
             Log.i(TAG, "Create new texture for: " + textureMap.name());
-            texture = new Texture(glGraphics, xmlParser, textureLoader, textureMap);
+            texture = new Texture(xmlParser, textureLoader, textureMap);
             textureMaps.put(textureMap, texture);
         }
 

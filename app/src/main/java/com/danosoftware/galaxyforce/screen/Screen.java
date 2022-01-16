@@ -5,7 +5,6 @@ import com.danosoftware.galaxyforce.models.screens.Model;
 import com.danosoftware.galaxyforce.textures.TextureMap;
 import com.danosoftware.galaxyforce.textures.TextureService;
 import com.danosoftware.galaxyforce.view.Camera2D;
-import com.danosoftware.galaxyforce.view.GLGraphics;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 
 public class Screen extends AbstractScreen {
@@ -15,10 +14,9 @@ public class Screen extends AbstractScreen {
       Controller controller,
       TextureService textureService,
       TextureMap textureMap,
-      GLGraphics glGraphics,
       Camera2D camera,
       SpriteBatcher batcher) {
 
-    super(model, controller, textureService, textureMap, glGraphics, camera, batcher);
+    super(model, controller, textureService, textureMap, camera, batcher);
   }
 }

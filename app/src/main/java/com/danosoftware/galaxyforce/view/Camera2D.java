@@ -1,6 +1,7 @@
 package com.danosoftware.galaxyforce.view;
 
-import javax.microedition.khronos.opengles.GL10;
+import android.opengl.GLES20;
+import android.opengl.Matrix;
 
 public class Camera2D {
 
@@ -9,6 +10,7 @@ public class Camera2D {
   private final float frustumWidth;
   private final float frustumHeight;
   private final GLGraphics glGraphics;
+  private final float[] mvp;
 
   public Camera2D(GLGraphics glGraphics, float frustumWidth, float frustumHeight) {
     this.glGraphics = glGraphics;
@@ -16,18 +18,16 @@ public class Camera2D {
     this.frustumHeight = frustumHeight;
     this.position = new Vector2(frustumWidth / 2, frustumHeight / 2);
     this.zoom = 1.0f;
+    this.mvp = new float[16];
+    createMatrices();
   }
 
   public void setViewportAndMatrices() {
-    GL10 gl = glGraphics.getGl();
-    gl.glViewport(0, 0, glGraphics.getWidth(), glGraphics.getHeight());
-    gl.glMatrixMode(GL10.GL_PROJECTION);
-    gl.glLoadIdentity();
-    gl.glOrthof(position.x - frustumWidth * zoom / 2, position.x + frustumWidth * zoom / 2,
-        position.y - frustumHeight * zoom / 2,
-        position.y + frustumHeight * zoom / 2, 1, -1);
-    gl.glMatrixMode(GL10.GL_MODELVIEW);
-    gl.glLoadIdentity();
+    // set viewport to match view
+    GLES20.glViewport(0, 0, glGraphics.getWidth(), glGraphics.getHeight());
+
+    // Copy the model / view / projection matrix over.
+    GLES20.glUniformMatrix4fv(GLShaderHelper.sMVPMatrixHandle, 1, false, mvp, 0);
   }
 
   public void touchToWorld(Vector2 touch) {
@@ -41,13 +41,41 @@ public class Camera2D {
    * position.
    */
   public void moveX(float xPos) {
-    this.position.x = xPos;
+    if (position.x != xPos) {
+      this.position.x = xPos;
+      createMatrices();
+    }
   }
 
   /**
    * Reset x-position of the camera.
    */
   public void resetPosition() {
-    this.position.x = frustumWidth / 2;
+    float resetXPosition = frustumWidth / 2;
+    if (position.x != resetXPosition) {
+      this.position.x = resetXPosition;
+      createMatrices();
+    }
+  }
+
+  private void createMatrices() {
+    // Create an orthographic projection that maps the desired arena size to the viewport dimensions.
+    final float[] mProjectionMatrix = new float[16];
+    Matrix.orthoM(
+        mProjectionMatrix,
+        0,
+        position.x - frustumWidth * zoom / 2,
+        position.x + frustumWidth * zoom / 2,
+        position.y - frustumHeight * zoom / 2,
+        position.y + frustumHeight * zoom / 2,
+        1,
+        -1);
+
+    // Create model-view matrix
+    final float[] mModelView = new float[16];
+    Matrix.setIdentityM(mModelView, 0);
+
+    // Calculate model-view-projection matrix
+    Matrix.multiplyMM(mvp, 0, mProjectionMatrix, 0, mModelView, 0);
   }
 }

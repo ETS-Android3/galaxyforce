@@ -3,17 +3,14 @@ package com.danosoftware.galaxyforce.textures;
 import android.content.res.AssetManager;
 import android.util.Log;
 import android.util.Xml;
-
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
-
-import org.xmlpull.v1.XmlPullParser;
-import org.xmlpull.v1.XmlPullParserException;
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
+import org.xmlpull.v1.XmlPullParser;
+import org.xmlpull.v1.XmlPullParserException;
 
 
 /**
@@ -44,14 +41,12 @@ public class TextureRegionXmlParser {
      */
     List<TextureDetail> loadTextures(String xmlFile) {
         Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Loading texture file: " + xmlFile);
-        try {
-            InputStream is = assets.open("textures/" + xmlFile);
+        try (InputStream is = assets.open("textures/" + xmlFile)) {
             XmlPullParser parser = Xml.newPullParser();
             parser.setFeature(XmlPullParser.FEATURE_PROCESS_NAMESPACES, false);
             parser.setInput(is, null);
             parser.nextTag();
             List<TextureDetail> textures = readTextureFile(parser);
-            is.close();
             return textures;
         } catch (XmlPullParserException | IOException e) {
             throw new GalaxyForceException("Error while loading texture file: " + xmlFile, e);

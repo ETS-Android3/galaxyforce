@@ -32,5 +32,16 @@
     public static int i(...);
 }
 
+# This will strip `Trace.beginSection` and `Trace.endSection` used during performance measurements.
+-assumenosideeffects public class android.os.Trace {
+    public void beginSection(...);
+    public void endSection(...);
+}
+
+# This will strip `GlUtils.checkGlError` used to check for GLES20 errors.
+-assumenosideeffects public class com.danosoftware.galaxyforce.utilities.GlUtils {
+    public void checkGlError(...);
+}
+
 # Helps debugging obsfucated code after mapping
 -keepattributes LineNumberTable,SourceFile
