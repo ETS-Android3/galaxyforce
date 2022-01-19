@@ -26,11 +26,11 @@ public class GLShaderHelper {
 
   static final String VERTEX_SHADER_CODE =
       "uniform mat4 u_MVPMatrix;" +
-          "attribute vec4 a_Position;" +
+          "attribute vec4 a_position;" +
           "attribute vec2 a_texCoord;" +
           "varying vec2 v_texCoord;" +
           "void main() {" +
-          "  gl_Position = u_MVPMatrix * a_Position;" +
+          "  gl_Position = u_MVPMatrix * a_position;" +
           "  v_texCoord = a_texCoord;" +
           "}";
 
@@ -43,14 +43,14 @@ public class GLShaderHelper {
           "}";
 
   static final String POINT_VERTEX_SHADER_CODE =
-      "uniform mat4 uMVPMatrix;" +
-          "attribute vec4 vPosition;" +
-          "attribute vec4 vColor;" +
+      "uniform mat4 u_MVPMatrix;" +
+          "attribute vec4 a_position;" +
+          "attribute vec4 a_color;" +
           "varying vec4 v_color;" +
           "void main() {" +
-          "   gl_Position = uMVPMatrix * vPosition;" +
+          "   gl_Position = u_MVPMatrix * a_position;" +
           "   gl_PointSize = 6.0;" +
-          "   v_color = vColor;" +
+          "   v_color = a_color;" +
           "}";
 
   static final String POINT_FRAGMENT_SHADER_CODE =
@@ -81,7 +81,7 @@ public class GLShaderHelper {
     GLES20.glUseProgram(spriteProgramHandle);
 
     // get handle to vertex shader's position co-ordinate member
-    sPositionHandle = GLES20.glGetAttribLocation(spriteProgramHandle, "a_Position");
+    sPositionHandle = GLES20.glGetAttribLocation(spriteProgramHandle, "a_position");
 
     // get handle to vertex shader's texture co-ordinate member
     sTexturePositionHandle = GLES20.glGetAttribLocation(spriteProgramHandle, "a_texCoord");
@@ -103,13 +103,13 @@ public class GLShaderHelper {
     GLES20.glUseProgram(pointProgramHandle);
 
     // get handle to vertex shader's position co-ordinate member
-    sPositionHandle = GLES20.glGetAttribLocation(pointProgramHandle, "vPosition");
+    sPositionHandle = GLES20.glGetAttribLocation(pointProgramHandle, "a_position");
 
     // get handle to vertex shader's texture co-ordinate member
-    sColourHandle = GLES20.glGetAttribLocation(pointProgramHandle, "vColor");
+    sColourHandle = GLES20.glGetAttribLocation(pointProgramHandle, "a_color");
 
     // get handle to vertex shader's transformation matrix
-    sMVPMatrixHandle = GLES20.glGetUniformLocation(pointProgramHandle, "uMVPMatrix");
+    sMVPMatrixHandle = GLES20.glGetUniformLocation(pointProgramHandle, "u_MVPMatrix");
 
     // capture any GL errors while setting handles
     GlUtils.checkGlError("setPointShaderProgram");
