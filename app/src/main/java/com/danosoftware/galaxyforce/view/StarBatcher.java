@@ -1,6 +1,7 @@
 package com.danosoftware.galaxyforce.view;
 
 import static com.danosoftware.galaxyforce.waves.utilities.Randomiser.random;
+import static com.danosoftware.galaxyforce.waves.utilities.Randomiser.randomFloat;
 
 import android.opengl.GLES20;
 import com.danosoftware.galaxyforce.constants.GameConstants;
@@ -10,7 +11,7 @@ public class StarBatcher {
   private static final String TAG = "StarBatcher";
 
   private static final int POSITION_COORDS_PER_VERTEX = 2;  // x,y
-  private static final int COLOUR_COORDS_PER_VERTEX = 0;   // r,g,b,a
+  private static final int COLOUR_COORDS_PER_VERTEX = 4;   // r,g,b,a
   private static final int COORDS_PER_VERTEX =
       POSITION_COORDS_PER_VERTEX + COLOUR_COORDS_PER_VERTEX;
   private static final int VERTICES_PER_STAR = 1;
@@ -40,7 +41,7 @@ public class StarBatcher {
     this.vertices = new Vertices(
         starsCount * VERTICES_PER_STAR,
         0,
-        false,
+        true,
         false);
 
     int index = 0;
@@ -51,10 +52,10 @@ public class StarBatcher {
       verticesBuffer[index++] = (float) (GameConstants.GAME_HEIGHT * random());
 
       // colour vertex - rgba colour
-//      verticesBuffer[index++] = 1.0f; // red
-//      verticesBuffer[index++] = 1.0f; // green
-//      verticesBuffer[index++] = 1.0f; // blue
-//      verticesBuffer[index++] = 1.0f; // alpha
+      verticesBuffer[index++] = randomFloat(); // red
+      verticesBuffer[index++] = randomFloat(); // green
+      verticesBuffer[index++] = randomFloat(); // blue
+      verticesBuffer[index++] = 1.0f; // alpha
     }
   }
 
@@ -71,7 +72,11 @@ public class StarBatcher {
   public void drawStar(float y) {
 
     // update y-position of star and increment index to next vertex
-    verticesBuffer[bufferIndex += COORDS_PER_VERTEX] = y;
+    for (int i = 0; i < 250; i++) {
+      verticesBuffer[bufferIndex] = (verticesBuffer[bufferIndex] + 1) % GameConstants.GAME_HEIGHT;
+      bufferIndex += COORDS_PER_VERTEX;
+    }
+    //verticesBuffer[bufferIndex+=COORDS_PER_VERTEX] = y;
 
     //numStars++;
   }

@@ -104,7 +104,7 @@ public abstract class AbstractScreen implements IScreen {
     GLShaderHelper.setPointShaderProgram();
     camera.setViewportAndMatrices();
     starBatcher.beginBatch();
-    //starBatcher.drawStar();
+    starBatcher.drawStar(0);
     starBatcher.endBatch();
 
     // count sprites to draw

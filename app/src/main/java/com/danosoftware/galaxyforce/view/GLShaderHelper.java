@@ -45,16 +45,19 @@ public class GLShaderHelper {
   static final String POINT_VERTEX_SHADER_CODE =
       "uniform mat4 uMVPMatrix;" +
           "attribute vec4 vPosition;" +
+          "attribute vec4 vColor;" +
+          "varying vec4 v_color;" +
           "void main() {" +
           "   gl_Position = uMVPMatrix * vPosition;" +
-          "   gl_PointSize = 5.0;" +
+          "   gl_PointSize = 6.0;" +
+          "   v_color = vColor;" +
           "}";
 
   static final String POINT_FRAGMENT_SHADER_CODE =
       "precision mediump float;" +
-          "uniform vec4 vColor;" +
+          "varying vec4 v_color;" +
           "void main() {" +
-          "   gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);" +
+          "   gl_FragColor = v_color;" +
           "}";
 
   /**
@@ -103,7 +106,7 @@ public class GLShaderHelper {
     sPositionHandle = GLES20.glGetAttribLocation(pointProgramHandle, "vPosition");
 
     // get handle to vertex shader's texture co-ordinate member
-    sColourHandle = GLES20.glGetUniformLocation(pointProgramHandle, "vColor");
+    sColourHandle = GLES20.glGetAttribLocation(pointProgramHandle, "vColor");
 
     // get handle to vertex shader's transformation matrix
     sMVPMatrixHandle = GLES20.glGetUniformLocation(pointProgramHandle, "uMVPMatrix");
