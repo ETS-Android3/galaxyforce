@@ -2,16 +2,20 @@ package com.danosoftware.galaxyforce.view;
 
 import android.opengl.GLES20;
 import android.util.Log;
-import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
 import com.danosoftware.galaxyforce.utilities.GlUtils;
 
 public class GLShaderHelper {
 
   private static final String TAG = "GLShaderHelper";
 
-  // Handles to the GL program and various components of it.
-  public static int sProgramHandle = -1;
+  // handle to the sprite shader program
+  public static int spriteProgramHandle = -1;
+  // handle to the point shader program
+  public static int pointProgramHandle = -1;
+
+  // Handles to the various components of the GL program.
   public static int sPositionHandle = -1;
+  public static int sColourHandle = -1;
   public static int sTexturePositionHandle = -1;
   public static int sTextureHandle = -1;
   public static int sMVPMatrixHandle = -1;
@@ -38,73 +42,128 @@ public class GLShaderHelper {
           "  gl_FragColor = texture2D(u_texture, v_texCoord);" +
           "}";
 
+  static final String POINT_VERTEX_SHADER_CODE =
+      "uniform mat4 uMVPMatrix;" +
+          "attribute vec4 vPosition;" +
+          "void main() {" +
+          "   gl_Position = uMVPMatrix * vPosition;" +
+          "   gl_PointSize = 5.0;" +
+          "}";
+
+  static final String POINT_FRAGMENT_SHADER_CODE =
+      "precision mediump float;" +
+          "uniform vec4 vColor;" +
+          "void main() {" +
+          "   gl_FragColor = vec4(1.0, 1.0, 1.0, 1.0);" +
+          "}";
+
   /**
    * Creates the GL program and associated references.
    */
   public static void createProgram() {
-    sProgramHandle = GlUtils.createProgram(VERTEX_SHADER_CODE, FRAGMENT_SHADER_CODE);
-    Log.d(TAG, "Created shader program " + sProgramHandle);
+    spriteProgramHandle = GlUtils.createProgram(VERTEX_SHADER_CODE, FRAGMENT_SHADER_CODE);
+    Log.d(TAG, "Created sprite shader program " + spriteProgramHandle);
 
-    // get handle to vertex shader's position co-ordinate member
-    sPositionHandle = GLES20.glGetAttribLocation(sProgramHandle, "a_Position");
-
-    // get handle to vertex shader's texture co-ordinate member
-    sTexturePositionHandle = GLES20.glGetAttribLocation(sProgramHandle, "a_texCoord");
-
-    // get handle to fragment shader's texture member
-    sTextureHandle = GLES20.glGetUniformLocation(sProgramHandle, "u_texture");
-
-    // get handle to vertex shader's transformation matrix
-    sMVPMatrixHandle = GLES20.glGetUniformLocation(sProgramHandle, "u_MVPMatrix");
+    pointProgramHandle = GlUtils
+        .createProgram(POINT_VERTEX_SHADER_CODE, POINT_FRAGMENT_SHADER_CODE);
+    Log.d(TAG, "Created point shader program " + pointProgramHandle);
 
     // capture any GL errors while creating program - removed in release
     GlUtils.checkGlError("createProgram");
   }
 
-  /**
-   * Dispose of the GL program and shaders.
-   */
-  public static void dispose() {
-    GLES20.glDetachShader(sProgramHandle, vertexShader);
-    GLES20.glDetachShader(sProgramHandle, fragmentShader);
+  public static void setSpriteShaderProgram() {
+    // Use our shader program for GL
+    resetHandles();
+    GLES20.glUseProgram(spriteProgramHandle);
 
-    GLES20.glDeleteShader(vertexShader);
-    GLES20.glDeleteShader(fragmentShader);
+    // get handle to vertex shader's position co-ordinate member
+    sPositionHandle = GLES20.glGetAttribLocation(spriteProgramHandle, "a_Position");
 
-    GLES20.glDeleteProgram(sProgramHandle);
+    // get handle to vertex shader's texture co-ordinate member
+    sTexturePositionHandle = GLES20.glGetAttribLocation(spriteProgramHandle, "a_texCoord");
+
+    // get handle to fragment shader's texture member
+    sTextureHandle = GLES20.glGetUniformLocation(spriteProgramHandle, "u_texture");
+
+    // get handle to vertex shader's transformation matrix
+    sMVPMatrixHandle = GLES20.glGetUniformLocation(spriteProgramHandle, "u_MVPMatrix");
+
+    // capture any GL errors while setting handles
+    GlUtils.checkGlError("setSpriteShaderProgram");
+
   }
 
-  /**
-   * Creates a program, given source code for vertex and fragment shaders.
-   *
-   * @param vertexShaderCode   Source code for vertex shader.
-   * @param fragmentShaderCode Source code for fragment shader.
-   * @return Handle to program.
-   */
-  public static int createProgram(String vertexShaderCode, String fragmentShaderCode) {
-    // Load the shaders.
-    vertexShader =
-        GlUtils.loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
-    fragmentShader =
-        GlUtils.loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
+  public static void setPointShaderProgram() {
+    // Use our shader program for GL
+    resetHandles();
+    GLES20.glUseProgram(pointProgramHandle);
 
-    // Build the program.
-    int programHandle = GLES20.glCreateProgram();
-    GLES20.glAttachShader(programHandle, vertexShader);
-    GLES20.glAttachShader(programHandle, fragmentShader);
-    GLES20.glLinkProgram(programHandle);
+    // get handle to vertex shader's position co-ordinate member
+    sPositionHandle = GLES20.glGetAttribLocation(pointProgramHandle, "vPosition");
 
-    // Check for failure.
-    int[] linkStatus = new int[1];
-    GLES20.glGetProgramiv(programHandle, GLES20.GL_LINK_STATUS, linkStatus, 0);
-    if (linkStatus[0] != GLES20.GL_TRUE) {
-      // Extract the detailed failure message.
-      String msg = GLES20.glGetProgramInfoLog(programHandle);
-      GLES20.glDeleteProgram(programHandle);
-      Log.e(TAG, "glLinkProgram: " + msg);
-      throw new GalaxyForceException("glLinkProgram failed");
-    }
+    // get handle to vertex shader's texture co-ordinate member
+    sColourHandle = GLES20.glGetUniformLocation(pointProgramHandle, "vColor");
 
-    return programHandle;
+    // get handle to vertex shader's transformation matrix
+    sMVPMatrixHandle = GLES20.glGetUniformLocation(pointProgramHandle, "uMVPMatrix");
+
+    // capture any GL errors while setting handles
+    GlUtils.checkGlError("setPointShaderProgram");
   }
+
+  private static void resetHandles() {
+    sPositionHandle = -1;
+    sColourHandle = -1;
+    sTexturePositionHandle = -1;
+    sTextureHandle = -1;
+    sMVPMatrixHandle = -1;
+  }
+
+//  /**
+//   * Dispose of the GL program and shaders.
+//   */
+//  public static void dispose() {
+//    GLES20.glDetachShader(sProgramHandle, vertexShader);
+//    GLES20.glDetachShader(sProgramHandle, fragmentShader);
+//
+//    GLES20.glDeleteShader(vertexShader);
+//    GLES20.glDeleteShader(fragmentShader);
+//
+//    GLES20.glDeleteProgram(sProgramHandle);
+//  }
+
+//  /**
+//   * Creates a program, given source code for vertex and fragment shaders.
+//   *
+//   * @param vertexShaderCode   Source code for vertex shader.
+//   * @param fragmentShaderCode Source code for fragment shader.
+//   * @return Handle to program.
+//   */
+//  public static int createProgram(String vertexShaderCode, String fragmentShaderCode) {
+//    // Load the shaders.
+//    vertexShader =
+//        GlUtils.loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
+//    fragmentShader =
+//        GlUtils.loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
+//
+//    // Build the program.
+//    int programHandle = GLES20.glCreateProgram();
+//    GLES20.glAttachShader(programHandle, vertexShader);
+//    GLES20.glAttachShader(programHandle, fragmentShader);
+//    GLES20.glLinkProgram(programHandle);
+//
+//    // Check for failure.
+//    int[] linkStatus = new int[1];
+//    GLES20.glGetProgramiv(programHandle, GLES20.GL_LINK_STATUS, linkStatus, 0);
+//    if (linkStatus[0] != GLES20.GL_TRUE) {
+//      // Extract the detailed failure message.
+//      String msg = GLES20.glGetProgramInfoLog(programHandle);
+//      GLES20.glDeleteProgram(programHandle);
+//      Log.e(TAG, "glLinkProgram: " + msg);
+//      throw new GalaxyForceException("glLinkProgram failed");
+//    }
+//
+//    return programHandle;
+//  }
 }

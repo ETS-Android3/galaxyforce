@@ -43,11 +43,13 @@ import com.danosoftware.galaxyforce.textures.TextureService;
 import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLGraphics;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
+import com.danosoftware.galaxyforce.view.StarBatcher;
 import java.util.List;
 
 public class ScreenFactory {
 
   private final SpriteBatcher batcher;
+  private final StarBatcher starBatcher;
   private final Camera2D camera;
   private final BillingService billingService;
   private final ConfigurationService configurationService;
@@ -89,6 +91,7 @@ public class ScreenFactory {
     this.input = input;
     this.versionName = versionName;
     this.batcher = new SpriteBatcher();
+    this.starBatcher = new StarBatcher();
     this.camera = new Camera2D(glGraphics, GameConstants.GAME_WIDTH, GameConstants.GAME_HEIGHT);
     this.starFieldTemplate = new StarFieldTemplate(GameConstants.GAME_WIDTH,
         GameConstants.GAME_HEIGHT);
@@ -113,7 +116,8 @@ public class ScreenFactory {
             textureService,
             TextureMap.MENU,
             camera,
-            batcher);
+            batcher,
+            starBatcher);
 
       case MAIN_MENU:
         return new ExitingScreen(
@@ -122,7 +126,8 @@ public class ScreenFactory {
             textureService,
             TextureMap.MENU,
             camera,
-            batcher);
+            batcher,
+            starBatcher);
 
       case OPTIONS:
         return new Screen(
@@ -132,7 +137,8 @@ public class ScreenFactory {
             textureService,
             TextureMap.MENU,
             camera,
-            batcher);
+            batcher,
+            starBatcher);
 
       case SELECT_LEVEL:
         this.music.load(Music.MAIN_TITLE);
@@ -144,7 +150,8 @@ public class ScreenFactory {
             textureService,
             TextureMap.MENU,
             camera,
-            batcher);
+            batcher,
+            starBatcher);
 
       case UPGRADE_FULL_VERSION:
         return new Screen(
@@ -153,7 +160,8 @@ public class ScreenFactory {
             textureService,
             TextureMap.MENU,
             camera,
-            batcher);
+            batcher,
+            starBatcher);
 
       case GAME_COMPLETE:
         return new Screen(
@@ -162,7 +170,8 @@ public class ScreenFactory {
             textureService,
             TextureMap.MENU,
             camera,
-            batcher);
+            batcher,
+            starBatcher);
 
       default:
         throw new IllegalArgumentException("Unsupported screen type: '" + screenType + "'.");
@@ -180,7 +189,8 @@ public class ScreenFactory {
         textureService,
         TextureMap.GAME,
         camera,
-        batcher);
+        batcher,
+        starBatcher);
   }
 
   /**
@@ -215,7 +225,8 @@ public class ScreenFactory {
         textureService,
         TextureMap.GAME,
         camera,
-        batcher);
+        batcher,
+        starBatcher);
   }
 
   public IScreen newGameOverScreen(int previousWave) {
@@ -226,6 +237,7 @@ public class ScreenFactory {
         textureService,
         TextureMap.GAME,
         camera,
-        batcher);
+        batcher,
+        starBatcher);
   }
 }

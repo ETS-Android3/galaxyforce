@@ -19,7 +19,9 @@ import com.danosoftware.galaxyforce.textures.TextureMap;
 import com.danosoftware.galaxyforce.textures.TextureRegion;
 import com.danosoftware.galaxyforce.textures.TextureService;
 import com.danosoftware.galaxyforce.view.Camera2D;
+import com.danosoftware.galaxyforce.view.GLShaderHelper;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
+import com.danosoftware.galaxyforce.view.StarBatcher;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -50,6 +52,7 @@ public abstract class AbstractScreen implements IScreen {
   final Model model;
   // sprite batcher used for displaying sprites
   final SpriteBatcher batcher;
+  final StarBatcher starBatcher;
   // camera used for display views
   final Camera2D camera;
   final Map<ISpriteIdentifier, TextureRegion> textureRegions;
@@ -68,7 +71,8 @@ public abstract class AbstractScreen implements IScreen {
       TextureService textureService,
       TextureMap textureMap,
       Camera2D camera,
-      SpriteBatcher batcher) {
+      SpriteBatcher batcher,
+      StarBatcher starBatcher) {
 
     this.textureService = textureService;
     this.textureMap = textureMap;
@@ -77,6 +81,7 @@ public abstract class AbstractScreen implements IScreen {
     this.controller = controller;
     this.model = model;
     this.textureRegions = new HashMap<>();
+    this.starBatcher = starBatcher;
   }
 
   @Override
@@ -91,16 +96,26 @@ public abstract class AbstractScreen implements IScreen {
         BACKGROUND_ALPHA);
     GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
-    camera.setViewportAndMatrices();
-
     // Enable alpha blending and blend based on the fragment's alpha value
     GLES20.glEnable(GLES20.GL_BLEND);
     GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+
+    // Draw Stars
+    GLShaderHelper.setPointShaderProgram();
+    camera.setViewportAndMatrices();
+    starBatcher.beginBatch();
+    //starBatcher.drawStar();
+    starBatcher.endBatch();
 
     // count sprites to draw
     final List<ISprite> sprites = model.getSprites();
     final List<Text> texts = model.getText();
     final int spriteCount = sprites.size() + countCharacters(texts);
+
+    // Use our sprite shader program for GL
+    GLShaderHelper.setSpriteShaderProgram();
+
+    camera.setViewportAndMatrices();
 
     batcher.beginBatch(texture, spriteCount);
 

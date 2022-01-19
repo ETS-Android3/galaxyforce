@@ -2,6 +2,7 @@ package com.danosoftware.galaxyforce.view;
 
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+import com.danosoftware.galaxyforce.utilities.GlUtils;
 
 public class Camera2D {
 
@@ -28,6 +29,9 @@ public class Camera2D {
 
     // Copy the model / view / projection matrix over.
     GLES20.glUniformMatrix4fv(GLShaderHelper.sMVPMatrixHandle, 1, false, mvp, 0);
+
+    // report any errors seen during matrices set-up - removed in release
+    GlUtils.checkGlError("setViewportAndMatrices");
   }
 
   public void touchToWorld(Vector2 touch) {

@@ -1,7 +1,6 @@
 package com.danosoftware.galaxyforce.view;
 
 import android.opengl.GLES20;
-import android.util.Log;
 import com.danosoftware.galaxyforce.utilities.GlUtils;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -43,6 +42,7 @@ class Vertices {
     ByteBuffer buffer = ByteBuffer.allocateDirect(maxVertices * vertexStride);
     buffer.order(ByteOrder.nativeOrder());
     vertices = buffer.asFloatBuffer();
+
     // allocate a buffer with a byte-size big enough to hold all indices (shorts)
     buffer = ByteBuffer.allocateDirect(maxIndices * BYTES_PER_SHORT);
     buffer.order(ByteOrder.nativeOrder());
@@ -81,16 +81,15 @@ class Vertices {
 
     // prepare colour values from vertices (if enabled)
     if (hasColor) {
-      Log.e(TAG, "Colour vertices not yet supported by shader program");
       vertices.position(offset);
       GLES20.glVertexAttribPointer(
-          -1, // tbc,
+          GLShaderHelper.sColourHandle,
           COLOUR_ELEMENTS_PER_VERTEX,
           GLES20.GL_FLOAT,
           false,
           vertexStride,
           vertices);
-      GLES20.glEnableVertexAttribArray(-1); // tbc
+      GLES20.glEnableVertexAttribArray(GLShaderHelper.sColourHandle);
 
       offset += COLOUR_ELEMENTS_PER_VERTEX;
     }
@@ -106,15 +105,14 @@ class Vertices {
           vertexStride,
           vertices);
       GLES20.glEnableVertexAttribArray(GLShaderHelper.sTexturePositionHandle);
-
-      // report any errors seen during binding - removed in release
-      GlUtils.checkGlError("bindSpriteVertices");
     }
+    // report any errors seen during binding - removed in release
+    GlUtils.checkGlError("bindSpriteVertices");
   }
 
   public void draw(int primitiveType, int offset, int numVertices) {
 
-    if (indices != null) {
+    if (indices != null && indices.hasRemaining()) {
       indices.position(offset);
       GLES20.glDrawElements(primitiveType, numVertices, GLES20.GL_UNSIGNED_SHORT, indices);
     } else {
@@ -130,7 +128,7 @@ class Vertices {
     // Disable vertex array.  Not strictly necessary.
     GLES20.glDisableVertexAttribArray(GLShaderHelper.sPositionHandle);
     if (hasColor) {
-      GLES20.glDisableVertexAttribArray(-1); // tbc
+      GLES20.glDisableVertexAttribArray(GLShaderHelper.sColourHandle);
     }
     if (hasTexCoords) {
       GLES20.glDisableVertexAttribArray(GLShaderHelper.sTexturePositionHandle);

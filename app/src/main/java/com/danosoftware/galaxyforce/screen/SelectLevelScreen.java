@@ -16,6 +16,7 @@ import com.danosoftware.galaxyforce.textures.TextureRegion;
 import com.danosoftware.galaxyforce.textures.TextureService;
 import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
+import com.danosoftware.galaxyforce.view.StarBatcher;
 import java.util.List;
 
 public class SelectLevelScreen extends AbstractScreen {
@@ -34,9 +35,10 @@ public class SelectLevelScreen extends AbstractScreen {
       TextureService textureService,
       TextureMap textureMap,
       Camera2D camera,
-      SpriteBatcher batcher) {
+      SpriteBatcher batcher,
+      StarBatcher starBatcher) {
 
-    super(model, controller, textureService, textureMap, camera, batcher);
+    super(model, controller, textureService, textureMap, camera, batcher, starBatcher);
     this.levelModel = model;
   }
 

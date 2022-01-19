@@ -21,7 +21,7 @@ public class StarFieldTemplate {
     private static final Random RANDOM = new Random();
 
     /* number of stars to show */
-    private static final int MAX_STARS = 250;
+    private static final int MAX_STARS = 0;
 
     // list of templates that can be used to create identical stars
     // contains each star's initial state and properties.
