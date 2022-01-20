@@ -4,11 +4,13 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_AL
 
 import android.opengl.GLES20;
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
 import com.danosoftware.galaxyforce.models.screens.Model;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
+import com.danosoftware.galaxyforce.sprites.game.starfield.NewStarField;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteProperties;
 import com.danosoftware.galaxyforce.text.Font;
@@ -22,6 +24,7 @@ import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLShaderHelper;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 import com.danosoftware.galaxyforce.view.StarBatcher;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -64,6 +67,8 @@ public abstract class AbstractScreen implements IScreen {
   Texture texture;
   // font used for displaying text sprites
   Font gameFont;
+  // holds the descending stars in our background
+  private final NewStarField starField;
 
   AbstractScreen(
       Model model,
@@ -72,7 +77,8 @@ public abstract class AbstractScreen implements IScreen {
       TextureMap textureMap,
       Camera2D camera,
       SpriteBatcher batcher,
-      StarBatcher starBatcher) {
+      StarBatcher starBatcher,
+      NewStarField starField) {
 
     this.textureService = textureService;
     this.textureMap = textureMap;
@@ -82,6 +88,7 @@ public abstract class AbstractScreen implements IScreen {
     this.model = model;
     this.textureRegions = new HashMap<>();
     this.starBatcher = starBatcher;
+    this.starField = starField;
   }
 
   @Override
@@ -102,9 +109,10 @@ public abstract class AbstractScreen implements IScreen {
 
     // Draw Stars
     GLShaderHelper.setPointShaderProgram();
+
     camera.setViewportAndMatrices();
     starBatcher.beginBatch();
-    starBatcher.drawStar(0);
+    starBatcher.drawStar(starField.getStarField());
     starBatcher.endBatch();
 
     // count sprites to draw
@@ -168,6 +176,7 @@ public abstract class AbstractScreen implements IScreen {
   public void update(float deltaTime) {
     controller.update(deltaTime);
     model.update(deltaTime);
+    starField.animate(deltaTime);
   }
 
   @Override

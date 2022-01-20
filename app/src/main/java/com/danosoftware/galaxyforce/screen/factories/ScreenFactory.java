@@ -3,6 +3,7 @@ package com.danosoftware.galaxyforce.screen.factories;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SHOW_FPS;
 
 import android.content.res.AssetManager;
+
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
@@ -35,6 +36,7 @@ import com.danosoftware.galaxyforce.services.savedgame.SavedGame;
 import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
+import com.danosoftware.galaxyforce.sprites.game.starfield.NewStarField;
 import com.danosoftware.galaxyforce.sprites.game.starfield.StarFieldTemplate;
 import com.danosoftware.galaxyforce.textures.TextureLoader;
 import com.danosoftware.galaxyforce.textures.TextureMap;
@@ -44,6 +46,7 @@ import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLGraphics;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 import com.danosoftware.galaxyforce.view.StarBatcher;
+
 import java.util.List;
 
 public class ScreenFactory {
@@ -63,6 +66,7 @@ public class ScreenFactory {
   private final Input input;
   private final String versionName;
   private final StarFieldTemplate starFieldTemplate;
+  private final NewStarField starField;
   private final TextureService textureService;
 
   public ScreenFactory(
@@ -91,10 +95,13 @@ public class ScreenFactory {
     this.input = input;
     this.versionName = versionName;
     this.batcher = new SpriteBatcher();
-    this.starBatcher = new StarBatcher();
     this.camera = new Camera2D(glGraphics, GameConstants.GAME_WIDTH, GameConstants.GAME_HEIGHT);
     this.starFieldTemplate = new StarFieldTemplate(GameConstants.GAME_WIDTH,
         GameConstants.GAME_HEIGHT);
+    this.starField = new NewStarField(
+            GameConstants.GAME_WIDTH,
+            GameConstants.GAME_HEIGHT);
+    this.starBatcher = new StarBatcher(starField.getStarField());
     this.textureService = new TextureService(
         new TextureRegionXmlParser(assets),
         new TextureLoader(assets));
@@ -117,7 +124,8 @@ public class ScreenFactory {
             TextureMap.MENU,
             camera,
             batcher,
-            starBatcher);
+            starBatcher,
+                starField);
 
       case MAIN_MENU:
         return new ExitingScreen(
@@ -127,7 +135,8 @@ public class ScreenFactory {
             TextureMap.MENU,
             camera,
             batcher,
-            starBatcher);
+            starBatcher,
+                starField);
 
       case OPTIONS:
         return new Screen(
@@ -138,7 +147,8 @@ public class ScreenFactory {
             TextureMap.MENU,
             camera,
             batcher,
-            starBatcher);
+            starBatcher,
+                starField);
 
       case SELECT_LEVEL:
         this.music.load(Music.MAIN_TITLE);
@@ -151,7 +161,8 @@ public class ScreenFactory {
             TextureMap.MENU,
             camera,
             batcher,
-            starBatcher);
+            starBatcher,
+                starField);
 
       case UPGRADE_FULL_VERSION:
         return new Screen(
@@ -161,7 +172,7 @@ public class ScreenFactory {
             TextureMap.MENU,
             camera,
             batcher,
-            starBatcher);
+            starBatcher, starField);
 
       case GAME_COMPLETE:
         return new Screen(
@@ -171,7 +182,7 @@ public class ScreenFactory {
             TextureMap.MENU,
             camera,
             batcher,
-            starBatcher);
+            starBatcher, starField);
 
       default:
         throw new IllegalArgumentException("Unsupported screen type: '" + screenType + "'.");
@@ -190,7 +201,8 @@ public class ScreenFactory {
         TextureMap.GAME,
         camera,
         batcher,
-        starBatcher);
+        starBatcher,
+            starField);
   }
 
   /**
@@ -226,7 +238,8 @@ public class ScreenFactory {
         TextureMap.GAME,
         camera,
         batcher,
-        starBatcher);
+        starBatcher,
+            starField);
   }
 
   public IScreen newGameOverScreen(int previousWave) {
@@ -238,6 +251,6 @@ public class ScreenFactory {
         TextureMap.GAME,
         camera,
         batcher,
-        starBatcher);
+        starBatcher, starField);
   }
 }

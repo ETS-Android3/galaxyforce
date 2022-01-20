@@ -1,14 +1,11 @@
 package com.danosoftware.galaxyforce.view;
 
-import static com.danosoftware.galaxyforce.waves.utilities.Randomiser.random;
-import static com.danosoftware.galaxyforce.waves.utilities.Randomiser.randomFloat;
-
 import android.opengl.GLES20;
-import com.danosoftware.galaxyforce.constants.GameConstants;
+
+import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
+import com.danosoftware.galaxyforce.sprites.game.starfield.Star2;
 
 public class StarBatcher {
-
-  private static final String TAG = "StarBatcher";
 
   private static final int POSITION_COORDS_PER_VERTEX = 2;  // x,y
   private static final int COLOUR_COORDS_PER_VERTEX = 4;   // r,g,b,a
@@ -21,64 +18,58 @@ public class StarBatcher {
   private int bufferIndex;
   private int numStars;
 
-  /* number of stars to show */
-  private static final int MAX_STARS = 250;
-
-  public StarBatcher() {
-    setUpVertices(MAX_STARS);
+  public StarBatcher(Star2[] starField) {
+    setUpVertices(starField);
   }
 
-  private void setUpVertices(int starsCount) {
+  /**
+   * initialises the star batcher with the initial star-field.
+   */
+  private void setUpVertices(Star2[] starField) {
 
     this.bufferIndex = 0;
-    this.numStars = starsCount;
+    this.numStars = starField.length;
 
     // create an vertices buffer that holds star's position and colour per vertex
-    this.verticesBuffer = new float[starsCount * (POSITION_COORDS_PER_VERTEX
+    this.verticesBuffer = new float[numStars * (POSITION_COORDS_PER_VERTEX
         + COLOUR_COORDS_PER_VERTEX)];
 
     // create vertices object to hold all vertices
     this.vertices = new Vertices(
-        starsCount * VERTICES_PER_STAR,
+            numStars * VERTICES_PER_STAR,
         0,
         true,
         false);
 
     int index = 0;
-    for (int i = 0; i < starsCount; i++) {
-
+    for (Star2 star2 : starField) {
       // position vertex - x,y position
-      verticesBuffer[index++] = (float) (GameConstants.GAME_WIDTH * random());
-      verticesBuffer[index++] = (float) (GameConstants.GAME_HEIGHT * random());
+      verticesBuffer[index++] = star2.getX();
+      verticesBuffer[index++] = star2.getY();
 
       // colour vertex - rgba colour
-      verticesBuffer[index++] = randomFloat(); // red
-      verticesBuffer[index++] = randomFloat(); // green
-      verticesBuffer[index++] = randomFloat(); // blue
+      final RgbColour colour = star2.getColour();
+      verticesBuffer[index++] = colour.getRed(); // red
+      verticesBuffer[index++] = colour.getGreen(); // green
+      verticesBuffer[index++] = colour.getBlue(); // blue
       verticesBuffer[index++] = 1.0f; // alpha
     }
   }
 
   public void beginBatch() {
-
-    //numStars = 0;
-
     // since each star's x-position and colour will never change,
     // we will only modify the y-position of our stars.
     // the first star's y-position is at index = 1
     bufferIndex = 1;
   }
 
-  public void drawStar(float y) {
-
+  public void drawStar(Star2[] starField) {
     // update y-position of star and increment index to next vertex
-    for (int i = 0; i < 250; i++) {
-      verticesBuffer[bufferIndex] = (verticesBuffer[bufferIndex] + 1) % GameConstants.GAME_HEIGHT;
+    for (Star2 star2 : starField) {
+      verticesBuffer[bufferIndex] = star2.getY();
       bufferIndex += COORDS_PER_VERTEX;
     }
     //verticesBuffer[bufferIndex+=COORDS_PER_VERTEX] = y;
-
-    //numStars++;
   }
 
   public void endBatch() {

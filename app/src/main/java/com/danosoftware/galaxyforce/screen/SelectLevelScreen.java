@@ -3,11 +3,13 @@ package com.danosoftware.galaxyforce.screen;
 import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_ALPHA;
 
 import android.opengl.GLES20;
+
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.models.screens.level.LevelModel;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
+import com.danosoftware.galaxyforce.sprites.game.starfield.NewStarField;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteProperties;
 import com.danosoftware.galaxyforce.text.Text;
@@ -17,6 +19,7 @@ import com.danosoftware.galaxyforce.textures.TextureService;
 import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 import com.danosoftware.galaxyforce.view.StarBatcher;
+
 import java.util.List;
 
 public class SelectLevelScreen extends AbstractScreen {
@@ -36,9 +39,10 @@ public class SelectLevelScreen extends AbstractScreen {
       TextureMap textureMap,
       Camera2D camera,
       SpriteBatcher batcher,
-      StarBatcher starBatcher) {
+      StarBatcher starBatcher,
+      NewStarField starField) {
 
-    super(model, controller, textureService, textureMap, camera, batcher, starBatcher);
+    super(model, controller, textureService, textureMap, camera, batcher, starBatcher, starField);
     this.levelModel = model;
   }
 
