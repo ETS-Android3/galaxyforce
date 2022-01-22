@@ -15,6 +15,7 @@ import com.danosoftware.galaxyforce.textures.TextureMap;
 import com.danosoftware.galaxyforce.textures.TextureRegion;
 import com.danosoftware.galaxyforce.textures.TextureService;
 import com.danosoftware.galaxyforce.view.Camera2D;
+import com.danosoftware.galaxyforce.view.GLShaderHelper;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 import com.danosoftware.galaxyforce.view.StarBatcher;
 import java.util.List;
@@ -58,15 +59,15 @@ public class SelectLevelScreen extends AbstractScreen {
         BACKGROUND_ALPHA);
     GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
 
-    // move camera's x position on screen by model's current scroll speed
-    float cameraOffset = levelModel.getScrollPosition();
-    camera.moveX(SCREEN_CENTRE + cameraOffset);
-
-    camera.setViewportAndMatrices();
-
     // Enable alpha blending and blend based on the fragment's alpha value
     GLES20.glEnable(GLES20.GL_BLEND);
     GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA);
+
+    // Draw Stars
+    GLShaderHelper.setPointShaderProgram();
+    camera.moveX(SCREEN_CENTRE);
+    camera.setViewportAndMatrices();
+    starBatcher.drawStars();
 
     // count sprites to draw
     final List<ISprite> levelSprites = levelModel.getStaticSprites();
@@ -77,6 +78,14 @@ public class SelectLevelScreen extends AbstractScreen {
         + sprites.size()
         + countCharacters(levelTexts)
         + countCharacters(texts);
+
+    // Use our sprite shader program for GL
+    GLShaderHelper.setSpriteShaderProgram();
+
+    // move camera's x position on screen by model's current scroll speed
+    float cameraOffset = levelModel.getScrollPosition();
+    camera.moveX(SCREEN_CENTRE + cameraOffset);
+    camera.setViewportAndMatrices();
 
     batcher.beginBatch(texture, spriteCount);
 
