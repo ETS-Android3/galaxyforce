@@ -14,10 +14,11 @@ import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.common.RotatingSprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.NewStarField;
+import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class GameCompleteModelImpl implements Model, TouchScreenModel {
   private final Game game;
 
   // stars
-  private final NewStarField starField;
+  private final StarField starField;
 
   // reference to all sprites in model
   private final List<ISprite> allSprites;
@@ -43,7 +44,7 @@ public class GameCompleteModelImpl implements Model, TouchScreenModel {
   public GameCompleteModelImpl(
       Game game,
       Controller controller,
-      NewStarField starField) {
+      StarField starField) {
     this.game = game;
     this.starField = starField;
     this.allSprites = new ArrayList<>();

@@ -3,6 +3,7 @@ package com.danosoftware.galaxyforce.models.screens;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.billing.BillingObserver;
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.billing.PurchaseState;
@@ -21,10 +22,11 @@ import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.BaseMovingSprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.LogoMovingSprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.PlanetMovingSprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.NewStarField;
+import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,7 +43,7 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
   private final BillingService billingService;
   private final List<Text> text;
   private final List<ISprite> sprites;
-  private final NewStarField starField;
+  private final StarField starField;
   // version name of this package
   private final String versionName;
   private final IMovingSprite planet;
@@ -59,7 +61,7 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
       Controller controller,
       BillingService billingService,
       String versionName,
-      NewStarField starField,
+      StarField starField,
       SoundPlayerService sounds) {
 
     this.game = game;

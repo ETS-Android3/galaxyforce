@@ -3,6 +3,7 @@ package com.danosoftware.galaxyforce.models.screens.options;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.buttons.sprite_text_button.OptionButton;
 import com.danosoftware.galaxyforce.buttons.toggle_group.ToggleButtonGroup;
 import com.danosoftware.galaxyforce.buttons.toggle_group.ToggleOption;
@@ -31,11 +32,12 @@ import com.danosoftware.galaxyforce.services.vibration.VibrateTime;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.NewStarField;
+import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +56,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
   private final GooglePlayServices playService;
 
   // stars
-  private final NewStarField starField;
+  private final StarField starField;
 
   // reference to all sprites in model
   private final List<ISprite> allSprites;
@@ -74,7 +76,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
       MusicPlayerService music,
       VibrationService vibrator,
       GooglePlayServices playService,
-      NewStarField starField) {
+      StarField starField) {
     this.game = game;
     this.controller = controller;
     this.configurationService = configurationService;

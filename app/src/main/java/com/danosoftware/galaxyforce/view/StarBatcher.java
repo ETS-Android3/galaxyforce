@@ -1,8 +1,9 @@
 package com.danosoftware.galaxyforce.view;
 
 import android.opengl.GLES20;
+
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
-import com.danosoftware.galaxyforce.sprites.game.starfield.Star2;
+import com.danosoftware.galaxyforce.sprites.game.starfield.Star;
 
 public class StarBatcher {
 
@@ -15,9 +16,9 @@ public class StarBatcher {
   private final float[] verticesBuffer;
   private final Vertices vertices;
   private final int numStars;
-  private final Star2[] starField;
+  private final Star[] starField;
 
-  public StarBatcher(Star2[] starField) {
+  public StarBatcher(Star[] starField) {
     this.starField = starField;
     this.numStars = starField.length;
 
@@ -40,13 +41,13 @@ public class StarBatcher {
    */
   private void setUpVertices() {
     int index = 0;
-    for (Star2 star2 : starField) {
+    for (Star star2 : starField) {
       // position vertex - x,y position
       verticesBuffer[index++] = star2.getX();
       verticesBuffer[index++] = star2.getY();
 
       // colour vertex - rgba colour
-      final RgbColour colour = star2.getColour();
+      final RgbColour colour = star2.colour();
       verticesBuffer[index++] = colour.getRed(); // red
       verticesBuffer[index++] = colour.getGreen(); // green
       verticesBuffer[index++] = colour.getBlue(); // blue
@@ -55,16 +56,23 @@ public class StarBatcher {
   }
 
   public void drawStars() {
-    // since each star's x-position and colour will never change,
-    // we will only modify the y-position of our stars.
+    // since each star's x-position will never change,
+    // we will only modify the y-position and the colour of our stars.
 
     // the first star's y-position within the buffer is at index = 1
     int bufferIndex = 1;
 
-    // update y-position of each star and increment index to next vertex.
-    for (Star2 star2 : starField) {
-      verticesBuffer[bufferIndex] = star2.getY();
-      bufferIndex += COORDS_PER_VERTEX;
+    // update y-position and colour of each star and increment index to next vertex.
+    for (Star star2 : starField) {
+      verticesBuffer[bufferIndex++] = star2.getY();
+
+      final RgbColour colour = star2.colour();
+      verticesBuffer[bufferIndex++] = colour.getRed();
+      verticesBuffer[bufferIndex++] = colour.getGreen();
+      verticesBuffer[bufferIndex++] = colour.getBlue();
+
+      // skip modifying colour's alpha or next star's x-pos
+      bufferIndex += 2;
     }
 
     // draw the points in the vertices buffer

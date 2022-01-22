@@ -3,6 +3,7 @@ package com.danosoftware.galaxyforce.models.screens.level;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.billing.BillingObserver;
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.billing.PurchaseState;
@@ -23,9 +24,10 @@ import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.services.savedgame.HighestLevelChangeObserver;
 import com.danosoftware.galaxyforce.services.savedgame.SavedGame;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.NewStarField;
+import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +44,7 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
   // map of zone number to x position
   private final Map<Integer, Integer> zoneXPosition;
   // on-screen components
-  private final NewStarField starField;
+  private final StarField starField;
   private final List<SpriteButton> buttons;
   private final List<SpriteTextButton> textButtons;
   private final List<SpriteTextButton> staticTextButtons;
@@ -75,7 +77,7 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
       Controller controller,
       BillingService billingService,
       SavedGame savedGame,
-      NewStarField starField) {
+      StarField starField) {
     this.game = game;
     this.controller = controller;
     this.billingService = billingService;

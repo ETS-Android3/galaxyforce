@@ -5,6 +5,7 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.LOGO_Y_POS;
 import static com.danosoftware.galaxyforce.constants.GameConstants.PLANET_Y_POS;
 
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.billing.BillingObserver;
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.billing.PurchaseState;
@@ -19,10 +20,11 @@ import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.NewStarField;
+import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,7 +35,7 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
 
   private final Game game;
 
-  private final NewStarField starField;
+  private final StarField starField;
 
   // sprites
   private final ISprite logo;
@@ -58,7 +60,7 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
       Game game,
       Controller controller,
       BillingService billingService,
-      NewStarField starField) {
+      StarField starField) {
     this.game = game;
     this.controller = controller;
     this.billingService = billingService;

@@ -2,6 +2,7 @@ package com.danosoftware.galaxyforce.models.screens.game;
 
 import android.content.res.AssetManager;
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.billing.PurchaseState;
 import com.danosoftware.galaxyforce.buttons.sprite_button.PauseButton;
@@ -46,7 +47,7 @@ import com.danosoftware.galaxyforce.sprites.game.factories.AlienFactory;
 import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.missiles.bases.IBaseMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
-import com.danosoftware.galaxyforce.sprites.game.starfield.NewStarField;
+import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.utilities.OverlapTester;
@@ -55,6 +56,7 @@ import com.danosoftware.galaxyforce.waves.managers.WaveManagerImpl;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocatorFactory;
 import com.danosoftware.galaxyforce.waves.utilities.WaveCreationUtils;
 import com.danosoftware.galaxyforce.waves.utilities.WaveFactory;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -110,7 +112,7 @@ public class GamePlayModelImpl implements Model, GameModel {
   // get ready text instances
   private Text waveText;
   //stars
-  private final NewStarField starField;
+  private final StarField starField;
 
   /*
    * Instance variables required in GET_READY state
@@ -133,7 +135,7 @@ public class GamePlayModelImpl implements Model, GameModel {
       SavedGame savedGame,
       AchievementService achievements,
       AssetManager assets,
-      NewStarField starField) {
+      StarField starField) {
     this.game = game;
     this.wave = wave;
     this.billingService = billingService;
