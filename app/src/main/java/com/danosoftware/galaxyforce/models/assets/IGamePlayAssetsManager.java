@@ -5,7 +5,6 @@ import com.danosoftware.galaxyforce.sprites.game.assets.Life;
 import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.missiles.bases.IBaseMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
-import com.danosoftware.galaxyforce.sprites.game.starfield.Star;
 import java.util.List;
 
 /**
@@ -28,8 +27,6 @@ public interface IGamePlayAssetsManager {
   List<IBaseMissile> getBaseMissiles();
 
   List<IPowerUp> getPowerUps();
-
-  List<Star> getStars();
 
   List<Flag> getFlags();
 

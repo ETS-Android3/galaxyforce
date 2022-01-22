@@ -20,9 +20,7 @@ import com.danosoftware.galaxyforce.models.screens.flashing.FlashingText;
 import com.danosoftware.galaxyforce.models.screens.flashing.FlashingTextImpl;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarAnimationType;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarFieldTemplate;
+import com.danosoftware.galaxyforce.sprites.game.starfield.NewStarField;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
@@ -39,7 +37,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
   private static final String LOCAL_TAG = "UnlockFullVersionModel";
 
   private final Game game;
-  private final StarField starField;
+  private final NewStarField starField;
   private final ISprite logo;
 
   // messages to display on the screen
@@ -62,16 +60,16 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
       Game game,
       Controller controller,
       BillingService billingService,
-      StarFieldTemplate starFieldTemplate) {
+      NewStarField starField) {
 
     this.game = game;
     this.controller = controller;
     this.billingService = billingService;
+    this.starField = starField;
     this.modelState = ModelState.RUNNING;
     this.buttons = new ArrayList<>();
     this.messages = new ArrayList<>();
     this.flashingText = null;
-    this.starField = new StarField(starFieldTemplate, StarAnimationType.MENU);
     this.logo = new SplashSprite(GameConstants.SCREEN_MID_X, 817,
         MenuSpriteIdentifier.GALAXY_FORCE);
     this.reBuildSprites = false;
@@ -307,7 +305,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
   @Override
   public List<ISprite> getSprites() {
 
-    List<ISprite> sprites = new ArrayList<>(starField.getSprites());
+    List<ISprite> sprites = new ArrayList<>();
     sprites.add(logo);
 
     for (SpriteTextButton button : buttons) {

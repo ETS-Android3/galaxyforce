@@ -21,9 +21,7 @@ import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.BaseMovingSprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.LogoMovingSprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.PlanetMovingSprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarAnimationType;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarFieldTemplate;
+import com.danosoftware.galaxyforce.sprites.game.starfield.NewStarField;
 import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
@@ -43,7 +41,7 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
   private final BillingService billingService;
   private final List<Text> text;
   private final List<ISprite> sprites;
-  private final StarField starField;
+  private final NewStarField starField;
   // version name of this package
   private final String versionName;
   private final IMovingSprite planet;
@@ -61,17 +59,17 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
       Controller controller,
       BillingService billingService,
       String versionName,
-      StarFieldTemplate starFieldTemplate,
+      NewStarField starField,
       SoundPlayerService sounds) {
 
     this.game = game;
     this.billingService = billingService;
     this.versionName = versionName;
+    this.starField = starField;
     this.sprites = new ArrayList<>();
     this.text = new ArrayList<>();
     this.splashScreenTime = 0f;
     this.reBuildText = true;
-    this.starField = new StarField(starFieldTemplate, StarAnimationType.MENU);
     this.planet = new PlanetMovingSprite(
         GameConstants.SCREEN_MID_X,
         START_PLANET_Y_POS,
@@ -83,7 +81,6 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
     this.base = new BaseMovingSprite(
         sounds);
 
-    sprites.addAll(starField.getSprites());
     sprites.add(planet);
     sprites.add(base);
     sprites.add(logo);

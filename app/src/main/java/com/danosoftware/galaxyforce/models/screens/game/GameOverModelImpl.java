@@ -17,9 +17,7 @@ import com.danosoftware.galaxyforce.models.screens.flashing.FlashingText;
 import com.danosoftware.galaxyforce.models.screens.flashing.FlashingTextImpl;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarAnimationType;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarFieldTemplate;
+import com.danosoftware.galaxyforce.sprites.game.starfield.NewStarField;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
@@ -49,7 +47,7 @@ public class GameOverModelImpl implements Model, ButtonModel {
   /* reference to pause menu buttons */
   private final List<SpriteTextButton> menuButtons;
   /* stars sprites */
-  private final StarField starField;
+  private final NewStarField starField;
   /* reference to flashing game over text */
   private final FlashingText flashingGameOverText;
   private final int lastWave;
@@ -60,9 +58,9 @@ public class GameOverModelImpl implements Model, ButtonModel {
       Game game,
       Controller controller,
       int lastWave,
-      StarFieldTemplate starFieldTemplate) {
+      NewStarField starField) {
     this.game = game;
-    this.starField = new StarField(starFieldTemplate, StarAnimationType.GAME);
+    this.starField = starField;
     this.lastWave = lastWave;
     this.menuButtons = new ArrayList<>();
     this.modelState = GameOverState.RUNNING;
@@ -93,7 +91,7 @@ public class GameOverModelImpl implements Model, ButtonModel {
   @Override
   public List<ISprite> getSprites() {
 
-    List<ISprite> sprites = new ArrayList<>(starField.getSprites());
+    List<ISprite> sprites = new ArrayList<>();
     for (SpriteTextButton eachButton : menuButtons) {
       sprites.add(eachButton.getSprite());
     }

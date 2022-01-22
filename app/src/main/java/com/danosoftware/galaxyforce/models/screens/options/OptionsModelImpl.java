@@ -31,9 +31,7 @@ import com.danosoftware.galaxyforce.services.vibration.VibrateTime;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarAnimationType;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarFieldTemplate;
+import com.danosoftware.galaxyforce.sprites.game.starfield.NewStarField;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
@@ -55,8 +53,8 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
   private final VibrationService vibrator;
   private final GooglePlayServices playService;
 
-  // references to stars
-  private final StarField starField;
+  // stars
+  private final NewStarField starField;
 
   // reference to all sprites in model
   private final List<ISprite> allSprites;
@@ -76,7 +74,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
       MusicPlayerService music,
       VibrationService vibrator,
       GooglePlayServices playService,
-      StarFieldTemplate starFieldTemplate) {
+      NewStarField starField) {
     this.game = game;
     this.controller = controller;
     this.configurationService = configurationService;
@@ -84,9 +82,9 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
     this.music = music;
     this.vibrator = vibrator;
     this.playService = playService;
+    this.starField = starField;
     this.allSprites = new ArrayList<>();
     this.allText = new ArrayList<>();
-    this.starField = new StarField(starFieldTemplate, StarAnimationType.MENU);
     this.reBuildAssets = false;
     this.connectionState = playService.connectedState();
 
@@ -106,13 +104,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
     allSprites.clear();
     allText.clear();
 
-    // add stars
-    allSprites.addAll(starField.getSprites());
-
-    /**
-     * add buttons
-     */
-
+    // add buttons
     allText.add(Text.newTextRelativePositionX(
         "SOUND EFFECTS",
         TextPositionX.CENTRE,

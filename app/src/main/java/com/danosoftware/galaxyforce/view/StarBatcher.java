@@ -1,7 +1,6 @@
 package com.danosoftware.galaxyforce.view;
 
 import android.opengl.GLES20;
-
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.sprites.game.starfield.Star2;
 
@@ -13,21 +12,13 @@ public class StarBatcher {
       POSITION_COORDS_PER_VERTEX + COLOUR_COORDS_PER_VERTEX;
   private static final int VERTICES_PER_STAR = 1;
 
-  private float[] verticesBuffer;
-  private Vertices vertices;
-  private int bufferIndex;
-  private int numStars;
+  private final float[] verticesBuffer;
+  private final Vertices vertices;
+  private final int numStars;
+  private final Star2[] starField;
 
   public StarBatcher(Star2[] starField) {
-    setUpVertices(starField);
-  }
-
-  /**
-   * initialises the star batcher with the initial star-field.
-   */
-  private void setUpVertices(Star2[] starField) {
-
-    this.bufferIndex = 0;
+    this.starField = starField;
     this.numStars = starField.length;
 
     // create an vertices buffer that holds star's position and colour per vertex
@@ -36,11 +27,18 @@ public class StarBatcher {
 
     // create vertices object to hold all vertices
     this.vertices = new Vertices(
-            numStars * VERTICES_PER_STAR,
+        numStars * VERTICES_PER_STAR,
         0,
         true,
         false);
 
+    setUpVertices();
+  }
+
+  /**
+   * initialises the vertices buffer with the initial star-field.
+   */
+  private void setUpVertices() {
     int index = 0;
     for (Star2 star2 : starField) {
       // position vertex - x,y position
@@ -56,23 +54,20 @@ public class StarBatcher {
     }
   }
 
-  public void beginBatch() {
+  public void drawStars() {
     // since each star's x-position and colour will never change,
     // we will only modify the y-position of our stars.
-    // the first star's y-position is at index = 1
-    bufferIndex = 1;
-  }
 
-  public void drawStar(Star2[] starField) {
-    // update y-position of star and increment index to next vertex
+    // the first star's y-position within the buffer is at index = 1
+    int bufferIndex = 1;
+
+    // update y-position of each star and increment index to next vertex.
     for (Star2 star2 : starField) {
       verticesBuffer[bufferIndex] = star2.getY();
       bufferIndex += COORDS_PER_VERTEX;
     }
-    //verticesBuffer[bufferIndex+=COORDS_PER_VERTEX] = y;
-  }
 
-  public void endBatch() {
+    // draw the points in the vertices buffer
     vertices.setVertices(verticesBuffer, 0, numStars * COORDS_PER_VERTEX);
     vertices.bind();
     vertices.draw(GLES20.GL_POINTS, 0, numStars * VERTICES_PER_STAR);

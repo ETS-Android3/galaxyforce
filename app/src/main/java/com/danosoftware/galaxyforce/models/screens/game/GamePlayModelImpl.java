@@ -46,9 +46,7 @@ import com.danosoftware.galaxyforce.sprites.game.factories.AlienFactory;
 import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.missiles.bases.IBaseMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarAnimationType;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarFieldTemplate;
+import com.danosoftware.galaxyforce.sprites.game.starfield.NewStarField;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.utilities.OverlapTester;
@@ -111,6 +109,8 @@ public class GamePlayModelImpl implements Model, GameModel {
   private IBasePrimary primaryBase;
   // get ready text instances
   private Text waveText;
+  //stars
+  private final NewStarField starField;
 
   /*
    * Instance variables required in GET_READY state
@@ -133,7 +133,7 @@ public class GamePlayModelImpl implements Model, GameModel {
       SavedGame savedGame,
       AchievementService achievements,
       AssetManager assets,
-      StarFieldTemplate starFieldTemplate) {
+      NewStarField starField) {
     this.game = game;
     this.wave = wave;
     this.billingService = billingService;
@@ -141,6 +141,7 @@ public class GamePlayModelImpl implements Model, GameModel {
     this.vibrator = vibrator;
     this.savedGame = savedGame;
     this.achievements = achievements;
+    this.starField = starField;
 
     // no text initially
     this.waveText = null;
@@ -154,8 +155,7 @@ public class GamePlayModelImpl implements Model, GameModel {
     /*
      * create asset manager to co-ordinate in-game assets
      */
-    StarField starField = new StarField(starFieldTemplate, StarAnimationType.GAME);
-    this.assets = new GamePlayAssetsManager(starField);
+    this.assets = new GamePlayAssetsManager();
 
     // reset lives
     this.lives = START_LIVES;
@@ -190,7 +190,6 @@ public class GamePlayModelImpl implements Model, GameModel {
   @Override
   public List<ISprite> getSprites() {
     List<ISprite> gameSprites = new ArrayList<>();
-    gameSprites.addAll(assets.getStars());
     gameSprites.addAll(alienManager.allAliens());
     gameSprites.addAll(primaryBase.allSprites());
     gameSprites.addAll(assets.getAliensMissiles());
@@ -211,7 +210,6 @@ public class GamePlayModelImpl implements Model, GameModel {
 
   private List<ISprite> getPausedSprites() {
     List<ISprite> pausedSprites = new ArrayList<>();
-    pausedSprites.addAll(assets.getStars());
     pausedSprites.addAll(alienManager.allAliens());
     pausedSprites.addAll(primaryBase.allSprites());
     pausedSprites.addAll(assets.getAliensMissiles());
@@ -270,6 +268,7 @@ public class GamePlayModelImpl implements Model, GameModel {
     }
 
     // move game sprites
+    starField.animate(deltaTime);
     alienManager.animate(deltaTime);
     assets.animate(deltaTime);
 

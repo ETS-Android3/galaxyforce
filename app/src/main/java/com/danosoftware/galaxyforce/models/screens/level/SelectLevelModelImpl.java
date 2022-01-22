@@ -23,9 +23,7 @@ import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.services.savedgame.HighestLevelChangeObserver;
 import com.danosoftware.galaxyforce.services.savedgame.SavedGame;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarAnimationType;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarFieldTemplate;
+import com.danosoftware.galaxyforce.sprites.game.starfield.NewStarField;
 import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
 import java.util.ArrayList;
@@ -44,7 +42,7 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
   // map of zone number to x position
   private final Map<Integer, Integer> zoneXPosition;
   // on-screen components
-  private final StarField starField;
+  private final NewStarField starField;
   private final List<SpriteButton> buttons;
   private final List<SpriteTextButton> textButtons;
   private final List<SpriteTextButton> staticTextButtons;
@@ -77,11 +75,12 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
       Controller controller,
       BillingService billingService,
       SavedGame savedGame,
-      StarFieldTemplate starFieldTemplate) {
+      NewStarField starField) {
     this.game = game;
     this.controller = controller;
     this.billingService = billingService;
     this.savedGame = savedGame;
+    this.starField = starField;
     this.modelState = ModelState.RUNNING;
     this.reBuildAssets = false;
     this.messages = new ArrayList<>();
@@ -95,9 +94,6 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
      */
     this.maxWaveUnlocked = savedGame.getGameLevel();
     this.zone = (int) Math.ceil((double) maxWaveUnlocked / GameConstants.WAVES_PER_ZONE);
-
-    /* set-up star-field */
-    this.starField = new StarField(starFieldTemplate, StarAnimationType.MENU);
 
     // create map of zone numbers to zone page x positions
     this.zoneXPosition = new HashMap<>();
@@ -256,7 +252,7 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
 
   @Override
   public List<ISprite> getStaticSprites() {
-    List<ISprite> sprites = new ArrayList<>(starField.getSprites());
+    List<ISprite> sprites = new ArrayList<>();
     for (SpriteTextButton button : staticTextButtons) {
       sprites.add(button.getSprite());
     }
