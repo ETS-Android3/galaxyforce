@@ -19,6 +19,7 @@ public class GLShaderHelper {
   public static int sTexturePositionHandle = -1;
   public static int sTextureHandle = -1;
   public static int sMVPMatrixHandle = -1;
+  public static int sPointSizeHandle = -1;
 
   // Handles to the created shaders.
   public static int vertexShader;
@@ -47,9 +48,10 @@ public class GLShaderHelper {
           "attribute vec4 a_position;" +
           "attribute vec4 a_color;" +
           "varying vec4 v_color;" +
+          "uniform float u_pointSize;" +
           "void main() {" +
           "   gl_Position = u_MVPMatrix * a_position;" +
-          "   gl_PointSize = 6.0;" +
+          "   gl_PointSize = u_pointSize;" +
           "   v_color = a_color;" +
           "}";
 
@@ -111,6 +113,9 @@ public class GLShaderHelper {
     // get handle to vertex shader's transformation matrix
     sMVPMatrixHandle = GLES20.glGetUniformLocation(pointProgramHandle, "u_MVPMatrix");
 
+    // get handle to vertex shader's point size
+    sPointSizeHandle = GLES20.glGetUniformLocation(pointProgramHandle, "u_pointSize");
+
     // capture any GL errors while setting handles
     GlUtils.checkGlError("setPointShaderProgram");
   }
@@ -121,6 +126,7 @@ public class GLShaderHelper {
     sTexturePositionHandle = -1;
     sTextureHandle = -1;
     sMVPMatrixHandle = -1;
+    sPointSizeHandle = -1;
   }
 
 //  /**

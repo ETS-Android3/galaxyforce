@@ -3,7 +3,6 @@ package com.danosoftware.galaxyforce.screen.factories;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SHOW_FPS;
 
 import android.content.res.AssetManager;
-
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
@@ -45,7 +44,6 @@ import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLGraphics;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 import com.danosoftware.galaxyforce.view.StarBatcher;
-
 import java.util.List;
 
 public class ScreenFactory {
@@ -95,9 +93,9 @@ public class ScreenFactory {
     this.batcher = new SpriteBatcher();
     this.camera = new Camera2D(glGraphics, GameConstants.GAME_WIDTH, GameConstants.GAME_HEIGHT);
     this.starField = new StarField(
-            GameConstants.GAME_WIDTH,
-            GameConstants.GAME_HEIGHT);
-    this.starBatcher = new StarBatcher(starField.getStarField());
+        GameConstants.GAME_WIDTH,
+        GameConstants.GAME_HEIGHT);
+    this.starBatcher = new StarBatcher(glGraphics, starField.getStarField());
     this.textureService = new TextureService(
         new TextureRegionXmlParser(assets),
         new TextureLoader(assets));
