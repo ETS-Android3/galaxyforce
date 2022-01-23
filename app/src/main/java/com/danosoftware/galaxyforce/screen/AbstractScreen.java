@@ -4,7 +4,6 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_AL
 
 import android.opengl.GLES20;
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
 import com.danosoftware.galaxyforce.models.screens.Model;
@@ -23,7 +22,6 @@ import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLShaderHelper;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 import com.danosoftware.galaxyforce.view.StarBatcher;
-
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -191,9 +189,9 @@ public abstract class AbstractScreen implements IScreen {
      * re-loaded. re-loading must happen each time screen is resumed as
      * textures can be disposed by OpenGL when the game is paused.
      */
-    //this.texture = textureService.getOrCreateTexture(textureMap);
-    textureService.reloadTextures();
-    this.texture = textureService.getTexture(textureMap);
+    this.texture = textureService.getOrCreateTexture(textureMap);
+//    textureService.reloadTextures();
+//    this.texture = textureService.getTexture(textureMap);
 
     /*
      * create each sprite's individual properties (e.g. width, height) from
