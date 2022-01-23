@@ -280,6 +280,8 @@ public class MainActivity extends Activity {
                     state = ActivityState.IDLE;
                     stateChanged.notifyAll();
                 }
+                // delete our GL shaders program
+                GLShaderHelper.deleteProgram();
             }
         }
 
@@ -295,9 +297,6 @@ public class MainActivity extends Activity {
 
             // create and initialise our GL shaders program
             GLShaderHelper.createProgram();
-
-            // Use our shader program for GL
-            GLES20.glUseProgram(GLShaderHelper.sProgramHandle);
 
             // set game background colour.
             // i.e. colour used when screen is cleared before each frame

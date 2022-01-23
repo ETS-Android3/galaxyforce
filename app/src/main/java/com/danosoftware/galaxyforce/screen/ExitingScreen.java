@@ -6,6 +6,7 @@ import com.danosoftware.galaxyforce.textures.TextureMap;
 import com.danosoftware.galaxyforce.textures.TextureService;
 import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
+import com.danosoftware.galaxyforce.view.StarBatcher;
 
 public class ExitingScreen extends AbstractScreen {
 
@@ -15,9 +16,10 @@ public class ExitingScreen extends AbstractScreen {
       TextureService textureService,
       TextureMap textureMap,
       Camera2D camera,
-      SpriteBatcher batcher) {
+      SpriteBatcher batcher,
+      StarBatcher starBatcher) {
 
-    super(model, controller, textureService, textureMap, camera, batcher);
+    super(model, controller, textureService, textureMap, camera, batcher, starBatcher);
   }
 
   @Override

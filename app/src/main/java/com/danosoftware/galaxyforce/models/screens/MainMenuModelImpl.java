@@ -5,6 +5,7 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.LOGO_Y_POS;
 import static com.danosoftware.galaxyforce.constants.GameConstants.PLANET_Y_POS;
 
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.billing.BillingObserver;
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.billing.PurchaseState;
@@ -19,12 +20,11 @@ import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarAnimationType;
 import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarFieldTemplate;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,8 +35,9 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
 
   private final Game game;
 
-  // sprites
   private final StarField starField;
+
+  // sprites
   private final ISprite logo;
   private final ISprite planet;
 
@@ -45,6 +46,9 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
 
   private final Controller controller;
   private final BillingService billingService;
+
+  private final List<ISprite> sprites;
+  private final List<Text> text;
 
   /*
    * Should we rebuild the buttons?
@@ -56,12 +60,14 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
       Game game,
       Controller controller,
       BillingService billingService,
-      StarFieldTemplate starFieldTemplate) {
+      StarField starField) {
     this.game = game;
     this.controller = controller;
     this.billingService = billingService;
+    this.starField = starField;
     this.buttons = new ArrayList<>();
-    this.starField = new StarField(starFieldTemplate, StarAnimationType.MENU);
+    this.sprites = new ArrayList<>();
+    this.text = new ArrayList<>();
     this.logo = new SplashSprite(GameConstants.SCREEN_MID_X, LOGO_Y_POS,
         MenuSpriteIdentifier.GALAXY_FORCE);
     this.planet = new SplashSprite(GameConstants.SCREEN_MID_X, PLANET_Y_POS,
@@ -73,6 +79,9 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
     // build on-screen buttons
     buildButtons();
     this.rebuildButtons = false;
+
+    // build sprites
+    buildSprites();
   }
 
   private void buildButtons() {
@@ -86,6 +95,19 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
 
     // add optional billing buttons
     addOptionalBillingButtons();
+  }
+
+  private void buildSprites() {
+    sprites.clear();
+    text.clear();
+
+    sprites.add(planet);
+    sprites.add(logo);
+
+    for (SpriteTextButton button : buttons) {
+      sprites.add(button.getSprite());
+      text.add(button.getText());
+    }
   }
 
   /**
@@ -133,26 +155,11 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
 
   @Override
   public List<ISprite> getSprites() {
-
-    List<ISprite> sprites = new ArrayList<>(starField.getSprites());
-    sprites.add(planet);
-    sprites.add(logo);
-
-    for (SpriteTextButton button : buttons) {
-      sprites.add(button.getSprite());
-    }
-
     return sprites;
   }
 
   @Override
   public List<Text> getText() {
-
-    List<Text> text = new ArrayList<>();
-    for (SpriteTextButton button : buttons) {
-      text.add(button.getText());
-    }
-
     return text;
   }
 
@@ -161,10 +168,11 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
     // move stars
     starField.animate(deltaTime);
 
-    // do we need to rebuild menu buttons?
+    // do we need to rebuild menu buttons and sprites?
     if (rebuildButtons) {
       buildButtons();
       rebuildButtons = false;
+      buildSprites();
     }
   }
 

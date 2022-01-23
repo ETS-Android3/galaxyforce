@@ -3,6 +3,7 @@ package com.danosoftware.galaxyforce.models.screens.game;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.buttons.sprite_text_button.SpriteTextButton;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
@@ -17,14 +18,13 @@ import com.danosoftware.galaxyforce.models.screens.flashing.FlashingText;
 import com.danosoftware.galaxyforce.models.screens.flashing.FlashingTextImpl;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarAnimationType;
 import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarFieldTemplate;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.utilities.WaveUtilities;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -60,9 +60,9 @@ public class GameOverModelImpl implements Model, ButtonModel {
       Game game,
       Controller controller,
       int lastWave,
-      StarFieldTemplate starFieldTemplate) {
+      StarField starField) {
     this.game = game;
-    this.starField = new StarField(starFieldTemplate, StarAnimationType.GAME);
+    this.starField = starField;
     this.lastWave = lastWave;
     this.menuButtons = new ArrayList<>();
     this.modelState = GameOverState.RUNNING;
@@ -93,7 +93,7 @@ public class GameOverModelImpl implements Model, ButtonModel {
   @Override
   public List<ISprite> getSprites() {
 
-    List<ISprite> sprites = new ArrayList<>(starField.getSprites());
+    List<ISprite> sprites = new ArrayList<>();
     for (SpriteTextButton eachButton : menuButtons) {
       sprites.add(eachButton.getSprite());
     }

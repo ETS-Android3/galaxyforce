@@ -3,6 +3,7 @@ package com.danosoftware.galaxyforce.models.screens.options;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.buttons.sprite_text_button.OptionButton;
 import com.danosoftware.galaxyforce.buttons.toggle_group.ToggleButtonGroup;
 import com.danosoftware.galaxyforce.buttons.toggle_group.ToggleOption;
@@ -31,13 +32,12 @@ import com.danosoftware.galaxyforce.services.vibration.VibrateTime;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarAnimationType;
 import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarFieldTemplate;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -55,7 +55,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
   private final VibrationService vibrator;
   private final GooglePlayServices playService;
 
-  // references to stars
+  // stars
   private final StarField starField;
 
   // reference to all sprites in model
@@ -76,7 +76,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
       MusicPlayerService music,
       VibrationService vibrator,
       GooglePlayServices playService,
-      StarFieldTemplate starFieldTemplate) {
+      StarField starField) {
     this.game = game;
     this.controller = controller;
     this.configurationService = configurationService;
@@ -84,9 +84,9 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
     this.music = music;
     this.vibrator = vibrator;
     this.playService = playService;
+    this.starField = starField;
     this.allSprites = new ArrayList<>();
     this.allText = new ArrayList<>();
-    this.starField = new StarField(starFieldTemplate, StarAnimationType.MENU);
     this.reBuildAssets = false;
     this.connectionState = playService.connectedState();
 
@@ -106,13 +106,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
     allSprites.clear();
     allText.clear();
 
-    // add stars
-    allSprites.addAll(starField.getSprites());
-
-    /**
-     * add buttons
-     */
-
+    // add buttons
     allText.add(Text.newTextRelativePositionX(
         "SOUND EFFECTS",
         TextPositionX.CENTRE,

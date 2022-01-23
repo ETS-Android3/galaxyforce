@@ -78,7 +78,6 @@ public class Texture {
 
     public void reload() {
         load();
-        bind();
     }
 
     public void bind() {

@@ -60,7 +60,7 @@ public class GlUtils {
      * @param fragmentShaderCode Source code for fragment shader.
      * @return Handle to program.
      */
-    public static int createProgram(String vertexShaderCode, String fragmentShaderCode) {
+    public static ShaderProgram createProgram(String vertexShaderCode, String fragmentShaderCode) {
         // Load the shaders.
         int vertexShader =
             GlUtils.loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
@@ -84,9 +84,26 @@ public class GlUtils {
             throw new RuntimeException("glLinkProgram failed");
         }
 
-        return programHandle;
+        return ShaderProgram
+            .builder()
+            .programHandle(programHandle)
+            .vertexShader(vertexShader)
+            .fragmentShader(fragmentShader)
+            .build();
     }
 
+    /**
+     * * Dispose of the GL program and shaders.
+     */
+    public static void dispose(ShaderProgram shaderProgram) {
+        GLES20.glDetachShader(shaderProgram.getProgramHandle(), shaderProgram.getVertexShader());
+        GLES20.glDetachShader(shaderProgram.getProgramHandle(), shaderProgram.getFragmentShader());
+
+        GLES20.glDeleteShader(shaderProgram.getVertexShader());
+        GLES20.glDeleteShader(shaderProgram.getFragmentShader());
+
+        GLES20.glDeleteProgram(shaderProgram.getProgramHandle());
+    }
 
     /**
      * Utility method for checking for OpenGL errors.  Use like this:

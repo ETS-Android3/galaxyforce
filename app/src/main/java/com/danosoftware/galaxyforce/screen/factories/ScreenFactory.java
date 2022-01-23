@@ -35,7 +35,7 @@ import com.danosoftware.galaxyforce.services.savedgame.SavedGame;
 import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarFieldTemplate;
+import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.textures.TextureLoader;
 import com.danosoftware.galaxyforce.textures.TextureMap;
 import com.danosoftware.galaxyforce.textures.TextureRegionXmlParser;
@@ -43,11 +43,13 @@ import com.danosoftware.galaxyforce.textures.TextureService;
 import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLGraphics;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
+import com.danosoftware.galaxyforce.view.StarBatcher;
 import java.util.List;
 
 public class ScreenFactory {
 
   private final SpriteBatcher batcher;
+  private final StarBatcher starBatcher;
   private final Camera2D camera;
   private final BillingService billingService;
   private final ConfigurationService configurationService;
@@ -60,7 +62,7 @@ public class ScreenFactory {
   private final Game game;
   private final Input input;
   private final String versionName;
-  private final StarFieldTemplate starFieldTemplate;
+  private final StarField starField;
   private final TextureService textureService;
 
   public ScreenFactory(
@@ -90,8 +92,10 @@ public class ScreenFactory {
     this.versionName = versionName;
     this.batcher = new SpriteBatcher();
     this.camera = new Camera2D(glGraphics, GameConstants.GAME_WIDTH, GameConstants.GAME_HEIGHT);
-    this.starFieldTemplate = new StarFieldTemplate(GameConstants.GAME_WIDTH,
+    this.starField = new StarField(
+        GameConstants.GAME_WIDTH,
         GameConstants.GAME_HEIGHT);
+    this.starBatcher = new StarBatcher(glGraphics, starField.getStarField());
     this.textureService = new TextureService(
         new TextureRegionXmlParser(assets),
         new TextureLoader(assets));
@@ -107,62 +111,67 @@ public class ScreenFactory {
 
       case SPLASH:
         return new ExitingScreen(
-            new SplashModelImpl(game, controller, billingService, versionName, starFieldTemplate,
-                sounds),
+            new SplashModelImpl(game, controller, billingService, versionName, starField, sounds),
             controller,
             textureService,
             TextureMap.MENU,
             camera,
-            batcher);
+            batcher,
+            starBatcher);
 
       case MAIN_MENU:
         return new ExitingScreen(
-            new MainMenuModelImpl(game, controller, billingService, starFieldTemplate),
+            new MainMenuModelImpl(game, controller, billingService, starField),
             controller,
             textureService,
             TextureMap.MENU,
             camera,
-            batcher);
+            batcher,
+            starBatcher);
 
       case OPTIONS:
         return new Screen(
             new OptionsModelImpl(game, controller, configurationService, sounds, music, vibrator,
-                playService, starFieldTemplate),
+                playService, starField),
             controller,
             textureService,
             TextureMap.MENU,
             camera,
-            batcher);
+            batcher,
+            starBatcher);
 
       case SELECT_LEVEL:
         this.music.load(Music.MAIN_TITLE);
         this.music.play();
         return new SelectLevelScreen(
             new SelectLevelModelImpl(game, controller, billingService, savedGame,
-                starFieldTemplate),
+                starField),
             controller,
             textureService,
             TextureMap.MENU,
             camera,
-            batcher);
+            batcher,
+            starBatcher);
 
       case UPGRADE_FULL_VERSION:
         return new Screen(
-            new UnlockFullVersionModelImpl(game, controller, billingService, starFieldTemplate),
+            new UnlockFullVersionModelImpl(game, controller, billingService, starField),
             controller,
             textureService,
             TextureMap.MENU,
             camera,
-            batcher);
+            batcher,
+            starBatcher);
 
       case GAME_COMPLETE:
         return new Screen(
-            new GameCompleteModelImpl(game, controller, starFieldTemplate),
+            new GameCompleteModelImpl(game, controller, starField),
             controller,
             textureService,
             TextureMap.MENU,
             camera,
-            batcher);
+            batcher,
+            starBatcher);
 
       default:
         throw new IllegalArgumentException("Unsupported screen type: '" + screenType + "'.");
@@ -180,7 +189,8 @@ public class ScreenFactory {
         textureService,
         TextureMap.GAME,
         camera,
-        batcher);
+        batcher,
+        starBatcher);
   }
 
   /**
@@ -198,7 +208,7 @@ public class ScreenFactory {
         savedGame,
         achievements,
         assets,
-        starFieldTemplate);
+        starField);
 
     if (SHOW_FPS) {
       return new GamePlayModelFrameRateDecorator(gameModel);
@@ -215,17 +225,19 @@ public class ScreenFactory {
         textureService,
         TextureMap.GAME,
         camera,
-        batcher);
+        batcher,
+        starBatcher);
   }
 
   public IScreen newGameOverScreen(int previousWave) {
     Controller controller = new ControllerImpl(input, camera);
     return new Screen(
-        new GameOverModelImpl(game, controller, previousWave, starFieldTemplate),
+        new GameOverModelImpl(game, controller, previousWave, starField),
         controller,
         textureService,
         TextureMap.GAME,
         camera,
-        batcher);
+        batcher,
+        starBatcher);
   }
 }

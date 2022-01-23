@@ -1,52 +1,33 @@
 package com.danosoftware.galaxyforce.sprites.game.starfield;
 
-import com.danosoftware.galaxyforce.sprites.common.AbstractMovingSprite;
-import com.danosoftware.galaxyforce.view.Animation;
+import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
+import lombok.Builder;
+import lombok.Data;
 
 /**
  * Star sprite that drifts down the screen over time and animates.
  * When a star reaches the bottom of the screen, it returns to the top.
  * Many stars will be contained within an animated star-field.
  */
-public class Star extends AbstractMovingSprite {
+@Builder
+@Data
+public class Star {
 
-    // star's initial animation cycle timing offset
-    private final float initialAnimationStateTime;
+    // offset used for star animation
+    private float animationStateTime;
 
-    // star's animation loop
-    private final Animation animation;
+    // star's position
+    private float x, y;
 
-    Star(
-        float x,
-        float y,
-        Animation animation,
-        float animationStateTime) {
+    // star's colour animation
+    private StarColourAnimation colourAnimation;
 
-      // set star's start position and initial sprite from animation
-      super(
-          animation.getKeyFrame(animationStateTime, Animation.ANIMATION_LOOPING),
-          x,
-          y);
-
-      this.animation = animation;
-      this.initialAnimationStateTime = animationStateTime;
+    public void animate(float deltaTime) {
+        animationStateTime += deltaTime;
     }
 
-    /**
-     * Update animation for star. Position changes are more efficiently handled by star-field.
-     * <p>
-     * NOTE: deltaTime represents total time since the initial star-field was created (not time since
-     * the last update). Helps seamless star-field animation when switching screens.
-     *
-     * @param deltaTime - total time since initial star-field was first created
-     */
-    @Override
-    public void animate(float deltaTime) {
-
-        // update animation frame
-        this.changeType(
-                animation.getKeyFrame(
-                        initialAnimationStateTime + deltaTime,
-                        Animation.ANIMATION_LOOPING));
+    public RgbColour colour() {
+        StarColour colour = colourAnimation.getKeyFrame(animationStateTime);
+        return colour.getRgb();
     }
 }
