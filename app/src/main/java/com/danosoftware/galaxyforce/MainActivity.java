@@ -19,6 +19,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+
 import com.danosoftware.galaxyforce.billing.BillingManager;
 import com.danosoftware.galaxyforce.billing.BillingManagerImpl;
 import com.danosoftware.galaxyforce.billing.BillingService;
@@ -38,6 +39,7 @@ import com.danosoftware.galaxyforce.view.GLShaderHelper;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.Task;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -289,6 +291,8 @@ public class MainActivity extends Activity {
         public void onSurfaceChanged(GL10 unused, int width, int height) {
             Log.i(GameConstants.LOG_TAG,
                 LOCAL_TAG + ": onSurfaceChanged. width: " + width + ". height: " + height + ".");
+            // set viewport to match view
+            GLES20.glViewport(0, 0, width, height);
         }
 
         @Override

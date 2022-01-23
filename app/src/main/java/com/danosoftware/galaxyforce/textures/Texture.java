@@ -4,8 +4,10 @@ import android.graphics.Bitmap;
 import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
 import com.danosoftware.galaxyforce.view.GLShaderHelper;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -41,15 +43,16 @@ public class Texture {
         this.textureDetailMap = buildTextureRegionMap(
                 xmlParser,
                 textureMap.getTextureXml());
-        load();
+        //load(textureId);
     }
 
-    private void load() {
+    private void load(int textureId) {
 
-        // create unique id for our texture
-        int[] textureIds = new int[1];
-        GLES20.glGenTextures(1, textureIds, 0);
-        textureId = textureIds[0];
+        // create unique ids for our textures
+//        int[] textureIds = new int[2];
+//        GLES20.glGenTextures(2, textureIds, 0);
+//        textureId = textureIds[0];
+        textureId = textureId;
 
         // load bitmap
         Bitmap bitmap = textureLoader.load(textureMap.getTextureImage());
@@ -76,17 +79,20 @@ public class Texture {
                 + ".");
     }
 
-    public void reload() {
-        load();
+    public void reload(int textureId) {
+        load(textureId);
+        bindActiveTexture();
     }
 
-    public void bind() {
+    public void bindActiveTexture() {
         // Set the active texture unit to texture unit 0.
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
 
         // Bind our texture to this unit.
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
+    }
 
+    public void bind() {
         // Tell the texture uniform sampler to use this texture in the shader by binding to texture unit 0.
         GLES20.glUniform1i(GLShaderHelper.sTextureHandle, 0);
     }

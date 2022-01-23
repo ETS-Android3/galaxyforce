@@ -2,6 +2,7 @@ package com.danosoftware.galaxyforce.view;
 
 import android.opengl.GLES20;
 import android.opengl.Matrix;
+
 import com.danosoftware.galaxyforce.utilities.GlUtils;
 
 public class Camera2D {
@@ -25,7 +26,7 @@ public class Camera2D {
 
   public void setViewportAndMatrices() {
     // set viewport to match view
-    GLES20.glViewport(0, 0, glGraphics.getWidth(), glGraphics.getHeight());
+    //GLES20.glViewport(0, 0, glGraphics.getWidth(), glGraphics.getHeight());
 
     // Copy the model / view / projection matrix over.
     GLES20.glUniformMatrix4fv(GLShaderHelper.sMVPMatrixHandle, 1, false, mvp, 0);
