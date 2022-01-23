@@ -158,8 +158,6 @@ public abstract class AbstractScreen implements IScreen {
 
     batcher.endBatch();
 
-    //GLES20.glUseProgram(-1);
-
     // Turn alpha blending off
     GLES20.glDisable(GLES20.GL_BLEND);
   }
