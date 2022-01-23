@@ -280,6 +280,8 @@ public class MainActivity extends Activity {
                     state = ActivityState.IDLE;
                     stateChanged.notifyAll();
                 }
+                // delete our GL shaders program
+                GLShaderHelper.deleteProgram();
             }
         }
 

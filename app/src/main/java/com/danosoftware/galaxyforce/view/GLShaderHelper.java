@@ -3,10 +3,15 @@ package com.danosoftware.galaxyforce.view;
 import android.opengl.GLES20;
 import android.util.Log;
 import com.danosoftware.galaxyforce.utilities.GlUtils;
+import com.danosoftware.galaxyforce.utilities.ShaderProgram;
 
 public class GLShaderHelper {
 
   private static final String TAG = "GLShaderHelper";
+
+  // shader programs
+  private static ShaderProgram spriteShader;
+  private static ShaderProgram pointShader;
 
   // handle to the sprite shader program
   public static int spriteProgramHandle = -1;
@@ -20,10 +25,6 @@ public class GLShaderHelper {
   public static int sTextureHandle = -1;
   public static int sMVPMatrixHandle = -1;
   public static int sPointSizeHandle = -1;
-
-  // Handles to the created shaders.
-  public static int vertexShader;
-  public static int fragmentShader;
 
   static final String VERTEX_SHADER_CODE =
       "uniform mat4 u_MVPMatrix;" +
@@ -66,15 +67,36 @@ public class GLShaderHelper {
    * Creates the GL program and associated references.
    */
   public static void createProgram() {
-    spriteProgramHandle = GlUtils.createProgram(VERTEX_SHADER_CODE, FRAGMENT_SHADER_CODE);
-    Log.d(TAG, "Created sprite shader program " + spriteProgramHandle);
+    spriteShader = GlUtils.createProgram(VERTEX_SHADER_CODE, FRAGMENT_SHADER_CODE);
+    spriteProgramHandle = spriteShader.getProgramHandle();
+    Log.d(TAG, "Created sprite shader program " + spriteShader);
 
-    pointProgramHandle = GlUtils
-        .createProgram(POINT_VERTEX_SHADER_CODE, POINT_FRAGMENT_SHADER_CODE);
-    Log.d(TAG, "Created point shader program " + pointProgramHandle);
+    pointShader = GlUtils.createProgram(POINT_VERTEX_SHADER_CODE, POINT_FRAGMENT_SHADER_CODE);
+    pointProgramHandle = pointShader.getProgramHandle();
+    Log.d(TAG, "Created point shader program " + pointShader);
 
     // capture any GL errors while creating program - removed in release
     GlUtils.checkGlError("createProgram");
+  }
+
+  /**
+   * Destroys the GL program and associated references.
+   */
+  public static void deleteProgram() {
+    if (spriteShader != null) {
+      GlUtils.dispose(spriteShader);
+      Log.d(TAG, "Deleted sprite shader program " + spriteShader);
+      spriteShader = null;
+    }
+    if (pointShader != null) {
+      GlUtils.dispose(pointShader);
+      Log.d(TAG, "Deleted point shader program " + pointShader);
+      pointShader = null;
+    }
+    resetHandles();
+
+    // capture any GL errors while creating program - removed in release
+    GlUtils.checkGlError("deleteProgram");
   }
 
   public static void setSpriteShaderProgram() {
@@ -128,51 +150,4 @@ public class GLShaderHelper {
     sMVPMatrixHandle = -1;
     sPointSizeHandle = -1;
   }
-
-//  /**
-//   * Dispose of the GL program and shaders.
-//   */
-//  public static void dispose() {
-//    GLES20.glDetachShader(sProgramHandle, vertexShader);
-//    GLES20.glDetachShader(sProgramHandle, fragmentShader);
-//
-//    GLES20.glDeleteShader(vertexShader);
-//    GLES20.glDeleteShader(fragmentShader);
-//
-//    GLES20.glDeleteProgram(sProgramHandle);
-//  }
-
-//  /**
-//   * Creates a program, given source code for vertex and fragment shaders.
-//   *
-//   * @param vertexShaderCode   Source code for vertex shader.
-//   * @param fragmentShaderCode Source code for fragment shader.
-//   * @return Handle to program.
-//   */
-//  public static int createProgram(String vertexShaderCode, String fragmentShaderCode) {
-//    // Load the shaders.
-//    vertexShader =
-//        GlUtils.loadShader(GLES20.GL_VERTEX_SHADER, vertexShaderCode);
-//    fragmentShader =
-//        GlUtils.loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShaderCode);
-//
-//    // Build the program.
-//    int programHandle = GLES20.glCreateProgram();
-//    GLES20.glAttachShader(programHandle, vertexShader);
-//    GLES20.glAttachShader(programHandle, fragmentShader);
-//    GLES20.glLinkProgram(programHandle);
-//
-//    // Check for failure.
-//    int[] linkStatus = new int[1];
-//    GLES20.glGetProgramiv(programHandle, GLES20.GL_LINK_STATUS, linkStatus, 0);
-//    if (linkStatus[0] != GLES20.GL_TRUE) {
-//      // Extract the detailed failure message.
-//      String msg = GLES20.glGetProgramInfoLog(programHandle);
-//      GLES20.glDeleteProgram(programHandle);
-//      Log.e(TAG, "glLinkProgram: " + msg);
-//      throw new GalaxyForceException("glLinkProgram failed");
-//    }
-//
-//    return programHandle;
-//  }
 }

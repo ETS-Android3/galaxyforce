@@ -1,7 +1,6 @@
 package com.danosoftware.galaxyforce.sprites.game.starfield;
 
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
-
 import lombok.Builder;
 import lombok.Data;
 
@@ -15,13 +14,13 @@ import lombok.Data;
 public class Star {
 
     // offset used for star animation
-    float animationStateTime;
+    private float animationStateTime;
 
     // star's position
-    float x, y;
+    private float x, y;
 
     // star's colour animation
-    StarColourAnimation colourAnimation;
+    private StarColourAnimation colourAnimation;
 
     public void animate(float deltaTime) {
         animationStateTime += deltaTime;

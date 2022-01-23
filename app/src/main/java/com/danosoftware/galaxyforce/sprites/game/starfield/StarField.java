@@ -35,21 +35,21 @@ public class StarField {
     private float stateTime;
 
     private static final StarColourAnimation[] STAR_ANIMATIONS = {
-            new StarColourAnimation(
-                    0.5f,
-                    StarColour.WHITE,
-                   StarColour.WHITE_SPARKLE,
-                    StarColour.WHITE),
-            new StarColourAnimation(
-                0.5f,
-                StarColour.RED,
-                StarColour.BLACK,
-                StarColour.RED),
-            new StarColourAnimation(
-                    0.5f,
-                    StarColour.BLUE,
-                    StarColour.BLACK,
-                    StarColour.BLUE)
+        new StarColourAnimation(
+            0.5f,
+            StarColour.WHITE,
+            StarColour.WHITE_SPARKLE,
+            StarColour.WHITE),
+        new StarColourAnimation(
+            0.5f,
+            StarColour.RED,
+            StarColour.BLACK,
+            StarColour.RED),
+        new StarColourAnimation(
+            0.5f,
+            StarColour.BLUE,
+            StarColour.BLACK,
+            StarColour.BLUE)
     };
 
     public StarField(int width, int height) {
@@ -78,11 +78,11 @@ public class StarField {
             // move star down screen according to speed.
             float starY;
             if (idx < SLOW_STAR_INDEX) {
-                starY = starField[idx].y - slowDistanceDelta;
+                starY = starField[idx].getY() - slowDistanceDelta;
             } else if (idx < FAST_STAR_INDEX) {
-                starY = starField[idx].y - normalDistanceDelta;
+                starY = starField[idx].getY() - normalDistanceDelta;
             } else {
-                starY = starField[idx].y - fastDistanceDelta;
+                starY = starField[idx].getY() - fastDistanceDelta;
             }
 
             // if star has reached the bottom of screen then re-position at the top.
@@ -90,7 +90,7 @@ public class StarField {
                 starY = height + starY;
             }
 
-            starField[idx].y = starY;
+            starField[idx].setY(starY);
             starField[idx].animate(deltaTime);
         }
     }
