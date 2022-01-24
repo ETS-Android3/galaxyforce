@@ -2,7 +2,6 @@ package com.danosoftware.galaxyforce.textures;
 
 import android.util.Log;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
-import java.util.EnumMap;
 
 /**
  * Service to create or retrieve textures.
@@ -18,53 +17,20 @@ public class TextureService {
     private final TextureLoader textureLoader;
 
     // textures for each TextureMap
-    private final EnumMap<TextureMap, Texture> textures;
+    private final Texture menuTexture;
+    private final Texture gameTexture;
 
-    // texture Ids for each TextureMap
-    private final EnumMap<TextureMap, Integer> textureIds;
-
-    private Texture menuTexture;
-    private Texture gameTexture;
+    // are the textures loaded?
+    private boolean texturesLoaded;
 
     public TextureService(
         final TextureRegionXmlParser xmlParser,
         final TextureLoader textureLoader) {
         this.xmlParser = xmlParser;
         this.textureLoader = textureLoader;
-        this.textures = new EnumMap<>(TextureMap.class);
-        this.textureIds = new EnumMap<>(TextureMap.class);
-        this.menuTexture = loadTexture(TextureMap.MENU);
-        menuTexture.dispose();
-        this.gameTexture = loadTexture(TextureMap.GAME);
-        gameTexture.dispose();
-        this.menuTexture = loadTexture(TextureMap.MENU);
-        this.gameTexture = loadTexture(TextureMap.GAME);
-
-        // create unique ids for our textures
-//        TextureMap[] textures2 = TextureMap.values();
-//        int[] ids = new int[textures2.length];
-//        GLES20.glGenTextures(textures2.length, ids, 0);
-//        Log.i(TAG, "id: " + ids);
-//        int idx = 0;
-//        for(TextureMap map : textures2) {
-//            textureIds.put(map, ids[idx]);
-//            Log.i(TAG, "Create texture id: " + ids[idx] + " for: " + map.name());
-//            idx++;
-//        }
-
-        // load all textures
-//        for (TextureMap textureMap : TextureMap.values()) {
-//            Log.i(TAG, "Create new texture for: " + textureMap.name());
-//            Texture texture = new Texture(xmlParser, textureLoader, textureMap);
-//            texture.reload(textureIds.get(textureMap));
-//            textures.put(textureMap, texture);
-//        }
-    }
-
-    private Texture loadTexture(TextureMap textureMap) {
-        Log.i(TAG, "Create new texture for: " + textureMap.name());
-        return new Texture(xmlParser, textureLoader, textureMap);
-        //textures.put(textureMap, texture);
+        this.menuTexture = createTexture(TextureMap.MENU);
+        this.gameTexture = createTexture(TextureMap.GAME);
+        this.texturesLoaded = false;
     }
 
     /**
@@ -72,6 +38,14 @@ public class TextureService {
      * Otherwise create a new one.
      */
     public Texture getOrCreateTexture(TextureMap textureMap) {
+
+        // typically we will need to load textures of the first attempt
+        // to get a texture or following an application resume.
+        // we can't load textures on construction as we must wait for the
+        // surface view to be created first.
+        if (!texturesLoaded) {
+            reloadTextures();
+        }
 
         final Texture texture;
         switch (textureMap) {
@@ -85,83 +59,33 @@ public class TextureService {
                 throw new GalaxyForceException("Unknown texture map: " + textureMap);
         }
 
+        // set our chosen texture as the bound one
         texture.bindActiveTexture();
         return texture;
-//        final Texture texture;
-//
-//        // create unique ids for our textures
-//        TextureMap[] textures2 = TextureMap.values();
-//        int[] ids = new int[textures2.length];
-//        GLES20.glGenTextures(textures2.length, ids, 0);
-//        int idx = 0;
-//        for(TextureMap map : textures2) {
-//            textureIds.put(map, ids[idx]);
-//            Log.i(TAG, "Create texture id: " + ids[idx] + " for: " + map.name());
-//            idx++;
-//        }
-//
-////        if (textureMaps.containsKey(textureMap)) {
-//            Log.i(TAG, "Reload existing texture for: " + textureMap.name());
-//            texture = textures.get(textureMap);
-//            // if retrieving an existing texture then reload/bind for OpenGL
-//            texture.reload(textureIds.get(textureMap));
-////        } else {
-////            Log.i(TAG, "Create new texture for: " + textureMap.name());
-////            texture = new Texture(xmlParser, textureLoader, textureMap);
-////            textureMaps.put(textureMap, texture);
-////        }
-//
-//        return texture;
+    }
+
+    private Texture createTexture(TextureMap textureMap) {
+        Log.i(TAG, "Create new texture for: " + textureMap.name());
+        return new Texture(xmlParser, textureLoader, textureMap);
     }
 
     /**
-     * Retrieve a texture from cache if available.
-     * Otherwise create a new one.
+     * Dispose textures - typically when application is being paused. Textures will need be reloaded
+     * and next time screen resumes.
      */
-    public Texture getTexture(TextureMap textureMap) {
-        Log.i(TAG, "Get texture: " + textureMap.name());
-        Texture texture = textures.get(textureMap);
-        texture.bindActiveTexture();
-        return texture;
+    public void disposeTextures() {
+        menuTexture.dispose();
+        gameTexture.dispose();
+        texturesLoaded = false;
     }
 
     /**
-     * Retrieve a texture from cache if available.
-     * Otherwise create a new one.
+     * Load textures - typically when application is resuming. Textures can be lost while the
+     * application is paused.
      */
     public void reloadTextures() {
-
-        final Texture texture;
-
-        // create unique ids for our textures
-//        TextureMap[] textures2 = TextureMap.values();
-//        int[] ids = new int[textures2.length];
-//        GLES20.glGenTextures(textures2.length, ids, 0);
-//        int idx = 0;
-//        for(TextureMap map : textures2) {
-//            textureIds.put(map, ids[idx]);
-//            Log.i(TAG, "Create texture id: " + ids[idx] + " for: " + map.name());
-//            idx++;
-//        }
-//
-//        for(TextureMap map : TextureMap.values()) {
-//            Texture text = textures.get(map);
-//            Integer textureId = textureIds.get(map);
-//            text.reload(textureId);
-//            Log.i(TAG, "Reload texture id: " + textureId + " for: " + map.name());
-//        }
-
-//        if (textureMaps.containsKey(textureMap)) {
-//        Log.i(TAG, "Reload existing texture for: " + textureMap.name());
-//        texture = textures.get(textureMap);
-        // if retrieving an existing texture then reload/bind for OpenGL
-//        texture.reload(textureIds.get(textureMap));
-//        } else {
-//            Log.i(TAG, "Create new texture for: " + textureMap.name());
-//            texture = new Texture(xmlParser, textureLoader, textureMap);
-//            textureMaps.put(textureMap, texture);
-//        }
-
-       // return texture;
+        menuTexture.load();
+        gameTexture.load();
+        texturesLoaded = true;
     }
 }

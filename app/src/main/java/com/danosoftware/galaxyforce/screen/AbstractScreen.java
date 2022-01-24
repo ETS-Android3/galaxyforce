@@ -172,12 +172,6 @@ public abstract class AbstractScreen implements IScreen {
   public void pause() {
     // pause model if whole game is paused (e.g. user presses home button)
     model.pause();
-
-    /*
-     * dispose of texture when screen paused. it will be reloaded next time
-     * screen resumes
-     */
-    texture.dispose();
   }
 
   @Override
@@ -190,8 +184,6 @@ public abstract class AbstractScreen implements IScreen {
      * textures can be disposed by OpenGL when the game is paused.
      */
     this.texture = textureService.getOrCreateTexture(textureMap);
-//    textureService.reloadTextures();
-//    this.texture = textureService.getTexture(textureMap);
 
     /*
      * create each sprite's individual properties (e.g. width, height) from

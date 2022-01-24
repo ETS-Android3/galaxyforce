@@ -3,6 +3,7 @@ package com.danosoftware.galaxyforce.games;
 import android.content.Context;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
 import com.danosoftware.galaxyforce.billing.BillingService;
@@ -31,6 +32,9 @@ import com.danosoftware.galaxyforce.services.sound.SoundPlayerServiceImpl;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.services.vibration.VibrationServiceImpl;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
+import com.danosoftware.galaxyforce.textures.TextureLoader;
+import com.danosoftware.galaxyforce.textures.TextureRegionXmlParser;
+import com.danosoftware.galaxyforce.textures.TextureService;
 import com.danosoftware.galaxyforce.view.GLGraphics;
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -52,6 +56,7 @@ public class GameImpl implements Game {
   private final SoundPlayerService sounds;
   private final MusicPlayerService music;
   private final VibrationService vibrator;
+  private final TextureService textureService;
   // reference to current screen
   private IScreen screen;
 
@@ -82,16 +87,22 @@ public class GameImpl implements Game {
     IPreferences<Integer> savedGamePreferences = new PreferencesInteger(context);
     SavedGame savedGame = new SavedGameImpl(savedGamePreferences, playService);
 
+    AssetManager assetManager = context.getAssets();
+    this.textureService = new TextureService(
+        new TextureRegionXmlParser(assetManager),
+        new TextureLoader(assetManager));
+
     this.screenFactory = new ScreenFactory(
         glGraphics,
         billingService,
         configurationService,
+        textureService,
         sounds,
         music,
         vibrator,
         playService,
         savedGame,
-        context.getAssets(),
+        assetManager,
         this,
         input,
         versionName);
@@ -150,6 +161,7 @@ public class GameImpl implements Game {
   @Override
   public void resume() {
     Log.i(GameConstants.LOG_TAG, LOCAL_TAG + ": Resume Game");
+    textureService.reloadTextures();
     screen.resume();
     sounds.resume();
     music.play();
@@ -159,6 +171,7 @@ public class GameImpl implements Game {
   public void pause() {
     Log.i(GameConstants.LOG_TAG, LOCAL_TAG + ": Pause Game");
     screen.pause();
+    textureService.disposeTextures();
     sounds.pause();
     vibrator.stop();
     music.pause();
@@ -168,6 +181,7 @@ public class GameImpl implements Game {
   public void dispose() {
     Log.i(GameConstants.LOG_TAG, LOCAL_TAG + ": Dispose Game");
     screen.dispose();
+    textureService.disposeTextures();
     sounds.dispose();
     music.dispose();
   }

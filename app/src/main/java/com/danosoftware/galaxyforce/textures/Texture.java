@@ -29,7 +29,6 @@ public class Texture {
     private int textureId;
     private int width;
     private int height;
-    private int offset;
 
     private static final String TAG = "Texture";
 
@@ -42,20 +41,13 @@ public class Texture {
         this.textureDetailMap = buildTextureRegionMap(
             xmlParser,
             textureMap.getTextureXml());
-        if (textureMap == TextureMap.MENU) {
-            offset = 0;
-        } else {
-            offset = 1;
-        }
-        load();
     }
 
-    private void load() {
+    public void load() {
 
-        // create unique ids for our textures
-        int[] textureIds = new int[2];
-        //IntBuffer buffer = IntBuffer.allocate(2);
-        GLES20.glGenTextures(2, textureIds, 0);
+        // create unique id for our texture
+        int[] textureIds = new int[1];
+        GLES20.glGenTextures(1, textureIds, 0);
         textureId = textureIds[0];
 
         // load bitmap
@@ -81,11 +73,6 @@ public class Texture {
         Log.d(TAG,
             "Loaded texture. Id: " + textureId + ". Filename: " + textureMap.getTextureImage()
                 + ".");
-    }
-
-    public void reload() {
-        load();
-        bindActiveTexture();
     }
 
     public void bindActiveTexture() {
