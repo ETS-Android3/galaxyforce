@@ -4,8 +4,10 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
+import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
+import android.os.Build;
 import android.util.Log;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
@@ -18,7 +20,7 @@ import java.util.Map;
 public class SoundPlayerServiceImpl implements SoundPlayerService, SoundPool.OnLoadCompleteListener {
 
     private static final float EFFECTS_VOLUME = 0.2f;
-    private static final int MAX_STREAMS = 20;
+    private static final int MAX_STREAMS = 5;
 
     private final SoundPool soundPool;
 
@@ -40,8 +42,7 @@ public class SoundPlayerServiceImpl implements SoundPlayerService, SoundPool.OnL
     private final Deque<Integer> streams;
 
     public SoundPlayerServiceImpl(Context context, boolean soundEnabled) {
-
-        this.soundPool = new SoundPool(MAX_STREAMS, AudioManager.STREAM_MUSIC, 0);
+        this.soundPool = createSoundPool();
         this.soundEnabled = soundEnabled;
         this.effectsBank = new EnumMap<>(SoundEffect.class);
         this.streams = new ArrayDeque<>(MAX_STREAMS);
@@ -56,6 +57,22 @@ public class SoundPlayerServiceImpl implements SoundPlayerService, SoundPool.OnL
         AssetManager assets = context.getAssets();
         for (SoundEffect effect : SoundEffect.values()) {
             loadSound(assets, effect);
+        }
+    }
+
+    @SuppressWarnings("deprecation")
+    private SoundPool createSoundPool() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            return new SoundPool.Builder()
+                .setAudioAttributes(
+                    new AudioAttributes.Builder()
+                        .setUsage(AudioAttributes.USAGE_GAME)
+                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
+                        .build())
+                .setMaxStreams(MAX_STREAMS)
+                .build();
+        } else {
+            return new SoundPool(MAX_STREAMS, AudioManager.STREAM_MUSIC, 0);
         }
     }
 
