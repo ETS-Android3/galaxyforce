@@ -38,7 +38,7 @@ public final class PathFactory {
         List<PathPoint> pathPoints = new ArrayList<>();
 
         // load path data from file
-        PathListDTO pathData = loader.loadPaths(path.getPathFile());
+        PathListDTO pathData = loader.loadPaths(path);
 
         double lastAngle = 0d;
 

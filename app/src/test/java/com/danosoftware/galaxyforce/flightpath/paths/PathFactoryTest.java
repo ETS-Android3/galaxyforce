@@ -10,12 +10,13 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
 
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.flightpath.dto.PathListDTO;
 import com.danosoftware.galaxyforce.flightpath.translators.PointTranslatorChain;
 import com.danosoftware.galaxyforce.flightpath.utilities.PathLoader;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -23,10 +24,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.io.File;
-import java.io.IOException;
-import java.util.List;
 
 /**
  * Test that checks all the paths create a list of points representing their paths.
@@ -59,7 +56,7 @@ public class PathFactoryTest {
             // it would have loaded for the current path.
             PathListDTO pathListDTO = loadPathDTO(path);
             PathLoader loader = mock(PathLoader.class);
-            when(loader.loadPaths(any(String.class))).thenReturn(pathListDTO);
+            when(loader.loadPaths(any(Path.class))).thenReturn(pathListDTO);
 
             PathFactory pathFactory = new PathFactory(loader);
             List<PathPoint> points = pathFactory.createPath(path, emptyTranslators, PathSpeed.NORMAL);
