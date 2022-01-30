@@ -37,10 +37,12 @@ public class VibrationServiceImpl implements VibrationService {
     @SuppressWarnings("deprecation")
     @Override
     public void vibrate(VibrateTime vibrateTime) {
-        if (VERSION.SDK_INT >= VERSION_CODES.O && vibrateTime.getVibrationEffect() != null) {
-            vibrator.vibrate(vibrateTime.getVibrationEffect());
-        } else {
-            vibrator.vibrate(vibrateTime.getTimeInMilliseconds());
+        if (supportsVibration && vibrationEnabled) {
+            if (VERSION.SDK_INT >= VERSION_CODES.O && vibrateTime.getVibrationEffect() != null) {
+                vibrator.vibrate(vibrateTime.getVibrationEffect());
+            } else {
+                vibrator.vibrate(vibrateTime.getTimeInMilliseconds());
+            }
         }
     }
 
