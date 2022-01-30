@@ -172,12 +172,6 @@ public abstract class AbstractScreen implements IScreen {
   public void pause() {
     // pause model if whole game is paused (e.g. user presses home button)
     model.pause();
-
-    /*
-     * dispose of texture when screen paused. it will be reloaded next time
-     * screen resumes
-     */
-    texture.dispose();
   }
 
   @Override

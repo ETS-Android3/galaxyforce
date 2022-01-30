@@ -24,9 +24,6 @@ public class Camera2D {
   }
 
   public void setViewportAndMatrices() {
-    // set viewport to match view
-    GLES20.glViewport(0, 0, glGraphics.getWidth(), glGraphics.getHeight());
-
     // Copy the model / view / projection matrix over.
     GLES20.glUniformMatrix4fv(GLShaderHelper.sMVPMatrixHandle, 1, false, mvp, 0);
 
