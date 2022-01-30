@@ -151,6 +151,7 @@ dependencies {
     def billing_version = "3.0.3"
     def jackson_version = "2.9.6"
 
+    implementation "androidx.core:core:1.7.0"
     implementation "com.android.billingclient:billing:$billing_version"
     implementation 'com.google.android.gms:play-services-games:21.0.0'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
@@ -160,6 +161,9 @@ dependencies {
     implementation "com.fasterxml.jackson.core:jackson-databind:$jackson_version"
     implementation "com.fasterxml.jackson.core:jackson-core:$jackson_version"
     implementation "com.fasterxml.jackson.core:jackson-annotations:$jackson_version"
+
+    // added to avoid build conflict with duplicate class of ListenableFuture found
+    implementation 'com.google.guava:guava:27.0.1-android'
 
     // lombok needed as compileOnly and annotationProcessor
     // see: https://projectlombok.org/setup/android

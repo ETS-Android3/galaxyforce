@@ -19,7 +19,9 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import com.danosoftware.galaxyforce.billing.BillingManager;
 import com.danosoftware.galaxyforce.billing.BillingManagerImpl;
 import com.danosoftware.galaxyforce.billing.BillingService;
@@ -39,7 +41,6 @@ import com.danosoftware.galaxyforce.view.GLShaderHelper;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.Task;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -197,31 +198,30 @@ public class MainActivity extends Activity {
     }
 
     private void setupScreen() {
-        // set application to use full screen
+        // turn off screen title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        // stop window dimming when window is visible (recommended over
-        // deprecated full wake lock)
+        // stop window dimming when window is visible
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
-    // setSystemUiVisibility() is deprecated but WindowInsetsController replacement requires API 30.
-    // not replaced to simply support older APIs.
     private void hideSystemUI() {
         // See https://developer.android.com/training/system-ui/immersive
-        // Using "sticky immersive"
         View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        // Set the content to appear under the system bars so that the
-                        // content doesn't resize when the system bars hide and show.
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        // Hide the nav bar and status bar
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
+
+        WindowInsetsControllerCompat windowInsetsController =
+            ViewCompat.getWindowInsetsController(decorView);
+        if (windowInsetsController == null) {
+            return;
+        }
+
+        // Configure the behavior of the hidden system bars
+        windowInsetsController.setSystemBarsBehavior(
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        );
+
+        // Hide both the status bar and the navigation bar
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
     }
 
     // invoked with result on attempts to sign-in to Google Play Services.
