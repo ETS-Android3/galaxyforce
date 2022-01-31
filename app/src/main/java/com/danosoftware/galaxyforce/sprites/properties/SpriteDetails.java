@@ -2,6 +2,8 @@ package com.danosoftware.galaxyforce.sprites.properties;
 
 import com.danosoftware.galaxyforce.textures.TextureRegion;
 
+import java.util.EnumMap;
+
 public enum SpriteDetails {
 
   // Block
@@ -726,11 +728,39 @@ public enum SpriteDetails {
   // this will be initialised lazily once texture map is loaded.
   private TextureRegion textureRegion;
 
+  // sprite's dimensions
+  private SpriteDimensions spriteDimensions;
+
   public TextureRegion getTextureRegion() {
     return textureRegion;
   }
 
   public void setTextureRegion(TextureRegion textureRegion) {
     this.textureRegion = textureRegion;
+  }
+
+  public SpriteDimensions getSpriteDimensions() {
+    return spriteDimensions;
+  }
+
+  public void setSpriteDimensions(SpriteDimensions spriteDimensions) {
+    this.spriteDimensions = spriteDimensions;
+  }
+
+  /**
+   * Change each sprite's texture regions and dimensions.
+   * Normally triggered when the TextureMap changes.
+   *
+   * @param textureRegions
+   * @param spriteDimensions
+   */
+  public static void initialise(
+          EnumMap<SpriteDetails, TextureRegion> textureRegions,
+          EnumMap<SpriteDetails, SpriteDimensions> spriteDimensions) {
+
+    for (SpriteDetails spriteDetails : SpriteDetails.values()) {
+      spriteDetails.setTextureRegion(textureRegions.get(spriteDetails));
+      spriteDetails.setSpriteDimensions(spriteDimensions.get(spriteDetails));
+    }
   }
 }

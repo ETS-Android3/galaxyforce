@@ -4,11 +4,15 @@ import static com.danosoftware.galaxyforce.textures.TextureMap.GAME;
 import static com.danosoftware.galaxyforce.textures.TextureMap.MENU;
 
 import android.util.Log;
+
+import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDimensions;
+import com.danosoftware.galaxyforce.text.Font;
+
 import java.util.EnumMap;
 
 /**
@@ -17,6 +21,15 @@ import java.util.EnumMap;
 public class TextureService {
 
   private static final String TAG = "Textures";
+
+  // font glyphs per row - i.e. characters in a row within texture map
+  private final static int FONT_GLYPHS_PER_ROW = 8;
+
+  // font glyphs width - i.e. width of individual character
+  private final static int FONT_GLYPHS_WIDTH = 30;
+
+  // font glyphs height - i.e. height of individual character
+  private final static int FONT_GLYPHS_HEIGHT = 38;
 
   // XML file loader
   private final TextureRegionXmlParser xmlParser;
@@ -34,15 +47,22 @@ public class TextureService {
   private final EnumMap<SpriteDetails, TextureRegion> menuTextureRegions;
   private final EnumMap<SpriteDetails, TextureRegion> gameTextureRegions;
 
-  // dimensions for each sprite
+  // dimensions for each sprite within each TextureMap
   private final EnumMap<SpriteDetails, SpriteDimensions> menuSpriteDimensions;
   private final EnumMap<SpriteDetails, SpriteDimensions> gameSpriteDimensions;
+
+  // fonts for each TextureMap
+  private Font menuFont;
+  private Font gameFont;
 
   // are the textures loaded?
   private boolean texturesLoaded;
 
-  // are the textures regions loaded?
-  private boolean texturesRegionsLoaded;
+  // are the fonts loaded?
+  private boolean fontsLoaded;
+
+  // current texture map enabled
+  private TextureMap currentTextureMap;
 
   public TextureService(
       final TextureRegionXmlParser xmlParser,
@@ -55,8 +75,9 @@ public class TextureService {
     this.gameTextureRegions = new EnumMap<>(SpriteDetails.class);
     this.menuSpriteDimensions = new EnumMap<>(SpriteDetails.class);
     this.gameSpriteDimensions = new EnumMap<>(SpriteDetails.class);
+    this.currentTextureMap = null;
     this.texturesLoaded = false;
-    this.texturesRegionsLoaded = false;
+    this.fontsLoaded = false;
   }
 
   /**
@@ -70,15 +91,25 @@ public class TextureService {
     // surface view to be created first.
     if (!texturesLoaded) {
       reloadTextures();
+      createTextureRegionsAndDimensions();
+      texturesLoaded = true;
     }
+
+    boolean switchingTextures = textureMap != currentTextureMap;
 
     final Texture texture;
     switch (textureMap) {
       case GAME:
         texture = gameTexture;
+        if (switchingTextures) {
+          SpriteDetails.initialise(gameTextureRegions, gameSpriteDimensions);
+        }
         break;
       case MENU:
         texture = menuTexture;
+        if (switchingTextures) {
+          SpriteDetails.initialise(menuTextureRegions, menuSpriteDimensions);
+        }
         break;
       default:
         throw new GalaxyForceException("Unknown texture map: " + textureMap);
@@ -86,40 +117,37 @@ public class TextureService {
 
     // set our chosen texture as the bound one
     texture.bindActiveTexture();
+    currentTextureMap = textureMap;
     return texture;
   }
 
   /**
-   * Retrieve texture regions for each sprite from cache if available. Otherwise create a new one.
+   * Retrieve a font from cache if available. Otherwise create a new one.
    */
-  public EnumMap<SpriteDetails, TextureRegion> getOrCreateTextureRegions(TextureMap textureMap) {
+  public Font getOrCreateFont(TextureMap textureMap) {
 
-    // textures must be loaded before we attempt to create texture regions.
-    // we need to know the texture map's dimensions.
     if (!texturesLoaded) {
-      throw new GalaxyForceException("Textures not loaded for texture map: " + textureMap);
+      throw new GalaxyForceException("Textures not loaded. Can not create font for texture map: " + textureMap.name());
     }
 
-    // if we have not created texture regions yet, create them now.
-    // they only need to be created once and then kept in our cache.
-    // this will happen just before the first frame is drawn.
-    if (!texturesRegionsLoaded) {
-      createTextureRegions();
+    if (!fontsLoaded) {
+      createFonts();
+      fontsLoaded = true;
     }
 
-    final EnumMap<SpriteDetails, TextureRegion> textureRegions;
+    final Font font;
     switch (textureMap) {
       case GAME:
-        textureRegions = gameTextureRegions;
+        font = gameFont;
         break;
       case MENU:
-        textureRegions = menuTextureRegions;
+        font = menuFont;
         break;
       default:
         throw new GalaxyForceException("Unknown texture map: " + textureMap);
     }
 
-    return textureRegions;
+    return font;
   }
 
   private Texture createTexture(TextureMap textureMap) {
@@ -148,39 +176,42 @@ public class TextureService {
   }
 
   /**
-   * create each sprite's texture regions for sprite display. must be created after a texture is
+   * create each sprite's texture regions/dimensions. must be created after a texture is
    * loaded and before sprites can be displayed.
    */
-  private void createTextureRegions() {
+  private void createTextureRegionsAndDimensions() {
 
-    // create texture regions for menu sprites
+    // create caches for menu sprites
     for (MenuSpriteIdentifier menuSprite : MenuSpriteIdentifier.values()) {
+      TextureDetail textureDetail = menuTexture.getTextureDetail(menuSprite.getImageName());
       menuTextureRegions.put(
-          menuSprite.getSprite(),
-          createTextureRegion(menuTexture, menuSprite.getImageName()));
+              menuSprite.getSprite(),
+              createTextureRegion(menuTexture, textureDetail));
+      menuSpriteDimensions.put(
+              menuSprite.getSprite(),
+              createSpriteDimensions(textureDetail));
     }
 
-    // create texture regions for game sprites
+    // create caches for game sprites
     for (GameSpriteIdentifier gameSprite : GameSpriteIdentifier.values()) {
+      TextureDetail textureDetail = gameTexture.getTextureDetail(gameSprite.getImageName());
       gameTextureRegions.put(
-          gameSprite.getSprite(),
-          createTextureRegion(gameTexture, gameSprite.getImageName()));
+              gameSprite.getSprite(),
+              createTextureRegion(gameTexture, textureDetail));
+      gameSpriteDimensions.put(
+              gameSprite.getSprite(),
+              createSpriteDimensions(textureDetail));
     }
-
-    texturesRegionsLoaded = true;
   }
 
   /**
    * Create a texture region for a specific image within the texture map.
    *
    * @param texture   - loaded texture
-   * @param imageName - image to create region for
+   * @param textureDetail - sprite's texture details
    * @return texture region
    */
-  private TextureRegion createTextureRegion(Texture texture, String imageName) {
-
-    TextureDetail textureDetail = texture.getTextureDetail(imageName);
-
+  private TextureRegion createTextureRegion(Texture texture, TextureDetail textureDetail) {
     return
         new TextureRegion(
             texture,
@@ -191,19 +222,45 @@ public class TextureService {
   }
 
   /**
-   * Create a texture region for a specific image within the texture map.
+   * Create a sprite dimension for a specific image within the texture map.
    *
-   * @param texture   - loaded texture
-   * @param imageName - image to create region for
-   * @return texture region
+   * @param textureDetail - sprite's texture details
+   * @return sprite dimension
    */
-  private SpriteDimensions createSpriteDimensions(Texture texture, String imageName) {
-
-    TextureDetail textureDetail = texture.getTextureDetail(imageName);
-
+  private SpriteDimensions createSpriteDimensions(TextureDetail textureDetail) {
     return
         new SpriteDimensions(
             textureDetail.getWidth(),
             textureDetail.getHeight());
+  }
+
+  /**
+   * Create fonts for menu and game
+   */
+  private void createFonts() {
+    String gameFontImageName = GameSpriteIdentifier.FONT_MAP.getImageName();
+    gameFont = createFont(gameTexture, gameFontImageName);
+
+    String menuFontImageName = MenuSpriteIdentifier.FONT_MAP.getImageName();
+    menuFont = createFont(menuTexture, menuFontImageName);
+  }
+
+  /**
+   * Create font from texture and font image name
+   *
+   * @param texture - texture holding font
+   * @param imageName - name of font in texture
+   * @return font
+   */
+  private Font createFont(Texture texture, String imageName) {
+    TextureDetail textureDetail = gameTexture.getTextureDetail(imageName);
+    return new Font(
+            texture,
+            textureDetail.getXPos(),
+            textureDetail.getYPos(),
+            FONT_GLYPHS_PER_ROW,
+            FONT_GLYPHS_WIDTH,
+            FONT_GLYPHS_HEIGHT,
+            GameConstants.FONT_CHARACTER_MAP);
   }
 }

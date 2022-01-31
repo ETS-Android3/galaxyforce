@@ -4,18 +4,17 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_AL
 
 import android.opengl.GLES20;
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
 import com.danosoftware.galaxyforce.models.screens.Model;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteProperties;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDimensions;
 import com.danosoftware.galaxyforce.text.Font;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.textures.Texture;
-import com.danosoftware.galaxyforce.textures.TextureDetail;
 import com.danosoftware.galaxyforce.textures.TextureMap;
 import com.danosoftware.galaxyforce.textures.TextureRegion;
 import com.danosoftware.galaxyforce.textures.TextureService;
@@ -23,6 +22,7 @@ import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLShaderHelper;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 import com.danosoftware.galaxyforce.view.StarBatcher;
+
 import java.util.EnumMap;
 import java.util.List;
 
@@ -30,15 +30,6 @@ public abstract class AbstractScreen implements IScreen {
 
   /* logger tag */
   private static final String LOCAL_TAG = "Screen";
-
-  // font glyphs per row - i.e. characters in a row within texture map
-  private final static int FONT_GLYPHS_PER_ROW = 8;
-
-  // font glyphs width - i.e. width of individual character
-  private final static int FONT_GLYPHS_WIDTH = 30;
-
-  // font glyphs height - i.e. height of individual character
-  private final static int FONT_GLYPHS_HEIGHT = 38;
 
   /**
    * Reference to model and controller. Each screen will have different implementations of models
@@ -118,12 +109,9 @@ public abstract class AbstractScreen implements IScreen {
 
     // gets sprites from model
     for (ISprite sprite : sprites) {
-      ISpriteIdentifier spriteId = sprite.spriteId();
-      ISpriteProperties props = spriteId.getProperties();
-      TextureRegion textureRegion = textureRegions.get(spriteId);
-
       SpriteDetails spriteDetails = sprite.spriteDetails();
-      TextureRegion textureRegion2 = spriteDetails.getTextureRegion();
+      TextureRegion textureRegion = spriteDetails.getTextureRegion();
+      SpriteDimensions dimensions = spriteDetails.getSpriteDimensions();
 
       if (textureRegion != null) {
         if (sprite.rotation() != 0) {
@@ -131,8 +119,8 @@ public abstract class AbstractScreen implements IScreen {
           batcher.drawSprite(
               sprite.x(),
               sprite.y(),
-              props.getWidth(),
-              props.getHeight(),
+                  dimensions.getWidth(),
+                  dimensions.getHeight(),
               sprite.rotation(),
               textureRegion);
         } else {
@@ -140,8 +128,8 @@ public abstract class AbstractScreen implements IScreen {
           batcher.drawSprite(
               sprite.x(),
               sprite.y(),
-              props.getWidth(),
-              props.getHeight(),
+                  dimensions.getWidth(),
+                  dimensions.getHeight(),
               textureRegion);
         }
       }
@@ -184,33 +172,15 @@ public abstract class AbstractScreen implements IScreen {
      * set-up texture map for screen. this will cause texture to be
      * re-loaded. re-loading must happen each time screen is resumed as
      * textures can be disposed by OpenGL when the game is paused.
+     *
+     * loading textures will also set-up the sprite's texture regions
+     * (used to draw sprite from texture map) and dimensions
+     * (e.g width and height).
      */
     this.texture = textureService.getOrCreateTexture(textureMap);
 
-    /*
-     * create each sprite's individual properties (e.g. width, height).
-     * must be called before sprites can be displayed.
-     */
-    // TBC
-
-    /*
-     * create each sprite's texture regions for sprite display. must be
-     * called after a new texture is re-loaded and before sprites can be
-     * displayed.
-     */
-    this.textureRegions = textureService.getOrCreateTextureRegions(textureMap);
-
-    // set-up fonts - can be null if sprite map has no fonts
-    ISpriteIdentifier fontId = textureMap.getFontIdentifier();
-    TextureDetail fontTextureDetails = texture.getTextureDetail(fontId.getName());
-    this.gameFont = new Font(
-        texture,
-        fontTextureDetails.getXPos(),
-        fontTextureDetails.getYPos(),
-        FONT_GLYPHS_PER_ROW,
-        FONT_GLYPHS_WIDTH,
-        FONT_GLYPHS_HEIGHT,
-        GameConstants.FONT_CHARACTER_MAP);
+    // set-up fonts
+    this.gameFont = textureService.getOrCreateFont(textureMap);
 
     model.resume();
   }
