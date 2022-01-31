@@ -11,6 +11,7 @@ import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteProperties;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Font;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.textures.Texture;
@@ -22,9 +23,8 @@ import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLShaderHelper;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 import com.danosoftware.galaxyforce.view.StarBatcher;
-import java.util.HashMap;
+import java.util.EnumMap;
 import java.util.List;
-import java.util.Map;
 
 public abstract class AbstractScreen implements IScreen {
 
@@ -55,13 +55,13 @@ public abstract class AbstractScreen implements IScreen {
   final StarBatcher starBatcher;
   // camera used for display views
   final Camera2D camera;
-  final Map<ISpriteIdentifier, TextureRegion> textureRegions;
   private final Controller controller;
   private final TextureService textureService;
   // TextureState identifies the texture map being used
   private final TextureMap textureMap;
   // reference to graphics texture map - set on resume
   Texture texture;
+  EnumMap<SpriteDetails, TextureRegion> textureRegions;
   // font used for displaying text sprites
   Font gameFont;
 
@@ -80,7 +80,6 @@ public abstract class AbstractScreen implements IScreen {
     this.camera = camera;
     this.controller = controller;
     this.model = model;
-    this.textureRegions = new HashMap<>();
     this.starBatcher = starBatcher;
   }
 
@@ -122,6 +121,9 @@ public abstract class AbstractScreen implements IScreen {
       ISpriteIdentifier spriteId = sprite.spriteId();
       ISpriteProperties props = spriteId.getProperties();
       TextureRegion textureRegion = textureRegions.get(spriteId);
+
+      SpriteDetails spriteDetails = sprite.spriteDetails();
+      TextureRegion textureRegion2 = spriteDetails.getTextureRegion();
 
       if (textureRegion != null) {
         if (sprite.rotation() != 0) {
@@ -186,24 +188,17 @@ public abstract class AbstractScreen implements IScreen {
     this.texture = textureService.getOrCreateTexture(textureMap);
 
     /*
-     * create each sprite's individual properties (e.g. width, height) from
-     * the xml file and create texture regions for sprite display. must be
+     * create each sprite's individual properties (e.g. width, height).
+     * must be called before sprites can be displayed.
+     */
+    // TBC
+
+    /*
+     * create each sprite's texture regions for sprite display. must be
      * called after a new texture is re-loaded and before sprites can be
      * displayed.
      */
-    textureRegions.clear();
-    for (ISpriteIdentifier sprite : textureMap.getSpriteIdentifiers()) {
-      sprite.updateProperties(texture);
-      TextureDetail textureDetails = texture.getTextureDetail(sprite.getName());
-      textureRegions.put(
-          sprite,
-          new TextureRegion(
-              texture,
-              textureDetails.getXPos(),
-              textureDetails.getYPos(),
-              textureDetails.getWidth(),
-              textureDetails.getHeight()));
-    }
+    this.textureRegions = textureService.getOrCreateTextureRegions(textureMap);
 
     // set-up fonts - can be null if sprite map has no fonts
     ISpriteIdentifier fontId = textureMap.getFontIdentifier();

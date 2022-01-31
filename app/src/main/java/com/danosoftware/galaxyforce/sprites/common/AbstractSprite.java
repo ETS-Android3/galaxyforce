@@ -2,6 +2,7 @@ package com.danosoftware.galaxyforce.sprites.common;
 
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteProperties;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 
 public abstract class AbstractSprite implements ISprite {
 
@@ -22,6 +23,7 @@ public abstract class AbstractSprite implements ISprite {
 
   // sprite properties
   private ISpriteIdentifier spriteId;
+  private SpriteDetails spriteDetails;
 
   AbstractSprite(
       ISpriteIdentifier spriteId,
@@ -102,15 +104,20 @@ public abstract class AbstractSprite implements ISprite {
     return spriteId;
   }
 
+  @Override
+  public SpriteDetails spriteDetails() {
+    return spriteDetails;
+  }
+
   // cache and return width from sprite properties if available
   private int cacheWidth() {
     ISpriteProperties props = spriteId.getProperties();
     if (props != null) {
-            cacheDimensions(props);
-            return width;
-        }
-        return 0;
+      cacheDimensions(props);
+      return width;
     }
+    return 0;
+  }
 
     // cache and return height from sprite properties if available
     private int cacheHeight() {

@@ -18,7 +18,6 @@ import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -63,7 +62,7 @@ public class GameCompleteModelImpl implements Model, TouchScreenModel {
   private void addSprites() {
     for (int column = 0; column < 3; column++) {
       RotatingSprite base = new RotatingSprite(100 + (column * 170), 580,
-          MenuSpriteIdentifier.BASE);
+          MenuSpriteIdentifier.BASE_LARGE);
       rotatedSprites.add(base);
       allSprites.add(base);
     }

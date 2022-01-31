@@ -21,18 +21,18 @@ public class BaseMovingSprite extends AbstractMovingSprite {
     private static final int LAUNCH_DISTANCE_PER_SECOND = 500;
     private static final int ACCELERATE_DISTANCE_PER_SECOND = 1500;
 
-    // base pause times
-    private static final float DELAY_IN_SECONDS_BEFORE_START = 2.0f;
-    private static final float DELAY_IN_SECONDS_FOR_PAUSING = 0.75f;
+  // base pause times
+  private static final float DELAY_IN_SECONDS_BEFORE_START = 2.0f;
+  private static final float DELAY_IN_SECONDS_FOR_PAUSING = 0.75f;
 
   // base Y positions
   private static final int START_BASE_Y_POS = -(128 / 2);
   private static final int FINAL_BASE_Y_POS = GameConstants.SCREEN_TOP + (128 / 2);
-    private static final int PAUSE_BASE_Y_POS = 200;
+  private static final int PAUSE_BASE_Y_POS = 200;
 
-    // base sprites
-    private static final ISpriteIdentifier BASE_FLAT = MenuSpriteIdentifier.BASE;
-    private static final ISpriteIdentifier BASE_TILT = MenuSpriteIdentifier.BASE_TILT;
+  // base sprites
+  private static final ISpriteIdentifier BASE_FLAT = MenuSpriteIdentifier.BASE_LARGE;
+  private static final ISpriteIdentifier BASE_TILT = MenuSpriteIdentifier.BASE_LARGE_TILT;
 
   private boolean launchSoundPlaying;
 
