@@ -4,7 +4,6 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_AL
 
 import android.opengl.GLES20;
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
 import com.danosoftware.galaxyforce.models.screens.Model;
@@ -22,7 +21,6 @@ import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLShaderHelper;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 import com.danosoftware.galaxyforce.view.StarBatcher;
-
 import java.util.EnumMap;
 import java.util.List;
 
@@ -119,8 +117,8 @@ public abstract class AbstractScreen implements IScreen {
           batcher.drawSprite(
               sprite.x(),
               sprite.y(),
-                  dimensions.getWidth(),
-                  dimensions.getHeight(),
+              dimensions.getWidth(),
+              dimensions.getHeight(),
               sprite.rotation(),
               textureRegion);
         } else {
@@ -128,8 +126,8 @@ public abstract class AbstractScreen implements IScreen {
           batcher.drawSprite(
               sprite.x(),
               sprite.y(),
-                  dimensions.getWidth(),
-                  dimensions.getHeight(),
+              dimensions.getWidth(),
+              dimensions.getHeight(),
               textureRegion);
         }
       }
