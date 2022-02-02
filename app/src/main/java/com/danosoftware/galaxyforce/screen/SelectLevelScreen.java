@@ -8,8 +8,7 @@ import com.danosoftware.galaxyforce.controllers.common.Controller;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.models.screens.level.LevelModel;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteProperties;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.textures.TextureMap;
 import com.danosoftware.galaxyforce.textures.TextureRegion;
@@ -94,30 +93,30 @@ public class SelectLevelScreen extends AbstractScreen {
      * scroll with other elements so offset stars by current camera offset.
      */
     for (ISprite sprite : levelSprites) {
-      ISpriteIdentifier spriteId = sprite.spriteId();
-      ISpriteProperties props = spriteId.getProperties();
-      TextureRegion textureRegion = textureRegions.get(spriteId);
+      SpriteDetails spriteDetails = sprite.spriteDetails();
+      TextureRegion textureRegion = spriteDetails.getTextureRegion();
+
       if (textureRegion != null) {
         batcher.drawSprite(
             sprite.x() + cameraOffset,
             sprite.y(),
-            props.getWidth(),
-            props.getHeight(),
+            sprite.width(),
+            sprite.height(),
             textureRegion);
       }
     }
 
     // gets sprites from model
     for (ISprite sprite : sprites) {
-      ISpriteIdentifier spriteId = sprite.spriteId();
-      ISpriteProperties props = spriteId.getProperties();
-      TextureRegion textureRegion = textureRegions.get(spriteId);
+      SpriteDetails spriteDetails = sprite.spriteDetails();
+      TextureRegion textureRegion = spriteDetails.getTextureRegion();
+
       if (textureRegion != null) {
         batcher.drawSprite(
             sprite.x(),
             sprite.y(),
-            props.getWidth(),
-            props.getHeight(),
+            sprite.width(),
+            sprite.height(),
             textureRegion);
       }
     }

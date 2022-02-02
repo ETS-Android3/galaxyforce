@@ -4,7 +4,7 @@ import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenBo
 
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.sprites.common.AbstractCollidingSprite;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 
 public class PowerUp extends AbstractCollidingSprite implements IPowerUp {
 
@@ -17,7 +17,7 @@ public class PowerUp extends AbstractCollidingSprite implements IPowerUp {
     private boolean isDestroyed;
 
     public PowerUp(
-        ISpriteIdentifier spriteId,
+        SpriteDetails spriteId,
         float x,
         float y,
         PowerUpType powerUpType) {

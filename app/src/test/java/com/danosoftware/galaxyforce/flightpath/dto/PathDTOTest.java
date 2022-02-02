@@ -6,17 +6,14 @@ import static org.hamcrest.CoreMatchers.notNullValue;
 import static org.junit.Assert.assertThat;
 
 import androidx.annotation.NonNull;
-
 import com.danosoftware.galaxyforce.flightpath.paths.Path;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
-import org.junit.Test;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 
 /**

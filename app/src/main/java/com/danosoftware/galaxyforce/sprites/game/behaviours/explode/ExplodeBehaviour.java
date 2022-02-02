@@ -2,7 +2,7 @@ package com.danosoftware.galaxyforce.sprites.game.behaviours.explode;
 
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlienFollower;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 
 public interface ExplodeBehaviour {
 
@@ -11,21 +11,21 @@ public interface ExplodeBehaviour {
      */
     void startExplosion(IAlien alien);
 
-    /**
-     * Initialise start of explosion for follower.
-     * <p>
-     * Used for followers when another followable sprite is exploding.
-     */
-    void startExplosionFollower(IAlienFollower alien);
+  /**
+   * Initialise start of explosion for follower.
+   * <p>
+   * Used for followers when another followable sprite is exploding.
+   */
+  void startExplosionFollower(IAlienFollower alien);
 
-    /**
-     * Get the current explosion sprite.
-     */
-    ISpriteIdentifier getExplosion(float deltaTime);
+  /**
+   * Get the current explosion sprite.
+   */
+  SpriteDetails getExplosion(float deltaTime);
 
-    /**
-     * Has the explosion finished?
-     */
-    boolean finishedExploding();
+  /**
+   * Has the explosion finished?
+   */
+  boolean finishedExploding();
 
 }

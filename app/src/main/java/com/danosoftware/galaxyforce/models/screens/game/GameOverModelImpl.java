@@ -3,7 +3,6 @@ package com.danosoftware.galaxyforce.models.screens.game;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.buttons.sprite_text_button.SpriteTextButton;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
@@ -20,11 +19,10 @@ import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
-import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.utilities.WaveUtilities;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -213,8 +211,8 @@ public class GameOverModelImpl implements Model, ButtonModel {
         100 + (row * 170),
         label,
         buttonType,
-        GameSpriteIdentifier.MENU_BUTTON_UP,
-        GameSpriteIdentifier.MENU_BUTTON_DOWN);
+        SpriteDetails.MENU_BUTTON_UP,
+        SpriteDetails.MENU_BUTTON_DOWN);
 
     // add a new menu button to controller's list of touch controllers
     controller.addTouchController(new DetectButtonTouch(button));

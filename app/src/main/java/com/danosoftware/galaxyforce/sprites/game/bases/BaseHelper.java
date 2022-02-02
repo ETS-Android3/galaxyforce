@@ -4,7 +4,7 @@ import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.AC
 import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.DESTROYED;
 import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.EXPLODING;
 import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.LEFT;
-import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.HELPER;
+import static com.danosoftware.galaxyforce.sprites.properties.SpriteDetails.HELPER;
 
 import com.danosoftware.galaxyforce.enumerations.BaseMissileType;
 import com.danosoftware.galaxyforce.models.assets.BaseMissilesDto;
@@ -21,7 +21,7 @@ import com.danosoftware.galaxyforce.sprites.game.bases.explode.IBaseExploder;
 import com.danosoftware.galaxyforce.sprites.game.factories.BaseMissileFactory;
 import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
-import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.view.Animation;
 import java.util.ArrayList;
 import java.util.List;
@@ -123,33 +123,33 @@ public class BaseHelper extends AbstractCollidingSprite implements IBaseHelper {
             final boolean shieldUp,
             final float shieldSyncTime) {
         super(
-                HELPER,
-                primaryBase.x() +
-                        (side == LEFT ? -X_OFFSET_FROM_PRIMARY_BASE : +X_OFFSET_FROM_PRIMARY_BASE),
-                primaryBase.y() + Y_OFFSET_FROM_PRIMARY_BASE
+            HELPER,
+            primaryBase.x() +
+                (side == LEFT ? -X_OFFSET_FROM_PRIMARY_BASE : +X_OFFSET_FROM_PRIMARY_BASE),
+            primaryBase.y() + Y_OFFSET_FROM_PRIMARY_BASE
         );
-        this.model = model;
-        this.sounds = sounds;
-        this.primaryBase = primaryBase;
-        this.state = ACTIVE;
-        this.side = side;
-        this.xOffset = (side == LEFT ? -X_OFFSET_FROM_PRIMARY_BASE : +X_OFFSET_FROM_PRIMARY_BASE);
-        this.explosion = new BaseExploderSimple(
-                sounds,
-                vibrator,
-                new Animation(
-                        0.075f,
-                        GameSpriteIdentifier.EXPLODE_01,
-                        GameSpriteIdentifier.EXPLODE_02,
-                        GameSpriteIdentifier.EXPLODE_03,
-                        GameSpriteIdentifier.EXPLODE_04,
-                        GameSpriteIdentifier.EXPLODE_05));
+      this.model = model;
+      this.sounds = sounds;
+      this.primaryBase = primaryBase;
+      this.state = ACTIVE;
+      this.side = side;
+      this.xOffset = (side == LEFT ? -X_OFFSET_FROM_PRIMARY_BASE : +X_OFFSET_FROM_PRIMARY_BASE);
+      this.explosion = new BaseExploderSimple(
+          sounds,
+          vibrator,
+          new Animation(
+              0.075f,
+              SpriteDetails.EXPLODE_01,
+              SpriteDetails.EXPLODE_02,
+              SpriteDetails.EXPLODE_03,
+              SpriteDetails.EXPLODE_04,
+              SpriteDetails.EXPLODE_05));
 
-        if (shieldUp) {
-            addSynchronisedShield(shieldSyncTime);
-        } else {
-            removeShield();
-        }
+      if (shieldUp) {
+        addSynchronisedShield(shieldSyncTime);
+      } else {
+        removeShield();
+      }
     }
 
     @Override

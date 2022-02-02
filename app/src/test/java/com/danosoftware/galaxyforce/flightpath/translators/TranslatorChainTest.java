@@ -6,7 +6,6 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
 import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
-
 import org.junit.Test;
 
 /**

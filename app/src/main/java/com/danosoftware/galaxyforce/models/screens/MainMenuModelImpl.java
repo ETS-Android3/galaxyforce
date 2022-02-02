@@ -5,7 +5,6 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.LOGO_Y_POS;
 import static com.danosoftware.galaxyforce.constants.GameConstants.PLANET_Y_POS;
 
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.billing.BillingObserver;
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.billing.PurchaseState;
@@ -22,9 +21,8 @@ import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
 import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
-import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,9 +67,9 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
     this.sprites = new ArrayList<>();
     this.text = new ArrayList<>();
     this.logo = new SplashSprite(GameConstants.SCREEN_MID_X, LOGO_Y_POS,
-        MenuSpriteIdentifier.GALAXY_FORCE);
+        SpriteDetails.GALAXY_FORCE);
     this.planet = new SplashSprite(GameConstants.SCREEN_MID_X, PLANET_Y_POS,
-        MenuSpriteIdentifier.PLUTO);
+        SpriteDetails.PLUTO);
 
     // register this model with the billing service
     billingService.registerPurchasesObserver(this);
@@ -143,8 +141,8 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
         100 + (row * 170),
         label,
         buttonType,
-        MenuSpriteIdentifier.MAIN_MENU,
-        MenuSpriteIdentifier.MAIN_MENU_PRESSED);
+        SpriteDetails.MAIN_MENU,
+        SpriteDetails.MAIN_MENU_PRESSED);
 
     // add a new menu button to controller's list of touch controllers
     controller.addTouchController(new DetectButtonTouch(button));

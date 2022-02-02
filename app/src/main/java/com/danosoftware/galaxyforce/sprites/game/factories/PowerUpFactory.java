@@ -7,8 +7,7 @@ import com.danosoftware.galaxyforce.models.assets.PowerUpsDto;
 import com.danosoftware.galaxyforce.services.sound.SoundEffect;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
 import com.danosoftware.galaxyforce.sprites.game.powerups.PowerUp;
-import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 
 public class PowerUpFactory {
 
@@ -38,35 +37,35 @@ public class PowerUpFactory {
    */
   public static PowerUpsDto newPowerUp(PowerUpType powerUpType, float x, float y) {
 
-    final ISpriteIdentifier spriteId;
+    final SpriteDetails spriteId;
 
     switch (powerUpType) {
       case HELPER_BASES:
-        spriteId = GameSpriteIdentifier.POWERUP_HELPER_BASES;
+        spriteId = SpriteDetails.POWERUP_HELPER_BASES;
         break;
       case LIFE:
-        spriteId = GameSpriteIdentifier.POWERUP_LIFE;
+        spriteId = SpriteDetails.POWERUP_LIFE;
         break;
       case MISSILE_BLAST:
-        spriteId = GameSpriteIdentifier.POWERUP_MISSILE_BLAST;
+        spriteId = SpriteDetails.POWERUP_MISSILE_BLAST;
         break;
       case MISSILE_FAST:
-        spriteId = GameSpriteIdentifier.POWERUP_MISSILE_FAST;
+        spriteId = SpriteDetails.POWERUP_MISSILE_FAST;
         break;
       case MISSILE_GUIDED:
-        spriteId = GameSpriteIdentifier.POWERUP_MISSILE_GUIDED;
+        spriteId = SpriteDetails.POWERUP_MISSILE_GUIDED;
         break;
       case MISSILE_LASER:
-        spriteId = GameSpriteIdentifier.POWERUP_MISSILE_LASER;
+        spriteId = SpriteDetails.POWERUP_MISSILE_LASER;
         break;
             case MISSILE_PARALLEL:
-                spriteId = GameSpriteIdentifier.POWERUP_MISSILE_PARALLEL;
+              spriteId = SpriteDetails.POWERUP_MISSILE_PARALLEL;
                 break;
             case MISSILE_SPRAY:
-                spriteId = GameSpriteIdentifier.POWERUP_MISSILE_SPRAY;
+              spriteId = SpriteDetails.POWERUP_MISSILE_SPRAY;
                 break;
             case SHIELD:
-                spriteId = GameSpriteIdentifier.POWERUP_SHIELD;
+              spriteId = SpriteDetails.POWERUP_SHIELD;
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported PowerUpType: '" + powerUpType + "'.");

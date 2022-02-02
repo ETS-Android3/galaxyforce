@@ -3,7 +3,7 @@ package com.danosoftware.galaxyforce.sprites.game.behaviours.explode;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlienFollower;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.spawn.SpawnBehaviour;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 
 /**
  * Implementation of explosion behaviour that will trigger aliens to spawn
@@ -26,22 +26,22 @@ public class ExplodeAndSpawn implements ExplodeBehaviour {
 
     @Override
     public void startExplosion(IAlien alien) {
-        exploder.startExplosion(alien);
-        spawner.spawn(alien);
+      exploder.startExplosion(alien);
+      spawner.spawn(alien);
     }
 
-    @Override
-    public void startExplosionFollower(IAlienFollower alien) {
-        startExplosion(alien);
-    }
+  @Override
+  public void startExplosionFollower(IAlienFollower alien) {
+    startExplosion(alien);
+  }
 
-    @Override
-    public ISpriteIdentifier getExplosion(float deltaTime) {
-        return exploder.getExplosion(deltaTime);
-    }
+  @Override
+  public SpriteDetails getExplosion(float deltaTime) {
+    return exploder.getExplosion(deltaTime);
+  }
 
-    @Override
-    public boolean finishedExploding() {
-        return exploder.finishedExploding();
-    }
+  @Override
+  public boolean finishedExploding() {
+    return exploder.finishedExploding();
+  }
 }

@@ -1,7 +1,6 @@
 package com.danosoftware.galaxyforce.exceptions;
 
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.constants.GameConstants;
 
 /**
