@@ -10,7 +10,6 @@ import com.danosoftware.galaxyforce.models.screens.Model;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
-import com.danosoftware.galaxyforce.sprites.properties.SpriteDimensions;
 import com.danosoftware.galaxyforce.text.Font;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.textures.Texture;
@@ -21,7 +20,6 @@ import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLShaderHelper;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 import com.danosoftware.galaxyforce.view.StarBatcher;
-import java.util.EnumMap;
 import java.util.List;
 
 public abstract class AbstractScreen implements IScreen {
@@ -50,7 +48,6 @@ public abstract class AbstractScreen implements IScreen {
   private final TextureMap textureMap;
   // reference to graphics texture map - set on resume
   Texture texture;
-  EnumMap<SpriteDetails, TextureRegion> textureRegions;
   // font used for displaying text sprites
   Font gameFont;
 
@@ -109,7 +106,6 @@ public abstract class AbstractScreen implements IScreen {
     for (ISprite sprite : sprites) {
       SpriteDetails spriteDetails = sprite.spriteDetails();
       TextureRegion textureRegion = spriteDetails.getTextureRegion();
-      SpriteDimensions dimensions = spriteDetails.getDimensions();
 
       if (textureRegion != null) {
         if (sprite.rotation() != 0) {
@@ -117,8 +113,8 @@ public abstract class AbstractScreen implements IScreen {
           batcher.drawSprite(
               sprite.x(),
               sprite.y(),
-              dimensions.getWidth(),
-              dimensions.getHeight(),
+              sprite.width(),
+              sprite.height(),
               sprite.rotation(),
               textureRegion);
         } else {
@@ -126,8 +122,8 @@ public abstract class AbstractScreen implements IScreen {
           batcher.drawSprite(
               sprite.x(),
               sprite.y(),
-              dimensions.getWidth(),
-              dimensions.getHeight(),
+              sprite.width(),
+              sprite.height(),
               textureRegion);
         }
       }

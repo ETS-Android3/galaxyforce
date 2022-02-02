@@ -41,22 +41,19 @@ public class ButtonSprite extends AbstractSprite implements IButtonSprite {
     }
 
     // create and return bounds.
-    // will try to create bounds from sprite properties (if available) and cache result.
-    // otherwise zero width/height bounds are returned.
     private Rectangle bounds() {
-      if (spriteDetails().getDimensions() != null) {
-        bounds = new Rectangle(
-            x - (width() / 2f) - buffer,
-            y - (height() / 2f) - buffer,
-            width() + (buffer * 2),
-            height() + (buffer * 2));
+
+      Rectangle tmpBounds = new Rectangle(
+          x - halfWidth() - buffer,
+          y - halfHeight() - buffer,
+          width() + (buffer * 2),
+          height() + (buffer * 2));
+
+      // only cache if dimensions available
+      if (width() > 0 && height() > 0) {
+        bounds = tmpBounds;
         boundsCached = true;
-        return bounds;
       }
-      return new Rectangle(
-          x(),
-          y(),
-          0,
-          0);
+      return tmpBounds;
     }
 }

@@ -1,6 +1,7 @@
 package com.danosoftware.galaxyforce.sprites.common;
 
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDimensions;
 import com.danosoftware.galaxyforce.utilities.Rectangle;
 
 public abstract class AbstractCollidingSprite extends AbstractMovingSprite implements ICollidingSprite {
@@ -72,26 +73,26 @@ public abstract class AbstractCollidingSprite extends AbstractMovingSprite imple
     // will try to create bounds from sprite properties (if available) and cache result
     // otherwise zero width/height bounds are returned
     private Rectangle bounds() {
-      if (spriteDetails().getDimensions() != null) {
-        cacheBounds();
+      SpriteDimensions dimensions = spriteDetails().getDimensions();
+      if (dimensions != null) {
+        cacheBounds(dimensions);
         return bounds;
       }
       return new Rectangle(x(), y(), 0, 0);
     }
 
-    // cache dimensions and bounds
-    private void cacheBounds() {
-      final int boundsReduction = spriteDetails().getDimensions() != null
-          ? spriteDetails().getDimensions().getBoundsReduction()
-          : 0;
-      final int twiceBoundsReduction = boundsReduction * 2;
+  // cache dimensions and bounds
+  private void cacheBounds(SpriteDimensions dimensions) {
 
-      // bounds represents bottom-left position then width and height
-      this.bounds = new Rectangle(
-          x() - halfWidth() + boundsReduction,
-          y() - halfHeight() + boundsReduction,
-          width() - twiceBoundsReduction,
-          height() - twiceBoundsReduction);
-      this.boundsCached = true;
-    }
+    final int boundsReduction = dimensions.getBoundsReduction();
+    final int twiceBoundsReduction = boundsReduction * 2;
+
+    // bounds represents bottom-left position then width and height
+    this.bounds = new Rectangle(
+        x() - halfWidth() + boundsReduction,
+        y() - halfHeight() + boundsReduction,
+        width() - twiceBoundsReduction,
+        height() - twiceBoundsReduction);
+    this.boundsCached = true;
+  }
 }

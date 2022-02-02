@@ -9,7 +9,6 @@ import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.models.screens.level.LevelModel;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
-import com.danosoftware.galaxyforce.sprites.properties.SpriteDimensions;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.textures.TextureMap;
 import com.danosoftware.galaxyforce.textures.TextureRegion;
@@ -96,14 +95,13 @@ public class SelectLevelScreen extends AbstractScreen {
     for (ISprite sprite : levelSprites) {
       SpriteDetails spriteDetails = sprite.spriteDetails();
       TextureRegion textureRegion = spriteDetails.getTextureRegion();
-      SpriteDimensions dimensions = spriteDetails.getDimensions();
 
       if (textureRegion != null) {
         batcher.drawSprite(
             sprite.x() + cameraOffset,
             sprite.y(),
-            dimensions.getWidth(),
-            dimensions.getHeight(),
+            sprite.width(),
+            sprite.height(),
             textureRegion);
       }
     }
@@ -112,14 +110,13 @@ public class SelectLevelScreen extends AbstractScreen {
     for (ISprite sprite : sprites) {
       SpriteDetails spriteDetails = sprite.spriteDetails();
       TextureRegion textureRegion = spriteDetails.getTextureRegion();
-      SpriteDimensions dimensions = spriteDetails.getDimensions();
 
       if (textureRegion != null) {
         batcher.drawSprite(
             sprite.x(),
             sprite.y(),
-            dimensions.getWidth(),
-            dimensions.getHeight(),
+            sprite.width(),
+            sprite.height(),
             textureRegion);
       }
     }
