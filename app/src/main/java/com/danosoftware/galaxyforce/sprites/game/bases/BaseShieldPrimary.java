@@ -6,40 +6,40 @@ import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.services.vibration.VibrateTime;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.sprites.common.AbstractMovingSprite;
-import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.view.Animation;
 
 public class BaseShieldPrimary extends AbstractMovingSprite implements IBaseShield {
 
-    // shield animation that pulses every second
-    private static final Animation SHIELD_PULSE = new Animation(
-            0.25f,
-            GameSpriteIdentifier.BASE_SHIELD_ONE,
-            GameSpriteIdentifier.BASE_SHIELD_TWO,
-            GameSpriteIdentifier.BASE_SHIELD_THREE,
-            GameSpriteIdentifier.BASE_SHIELD_FOUR);
-    private static final Animation LEFT_LEAN_SHIELD_PULSE = new Animation(
-            0.25f,
-            GameSpriteIdentifier.BASE_LEFT_SHIELD_ONE,
-            GameSpriteIdentifier.BASE_LEFT_SHIELD_TWO,
-            GameSpriteIdentifier.BASE_LEFT_SHIELD_THREE,
-            GameSpriteIdentifier.BASE_LEFT_SHIELD_FOUR);
-    private static final Animation RIGHT_LEAN_SHIELD_PULSE = new Animation(
-            0.25f,
-            GameSpriteIdentifier.BASE_RIGHT_SHIELD_ONE,
-            GameSpriteIdentifier.BASE_RIGHT_SHIELD_TWO,
-            GameSpriteIdentifier.BASE_RIGHT_SHIELD_THREE,
-            GameSpriteIdentifier.BASE_RIGHT_SHIELD_FOUR);
+  // shield animation that pulses every second
+  private static final Animation SHIELD_PULSE = new Animation(
+      0.25f,
+      SpriteDetails.BASE_SHIELD_ONE,
+      SpriteDetails.BASE_SHIELD_TWO,
+      SpriteDetails.BASE_SHIELD_THREE,
+      SpriteDetails.BASE_SHIELD_FOUR);
+  private static final Animation LEFT_LEAN_SHIELD_PULSE = new Animation(
+      0.25f,
+      SpriteDetails.BASE_LEFT_SHIELD_ONE,
+      SpriteDetails.BASE_LEFT_SHIELD_TWO,
+      SpriteDetails.BASE_LEFT_SHIELD_THREE,
+      SpriteDetails.BASE_LEFT_SHIELD_FOUR);
+  private static final Animation RIGHT_LEAN_SHIELD_PULSE = new Animation(
+      0.25f,
+      SpriteDetails.BASE_RIGHT_SHIELD_ONE,
+      SpriteDetails.BASE_RIGHT_SHIELD_TWO,
+      SpriteDetails.BASE_RIGHT_SHIELD_THREE,
+      SpriteDetails.BASE_RIGHT_SHIELD_FOUR);
 
-    // how often shield pulse effects should repeat
-    private static final float SHIELD_PULSE_FREQUENCY_IN_SECONDS = 2f;
-    private float timeSinceLastPulse = 0f;
-    private boolean effectsPlaying = false;
+  // how often shield pulse effects should repeat
+  private static final float SHIELD_PULSE_FREQUENCY_IN_SECONDS = 2f;
+  private float timeSinceLastPulse = 0f;
+  private boolean effectsPlaying = false;
 
-    private final IBasePrimary base;
+  private final IBasePrimary base;
 
-    // state time used to help select the current animation frame
-    private float stateTime;
+  // state time used to help select the current animation frame
+  private float stateTime;
 
     // reference to sound player
     private final SoundPlayerService sounds;

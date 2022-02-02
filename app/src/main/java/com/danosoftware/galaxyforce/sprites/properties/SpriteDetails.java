@@ -1,7 +1,6 @@
 package com.danosoftware.galaxyforce.sprites.properties;
 
 import com.danosoftware.galaxyforce.textures.TextureRegion;
-
 import java.util.EnumMap;
 
 public enum SpriteDetails {

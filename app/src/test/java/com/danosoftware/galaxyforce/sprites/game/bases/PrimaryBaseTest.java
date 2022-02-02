@@ -1,5 +1,6 @@
 package com.danosoftware.galaxyforce.sprites.game.bases;
 
+import static com.danosoftware.galaxyforce.common.SpriteDetailsCommon.setUpSpriteDetailsForTests;
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
@@ -33,8 +34,7 @@ import com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState;
 import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
 import com.danosoftware.galaxyforce.sprites.game.powerups.PowerUp;
-import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
-import com.danosoftware.galaxyforce.textures.Texture;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.textures.TextureDetail;
 import com.danosoftware.galaxyforce.textures.TextureService;
 import java.lang.reflect.Field;
@@ -60,24 +60,21 @@ public class PrimaryBaseTest {
 
     @Before
     public void setUp() {
-        // mock any static android logging
-        mockStatic(Log.class);
+      // mock any static android logging
+      mockStatic(Log.class);
 
-        Texture mockTexture = mock(Texture.class);
-        when(mockTexture.getTextureDetail(any(String.class))).thenReturn(mockTextureDetail);
-        for (GameSpriteIdentifier spriteId : GameSpriteIdentifier.values()) {
-            spriteId.updateProperties(mockTexture);
-        }
+      // pre-populate sprite details
+      setUpSpriteDetailsForTests();
 
-        model = mock(GameModel.class);
-        SoundPlayerService sounds = mock(SoundPlayerService.class);
-        VibrationService vibrator = mock(VibrationService.class);
+      model = mock(GameModel.class);
+      SoundPlayerService sounds = mock(SoundPlayerService.class);
+      VibrationService vibrator = mock(VibrationService.class);
 
-        primaryBase = new BasePrimary(model, sounds, vibrator);
-        primaryBaseSpy = spy(primaryBase);
+      primaryBase = new BasePrimary(model, sounds, vibrator);
+      primaryBaseSpy = spy(primaryBase);
 
-        leftHelper = mock(IBaseHelper.class);
-        rightHelper = mock(IBaseHelper.class);
+      leftHelper = mock(IBaseHelper.class);
+      rightHelper = mock(IBaseHelper.class);
     }
 
 
@@ -158,7 +155,7 @@ public class PrimaryBaseTest {
 
     @Test()
     public void shieldedBaseShouldNotBeDestroyedWhenHitByMissile() {
-        IPowerUp shieldPowerUp = new PowerUp(GameSpriteIdentifier.POWERUP_SHIELD, 0, 0, PowerUpType.SHIELD);
+      IPowerUp shieldPowerUp = new PowerUp(SpriteDetails.POWERUP_SHIELD, 0, 0, PowerUpType.SHIELD);
         primaryBaseSpy.collectPowerUp(shieldPowerUp);
         IAlienMissile missile = mock(IAlienMissile.class);
         primaryBaseSpy.onHitBy(missile);
@@ -277,23 +274,23 @@ public class PrimaryBaseTest {
     @Test
     public void helperBasesShouldRemoveShieldedWithPrimaryBase() {
 
-        // add mock helpers to primary base
-        primaryBase.helperCreated(LEFT, leftHelper);
-        primaryBase.helperCreated(RIGHT, rightHelper);
+      // add mock helpers to primary base
+      primaryBase.helperCreated(LEFT, leftHelper);
+      primaryBase.helperCreated(RIGHT, rightHelper);
 
-        // add shield to primary base
-        IPowerUp shieldPowerUp = new PowerUp(GameSpriteIdentifier.POWERUP_SHIELD, 0, 0,
-            PowerUpType.SHIELD);
-        primaryBase.collectPowerUp(shieldPowerUp);
-        primaryBase.animate(20f);
+      // add shield to primary base
+      IPowerUp shieldPowerUp = new PowerUp(SpriteDetails.POWERUP_SHIELD, 0, 0,
+          PowerUpType.SHIELD);
+      primaryBase.collectPowerUp(shieldPowerUp);
+      primaryBase.animate(20f);
 
-        // verify helper bases were also given shields
-        verify(leftHelper, times(1)).removeShield();
-        verify(rightHelper, times(1)).removeShield();
+      // verify helper bases were also given shields
+      verify(leftHelper, times(1)).removeShield();
+      verify(rightHelper, times(1)).removeShield();
 
-        // count number of primary base shields
-        Long shields = primaryBase.allSprites().stream().filter(
-            iSprite -> iSprite instanceof BaseShieldPrimary).count();
+      // count number of primary base shields
+      Long shields = primaryBase.allSprites().stream().filter(
+          iSprite -> iSprite instanceof BaseShieldPrimary).count();
         assertThat(shields, is(0L));
     }
 

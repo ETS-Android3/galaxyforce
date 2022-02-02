@@ -3,7 +3,6 @@ package com.danosoftware.galaxyforce.models.screens.options;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.buttons.sprite_text_button.OptionButton;
 import com.danosoftware.galaxyforce.buttons.toggle_group.ToggleButtonGroup;
 import com.danosoftware.galaxyforce.buttons.toggle_group.ToggleOption;
@@ -34,10 +33,9 @@ import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
 import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
-import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,11 +85,11 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
     this.starField = starField;
     this.allSprites = new ArrayList<>();
     this.allText = new ArrayList<>();
-    this.reBuildAssets = false;
     this.connectionState = playService.connectedState();
 
-    // build screen assets
-    buildAssets();
+    // build screen assets on next update
+    // sprites won't be initialised until screen resumes
+    this.reBuildAssets = true;
 
     // register for connection changes from the google play service
     playService.registerConnectionObserver(this);
@@ -185,8 +183,9 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
       // we will place google play icon alongside text.
       // compute the positions of each so combined icon/text is centred.
       final String text = "GOOGLE PLAY";
-      final MenuSpriteIdentifier icon = MenuSpriteIdentifier.GOOGLE_PLAY;
-      final int halfIconWidth = (icon.getProperties() != null ? icon.getProperties().getWidth() / 2
+      final SpriteDetails icon = SpriteDetails.GOOGLE_PLAY;
+      final int halfIconWidth = (icon.getSpriteDimensions() != null ?
+          icon.getSpriteDimensions().getWidth() / 2
           : 0);
       final int fontWidth = 30;
       final int buffer = 10;
@@ -271,8 +270,8 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
         90 + (column * 180) + offset,
         100 + (row * 170),
         optionType,
-        MenuSpriteIdentifier.OPTION_UNSELECTED,
-        MenuSpriteIdentifier.OPTION_SELECTED,
+        SpriteDetails.OPTION_UNSELECTED,
+        SpriteDetails.OPTION_SELECTED,
         toggleGroup);
 
     // add a new button to controller's list of touch controllers
@@ -304,8 +303,8 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
         100 + (row * 170),
         label,
         buttonType,
-        MenuSpriteIdentifier.MAIN_MENU,
-        MenuSpriteIdentifier.MAIN_MENU_PRESSED);
+        SpriteDetails.MAIN_MENU,
+        SpriteDetails.MAIN_MENU_PRESSED);
 
     // add a new menu button to controller's list of touch controllers
     controller.addTouchController(new DetectButtonTouch(button));

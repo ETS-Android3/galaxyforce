@@ -3,7 +3,6 @@ package com.danosoftware.galaxyforce.services.preferences;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import java.util.Map;
 
 public class PreferencesInteger implements IPreferences<Integer> {

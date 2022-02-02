@@ -3,7 +3,6 @@ package com.danosoftware.galaxyforce.models.screens;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
-
 import com.android.billingclient.api.SkuDetails;
 import com.danosoftware.galaxyforce.billing.BillingObserver;
 import com.danosoftware.galaxyforce.billing.BillingService;
@@ -23,10 +22,9 @@ import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
 import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
-import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -73,7 +71,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
     this.messages = new ArrayList<>();
     this.flashingText = null;
     this.logo = new SplashSprite(GameConstants.SCREEN_MID_X, 817,
-        MenuSpriteIdentifier.GALAXY_FORCE);
+        SpriteDetails.GALAXY_FORCE);
     this.reBuildSprites = false;
 
     // register this model with the billing service
@@ -294,8 +292,8 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
         100 + (row * 170),
         label,
         buttonType,
-        MenuSpriteIdentifier.MAIN_MENU,
-        MenuSpriteIdentifier.MAIN_MENU_PRESSED);
+        SpriteDetails.MAIN_MENU,
+        SpriteDetails.MAIN_MENU_PRESSED);
 
     // add a new menu button to controller's list of touch controllers
     controller.addTouchController(new DetectButtonTouch(button));

@@ -16,7 +16,7 @@ import com.danosoftware.galaxyforce.models.screens.flashing.FlashingTextImpl;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
-import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import java.util.ArrayList;
@@ -200,8 +200,8 @@ public class GamePausedModelImpl implements Model, ButtonModel {
         100 + (row * 170),
         label,
         buttonType,
-        GameSpriteIdentifier.MENU_BUTTON_UP,
-        GameSpriteIdentifier.MENU_BUTTON_DOWN);
+        SpriteDetails.MENU_BUTTON_UP,
+        SpriteDetails.MENU_BUTTON_DOWN);
 
     // add a new menu button to controller's list of touch controllers
     controller.addTouchController(new DetectButtonTouch(button));

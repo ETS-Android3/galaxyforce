@@ -4,7 +4,7 @@ import com.danosoftware.galaxyforce.services.sound.SoundEffect;
 import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.services.vibration.VibrateTime;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.view.Animation;
 
 public class BaseExploderSimple implements IBaseExploder {
@@ -27,24 +27,24 @@ public class BaseExploderSimple implements IBaseExploder {
             Animation animation) {
         this.animation = animation;
         this.sounds = sounds;
-        this.vibrator = vibrator;
+      this.vibrator = vibrator;
     }
 
-    @Override
-    public void startExplosion() {
-        explosionTime = 0f;
-        sounds.play(SoundEffect.EXPLOSION);
-        vibrator.vibrate(VibrateTime.TINY);
-    }
+  @Override
+  public void startExplosion() {
+    explosionTime = 0f;
+    sounds.play(SoundEffect.EXPLOSION);
+    vibrator.vibrate(VibrateTime.TINY);
+  }
 
-    @Override
-    public ISpriteIdentifier getExplosion(float deltaTime) {
-        explosionTime += deltaTime;
-        return animation.getKeyFrame(explosionTime, Animation.ANIMATION_NONLOOPING);
-    }
+  @Override
+  public SpriteDetails getExplosion(float deltaTime) {
+    explosionTime += deltaTime;
+    return animation.getKeyFrame(explosionTime, Animation.ANIMATION_NONLOOPING);
+  }
 
-    @Override
-    public boolean finishedExploding() {
-        return animation.isAnimationComplete();
-    }
+  @Override
+  public boolean finishedExploding() {
+    return animation.isAnimationComplete();
+  }
 }

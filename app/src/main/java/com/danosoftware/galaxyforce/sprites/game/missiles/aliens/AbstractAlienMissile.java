@@ -25,7 +25,7 @@ public abstract class AbstractAlienMissile extends AbstractCollidingSprite imple
               animation.getKeyFrame(
                   0,
                   Animation.ANIMATION_LOOPING))
-              .getProperties()
+              .getSpriteDimensions()
               .getHeight() / 2f);
       this.isDestroyed = false;
       this.animation = animation;

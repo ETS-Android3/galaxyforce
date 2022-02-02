@@ -1,7 +1,6 @@
 package com.danosoftware.galaxyforce.flightpath.utilities;
 
 import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
-
 import java.util.ArrayList;
 import java.util.List;
 

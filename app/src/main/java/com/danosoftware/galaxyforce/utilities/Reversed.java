@@ -6,7 +6,6 @@ package com.danosoftware.galaxyforce.utilities;
  */
 
 import androidx.annotation.NonNull;
-
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;

@@ -1,7 +1,7 @@
 package com.danosoftware.galaxyforce.buttons.sprite_button;
 
-import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.PAUSE_BUTTON_DOWN;
-import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.PAUSE_BUTTON_UP;
+import static com.danosoftware.galaxyforce.sprites.properties.SpriteDetails.PAUSE_BUTTON_DOWN;
+import static com.danosoftware.galaxyforce.sprites.properties.SpriteDetails.PAUSE_BUTTON_UP;
 
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.models.screens.game.GameModel;

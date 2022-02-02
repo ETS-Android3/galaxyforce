@@ -1,7 +1,6 @@
 package com.danosoftware.galaxyforce.sprites.game.starfield;
 
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
-
 import lombok.Getter;
 
 @Getter

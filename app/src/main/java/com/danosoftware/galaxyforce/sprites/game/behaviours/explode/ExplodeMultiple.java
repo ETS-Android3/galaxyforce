@@ -9,7 +9,7 @@ import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlienFollower;
 import com.danosoftware.galaxyforce.sprites.game.factories.AlienFactory;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.view.Animation;
 import com.danosoftware.galaxyforce.waves.AlienCharacter;
 import com.danosoftware.galaxyforce.waves.config.aliens.exploding.ExplosionConfig;
@@ -41,7 +41,7 @@ public class ExplodeMultiple implements ExplodeBehaviour {
     private final GameModel model;
     private final AlienFactory alienFactory;
 
-    private ISpriteIdentifier spriteToExplode;
+    private SpriteDetails spriteToExplode;
     private boolean startedMainExplosion;
 
     private final int numberOfExplosions;
@@ -84,7 +84,7 @@ public class ExplodeMultiple implements ExplodeBehaviour {
         explosionTime = 0f;
         mainExplosionTime = 0f;
         startedMainExplosion = false;
-        spriteToExplode = alien.spriteId();
+        spriteToExplode = alien.spriteDetails();
 
         /*
          * Create a number of additional explosions around the exploding alien.
@@ -125,7 +125,7 @@ public class ExplodeMultiple implements ExplodeBehaviour {
     }
 
     @Override
-    public ISpriteIdentifier getExplosion(float deltaTime) {
+    public SpriteDetails getExplosion(float deltaTime) {
         explosionTime += deltaTime;
 
         // trigger any explosions that are due to start

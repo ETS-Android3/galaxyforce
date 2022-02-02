@@ -1,6 +1,6 @@
 package com.danosoftware.galaxyforce.sprites.game.behaviours.hit;
 
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 
 /**
  * Interface that handles behaviour following a sprite being hit.
@@ -22,13 +22,13 @@ public interface HitBehaviour {
      */
     void startHitFollower(float stateTime);
 
-    /**
-     * Is sprite still performing hit behaviour?
-     */
-    boolean isHit();
+  /**
+   * Is sprite still performing hit behaviour?
+   */
+  boolean isHit();
 
-    /**
-     * Get the current hit sprite.
-     */
-    ISpriteIdentifier getHit(float deltaTime);
+  /**
+   * Get the current hit sprite.
+   */
+  SpriteDetails getHit(float deltaTime);
 }

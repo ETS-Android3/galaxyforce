@@ -4,7 +4,6 @@ import static com.danosoftware.galaxyforce.textures.TextureMap.GAME;
 import static com.danosoftware.galaxyforce.textures.TextureMap.MENU;
 
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
@@ -12,7 +11,6 @@ import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDimensions;
 import com.danosoftware.galaxyforce.text.Font;
-
 import java.util.EnumMap;
 
 /**
@@ -58,6 +56,9 @@ public class TextureService {
   // are the textures loaded?
   private boolean texturesLoaded;
 
+  // are the regions and dimensions loaded?
+  private boolean dimensionsLoaded;
+
   // are the fonts loaded?
   private boolean fontsLoaded;
 
@@ -77,6 +78,7 @@ public class TextureService {
     this.gameSpriteDimensions = new EnumMap<>(SpriteDetails.class);
     this.currentTextureMap = null;
     this.texturesLoaded = false;
+    this.dimensionsLoaded = false;
     this.fontsLoaded = false;
   }
 
@@ -85,14 +87,14 @@ public class TextureService {
    */
   public Texture getOrCreateTexture(TextureMap textureMap) {
 
+    Log.i(TAG, "Selected texture map: " + textureMap.name());
+
     // typically we will need to load textures of the first attempt
     // to get a texture or following an application resume.
     // we can't load textures on construction as we must wait for the
     // surface view to be created first.
     if (!texturesLoaded) {
       reloadTextures();
-      createTextureRegionsAndDimensions();
-      texturesLoaded = true;
     }
 
     boolean switchingTextures = textureMap != currentTextureMap;
@@ -173,6 +175,14 @@ public class TextureService {
     menuTexture.load();
     gameTexture.load();
     texturesLoaded = true;
+
+    // check if dimensions are loaded.
+    // we only do this once per game.
+    // we don't need to re-load every time with textures
+    if (!dimensionsLoaded) {
+      createTextureRegionsAndDimensions();
+      dimensionsLoaded = true;
+    }
   }
 
   /**
@@ -185,22 +195,22 @@ public class TextureService {
     for (MenuSpriteIdentifier menuSprite : MenuSpriteIdentifier.values()) {
       TextureDetail textureDetail = menuTexture.getTextureDetail(menuSprite.getImageName());
       menuTextureRegions.put(
-              menuSprite.getSprite(),
-              createTextureRegion(menuTexture, textureDetail));
+          menuSprite.getSprite(),
+          createTextureRegion(menuTexture, textureDetail));
       menuSpriteDimensions.put(
-              menuSprite.getSprite(),
-              createSpriteDimensions(textureDetail));
+          menuSprite.getSprite(),
+          createMenuSpriteDimensions(textureDetail));
     }
 
     // create caches for game sprites
     for (GameSpriteIdentifier gameSprite : GameSpriteIdentifier.values()) {
       TextureDetail textureDetail = gameTexture.getTextureDetail(gameSprite.getImageName());
       gameTextureRegions.put(
-              gameSprite.getSprite(),
-              createTextureRegion(gameTexture, textureDetail));
+          gameSprite.getSprite(),
+          createTextureRegion(gameTexture, textureDetail));
       gameSpriteDimensions.put(
-              gameSprite.getSprite(),
-              createSpriteDimensions(textureDetail));
+          gameSprite.getSprite(),
+          createGameSpriteDimensions(textureDetail, gameSprite.getBoundsReduction()));
     }
   }
 
@@ -227,11 +237,28 @@ public class TextureService {
    * @param textureDetail - sprite's texture details
    * @return sprite dimension
    */
-  private SpriteDimensions createSpriteDimensions(TextureDetail textureDetail) {
+  private SpriteDimensions createMenuSpriteDimensions(TextureDetail textureDetail) {
     return
         new SpriteDimensions(
             textureDetail.getWidth(),
             textureDetail.getHeight());
+  }
+
+  /**
+   * Create a sprite dimension for a specific image within the texture map.
+   *
+   * @param textureDetail   - sprite's texture details
+   * @param boundsReduction - bounds to reduce sprite by
+   * @return sprite dimension
+   */
+  private SpriteDimensions createGameSpriteDimensions(
+      TextureDetail textureDetail,
+      int boundsReduction) {
+    return
+        new SpriteDimensions(
+            textureDetail.getWidth(),
+            textureDetail.getHeight(),
+            boundsReduction);
   }
 
   /**
@@ -253,7 +280,7 @@ public class TextureService {
    * @return font
    */
   private Font createFont(Texture texture, String imageName) {
-    TextureDetail textureDetail = gameTexture.getTextureDetail(imageName);
+    TextureDetail textureDetail = texture.getTextureDetail(imageName);
     return new Font(
             texture,
             textureDetail.getXPos(),

@@ -3,7 +3,6 @@ package com.danosoftware.galaxyforce.models.screens;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.billing.BillingObserver;
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.billing.PurchaseState;
@@ -23,10 +22,9 @@ import com.danosoftware.galaxyforce.sprites.game.splash.BaseMovingSprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.LogoMovingSprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.PlanetMovingSprite;
 import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
-import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -75,11 +73,11 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
     this.planet = new PlanetMovingSprite(
         GameConstants.SCREEN_MID_X,
         START_PLANET_Y_POS,
-        MenuSpriteIdentifier.PLUTO);
+        SpriteDetails.PLUTO);
     this.logo = new LogoMovingSprite(
         GameConstants.SCREEN_MID_X,
         START_LOGO_Y_POS,
-        MenuSpriteIdentifier.GALAXY_FORCE);
+        SpriteDetails.GALAXY_FORCE);
     this.base = new BaseMovingSprite(
         sounds);
 

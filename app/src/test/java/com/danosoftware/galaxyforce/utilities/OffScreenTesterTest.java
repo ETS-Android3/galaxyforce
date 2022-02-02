@@ -1,5 +1,6 @@
 package com.danosoftware.galaxyforce.utilities;
 
+import static com.danosoftware.galaxyforce.common.SpriteDetailsCommon.setUpSpriteDetailsForTests;
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
 import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenAnySide;
@@ -12,9 +13,9 @@ import static org.mockito.Mockito.when;
 
 import com.danosoftware.galaxyforce.sprites.common.AbstractSprite;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteProperties;
-
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDimensions;
+import com.danosoftware.galaxyforce.textures.TextureRegion;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -36,27 +37,34 @@ public class OffScreenTesterTest {
     private static final int WIDTH = 10;
 
     private static final int MID_X = GAME_WIDTH / 2;
-    private static final int MID_Y = GAME_HEIGHT / 2;
+  private static final int MID_Y = GAME_HEIGHT / 2;
 
-    // test implementation of an abstract sprite
-    private static class TestSprite extends AbstractSprite {
-        private TestSprite(ISpriteIdentifier spriteId, int x, int y) {
-            super(spriteId, x, y);
-        }
+  // test implementation of an abstract sprite
+  private static class TestSprite extends AbstractSprite {
+
+    private TestSprite(SpriteDetails spriteId, int x, int y) {
+      super(spriteId, x, y);
     }
+  }
 
-    private ISprite sprite;
-    private ISpriteIdentifier spriteId;
+  private ISprite sprite;
+  private SpriteDetails spriteId;
 
-    @Before
-    public void setUp() {
-        ISpriteProperties props = mock(ISpriteProperties.class);
-        when(props.getHeight()).thenReturn(HEIGHT);
-        when(props.getWidth()).thenReturn(WIDTH);
+  @Before
+  public void setUp() {
+    SpriteDimensions dimensions = mock(SpriteDimensions.class);
+    when(dimensions.getHeight()).thenReturn(HEIGHT);
+    when(dimensions.getWidth()).thenReturn(WIDTH);
 
-        spriteId = mock(ISpriteIdentifier.class);
-        when(spriteId.getProperties()).thenReturn(props);
-    }
+    // pre-populate sprite details - only BASE has dimensions
+    final TextureRegion mockTextureRegion = mock(TextureRegion.class);
+    setUpSpriteDetailsForTests(
+        new SpriteDetails[]{SpriteDetails.BASE},
+        mockTextureRegion,
+        dimensions);
+
+    spriteId = SpriteDetails.BASE;
+  }
 
     // tests sprite just off bottom on screen
     @Test

@@ -1,7 +1,6 @@
 package com.danosoftware.galaxyforce.waves;
 
-import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.view.Animation;
 
 /**
@@ -14,1008 +13,1008 @@ public enum AlienCharacter {
 
   // special null character reserved for multi-explosions that spawn immediately as exploding aliens
   NULL(
-      new ISpriteIdentifier[]{GameSpriteIdentifier.NULL},
-      new ISpriteIdentifier[]{GameSpriteIdentifier.NULL},
+      new SpriteDetails[]{SpriteDetails.NULL},
+      new SpriteDetails[]{SpriteDetails.NULL},
       0f),
 
   BLOCK(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BLOCK_01,
-          GameSpriteIdentifier.BLOCK_02},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BLOCK_01,
-          GameSpriteIdentifier.BLOCK_02},
+      new SpriteDetails[]{
+          SpriteDetails.BLOCK_01,
+          SpriteDetails.BLOCK_02},
+      new SpriteDetails[]{
+          SpriteDetails.BLOCK_01,
+          SpriteDetails.BLOCK_02},
       0.5f
   ),
 
   FROGGER(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.FROGGER,
-          GameSpriteIdentifier.FROGGER_TALL,
-          GameSpriteIdentifier.FROGGER,
-          GameSpriteIdentifier.FROGGER_WIDE},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.FROGGER_HIT,
-          GameSpriteIdentifier.FROGGER_TALL_HIT,
-          GameSpriteIdentifier.FROGGER_HIT,
-          GameSpriteIdentifier.FROGGER_WIDE_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.FROGGER,
+          SpriteDetails.FROGGER_TALL,
+          SpriteDetails.FROGGER,
+          SpriteDetails.FROGGER_WIDE},
+      new SpriteDetails[]{
+          SpriteDetails.FROGGER_HIT,
+          SpriteDetails.FROGGER_TALL_HIT,
+          SpriteDetails.FROGGER_HIT,
+          SpriteDetails.FROGGER_WIDE_HIT},
       0.25f
   ),
 
   CYCLONE(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.CYCLONE_01,
-          GameSpriteIdentifier.CYCLONE_02,
-          GameSpriteIdentifier.CYCLONE_03,
-          GameSpriteIdentifier.CYCLONE_04,
-          GameSpriteIdentifier.CYCLONE_05},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.CYCLONE_01_HIT,
-          GameSpriteIdentifier.CYCLONE_02_HIT,
-          GameSpriteIdentifier.CYCLONE_03_HIT,
-          GameSpriteIdentifier.CYCLONE_04_HIT,
-          GameSpriteIdentifier.CYCLONE_05_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.CYCLONE_01,
+          SpriteDetails.CYCLONE_02,
+          SpriteDetails.CYCLONE_03,
+          SpriteDetails.CYCLONE_04,
+          SpriteDetails.CYCLONE_05},
+      new SpriteDetails[]{
+          SpriteDetails.CYCLONE_01_HIT,
+          SpriteDetails.CYCLONE_02_HIT,
+          SpriteDetails.CYCLONE_03_HIT,
+          SpriteDetails.CYCLONE_04_HIT,
+          SpriteDetails.CYCLONE_05_HIT},
       0.25f
   ),
 
   DEVIL(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.DEVIL,
-          GameSpriteIdentifier.DEVIL_DOWN,
-          GameSpriteIdentifier.DEVIL,
-          GameSpriteIdentifier.DEVIL_UP},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.DEVIL_HIT,
-          GameSpriteIdentifier.DEVIL_DOWN_HIT,
-          GameSpriteIdentifier.DEVIL_HIT,
-          GameSpriteIdentifier.DEVIL_UP_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.DEVIL,
+          SpriteDetails.DEVIL_DOWN,
+          SpriteDetails.DEVIL,
+          SpriteDetails.DEVIL_UP},
+      new SpriteDetails[]{
+          SpriteDetails.DEVIL_HIT,
+          SpriteDetails.DEVIL_DOWN_HIT,
+          SpriteDetails.DEVIL_HIT,
+          SpriteDetails.DEVIL_UP_HIT},
       0.25f
   ),
 
   GREMLIN(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.GREMLIN_01,
-          GameSpriteIdentifier.GREMLIN_02,
-          GameSpriteIdentifier.GREMLIN_03,
-          GameSpriteIdentifier.GREMLIN_04,
-          GameSpriteIdentifier.GREMLIN_03,
-          GameSpriteIdentifier.GREMLIN_02},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.GREMLIN_01_HIT,
-          GameSpriteIdentifier.GREMLIN_02_HIT,
-          GameSpriteIdentifier.GREMLIN_03_HIT,
-          GameSpriteIdentifier.GREMLIN_04_HIT,
-          GameSpriteIdentifier.GREMLIN_03_HIT,
-          GameSpriteIdentifier.GREMLIN_02_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.GREMLIN_01,
+          SpriteDetails.GREMLIN_02,
+          SpriteDetails.GREMLIN_03,
+          SpriteDetails.GREMLIN_04,
+          SpriteDetails.GREMLIN_03,
+          SpriteDetails.GREMLIN_02},
+      new SpriteDetails[]{
+          SpriteDetails.GREMLIN_01_HIT,
+          SpriteDetails.GREMLIN_02_HIT,
+          SpriteDetails.GREMLIN_03_HIT,
+          SpriteDetails.GREMLIN_04_HIT,
+          SpriteDetails.GREMLIN_03_HIT,
+          SpriteDetails.GREMLIN_02_HIT},
       0.25f
   ),
 
   SPARKLE(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.SPARKLE,
-          GameSpriteIdentifier.SPARKLE_TALL,
-          GameSpriteIdentifier.SPARKLE,
-          GameSpriteIdentifier.SPARKLE_WIDE},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.SPARKLE_HIT,
-          GameSpriteIdentifier.SPARKLE_TALL_HIT,
-          GameSpriteIdentifier.SPARKLE_HIT,
-          GameSpriteIdentifier.SPARKLE_WIDE_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.SPARKLE,
+          SpriteDetails.SPARKLE_TALL,
+          SpriteDetails.SPARKLE,
+          SpriteDetails.SPARKLE_WIDE},
+      new SpriteDetails[]{
+          SpriteDetails.SPARKLE_HIT,
+          SpriteDetails.SPARKLE_TALL_HIT,
+          SpriteDetails.SPARKLE_HIT,
+          SpriteDetails.SPARKLE_WIDE_HIT},
       0.25f
   ),
 
   PINCER(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.PINCER,
-          GameSpriteIdentifier.PINCER_LEFT,
-          GameSpriteIdentifier.PINCER,
-          GameSpriteIdentifier.PINCER_RIGHT},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.PINCER_HIT,
-          GameSpriteIdentifier.PINCER_LEFT_HIT,
-          GameSpriteIdentifier.PINCER_HIT,
-          GameSpriteIdentifier.PINCER_RIGHT_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.PINCER,
+          SpriteDetails.PINCER_LEFT,
+          SpriteDetails.PINCER,
+          SpriteDetails.PINCER_RIGHT},
+      new SpriteDetails[]{
+          SpriteDetails.PINCER_HIT,
+          SpriteDetails.PINCER_LEFT_HIT,
+          SpriteDetails.PINCER_HIT,
+          SpriteDetails.PINCER_RIGHT_HIT},
       0.25f
   ),
 
   SPECTATOR(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.SPECTATOR,
-          GameSpriteIdentifier.SPECTATOR_UP,
-          GameSpriteIdentifier.SPECTATOR,
-          GameSpriteIdentifier.SPECTATOR_DOWN},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.SPECTATOR_HIT,
-          GameSpriteIdentifier.SPECTATOR_UP_HIT,
-          GameSpriteIdentifier.SPECTATOR_HIT,
-          GameSpriteIdentifier.SPECTATOR_DOWN_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.SPECTATOR,
+          SpriteDetails.SPECTATOR_UP,
+          SpriteDetails.SPECTATOR,
+          SpriteDetails.SPECTATOR_DOWN},
+      new SpriteDetails[]{
+          SpriteDetails.SPECTATOR_HIT,
+          SpriteDetails.SPECTATOR_UP_HIT,
+          SpriteDetails.SPECTATOR_HIT,
+          SpriteDetails.SPECTATOR_DOWN_HIT},
       0.25f
   ),
 
   SQUASHER(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.SQUASHER,
-          GameSpriteIdentifier.SQUASHER_WIDE,
-          GameSpriteIdentifier.SQUASHER,
-          GameSpriteIdentifier.SQUASHER_TALL},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.SQUASHER_HIT,
-          GameSpriteIdentifier.SQUASHER_WIDE_HIT,
-          GameSpriteIdentifier.SQUASHER_HIT,
-          GameSpriteIdentifier.SQUASHER_TALL_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.SQUASHER,
+          SpriteDetails.SQUASHER_WIDE,
+          SpriteDetails.SQUASHER,
+          SpriteDetails.SQUASHER_TALL},
+      new SpriteDetails[]{
+          SpriteDetails.SQUASHER_HIT,
+          SpriteDetails.SQUASHER_WIDE_HIT,
+          SpriteDetails.SQUASHER_HIT,
+          SpriteDetails.SQUASHER_TALL_HIT},
       0.25f
   ),
 
   TINY_DANCER(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.TINY_DANCER,
-          GameSpriteIdentifier.TINY_DANCER_LEFT,
-          GameSpriteIdentifier.TINY_DANCER,
-          GameSpriteIdentifier.TINY_DANCER_RIGHT},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.TINY_DANCER_HIT,
-          GameSpriteIdentifier.TINY_DANCER_LEFT_HIT,
-          GameSpriteIdentifier.TINY_DANCER_HIT,
-          GameSpriteIdentifier.TINY_DANCER_RIGHT_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.TINY_DANCER,
+          SpriteDetails.TINY_DANCER_LEFT,
+          SpriteDetails.TINY_DANCER,
+          SpriteDetails.TINY_DANCER_RIGHT},
+      new SpriteDetails[]{
+          SpriteDetails.TINY_DANCER_HIT,
+          SpriteDetails.TINY_DANCER_LEFT_HIT,
+          SpriteDetails.TINY_DANCER_HIT,
+          SpriteDetails.TINY_DANCER_RIGHT_HIT},
       0.25f
   ),
 
   WILD_STYLE(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.WILD_STYLE,
-          GameSpriteIdentifier.WILD_STYLE_FLAT,
-          GameSpriteIdentifier.WILD_STYLE,
-          GameSpriteIdentifier.WILD_STYLE_TALL},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.WILD_STYLE_HIT,
-          GameSpriteIdentifier.WILD_STYLE_FLAT_HIT,
-          GameSpriteIdentifier.WILD_STYLE_HIT,
-          GameSpriteIdentifier.WILD_STYLE_TALL_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.WILD_STYLE,
+          SpriteDetails.WILD_STYLE_FLAT,
+          SpriteDetails.WILD_STYLE,
+          SpriteDetails.WILD_STYLE_TALL},
+      new SpriteDetails[]{
+          SpriteDetails.WILD_STYLE_HIT,
+          SpriteDetails.WILD_STYLE_FLAT_HIT,
+          SpriteDetails.WILD_STYLE_HIT,
+          SpriteDetails.WILD_STYLE_TALL_HIT},
       0.25f
   ),
 
   CONFUSER(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.CONFUSER,
-          GameSpriteIdentifier.CONFUSER_FLAT,
-          GameSpriteIdentifier.CONFUSER,
-          GameSpriteIdentifier.CONFUSER_TALL},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.CONFUSER_HIT,
-          GameSpriteIdentifier.CONFUSER_FLAT_HIT,
-          GameSpriteIdentifier.CONFUSER_HIT,
-          GameSpriteIdentifier.CONFUSER_TALL_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.CONFUSER,
+          SpriteDetails.CONFUSER_FLAT,
+          SpriteDetails.CONFUSER,
+          SpriteDetails.CONFUSER_TALL},
+      new SpriteDetails[]{
+          SpriteDetails.CONFUSER_HIT,
+          SpriteDetails.CONFUSER_FLAT_HIT,
+          SpriteDetails.CONFUSER_HIT,
+          SpriteDetails.CONFUSER_TALL_HIT},
       0.25f
   ),
 
   SAUCER(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.SAUCER,
-          GameSpriteIdentifier.SAUCER_RIGHT,
-          GameSpriteIdentifier.SAUCER,
-          GameSpriteIdentifier.SAUCER_LEFT},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.SAUCER_HIT,
-          GameSpriteIdentifier.SAUCER_RIGHT_HIT,
-          GameSpriteIdentifier.SAUCER_HIT,
-          GameSpriteIdentifier.SAUCER_LEFT_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.SAUCER,
+          SpriteDetails.SAUCER_RIGHT,
+          SpriteDetails.SAUCER,
+          SpriteDetails.SAUCER_LEFT},
+      new SpriteDetails[]{
+          SpriteDetails.SAUCER_HIT,
+          SpriteDetails.SAUCER_RIGHT_HIT,
+          SpriteDetails.SAUCER_HIT,
+          SpriteDetails.SAUCER_LEFT_HIT},
       0.25f
   ),
 
   PINKO(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.PINKO,
-          GameSpriteIdentifier.PINKO_TALL,
-          GameSpriteIdentifier.PINKO,
-          GameSpriteIdentifier.PINKO_WIDE},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.PINKO_HIT,
-          GameSpriteIdentifier.PINKO_TALL_HIT,
-          GameSpriteIdentifier.PINKO_HIT,
-          GameSpriteIdentifier.PINKO_WIDE_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.PINKO,
+          SpriteDetails.PINKO_TALL,
+          SpriteDetails.PINKO,
+          SpriteDetails.PINKO_WIDE},
+      new SpriteDetails[]{
+          SpriteDetails.PINKO_HIT,
+          SpriteDetails.PINKO_TALL_HIT,
+          SpriteDetails.PINKO_HIT,
+          SpriteDetails.PINKO_WIDE_HIT},
       0.25f
   ),
 
   PISTON(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.PISTON,
-          GameSpriteIdentifier.PISTON_TALL,
-          GameSpriteIdentifier.PISTON,
-          GameSpriteIdentifier.PISTON_WIDE},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.PISTON_HIT,
-          GameSpriteIdentifier.PISTON_TALL_HIT,
-          GameSpriteIdentifier.PISTON_HIT,
-          GameSpriteIdentifier.PISTON_WIDE_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.PISTON,
+          SpriteDetails.PISTON_TALL,
+          SpriteDetails.PISTON,
+          SpriteDetails.PISTON_WIDE},
+      new SpriteDetails[]{
+          SpriteDetails.PISTON_HIT,
+          SpriteDetails.PISTON_TALL_HIT,
+          SpriteDetails.PISTON_HIT,
+          SpriteDetails.PISTON_WIDE_HIT},
       0.25f
   ),
 
   PURPLE_MEANIE(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.PURPLE_MEANIE_01,
-          GameSpriteIdentifier.PURPLE_MEANIE_02,
-          GameSpriteIdentifier.PURPLE_MEANIE_03,
-          GameSpriteIdentifier.PURPLE_MEANIE_04,
-          GameSpriteIdentifier.PURPLE_MEANIE_05},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.PURPLE_MEANIE_01_HIT,
-          GameSpriteIdentifier.PURPLE_MEANIE_02_HIT,
-          GameSpriteIdentifier.PURPLE_MEANIE_03_HIT,
-          GameSpriteIdentifier.PURPLE_MEANIE_04_HIT,
-          GameSpriteIdentifier.PURPLE_MEANIE_05_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.PURPLE_MEANIE_01,
+          SpriteDetails.PURPLE_MEANIE_02,
+          SpriteDetails.PURPLE_MEANIE_03,
+          SpriteDetails.PURPLE_MEANIE_04,
+          SpriteDetails.PURPLE_MEANIE_05},
+      new SpriteDetails[]{
+          SpriteDetails.PURPLE_MEANIE_01_HIT,
+          SpriteDetails.PURPLE_MEANIE_02_HIT,
+          SpriteDetails.PURPLE_MEANIE_03_HIT,
+          SpriteDetails.PURPLE_MEANIE_04_HIT,
+          SpriteDetails.PURPLE_MEANIE_05_HIT},
       0.25f
   ),
 
   PAD(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.PAD_01,
-          GameSpriteIdentifier.PAD_02,
-          GameSpriteIdentifier.PAD_03,
-          GameSpriteIdentifier.PAD_04,
-          GameSpriteIdentifier.PAD_05},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.PAD_01_HIT,
-          GameSpriteIdentifier.PAD_02_HIT,
-          GameSpriteIdentifier.PAD_03_HIT,
-          GameSpriteIdentifier.PAD_04_HIT,
-          GameSpriteIdentifier.PAD_05_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.PAD_01,
+          SpriteDetails.PAD_02,
+          SpriteDetails.PAD_03,
+          SpriteDetails.PAD_04,
+          SpriteDetails.PAD_05},
+      new SpriteDetails[]{
+          SpriteDetails.PAD_01_HIT,
+          SpriteDetails.PAD_02_HIT,
+          SpriteDetails.PAD_03_HIT,
+          SpriteDetails.PAD_04_HIT,
+          SpriteDetails.PAD_05_HIT},
       0.25f
   ),
 
   GHOST(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.GHOST,
-          GameSpriteIdentifier.GHOST_LEFT,
-          GameSpriteIdentifier.GHOST,
-          GameSpriteIdentifier.GHOST_RIGHT},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.GHOST_HIT,
-          GameSpriteIdentifier.GHOST_LEFT_HIT,
-          GameSpriteIdentifier.GHOST_HIT,
-          GameSpriteIdentifier.GHOST_RIGHT_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.GHOST,
+          SpriteDetails.GHOST_LEFT,
+          SpriteDetails.GHOST,
+          SpriteDetails.GHOST_RIGHT},
+      new SpriteDetails[]{
+          SpriteDetails.GHOST_HIT,
+          SpriteDetails.GHOST_LEFT_HIT,
+          SpriteDetails.GHOST_HIT,
+          SpriteDetails.GHOST_RIGHT_HIT},
       0.25f
   ),
 
   HOPPER(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.HOPPER,
-          GameSpriteIdentifier.HOPPER_LEFT,
-          GameSpriteIdentifier.HOPPER,
-          GameSpriteIdentifier.HOPPER_RIGHT},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.HOPPER_HIT,
-          GameSpriteIdentifier.HOPPER_LEFT_HIT,
-          GameSpriteIdentifier.HOPPER_HIT,
-          GameSpriteIdentifier.HOPPER_RIGHT_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.HOPPER,
+          SpriteDetails.HOPPER_LEFT,
+          SpriteDetails.HOPPER,
+          SpriteDetails.HOPPER_RIGHT},
+      new SpriteDetails[]{
+          SpriteDetails.HOPPER_HIT,
+          SpriteDetails.HOPPER_LEFT_HIT,
+          SpriteDetails.HOPPER_HIT,
+          SpriteDetails.HOPPER_RIGHT_HIT},
       0.25f
   ),
 
   AMOEBA(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.AMOEBA,
-          GameSpriteIdentifier.AMOEBA_LEFT,
-          GameSpriteIdentifier.AMOEBA,
-          GameSpriteIdentifier.AMOEBA_RIGHT},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.AMOEBA_HIT,
-          GameSpriteIdentifier.AMOEBA_LEFT_HIT,
-          GameSpriteIdentifier.AMOEBA_HIT,
-          GameSpriteIdentifier.AMOEBA_RIGHT_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.AMOEBA,
+          SpriteDetails.AMOEBA_LEFT,
+          SpriteDetails.AMOEBA,
+          SpriteDetails.AMOEBA_RIGHT},
+      new SpriteDetails[]{
+          SpriteDetails.AMOEBA_HIT,
+          SpriteDetails.AMOEBA_LEFT_HIT,
+          SpriteDetails.AMOEBA_HIT,
+          SpriteDetails.AMOEBA_RIGHT_HIT},
       0.25f
   ),
 
   CHEEKY(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.CHEEKY,
-          GameSpriteIdentifier.CHEEKY_LEFT,
-          GameSpriteIdentifier.CHEEKY,
-          GameSpriteIdentifier.CHEEKY_RIGHT},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.CHEEKY_HIT,
-          GameSpriteIdentifier.CHEEKY_LEFT_HIT,
-          GameSpriteIdentifier.CHEEKY_HIT,
-          GameSpriteIdentifier.CHEEKY_RIGHT_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.CHEEKY,
+          SpriteDetails.CHEEKY_LEFT,
+          SpriteDetails.CHEEKY,
+          SpriteDetails.CHEEKY_RIGHT},
+      new SpriteDetails[]{
+          SpriteDetails.CHEEKY_HIT,
+          SpriteDetails.CHEEKY_LEFT_HIT,
+          SpriteDetails.CHEEKY_HIT,
+          SpriteDetails.CHEEKY_RIGHT_HIT},
       0.25f
   ),
 
   FOXY(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.FOXY,
-          GameSpriteIdentifier.FOXY_TALL,
-          GameSpriteIdentifier.FOXY,
-          GameSpriteIdentifier.FOXY_WIDE},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.FOXY_HIT,
-          GameSpriteIdentifier.FOXY_TALL_HIT,
-          GameSpriteIdentifier.FOXY_HIT,
-          GameSpriteIdentifier.FOXY_WIDE_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.FOXY,
+          SpriteDetails.FOXY_TALL,
+          SpriteDetails.FOXY,
+          SpriteDetails.FOXY_WIDE},
+      new SpriteDetails[]{
+          SpriteDetails.FOXY_HIT,
+          SpriteDetails.FOXY_TALL_HIT,
+          SpriteDetails.FOXY_HIT,
+          SpriteDetails.FOXY_WIDE_HIT},
       0.25f
   ),
 
   FIGHTER(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.FIGHTER,
-          GameSpriteIdentifier.FIGHTER_TALL,
-          GameSpriteIdentifier.FIGHTER,
-          GameSpriteIdentifier.FIGHTER_WIDE},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.FIGHTER_HIT,
-          GameSpriteIdentifier.FIGHTER_TALL_HIT,
-          GameSpriteIdentifier.FIGHTER_HIT,
-          GameSpriteIdentifier.FIGHTER_WIDE_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.FIGHTER,
+          SpriteDetails.FIGHTER_TALL,
+          SpriteDetails.FIGHTER,
+          SpriteDetails.FIGHTER_WIDE},
+      new SpriteDetails[]{
+          SpriteDetails.FIGHTER_HIT,
+          SpriteDetails.FIGHTER_TALL_HIT,
+          SpriteDetails.FIGHTER_HIT,
+          SpriteDetails.FIGHTER_WIDE_HIT},
       0.25f
   ),
 
   RIPLEY(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.RIPLEY,
-          GameSpriteIdentifier.RIPLEY_LEFT,
-          GameSpriteIdentifier.RIPLEY,
-          GameSpriteIdentifier.RIPLEY_RIGHT},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.RIPLEY_HIT,
-          GameSpriteIdentifier.RIPLEY_LEFT_HIT,
-          GameSpriteIdentifier.RIPLEY_HIT,
-          GameSpriteIdentifier.RIPLEY_RIGHT_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.RIPLEY,
+          SpriteDetails.RIPLEY_LEFT,
+          SpriteDetails.RIPLEY,
+          SpriteDetails.RIPLEY_RIGHT},
+      new SpriteDetails[]{
+          SpriteDetails.RIPLEY_HIT,
+          SpriteDetails.RIPLEY_LEFT_HIT,
+          SpriteDetails.RIPLEY_HIT,
+          SpriteDetails.RIPLEY_RIGHT_HIT},
       0.25f
   ),
 
   WALKER(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.WALKER,
-          GameSpriteIdentifier.WALKER_RIGHT,
-          GameSpriteIdentifier.WALKER_LEFT},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.WALKER_HIT,
-          GameSpriteIdentifier.WALKER_RIGHT_HIT,
-          GameSpriteIdentifier.WALKER_LEFT_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.WALKER,
+          SpriteDetails.WALKER_RIGHT,
+          SpriteDetails.WALKER_LEFT},
+      new SpriteDetails[]{
+          SpriteDetails.WALKER_HIT,
+          SpriteDetails.WALKER_RIGHT_HIT,
+          SpriteDetails.WALKER_LEFT_HIT},
       0.25f
   ),
 
   CHARLIE(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.CHARLIE,
-          GameSpriteIdentifier.CHARLIE_LEFT,
-          GameSpriteIdentifier.CHARLIE,
-          GameSpriteIdentifier.CHARLIE_RIGHT},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.CHARLIE_HIT,
-          GameSpriteIdentifier.CHARLIE_LEFT_HIT,
-          GameSpriteIdentifier.CHARLIE_HIT,
-          GameSpriteIdentifier.CHARLIE_RIGHT_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.CHARLIE,
+          SpriteDetails.CHARLIE_LEFT,
+          SpriteDetails.CHARLIE,
+          SpriteDetails.CHARLIE_RIGHT},
+      new SpriteDetails[]{
+          SpriteDetails.CHARLIE_HIT,
+          SpriteDetails.CHARLIE_LEFT_HIT,
+          SpriteDetails.CHARLIE_HIT,
+          SpriteDetails.CHARLIE_RIGHT_HIT},
       0.25f
   ),
 
   ALL_SEEING_EYE(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.ALL_SEEING_EYE,
-          GameSpriteIdentifier.ALL_SEEING_EYE_LEFT,
-          GameSpriteIdentifier.ALL_SEEING_EYE,
-          GameSpriteIdentifier.ALL_SEEING_EYE_RIGHT},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.ALL_SEEING_EYE_HIT,
-          GameSpriteIdentifier.ALL_SEEING_EYE_LEFT_HIT,
-          GameSpriteIdentifier.ALL_SEEING_EYE_HIT,
-          GameSpriteIdentifier.ALL_SEEING_EYE_RIGHT_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.ALL_SEEING_EYE,
+          SpriteDetails.ALL_SEEING_EYE_LEFT,
+          SpriteDetails.ALL_SEEING_EYE,
+          SpriteDetails.ALL_SEEING_EYE_RIGHT},
+      new SpriteDetails[]{
+          SpriteDetails.ALL_SEEING_EYE_HIT,
+          SpriteDetails.ALL_SEEING_EYE_LEFT_HIT,
+          SpriteDetails.ALL_SEEING_EYE_HIT,
+          SpriteDetails.ALL_SEEING_EYE_RIGHT_HIT},
       0.25f
   ),
 
   JUMPER(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.JUMPER,
-          GameSpriteIdentifier.JUMPER_UP,
-          GameSpriteIdentifier.JUMPER,
-          GameSpriteIdentifier.JUMPER_DOWN},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.JUMPER_HIT,
-          GameSpriteIdentifier.JUMPER_UP_HIT,
-          GameSpriteIdentifier.JUMPER_HIT,
-          GameSpriteIdentifier.JUMPER_DOWN_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.JUMPER,
+          SpriteDetails.JUMPER_UP,
+          SpriteDetails.JUMPER,
+          SpriteDetails.JUMPER_DOWN},
+      new SpriteDetails[]{
+          SpriteDetails.JUMPER_HIT,
+          SpriteDetails.JUMPER_UP_HIT,
+          SpriteDetails.JUMPER_HIT,
+          SpriteDetails.JUMPER_DOWN_HIT},
       0.25f
   ),
 
   ROTATOR(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.ROTATOR_01,
-          GameSpriteIdentifier.ROTATOR_02,
-          GameSpriteIdentifier.ROTATOR_03,
-          GameSpriteIdentifier.ROTATOR_04,
-          GameSpriteIdentifier.ROTATOR_05,},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.ROTATOR_01_HIT,
-          GameSpriteIdentifier.ROTATOR_02_HIT,
-          GameSpriteIdentifier.ROTATOR_03_HIT,
-          GameSpriteIdentifier.ROTATOR_04_HIT,
-          GameSpriteIdentifier.ROTATOR_05_HIT,},
+      new SpriteDetails[]{
+          SpriteDetails.ROTATOR_01,
+          SpriteDetails.ROTATOR_02,
+          SpriteDetails.ROTATOR_03,
+          SpriteDetails.ROTATOR_04,
+          SpriteDetails.ROTATOR_05,},
+      new SpriteDetails[]{
+          SpriteDetails.ROTATOR_01_HIT,
+          SpriteDetails.ROTATOR_02_HIT,
+          SpriteDetails.ROTATOR_03_HIT,
+          SpriteDetails.ROTATOR_04_HIT,
+          SpriteDetails.ROTATOR_05_HIT,},
       0.15f
   ),
 
   WHIRLPOOL(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.WHIRLPOOL_01,
-          GameSpriteIdentifier.WHIRLPOOL_02,
-          GameSpriteIdentifier.WHIRLPOOL_03,
-          GameSpriteIdentifier.WHIRLPOOL_04,
-          GameSpriteIdentifier.WHIRLPOOL_05,},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.WHIRLPOOL_01_HIT,
-          GameSpriteIdentifier.WHIRLPOOL_02_HIT,
-          GameSpriteIdentifier.WHIRLPOOL_03_HIT,
-          GameSpriteIdentifier.WHIRLPOOL_04_HIT,
-          GameSpriteIdentifier.WHIRLPOOL_05_HIT,},
+      new SpriteDetails[]{
+          SpriteDetails.WHIRLPOOL_01,
+          SpriteDetails.WHIRLPOOL_02,
+          SpriteDetails.WHIRLPOOL_03,
+          SpriteDetails.WHIRLPOOL_04,
+          SpriteDetails.WHIRLPOOL_05,},
+      new SpriteDetails[]{
+          SpriteDetails.WHIRLPOOL_01_HIT,
+          SpriteDetails.WHIRLPOOL_02_HIT,
+          SpriteDetails.WHIRLPOOL_03_HIT,
+          SpriteDetails.WHIRLPOOL_04_HIT,
+          SpriteDetails.WHIRLPOOL_05_HIT,},
       0.15f
   ),
 
   BATTLE_DROID(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BATTLE_DROID_01,
-          GameSpriteIdentifier.BATTLE_DROID_02,
-          GameSpriteIdentifier.BATTLE_DROID_01,
-          GameSpriteIdentifier.BATTLE_DROID_03},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BATTLE_DROID_01_HIT,
-          GameSpriteIdentifier.BATTLE_DROID_02_HIT,
-          GameSpriteIdentifier.BATTLE_DROID_01_HIT,
-          GameSpriteIdentifier.BATTLE_DROID_03_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.BATTLE_DROID_01,
+          SpriteDetails.BATTLE_DROID_02,
+          SpriteDetails.BATTLE_DROID_01,
+          SpriteDetails.BATTLE_DROID_03},
+      new SpriteDetails[]{
+          SpriteDetails.BATTLE_DROID_01_HIT,
+          SpriteDetails.BATTLE_DROID_02_HIT,
+          SpriteDetails.BATTLE_DROID_01_HIT,
+          SpriteDetails.BATTLE_DROID_03_HIT},
       0.20f
   ),
 
   FISH(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.FISH_01,
-          GameSpriteIdentifier.FISH_02,
-          GameSpriteIdentifier.FISH_01,
-          GameSpriteIdentifier.FISH_03},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.FISH_01_HIT,
-          GameSpriteIdentifier.FISH_02_HIT,
-          GameSpriteIdentifier.FISH_01_HIT,
-          GameSpriteIdentifier.FISH_03_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.FISH_01,
+          SpriteDetails.FISH_02,
+          SpriteDetails.FISH_01,
+          SpriteDetails.FISH_03},
+      new SpriteDetails[]{
+          SpriteDetails.FISH_01_HIT,
+          SpriteDetails.FISH_02_HIT,
+          SpriteDetails.FISH_01_HIT,
+          SpriteDetails.FISH_03_HIT},
       0.20f
   ),
 
   LEMMING(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.LEMMING_01,
-          GameSpriteIdentifier.LEMMING_02,
-          GameSpriteIdentifier.LEMMING_01,
-          GameSpriteIdentifier.LEMMING_03},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.LEMMING_01_HIT,
-          GameSpriteIdentifier.LEMMING_02_HIT,
-          GameSpriteIdentifier.LEMMING_01_HIT,
-          GameSpriteIdentifier.LEMMING_03_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.LEMMING_01,
+          SpriteDetails.LEMMING_02,
+          SpriteDetails.LEMMING_01,
+          SpriteDetails.LEMMING_03},
+      new SpriteDetails[]{
+          SpriteDetails.LEMMING_01_HIT,
+          SpriteDetails.LEMMING_02_HIT,
+          SpriteDetails.LEMMING_01_HIT,
+          SpriteDetails.LEMMING_03_HIT},
       0.20f
   ),
 
   SQUEEZE_BOX(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.SQUEEZE_BOX_01,
-          GameSpriteIdentifier.SQUEEZE_BOX_02,
-          GameSpriteIdentifier.SQUEEZE_BOX_01,
-          GameSpriteIdentifier.SQUEEZE_BOX_03},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.SQUEEZE_BOX_01_HIT,
-          GameSpriteIdentifier.SQUEEZE_BOX_02_HIT,
-          GameSpriteIdentifier.SQUEEZE_BOX_01_HIT,
-          GameSpriteIdentifier.SQUEEZE_BOX_03_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.SQUEEZE_BOX_01,
+          SpriteDetails.SQUEEZE_BOX_02,
+          SpriteDetails.SQUEEZE_BOX_01,
+          SpriteDetails.SQUEEZE_BOX_03},
+      new SpriteDetails[]{
+          SpriteDetails.SQUEEZE_BOX_01_HIT,
+          SpriteDetails.SQUEEZE_BOX_02_HIT,
+          SpriteDetails.SQUEEZE_BOX_01_HIT,
+          SpriteDetails.SQUEEZE_BOX_03_HIT},
       0.20f
   ),
 
   YELLOW_BEARD(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.YELLOW_BEARD_01,
-          GameSpriteIdentifier.YELLOW_BEARD_02,
-          GameSpriteIdentifier.YELLOW_BEARD_01,
-          GameSpriteIdentifier.YELLOW_BEARD_03},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.YELLOW_BEARD_01_HIT,
-          GameSpriteIdentifier.YELLOW_BEARD_02_HIT,
-          GameSpriteIdentifier.YELLOW_BEARD_01_HIT,
-          GameSpriteIdentifier.YELLOW_BEARD_03_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.YELLOW_BEARD_01,
+          SpriteDetails.YELLOW_BEARD_02,
+          SpriteDetails.YELLOW_BEARD_01,
+          SpriteDetails.YELLOW_BEARD_03},
+      new SpriteDetails[]{
+          SpriteDetails.YELLOW_BEARD_01_HIT,
+          SpriteDetails.YELLOW_BEARD_02_HIT,
+          SpriteDetails.YELLOW_BEARD_01_HIT,
+          SpriteDetails.YELLOW_BEARD_03_HIT},
       0.20f
   ),
 
   PILOT(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.PILOT_01,
-          GameSpriteIdentifier.PILOT_02,
-          GameSpriteIdentifier.PILOT_01,
-          GameSpriteIdentifier.PILOT_03},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.PILOT_01_HIT,
-          GameSpriteIdentifier.PILOT_02_HIT,
-          GameSpriteIdentifier.PILOT_01_HIT,
-          GameSpriteIdentifier.PILOT_03_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.PILOT_01,
+          SpriteDetails.PILOT_02,
+          SpriteDetails.PILOT_01,
+          SpriteDetails.PILOT_03},
+      new SpriteDetails[]{
+          SpriteDetails.PILOT_01_HIT,
+          SpriteDetails.PILOT_02_HIT,
+          SpriteDetails.PILOT_01_HIT,
+          SpriteDetails.PILOT_03_HIT},
       0.20f
   ),
 
   ARACNOID(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.ARACNOID_01,
-          GameSpriteIdentifier.ARACNOID_02,
-          GameSpriteIdentifier.ARACNOID_01,
-          GameSpriteIdentifier.ARACNOID_03},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.ARACNOID_01_HIT,
-          GameSpriteIdentifier.ARACNOID_02_HIT,
-          GameSpriteIdentifier.ARACNOID_01_HIT,
-          GameSpriteIdentifier.ARACNOID_03_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.ARACNOID_01,
+          SpriteDetails.ARACNOID_02,
+          SpriteDetails.ARACNOID_01,
+          SpriteDetails.ARACNOID_03},
+      new SpriteDetails[]{
+          SpriteDetails.ARACNOID_01_HIT,
+          SpriteDetails.ARACNOID_02_HIT,
+          SpriteDetails.ARACNOID_01_HIT,
+          SpriteDetails.ARACNOID_03_HIT},
       0.20f
   ),
 
   CRAB(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.CRAB_01,
-          GameSpriteIdentifier.CRAB_02,
-          GameSpriteIdentifier.CRAB_01,
-          GameSpriteIdentifier.CRAB_03},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.CRAB_01_HIT,
-          GameSpriteIdentifier.CRAB_02_HIT,
-          GameSpriteIdentifier.CRAB_01_HIT,
-          GameSpriteIdentifier.CRAB_03_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.CRAB_01,
+          SpriteDetails.CRAB_02,
+          SpriteDetails.CRAB_01,
+          SpriteDetails.CRAB_03},
+      new SpriteDetails[]{
+          SpriteDetails.CRAB_01_HIT,
+          SpriteDetails.CRAB_02_HIT,
+          SpriteDetails.CRAB_01_HIT,
+          SpriteDetails.CRAB_03_HIT},
       0.20f
   ),
 
   BEAR(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BEAR_01,
-          GameSpriteIdentifier.BEAR_02,
-          GameSpriteIdentifier.BEAR_01,
-          GameSpriteIdentifier.BEAR_03},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BEAR_01_HIT,
-          GameSpriteIdentifier.BEAR_02_HIT,
-          GameSpriteIdentifier.BEAR_01_HIT,
-          GameSpriteIdentifier.BEAR_03_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.BEAR_01,
+          SpriteDetails.BEAR_02,
+          SpriteDetails.BEAR_01,
+          SpriteDetails.BEAR_03},
+      new SpriteDetails[]{
+          SpriteDetails.BEAR_01_HIT,
+          SpriteDetails.BEAR_02_HIT,
+          SpriteDetails.BEAR_01_HIT,
+          SpriteDetails.BEAR_03_HIT},
       0.20f
   ),
 
   DINO(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.DINO_01,
-          GameSpriteIdentifier.DINO_02,
-          GameSpriteIdentifier.DINO_03,
-          GameSpriteIdentifier.DINO_04,
-          GameSpriteIdentifier.DINO_03,
-          GameSpriteIdentifier.DINO_02},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.DINO_01_HIT,
-          GameSpriteIdentifier.DINO_02_HIT,
-          GameSpriteIdentifier.DINO_03_HIT,
-          GameSpriteIdentifier.DINO_04_HIT,
-          GameSpriteIdentifier.DINO_03_HIT,
-          GameSpriteIdentifier.DINO_02_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.DINO_01,
+          SpriteDetails.DINO_02,
+          SpriteDetails.DINO_03,
+          SpriteDetails.DINO_04,
+          SpriteDetails.DINO_03,
+          SpriteDetails.DINO_02},
+      new SpriteDetails[]{
+          SpriteDetails.DINO_01_HIT,
+          SpriteDetails.DINO_02_HIT,
+          SpriteDetails.DINO_03_HIT,
+          SpriteDetails.DINO_04_HIT,
+          SpriteDetails.DINO_03_HIT,
+          SpriteDetails.DINO_02_HIT},
       0.20f
   ),
 
   FRISBIE(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.FRISBIE_01,
-          GameSpriteIdentifier.FRISBIE_02,
-          GameSpriteIdentifier.FRISBIE_03,
-          GameSpriteIdentifier.FRISBIE_04,
-          GameSpriteIdentifier.FRISBIE_05},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.FRISBIE_01_HIT,
-          GameSpriteIdentifier.FRISBIE_02_HIT,
-          GameSpriteIdentifier.FRISBIE_03_HIT,
-          GameSpriteIdentifier.FRISBIE_04_HIT,
-          GameSpriteIdentifier.FRISBIE_05_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.FRISBIE_01,
+          SpriteDetails.FRISBIE_02,
+          SpriteDetails.FRISBIE_03,
+          SpriteDetails.FRISBIE_04,
+          SpriteDetails.FRISBIE_05},
+      new SpriteDetails[]{
+          SpriteDetails.FRISBIE_01_HIT,
+          SpriteDetails.FRISBIE_02_HIT,
+          SpriteDetails.FRISBIE_03_HIT,
+          SpriteDetails.FRISBIE_04_HIT,
+          SpriteDetails.FRISBIE_05_HIT},
       0.20f
   ),
 
   JOKER(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.JOKER_01,
-          GameSpriteIdentifier.JOKER_02,
-          GameSpriteIdentifier.JOKER_03,
-          GameSpriteIdentifier.JOKER_02},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.JOKER_01_HIT,
-          GameSpriteIdentifier.JOKER_02_HIT,
-          GameSpriteIdentifier.JOKER_03_HIT,
-          GameSpriteIdentifier.JOKER_02_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.JOKER_01,
+          SpriteDetails.JOKER_02,
+          SpriteDetails.JOKER_03,
+          SpriteDetails.JOKER_02},
+      new SpriteDetails[]{
+          SpriteDetails.JOKER_01_HIT,
+          SpriteDetails.JOKER_02_HIT,
+          SpriteDetails.JOKER_03_HIT,
+          SpriteDetails.JOKER_02_HIT},
       0.20f
   ),
 
   // octopus alien with flapping legs
   OCTOPUS(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.OCTOPUS_LEFT,
-          GameSpriteIdentifier.OCTOPUS_RIGHT},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.OCTOPUS_LEFT_HIT,
-          GameSpriteIdentifier.OCTOPUS_RIGHT_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.OCTOPUS_LEFT,
+          SpriteDetails.OCTOPUS_RIGHT},
+      new SpriteDetails[]{
+          SpriteDetails.OCTOPUS_LEFT_HIT,
+          SpriteDetails.OCTOPUS_RIGHT_HIT},
       0.5f),
 
   MINION(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.MINION},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.MINION_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.MINION},
+      new SpriteDetails[]{
+          SpriteDetails.MINION_HIT},
       0f),
 
   // green spinning balls
   SPINNER_GREEN(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.SPINNER_GREEN_01,
-          GameSpriteIdentifier.SPINNER_GREEN_02,
-          GameSpriteIdentifier.SPINNER_GREEN_03},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.SPINNER_GREEN_01_HIT,
-          GameSpriteIdentifier.SPINNER_GREEN_02_HIT,
-          GameSpriteIdentifier.SPINNER_GREEN_03_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.SPINNER_GREEN_01,
+          SpriteDetails.SPINNER_GREEN_02,
+          SpriteDetails.SPINNER_GREEN_03},
+      new SpriteDetails[]{
+          SpriteDetails.SPINNER_GREEN_01_HIT,
+          SpriteDetails.SPINNER_GREEN_02_HIT,
+          SpriteDetails.SPINNER_GREEN_03_HIT},
       0.05f),
 
   // green pulsating spinning balls
   SPINNER_PULSE_GREEN(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.SPINNER_PULSE_GREEN_01,
-          GameSpriteIdentifier.SPINNER_PULSE_GREEN_02,
-          GameSpriteIdentifier.SPINNER_PULSE_GREEN_03},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.SPINNER_PULSE_GREEN_01_HIT,
-          GameSpriteIdentifier.SPINNER_PULSE_GREEN_02_HIT,
-          GameSpriteIdentifier.SPINNER_PULSE_GREEN_03_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.SPINNER_PULSE_GREEN_01,
+          SpriteDetails.SPINNER_PULSE_GREEN_02,
+          SpriteDetails.SPINNER_PULSE_GREEN_03},
+      new SpriteDetails[]{
+          SpriteDetails.SPINNER_PULSE_GREEN_01_HIT,
+          SpriteDetails.SPINNER_PULSE_GREEN_02_HIT,
+          SpriteDetails.SPINNER_PULSE_GREEN_03_HIT},
       0.2f),
 
   // molecule - made from joined spheres
   MOLECULE(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.MOLECULE},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.MOLECULE_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.MOLECULE},
+      new SpriteDetails[]{
+          SpriteDetails.MOLECULE_HIT},
       0f),
   MOLECULE_MINI(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.MOLECULE_MINI},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.MOLECULE_MINI_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.MOLECULE_MINI},
+      new SpriteDetails[]{
+          SpriteDetails.MOLECULE_MINI_HIT},
       0f),
 
   // big boss alien with claws
   BIG_BOSS(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BIG_BOSS_01,
-          GameSpriteIdentifier.BIG_BOSS_02},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BIG_BOSS_01_HIT,
-          GameSpriteIdentifier.BIG_BOSS_02_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.BIG_BOSS_01,
+          SpriteDetails.BIG_BOSS_02},
+      new SpriteDetails[]{
+          SpriteDetails.BIG_BOSS_01_HIT,
+          SpriteDetails.BIG_BOSS_02_HIT},
       0.25f),
 
   // flapping lady bird
   LADY_BIRD(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.LADYBIRD_01,
-          GameSpriteIdentifier.LADYBIRD_02},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.LADYBIRD_01_HIT,
-          GameSpriteIdentifier.LADYBIRD_02_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.LADYBIRD_01,
+          SpriteDetails.LADYBIRD_02},
+      new SpriteDetails[]{
+          SpriteDetails.LADYBIRD_01_HIT,
+          SpriteDetails.LADYBIRD_02_HIT},
       0.25f),
 
 
   // rocky asteroid
   ASTEROID(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.ASTEROID},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.ASTEROID_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.ASTEROID},
+      new SpriteDetails[]{
+          SpriteDetails.ASTEROID_HIT},
       0f),
 
   // small rocky asteroid
   ASTEROID_MINI(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.ASTEROID_MINI},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.ASTEROID_MINI_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.ASTEROID_MINI},
+      new SpriteDetails[]{
+          SpriteDetails.ASTEROID_MINI_HIT},
       0f),
 
   // dragon
   DRAGON_HEAD(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.DRAGON_HEAD_LEFT,
-          GameSpriteIdentifier.DRAGON_HEAD_RIGHT},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.DRAGON_HEAD_LEFT_HIT,
-          GameSpriteIdentifier.DRAGON_HEAD_RIGHT_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.DRAGON_HEAD_LEFT,
+          SpriteDetails.DRAGON_HEAD_RIGHT},
+      new SpriteDetails[]{
+          SpriteDetails.DRAGON_HEAD_LEFT_HIT,
+          SpriteDetails.DRAGON_HEAD_RIGHT_HIT},
       0.5f),
 
   DRAGON_BODY(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.DRAGON_BODY},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.DRAGON_BODY_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.DRAGON_BODY},
+      new SpriteDetails[]{
+          SpriteDetails.DRAGON_BODY_HIT},
       0.5f),
 
   // baby dragon
   BABY_DRAGON_HEAD(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BABY_DRAGON_HEAD_LEFT,
-          GameSpriteIdentifier.BABY_DRAGON_HEAD_RIGHT},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BABY_DRAGON_HEAD_LEFT_HIT,
-          GameSpriteIdentifier.BABY_DRAGON_HEAD_RIGHT_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.BABY_DRAGON_HEAD_LEFT,
+          SpriteDetails.BABY_DRAGON_HEAD_RIGHT},
+      new SpriteDetails[]{
+          SpriteDetails.BABY_DRAGON_HEAD_LEFT_HIT,
+          SpriteDetails.BABY_DRAGON_HEAD_RIGHT_HIT},
       0.5f),
 
   BABY_DRAGON_BODY(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BABY_DRAGON_BODY},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BABY_DRAGON_BODY_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.BABY_DRAGON_BODY},
+      new SpriteDetails[]{
+          SpriteDetails.BABY_DRAGON_BODY_HIT},
       0.5f),
 
   // skull
   SKULL(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.SKULL},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.SKULL_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.SKULL},
+      new SpriteDetails[]{
+          SpriteDetails.SKULL_HIT},
       0f),
 
   // droid
   DROID(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.DROID},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.DROID_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.DROID},
+      new SpriteDetails[]{
+          SpriteDetails.DROID_HIT},
       0f),
 
   // big flapping mothership alien
   INSECT_MOTHERSHIP(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.MOTHER_BUZZER_WINGS_DOWN,
-          GameSpriteIdentifier.MOTHER_BUZZER_WINGS_UP},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.MOTHER_BUZZER_WINGS_DOWN_HIT,
-          GameSpriteIdentifier.MOTHER_BUZZER_WINGS_UP_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.MOTHER_BUZZER_WINGS_DOWN,
+          SpriteDetails.MOTHER_BUZZER_WINGS_UP},
+      new SpriteDetails[]{
+          SpriteDetails.MOTHER_BUZZER_WINGS_DOWN_HIT,
+          SpriteDetails.MOTHER_BUZZER_WINGS_UP_HIT},
       0.5f),
 
   // flying insects
   INSECT(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.INSECT_WINGS_UP,
-          GameSpriteIdentifier.INSECT_WINGS_DOWN},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.INSECT_WINGS_UP,
-          GameSpriteIdentifier.INSECT_WINGS_DOWN},
+      new SpriteDetails[]{
+          SpriteDetails.INSECT_WINGS_UP,
+          SpriteDetails.INSECT_WINGS_DOWN},
+      new SpriteDetails[]{
+          SpriteDetails.INSECT_WINGS_UP,
+          SpriteDetails.INSECT_WINGS_DOWN},
       0.5f),
 
   // gobby alien
   GOBBY(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.GOBBY_LEFT,
-          GameSpriteIdentifier.GOBBY_RIGHT},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.GOBBY_LEFT_HIT,
-          GameSpriteIdentifier.GOBBY_RIGHT_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.GOBBY_LEFT,
+          SpriteDetails.GOBBY_RIGHT},
+      new SpriteDetails[]{
+          SpriteDetails.GOBBY_LEFT_HIT,
+          SpriteDetails.GOBBY_RIGHT_HIT},
       0.5f),
 
   // flapping book
   BOOK(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BOOK_FLAT,
-          GameSpriteIdentifier.BOOK_BEND,
-          GameSpriteIdentifier.BOOK_CLOSED,
-          GameSpriteIdentifier.BOOK_BEND},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BOOK_FLAT_HIT,
-          GameSpriteIdentifier.BOOK_BEND_HIT,
-          GameSpriteIdentifier.BOOK_CLOSED_HIT,
-          GameSpriteIdentifier.BOOK_BEND_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.BOOK_FLAT,
+          SpriteDetails.BOOK_BEND,
+          SpriteDetails.BOOK_CLOSED,
+          SpriteDetails.BOOK_BEND},
+      new SpriteDetails[]{
+          SpriteDetails.BOOK_FLAT_HIT,
+          SpriteDetails.BOOK_BEND_HIT,
+          SpriteDetails.BOOK_CLOSED_HIT,
+          SpriteDetails.BOOK_BEND_HIT},
       0.2f),
 
   // big blobby alien
   ZOGG(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.ZOGG_UP,
-          GameSpriteIdentifier.ZOGG_DOWN},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.ZOGG_UP_HIT,
-          GameSpriteIdentifier.ZOGG_DOWN_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.ZOGG_UP,
+          SpriteDetails.ZOGG_DOWN},
+      new SpriteDetails[]{
+          SpriteDetails.ZOGG_UP_HIT,
+          SpriteDetails.ZOGG_DOWN_HIT},
       0.5f),
 
   // bomb
   BOMB(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BOMB_01,
-          GameSpriteIdentifier.BOMB_02,
-          GameSpriteIdentifier.BOMB_03},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BOMB_01_HIT,
-          GameSpriteIdentifier.BOMB_02_HIT,
-          GameSpriteIdentifier.BOMB_03_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.BOMB_01,
+          SpriteDetails.BOMB_02,
+          SpriteDetails.BOMB_03},
+      new SpriteDetails[]{
+          SpriteDetails.BOMB_01_HIT,
+          SpriteDetails.BOMB_02_HIT,
+          SpriteDetails.BOMB_03_HIT},
       0.5f),
 
   // circuit board
   CIRCUIT(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.CIRCUIT_LEFT,
-          GameSpriteIdentifier.CIRCUIT_RIGHT},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.CIRCUIT_LEFT_HIT,
-          GameSpriteIdentifier.CIRCUIT_RIGHT_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.CIRCUIT_LEFT,
+          SpriteDetails.CIRCUIT_RIGHT},
+      new SpriteDetails[]{
+          SpriteDetails.CIRCUIT_LEFT_HIT,
+          SpriteDetails.CIRCUIT_RIGHT_HIT},
       0.5f),
 
   // flying fire bat
   BATTY(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BATTY_FLAP_DOWN,
-          GameSpriteIdentifier.BATTY_FLAP_UP},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BATTY_FLAP_DOWN_HIT,
-          GameSpriteIdentifier.BATTY_FLAP_UP_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.BATTY_FLAP_DOWN,
+          SpriteDetails.BATTY_FLAP_UP},
+      new SpriteDetails[]{
+          SpriteDetails.BATTY_FLAP_DOWN_HIT,
+          SpriteDetails.BATTY_FLAP_UP_HIT},
       0.2f),
 
   // circuit board
   CLOUD(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.CLOUD},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.CLOUD_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.CLOUD},
+      new SpriteDetails[]{
+          SpriteDetails.CLOUD_HIT},
       0f,
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.CLOUD_EXPLODE_01,
-          GameSpriteIdentifier.CLOUD_EXPLODE_02,
-          GameSpriteIdentifier.CLOUD_EXPLODE_03,
-          GameSpriteIdentifier.CLOUD_EXPLODE_04,
-          GameSpriteIdentifier.CLOUD_EXPLODE_05},
+      new SpriteDetails[]{
+          SpriteDetails.CLOUD_EXPLODE_01,
+          SpriteDetails.CLOUD_EXPLODE_02,
+          SpriteDetails.CLOUD_EXPLODE_03,
+          SpriteDetails.CLOUD_EXPLODE_04,
+          SpriteDetails.CLOUD_EXPLODE_05},
       0.075f),
 
   // green bouncy alien
   BOUNCER(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BOUNCER_IN,
-          GameSpriteIdentifier.BOUNCER_OUT},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BOUNCER_IN_HIT,
-          GameSpriteIdentifier.BOUNCER_OUT_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.BOUNCER_IN,
+          SpriteDetails.BOUNCER_OUT},
+      new SpriteDetails[]{
+          SpriteDetails.BOUNCER_IN_HIT,
+          SpriteDetails.BOUNCER_OUT_HIT},
       0.2f),
 
   // alien with droopy tendrils
   DROOPY(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.DROOPY_UP,
-          GameSpriteIdentifier.DROOPY_DOWN},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.DROOPY_UP_HIT,
-          GameSpriteIdentifier.DROOPY_DOWN_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.DROOPY_UP,
+          SpriteDetails.DROOPY_DOWN},
+      new SpriteDetails[]{
+          SpriteDetails.DROOPY_UP_HIT,
+          SpriteDetails.DROOPY_DOWN_HIT},
       0.2f),
 
   // evil yellow cat
 //    BAD_CAT(
-//            new ISpriteIdentifier[]{
-//                    GameSpriteIdentifier.BAD_CAT},
-//            new ISpriteIdentifier[]{
-//                    GameSpriteIdentifier.BAD_CAT_HIT},
+//            new SpriteDetails[]{
+//                    SpriteDetails.BAD_CAT},
+//            new SpriteDetails[]{
+//                    SpriteDetails.BAD_CAT_HIT},
 //            0f),
   BAD_CAT(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BAD_CAT_SQUEEZE,
-          GameSpriteIdentifier.BAD_CAT_SQUEEZE_WIDE,
-          GameSpriteIdentifier.BAD_CAT_SQUEEZE,
-          GameSpriteIdentifier.BAD_CAT_SQUEEZE_TALL},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BAD_CAT_SQUEEZE_HIT,
-          GameSpriteIdentifier.BAD_CAT_SQUEEZE_WIDE_HIT,
-          GameSpriteIdentifier.BAD_CAT_SQUEEZE_HIT,
-          GameSpriteIdentifier.BAD_CAT_SQUEEZE_TALL_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.BAD_CAT_SQUEEZE,
+          SpriteDetails.BAD_CAT_SQUEEZE_WIDE,
+          SpriteDetails.BAD_CAT_SQUEEZE,
+          SpriteDetails.BAD_CAT_SQUEEZE_TALL},
+      new SpriteDetails[]{
+          SpriteDetails.BAD_CAT_SQUEEZE_HIT,
+          SpriteDetails.BAD_CAT_SQUEEZE_WIDE_HIT,
+          SpriteDetails.BAD_CAT_SQUEEZE_HIT,
+          SpriteDetails.BAD_CAT_SQUEEZE_TALL_HIT},
       0.25f),
 
   SMOKEY(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.SMOKEY_FLAME_NONE,
-          GameSpriteIdentifier.SMOKEY_FLAME_SMALL,
-          GameSpriteIdentifier.SMOKEY_FLAME_BIG,
-          GameSpriteIdentifier.SMOKEY_FLAME_SMALL},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.SMOKEY_FLAME_NONE_HIT,
-          GameSpriteIdentifier.SMOKEY_FLAME_SMALL_HIT,
-          GameSpriteIdentifier.SMOKEY_FLAME_BIG_HIT,
-          GameSpriteIdentifier.SMOKEY_FLAME_SMALL_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.SMOKEY_FLAME_NONE,
+          SpriteDetails.SMOKEY_FLAME_SMALL,
+          SpriteDetails.SMOKEY_FLAME_BIG,
+          SpriteDetails.SMOKEY_FLAME_SMALL},
+      new SpriteDetails[]{
+          SpriteDetails.SMOKEY_FLAME_NONE_HIT,
+          SpriteDetails.SMOKEY_FLAME_SMALL_HIT,
+          SpriteDetails.SMOKEY_FLAME_BIG_HIT,
+          SpriteDetails.SMOKEY_FLAME_SMALL_HIT},
       0.2f),
 
   TELLY(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.TELLY_FUZZ_ONE,
-          GameSpriteIdentifier.TELLY_FUZZ_TWO},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.TELLY_FUZZ_ONE_HIT,
-          GameSpriteIdentifier.TELLY_FUZZ_TWO_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.TELLY_FUZZ_ONE,
+          SpriteDetails.TELLY_FUZZ_TWO},
+      new SpriteDetails[]{
+          SpriteDetails.TELLY_FUZZ_ONE_HIT,
+          SpriteDetails.TELLY_FUZZ_TWO_HIT},
       0.3f),
 
   HELMET(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.HELMET},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.HELMET_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.HELMET},
+      new SpriteDetails[]{
+          SpriteDetails.HELMET_HIT},
       0f),
 
   EGG(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.EGG_CRACK_01,
-          GameSpriteIdentifier.EGG_CRACK_02,
-          GameSpriteIdentifier.EGG_CRACK_03,
-          GameSpriteIdentifier.EGG_CRACK_02,
-          GameSpriteIdentifier.EGG_CRACK_03,
-          GameSpriteIdentifier.EGG_CRACK_02,
-          GameSpriteIdentifier.EGG_CRACK_03,
-          GameSpriteIdentifier.EGG_CRACK_02,
-          GameSpriteIdentifier.EGG_CRACK_03},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.EGG_CRACK_01_HIT,
-          GameSpriteIdentifier.EGG_CRACK_02_HIT,
-          GameSpriteIdentifier.EGG_CRACK_03_HIT,
-          GameSpriteIdentifier.EGG_CRACK_02_HIT,
-          GameSpriteIdentifier.EGG_CRACK_03_HIT,
-          GameSpriteIdentifier.EGG_CRACK_02_HIT,
-          GameSpriteIdentifier.EGG_CRACK_03_HIT,
-          GameSpriteIdentifier.EGG_CRACK_02_HIT,
-          GameSpriteIdentifier.EGG_CRACK_03_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.EGG_CRACK_01,
+          SpriteDetails.EGG_CRACK_02,
+          SpriteDetails.EGG_CRACK_03,
+          SpriteDetails.EGG_CRACK_02,
+          SpriteDetails.EGG_CRACK_03,
+          SpriteDetails.EGG_CRACK_02,
+          SpriteDetails.EGG_CRACK_03,
+          SpriteDetails.EGG_CRACK_02,
+          SpriteDetails.EGG_CRACK_03},
+      new SpriteDetails[]{
+          SpriteDetails.EGG_CRACK_01_HIT,
+          SpriteDetails.EGG_CRACK_02_HIT,
+          SpriteDetails.EGG_CRACK_03_HIT,
+          SpriteDetails.EGG_CRACK_02_HIT,
+          SpriteDetails.EGG_CRACK_03_HIT,
+          SpriteDetails.EGG_CRACK_02_HIT,
+          SpriteDetails.EGG_CRACK_03_HIT,
+          SpriteDetails.EGG_CRACK_02_HIT,
+          SpriteDetails.EGG_CRACK_03_HIT},
       0.25f,
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.EGG_CRACK_04,
-          GameSpriteIdentifier.EGG_CRACK_05,
-          GameSpriteIdentifier.EGG_CRACK_06,
-          GameSpriteIdentifier.EGG_CRACK_07},
+      new SpriteDetails[]{
+          SpriteDetails.EGG_CRACK_04,
+          SpriteDetails.EGG_CRACK_05,
+          SpriteDetails.EGG_CRACK_06,
+          SpriteDetails.EGG_CRACK_07},
       0.075f),
 
   BARRIER(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BARRIER_01,
-          GameSpriteIdentifier.BARRIER_02,
-          GameSpriteIdentifier.BARRIER_03},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.BARRIER_01,
-          GameSpriteIdentifier.BARRIER_02,
-          GameSpriteIdentifier.BARRIER_03},
+      new SpriteDetails[]{
+          SpriteDetails.BARRIER_01,
+          SpriteDetails.BARRIER_02,
+          SpriteDetails.BARRIER_03},
+      new SpriteDetails[]{
+          SpriteDetails.BARRIER_01,
+          SpriteDetails.BARRIER_02,
+          SpriteDetails.BARRIER_03},
       0.75f),
 
   SPACE_STATION(
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.SPACE_STATION},
-      new ISpriteIdentifier[]{
-          GameSpriteIdentifier.SPACE_STATION_HIT},
+      new SpriteDetails[]{
+          SpriteDetails.SPACE_STATION},
+      new SpriteDetails[]{
+          SpriteDetails.SPACE_STATION_HIT},
       0f);
 
   private static final float DEFAULT_EXPLOSION_FRAME_DURATION = 0.075f;
 
   // alien animation frames
-  private final ISpriteIdentifier[] animationFrames;
+  private final SpriteDetails[] animationFrames;
 
   // alien animation frames when hit - to be in sync with normal animation frames
-  private final ISpriteIdentifier[] hitAnimationFrames;
+  private final SpriteDetails[] hitAnimationFrames;
 
   // time between frame transitions
   private final float frameDuration;
 
   // alien animation frames when exploding
-  private final ISpriteIdentifier[] explosionAnimationFrames;
+  private final SpriteDetails[] explosionAnimationFrames;
   private final float explosionFrameDuration;
 
   AlienCharacter(
-      final ISpriteIdentifier[] animationFrames,
-      final ISpriteIdentifier[] hitAnimationFrames,
+      final SpriteDetails[] animationFrames,
+      final SpriteDetails[] hitAnimationFrames,
       final float frameDuration) {
     this(
         animationFrames,
         hitAnimationFrames,
         frameDuration,
-        new ISpriteIdentifier[]{
-            GameSpriteIdentifier.EXPLODE_BIG_01,
-            GameSpriteIdentifier.EXPLODE_BIG_02,
-            GameSpriteIdentifier.EXPLODE_BIG_03,
-            GameSpriteIdentifier.EXPLODE_BIG_04,
-            GameSpriteIdentifier.EXPLODE_BIG_05},
+        new SpriteDetails[]{
+            SpriteDetails.EXPLODE_BIG_01,
+            SpriteDetails.EXPLODE_BIG_02,
+            SpriteDetails.EXPLODE_BIG_03,
+            SpriteDetails.EXPLODE_BIG_04,
+            SpriteDetails.EXPLODE_BIG_05},
         DEFAULT_EXPLOSION_FRAME_DURATION);
   }
 
   AlienCharacter(
-      final ISpriteIdentifier[] animationFrames,
-      final ISpriteIdentifier[] hitAnimationFrames,
+      final SpriteDetails[] animationFrames,
+      final SpriteDetails[] hitAnimationFrames,
       final float frameDuration,
-      final ISpriteIdentifier[] explosionAnimationFrames,
+      final SpriteDetails[] explosionAnimationFrames,
       final float explosionFrameDuration) {
     this.animationFrames = animationFrames;
     this.hitAnimationFrames = hitAnimationFrames;

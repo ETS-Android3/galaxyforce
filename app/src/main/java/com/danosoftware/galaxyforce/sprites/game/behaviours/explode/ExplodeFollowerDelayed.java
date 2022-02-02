@@ -6,7 +6,7 @@ import com.danosoftware.galaxyforce.services.vibration.VibrateTime;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlienFollower;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.view.Animation;
 import com.danosoftware.galaxyforce.waves.AlienCharacter;
 
@@ -28,7 +28,7 @@ public class ExplodeFollowerDelayed implements ExplodeBehaviour {
     // reference to vibrator
     private final VibrationService vibrator;
 
-    private ISpriteIdentifier spriteToExplode;
+    private SpriteDetails spriteToExplode;
     private boolean startedExplosion;
 
     // delayed time when explosion should start
@@ -66,11 +66,11 @@ public class ExplodeFollowerDelayed implements ExplodeBehaviour {
         totalTimeElapsed = 0f;
         timeSinceExplosionStarted = 0f;
         startedExplosion = false;
-        spriteToExplode = alien.spriteId();
+        spriteToExplode = alien.spriteDetails();
     }
 
     @Override
-    public ISpriteIdentifier getExplosion(float deltaTime) {
+    public SpriteDetails getExplosion(float deltaTime) {
         totalTimeElapsed += deltaTime;
 
         // the explosion will only start once time has been exceeded

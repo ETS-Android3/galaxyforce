@@ -3,8 +3,7 @@ package com.danosoftware.galaxyforce.buttons.sprite_text_button;
 import com.danosoftware.galaxyforce.models.screens.level.SelectLevelModel;
 import com.danosoftware.galaxyforce.sprites.buttons.ButtonSprite;
 import com.danosoftware.galaxyforce.sprites.buttons.IButtonSprite;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
-import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.utilities.Rectangle;
 
@@ -14,10 +13,10 @@ import com.danosoftware.galaxyforce.utilities.Rectangle;
 public class SelectLevel implements SpriteTextButton {
 
   // possible button sprites
-  private static final ISpriteIdentifier levelButton = MenuSpriteIdentifier.LEVEL_FRAME;
-  private static final ISpriteIdentifier levelButtonPressed = MenuSpriteIdentifier.LEVEL_FRAME_PRESSED;
-  private static final ISpriteIdentifier lockedButton = MenuSpriteIdentifier.LEVEL_FRAME_LOCKED;
-  private static final ISpriteIdentifier lockedButtonPressed = MenuSpriteIdentifier.LEVEL_FRAME_LOCKED_PRESSED;
+  private static final SpriteDetails levelButton = SpriteDetails.LEVEL_FRAME;
+  private static final SpriteDetails levelButtonPressed = SpriteDetails.LEVEL_FRAME_PRESSED;
+  private static final SpriteDetails lockedButton = SpriteDetails.LEVEL_FRAME_LOCKED;
+  private static final SpriteDetails lockedButtonPressed = SpriteDetails.LEVEL_FRAME_LOCKED_PRESSED;
   // reference to button's level number
   private final static int NO_LEVEL = 0;
   // reference to Text representing level number
@@ -32,8 +31,8 @@ public class SelectLevel implements SpriteTextButton {
   // lock status of this button
   private final LockStatus lockStatus;
   // sprites to be used for when button is up (not pressed) or down (pressed)
-  private final ISpriteIdentifier spriteButtonUp;
-  private final ISpriteIdentifier spriteButtonDown;
+  private final SpriteDetails spriteButtonUp;
+  private final SpriteDetails spriteButtonDown;
 
   public SelectLevel(SelectLevelModel model, int xPos, int yPos, int levelInt,
       LockStatus lockStatus) {

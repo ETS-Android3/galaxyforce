@@ -3,7 +3,6 @@ package com.danosoftware.galaxyforce.models.screens.level;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.billing.BillingObserver;
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.billing.PurchaseState;
@@ -25,9 +24,8 @@ import com.danosoftware.galaxyforce.services.savedgame.HighestLevelChangeObserve
 import com.danosoftware.galaxyforce.services.savedgame.SavedGame;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
-import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -209,8 +207,8 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
           xPosition + 100 + (column * 170),
           100 + (row * 170),
           zone,
-          MenuSpriteIdentifier.PREVIOUS_LEVEL,
-          MenuSpriteIdentifier.PREVIOUS_LEVEL_PRESSED);
+          SpriteDetails.PREVIOUS_LEVEL,
+          SpriteDetails.PREVIOUS_LEVEL_PRESSED);
       controller.addTouchController(new DetectButtonTouch(prevButton));
       buttons.add(prevButton);
     }
@@ -224,8 +222,8 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
           xPosition + 100 + (column * 170),
           100 + (row * 170),
           zone,
-          MenuSpriteIdentifier.NEXT_LEVEL,
-          MenuSpriteIdentifier.NEXT_LEVEL_PRESSED);
+          SpriteDetails.NEXT_LEVEL,
+          SpriteDetails.NEXT_LEVEL_PRESSED);
       controller.addTouchController(new DetectButtonTouch(nextButton));
       buttons.add(nextButton);
     }

@@ -1,7 +1,6 @@
 package com.danosoftware.galaxyforce.sprites.game.behaviours.fire;
 
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
-
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Set;

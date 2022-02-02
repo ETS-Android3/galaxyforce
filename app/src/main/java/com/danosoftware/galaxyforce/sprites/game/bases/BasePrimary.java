@@ -8,9 +8,9 @@ import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.DE
 import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.EXPLODING;
 import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.LEFT;
 import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.RIGHT;
-import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.BASE;
-import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.BASE_LEFT;
-import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.BASE_RIGHT;
+import static com.danosoftware.galaxyforce.sprites.properties.SpriteDetails.BASE;
+import static com.danosoftware.galaxyforce.sprites.properties.SpriteDetails.BASE_LEFT;
+import static com.danosoftware.galaxyforce.sprites.properties.SpriteDetails.BASE_RIGHT;
 
 import android.util.Log;
 import com.danosoftware.galaxyforce.enumerations.BaseMissileType;
@@ -33,7 +33,7 @@ import com.danosoftware.galaxyforce.sprites.game.bases.explode.IBaseMultiExplode
 import com.danosoftware.galaxyforce.sprites.game.factories.BaseMissileFactory;
 import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
-import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.utilities.MoveBaseHelper;
 import com.danosoftware.galaxyforce.view.Animation;
 import java.util.ArrayList;
@@ -127,42 +127,42 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
             final SoundPlayerService sounds,
             final VibrationService vibrator) {
 
-        super(BASE, SCREEN_MID_X, SCREEN_BOTTOM);
-        this.state = ACTIVE;
-        this.helpers = new EnumMap<>(HelperSide.class);
-        this.activeHelpers = new EnumMap<>(HelperSide.class);
-        this.allSprites = buildAllSprites();
-        this.activeBases = buildActiveBases();
-        this.lean = BaseLean.NONE;
-        this.moveHelper = new MoveBaseHelper(this);
-        this.backgroundFlash = new BackgroundFlash();
+      super(BASE, SCREEN_MID_X, SCREEN_BOTTOM);
+      this.state = ACTIVE;
+      this.helpers = new EnumMap<>(HelperSide.class);
+      this.activeHelpers = new EnumMap<>(HelperSide.class);
+      this.allSprites = buildAllSprites();
+      this.activeBases = buildActiveBases();
+      this.lean = BaseLean.NONE;
+      this.moveHelper = new MoveBaseHelper(this);
+      this.backgroundFlash = new BackgroundFlash();
 
-        this.explosion = new BaseMultiExploder(
-                this,
-                sounds,
-                vibrator,
-                new Animation(
-                        0.05f,
-                        GameSpriteIdentifier.BASE_EXPLODE_01,
-                        GameSpriteIdentifier.BASE_EXPLODE_02,
-                        GameSpriteIdentifier.BASE_EXPLODE_03,
-                        GameSpriteIdentifier.BASE_EXPLODE_04,
-                        GameSpriteIdentifier.BASE_EXPLODE_05,
-                        GameSpriteIdentifier.BASE_EXPLODE_06,
-                        GameSpriteIdentifier.BASE_EXPLODE_07,
-                        GameSpriteIdentifier.BASE_EXPLODE_08,
-                        GameSpriteIdentifier.BASE_EXPLODE_09,
-                        GameSpriteIdentifier.BASE_EXPLODE_10,
-                        GameSpriteIdentifier.BASE_EXPLODE_11));
-        this.model = model;
-        this.sounds = sounds;
-        this.vibrator = vibrator;
+      this.explosion = new BaseMultiExploder(
+          this,
+          sounds,
+          vibrator,
+          new Animation(
+              0.05f,
+              SpriteDetails.BASE_EXPLODE_01,
+              SpriteDetails.BASE_EXPLODE_02,
+              SpriteDetails.BASE_EXPLODE_03,
+              SpriteDetails.BASE_EXPLODE_04,
+              SpriteDetails.BASE_EXPLODE_05,
+              SpriteDetails.BASE_EXPLODE_06,
+              SpriteDetails.BASE_EXPLODE_07,
+              SpriteDetails.BASE_EXPLODE_08,
+              SpriteDetails.BASE_EXPLODE_09,
+              SpriteDetails.BASE_EXPLODE_10,
+              SpriteDetails.BASE_EXPLODE_11));
+      this.model = model;
+      this.sounds = sounds;
+      this.vibrator = vibrator;
 
-        // set-up missile behaviours
-        this.baseMissileType = DEFAULT_MISSILE_TYPE;
-        this.baseMissileDelay = DEFAULT_BASE_MISSILE_DELAY;
-        timeUntilDefaultMissile = 0f;
-        timeSinceBaseLastFired = 0f;
+      // set-up missile behaviours
+      this.baseMissileType = DEFAULT_MISSILE_TYPE;
+      this.baseMissileDelay = DEFAULT_BASE_MISSILE_DELAY;
+      timeUntilDefaultMissile = 0f;
+      timeSinceBaseLastFired = 0f;
     }
 
     /**

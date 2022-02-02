@@ -1,23 +1,23 @@
 package com.danosoftware.galaxyforce.view;
 
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 
 public class Animation {
 
   public static final int ANIMATION_LOOPING = 0;
   public static final int ANIMATION_NONLOOPING = 1;
 
-  private final ISpriteIdentifier[] keyFrames;
+  private final SpriteDetails[] keyFrames;
   private final float frameDuration;
   private boolean animationComplete;
 
-  public Animation(float frameDuration, ISpriteIdentifier... keyFrames) {
+  public Animation(float frameDuration, SpriteDetails... keyFrames) {
     this.frameDuration = frameDuration;
     this.keyFrames = keyFrames;
     this.animationComplete = false;
   }
 
-  public ISpriteIdentifier getKeyFrame(float stateTime, int mode) {
+  public SpriteDetails getKeyFrame(float stateTime, int mode) {
     int frameNumber;
     if (frameDuration == 0) {
       /*

@@ -1,18 +1,18 @@
 package com.danosoftware.galaxyforce.sprites.game.bases;
 
 import com.danosoftware.galaxyforce.sprites.common.AbstractMovingSprite;
-import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.view.Animation;
 
 public class BaseShieldHelper extends AbstractMovingSprite implements IBaseShield {
 
-    // shield animation that pulses every second
-    private static final Animation SHIELD_PULSE = new Animation(
-        0.25f,
-        GameSpriteIdentifier.HELPER_SHIELD_ONE,
-        GameSpriteIdentifier.HELPER_SHIELD_TWO,
-        GameSpriteIdentifier.HELPER_SHIELD_THREE,
-        GameSpriteIdentifier.HELPER_SHIELD_FOUR);
+  // shield animation that pulses every second
+  private static final Animation SHIELD_PULSE = new Animation(
+      0.25f,
+      SpriteDetails.HELPER_SHIELD_ONE,
+      SpriteDetails.HELPER_SHIELD_TWO,
+      SpriteDetails.HELPER_SHIELD_THREE,
+      SpriteDetails.HELPER_SHIELD_FOUR);
 
   // state time used to help select the current animation frame
   private float stateTime;

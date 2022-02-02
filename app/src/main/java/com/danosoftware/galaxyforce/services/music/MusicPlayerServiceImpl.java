@@ -6,9 +6,7 @@ import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
-
 import java.io.IOException;
 import java.util.EnumMap;
 import java.util.Map;

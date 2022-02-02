@@ -1,7 +1,7 @@
 package com.danosoftware.galaxyforce.sprites.buttons;
 
 import com.danosoftware.galaxyforce.sprites.common.AbstractSprite;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.utilities.Rectangle;
 
 public class ButtonSprite extends AbstractSprite implements IButtonSprite {
@@ -15,22 +15,22 @@ public class ButtonSprite extends AbstractSprite implements IButtonSprite {
     // are bounds cached?
     private boolean boundsCached;
 
-    public ButtonSprite(
-            ISpriteIdentifier spriteId,
-            int x,
-            int y) {
-        this(spriteId, x, y, 0);
-    }
+  public ButtonSprite(
+      SpriteDetails spriteId,
+      int x,
+      int y) {
+    this(spriteId, x, y, 0);
+  }
 
-    public ButtonSprite(
-            ISpriteIdentifier spriteId,
-            int x,
-            int y,
-            int buffer) {
-        super(spriteId, x, y);
-        this.buffer = buffer;
-        this.boundsCached = false;
-    }
+  public ButtonSprite(
+      SpriteDetails spriteId,
+      int x,
+      int y,
+      int buffer) {
+    super(spriteId, x, y);
+    this.buffer = buffer;
+    this.boundsCached = false;
+  }
 
     @Override
     public Rectangle getBounds() {
@@ -44,19 +44,19 @@ public class ButtonSprite extends AbstractSprite implements IButtonSprite {
     // will try to create bounds from sprite properties (if available) and cache result.
     // otherwise zero width/height bounds are returned.
     private Rectangle bounds() {
-        if (spriteId().getProperties() != null) {
-            bounds = new Rectangle(
-                x - (width() / 2f) - buffer,
-                y - (height() / 2f) - buffer,
-                width() + (buffer * 2),
-                height() + (buffer * 2));
-            boundsCached = true;
-            return bounds;
-        }
-        return new Rectangle(
-                x(),
-                y(),
-                0,
-                0);
+      if (spriteDetails().getSpriteDimensions() != null) {
+        bounds = new Rectangle(
+            x - (width() / 2f) - buffer,
+            y - (height() / 2f) - buffer,
+            width() + (buffer * 2),
+            height() + (buffer * 2));
+        boundsCached = true;
+        return bounds;
+      }
+      return new Rectangle(
+          x(),
+          y(),
+          0,
+          0);
     }
 }

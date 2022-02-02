@@ -15,7 +15,7 @@ import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.common.RotatingSprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
 import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
-import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import java.util.ArrayList;
@@ -62,13 +62,13 @@ public class GameCompleteModelImpl implements Model, TouchScreenModel {
   private void addSprites() {
     for (int column = 0; column < 3; column++) {
       RotatingSprite base = new RotatingSprite(100 + (column * 170), 580,
-          MenuSpriteIdentifier.BASE_LARGE);
+          SpriteDetails.BASE_LARGE);
       rotatedSprites.add(base);
       allSprites.add(base);
     }
 
     allSprites
-        .add(new SplashSprite(GameConstants.SCREEN_MID_X, 817, MenuSpriteIdentifier.GALAXY_FORCE));
+        .add(new SplashSprite(GameConstants.SCREEN_MID_X, 817, SpriteDetails.GALAXY_FORCE));
 
     allText.add(
         Text.newTextRelativePositionX("GAME COMPLETED!", TextPositionX.CENTRE, 175 + (3 * 170)));

@@ -1,7 +1,7 @@
 package com.danosoftware.galaxyforce.enumerations;
 
 import com.danosoftware.galaxyforce.services.sound.SoundEffect;
-import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.view.Animation;
 
 /**
@@ -9,28 +9,28 @@ import com.danosoftware.galaxyforce.view.Animation;
  */
 public enum BaseMissileCharacter {
     MISSILE(
-            new Animation(
-                    0f,
-                    GameSpriteIdentifier.BASE_MISSILE),
-            SoundEffect.BASE_FIRE
+        new Animation(
+            0f,
+            SpriteDetails.BASE_MISSILE),
+        SoundEffect.BASE_FIRE
     ),
     BLAST(
-            new Animation(
-                    0f,
-                    GameSpriteIdentifier.BASE_MISSILE_BLAST),
-            SoundEffect.BASE_FIRE
+        new Animation(
+            0f,
+            SpriteDetails.BASE_MISSILE_BLAST),
+        SoundEffect.BASE_FIRE
     ),
     ROCKET(
-            new Animation(
-                    0f,
-                    GameSpriteIdentifier.BASE_MISSILE_ROCKET),
-            SoundEffect.BASE_FIRE
+        new Animation(
+            0f,
+            SpriteDetails.BASE_MISSILE_ROCKET),
+        SoundEffect.BASE_FIRE
     ),
     LASER(
-            new Animation(
-                    0f,
-                    GameSpriteIdentifier.BASE_MISSILE_LASER),
-            SoundEffect.BASE_FIRE
+        new Animation(
+            0f,
+            SpriteDetails.BASE_MISSILE_LASER),
+        SoundEffect.BASE_FIRE
     );
 
     private final Animation animation;

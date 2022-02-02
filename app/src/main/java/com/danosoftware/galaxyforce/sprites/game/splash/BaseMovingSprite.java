@@ -4,8 +4,7 @@ import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.services.sound.SoundEffect;
 import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.sprites.common.AbstractMovingSprite;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
-import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 
 /**
  * Splash screen base sprite that moves small way up the screen, pauses and then
@@ -31,8 +30,8 @@ public class BaseMovingSprite extends AbstractMovingSprite {
   private static final int PAUSE_BASE_Y_POS = 200;
 
   // base sprites
-  private static final ISpriteIdentifier BASE_FLAT = MenuSpriteIdentifier.BASE_LARGE;
-  private static final ISpriteIdentifier BASE_TILT = MenuSpriteIdentifier.BASE_LARGE_TILT;
+  private static final SpriteDetails BASE_FLAT = SpriteDetails.BASE_LARGE;
+  private static final SpriteDetails BASE_TILT = SpriteDetails.BASE_LARGE_TILT;
 
   private boolean launchSoundPlaying;
 
