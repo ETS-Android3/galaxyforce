@@ -29,7 +29,7 @@ public abstract class AbstractBaseMissile extends AbstractCollidingSprite implem
               animation.getKeyFrame(
                   0,
                   Animation.ANIMATION_LOOPING))
-              .getSpriteDimensions()
+              .getDimensions()
               .getHeight() / 2f);
       this.isDestroyed = false;
       this.animation = animation;

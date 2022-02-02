@@ -96,7 +96,7 @@ public class SelectLevelScreen extends AbstractScreen {
     for (ISprite sprite : levelSprites) {
       SpriteDetails spriteDetails = sprite.spriteDetails();
       TextureRegion textureRegion = spriteDetails.getTextureRegion();
-      SpriteDimensions dimensions = spriteDetails.getSpriteDimensions();
+      SpriteDimensions dimensions = spriteDetails.getDimensions();
 
       if (textureRegion != null) {
         batcher.drawSprite(
@@ -112,7 +112,7 @@ public class SelectLevelScreen extends AbstractScreen {
     for (ISprite sprite : sprites) {
       SpriteDetails spriteDetails = sprite.spriteDetails();
       TextureRegion textureRegion = spriteDetails.getTextureRegion();
-      SpriteDimensions dimensions = spriteDetails.getSpriteDimensions();
+      SpriteDimensions dimensions = spriteDetails.getDimensions();
 
       if (textureRegion != null) {
         batcher.drawSprite(

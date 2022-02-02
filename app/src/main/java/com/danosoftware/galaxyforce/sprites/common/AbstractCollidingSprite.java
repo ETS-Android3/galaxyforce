@@ -72,7 +72,7 @@ public abstract class AbstractCollidingSprite extends AbstractMovingSprite imple
     // will try to create bounds from sprite properties (if available) and cache result
     // otherwise zero width/height bounds are returned
     private Rectangle bounds() {
-      if (spriteDetails().getSpriteDimensions() != null) {
+      if (spriteDetails().getDimensions() != null) {
         cacheBounds();
         return bounds;
       }
@@ -81,8 +81,8 @@ public abstract class AbstractCollidingSprite extends AbstractMovingSprite imple
 
     // cache dimensions and bounds
     private void cacheBounds() {
-      final int boundsReduction = spriteDetails().getSpriteDimensions() != null
-          ? spriteDetails().getSpriteDimensions().getBoundsReduction()
+      final int boundsReduction = spriteDetails().getDimensions() != null
+          ? spriteDetails().getDimensions().getBoundsReduction()
           : 0;
       final int twiceBoundsReduction = boundsReduction * 2;
 

@@ -184,8 +184,8 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
       // compute the positions of each so combined icon/text is centred.
       final String text = "GOOGLE PLAY";
       final SpriteDetails icon = SpriteDetails.GOOGLE_PLAY;
-      final int halfIconWidth = (icon.getSpriteDimensions() != null ?
-          icon.getSpriteDimensions().getWidth() / 2
+      final int halfIconWidth = (icon.getDimensions() != null ?
+          icon.getDimensions().getWidth() / 2
           : 0);
       final int fontWidth = 30;
       final int buffer = 10;

@@ -734,15 +734,15 @@ public enum SpriteDetails {
     return textureRegion;
   }
 
-  public void setTextureRegion(TextureRegion textureRegion) {
+  private void setTextureRegion(TextureRegion textureRegion) {
     this.textureRegion = textureRegion;
   }
 
-  public SpriteDimensions getSpriteDimensions() {
+  public SpriteDimensions getDimensions() {
     return spriteDimensions;
   }
 
-  public void setSpriteDimensions(SpriteDimensions spriteDimensions) {
+  private void setDimensions(SpriteDimensions spriteDimensions) {
     this.spriteDimensions = spriteDimensions;
   }
 
@@ -759,7 +759,7 @@ public enum SpriteDetails {
 
     for (SpriteDetails spriteDetails : SpriteDetails.values()) {
       spriteDetails.setTextureRegion(textureRegions.get(spriteDetails));
-      spriteDetails.setSpriteDimensions(spriteDimensions.get(spriteDetails));
+      spriteDetails.setDimensions(spriteDimensions.get(spriteDetails));
     }
   }
 }

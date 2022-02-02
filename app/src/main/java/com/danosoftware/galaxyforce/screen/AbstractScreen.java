@@ -109,7 +109,7 @@ public abstract class AbstractScreen implements IScreen {
     for (ISprite sprite : sprites) {
       SpriteDetails spriteDetails = sprite.spriteDetails();
       TextureRegion textureRegion = spriteDetails.getTextureRegion();
-      SpriteDimensions dimensions = spriteDetails.getSpriteDimensions();
+      SpriteDimensions dimensions = spriteDetails.getDimensions();
 
       if (textureRegion != null) {
         if (sprite.rotation() != 0) {

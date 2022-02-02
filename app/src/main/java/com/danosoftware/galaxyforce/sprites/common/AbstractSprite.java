@@ -104,7 +104,7 @@ public abstract class AbstractSprite implements ISprite {
 
   // cache and return width from sprite properties if available
   private int cacheWidth() {
-    SpriteDimensions dimensions = spriteDetails.getSpriteDimensions();
+    SpriteDimensions dimensions = spriteDetails.getDimensions();
     if (dimensions != null) {
       cacheDimensions(dimensions);
       return width;
@@ -114,7 +114,7 @@ public abstract class AbstractSprite implements ISprite {
 
     // cache and return height from sprite properties if available
     private int cacheHeight() {
-      SpriteDimensions dimensions = spriteDetails.getSpriteDimensions();
+      SpriteDimensions dimensions = spriteDetails.getDimensions();
       if (dimensions != null) {
         cacheDimensions(dimensions);
         return height;
@@ -124,7 +124,7 @@ public abstract class AbstractSprite implements ISprite {
 
   // cache and return half-width from sprite properties if available
   private int cacheHalfWidth() {
-    SpriteDimensions dimensions = spriteDetails.getSpriteDimensions();
+    SpriteDimensions dimensions = spriteDetails.getDimensions();
     if (dimensions != null) {
       cacheDimensions(dimensions);
       return halfWidth;
@@ -134,7 +134,7 @@ public abstract class AbstractSprite implements ISprite {
 
   // cache and return half-height from sprite properties if available
   private int cacheHalfHeight() {
-    SpriteDimensions dimensions = spriteDetails.getSpriteDimensions();
+    SpriteDimensions dimensions = spriteDetails.getDimensions();
     if (dimensions != null) {
       cacheDimensions(dimensions);
       return halfHeight;
