@@ -139,7 +139,6 @@ public class ScreenFactory {
 
       case SELECT_LEVEL:
         this.music.load(Music.MAIN_TITLE);
-        this.music.play();
         return new SelectLevelScreen(
             new SelectLevelModelImpl(game, controller, billingService, savedGame,
                 starField),
@@ -177,7 +176,6 @@ public class ScreenFactory {
 
   public IScreen newGameScreen(int startingWave) {
     this.music.load(Music.GAME_LOOP);
-    this.music.play();
     Controller controller = new ControllerImpl(input, camera);
     Model gameModel = createGameModel(controller, startingWave);
     return new Screen(

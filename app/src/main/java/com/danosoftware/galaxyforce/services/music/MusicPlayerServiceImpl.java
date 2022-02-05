@@ -1,38 +1,43 @@
 package com.danosoftware.galaxyforce.services.music;
 
+import static com.danosoftware.galaxyforce.services.music.MusicPlayerHelper.createModernMediaPlayer;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.os.Build.VERSION;
+import android.os.Build.VERSION_CODES;
+import android.util.Log;
+import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
 import java.io.IOException;
-import java.util.EnumMap;
-import java.util.Map;
 
-public class MusicPlayerServiceImpl implements MusicPlayerService, MediaPlayer.OnCompletionListener {
-
-    private final Map<Music, AssetFileDescriptor> musicFiles;
+public class MusicPlayerServiceImpl implements
+    MusicPlayerService,
+    MediaPlayer.OnPreparedListener,
+    MediaPlayer.OnCompletionListener,
+    MediaPlayer.OnErrorListener {
 
     private MediaPlayer mediaPlayer;
+
+    // is player prepared for playing (prepares asynchronously)
     private boolean isPrepared;
 
     // is music player enabled?
     private boolean musicEnabled;
 
+    // currently playing music
     private Music currentlyLoaded;
+
+    private final AssetManager assets;
 
     public MusicPlayerServiceImpl(Context context, boolean musicEnabled) {
         this.musicEnabled = musicEnabled;
-        this.musicFiles = new EnumMap<>(Music.class);
+        this.assets = context.getAssets();
         this.currentlyLoaded = null;
-
-        // load map of music to files descriptors
-        AssetManager assets = context.getAssets();
-        for (Music music : Music.values()) {
-            musicFiles.put(music, assetFileDescriptor(assets, music.getFileName()));
-        }
 
         if (context instanceof Activity) {
             Activity activity = (Activity) context;
@@ -41,6 +46,9 @@ public class MusicPlayerServiceImpl implements MusicPlayerService, MediaPlayer.O
         }
     }
 
+    /**
+     * Load music (if different from currently loaded music) and prepare asynchronously.
+     */
     @Override
     public void load(Music music) {
 
@@ -53,54 +61,67 @@ public class MusicPlayerServiceImpl implements MusicPlayerService, MediaPlayer.O
         if (this.mediaPlayer != null) {
             dispose();
         }
-        this.mediaPlayer = new MediaPlayer();
 
-        AssetFileDescriptor assetDescriptor = musicFiles.get(music);
-        try {
-            mediaPlayer.setDataSource(assetDescriptor.getFileDescriptor(), assetDescriptor.getStartOffset(), assetDescriptor.getLength());
-            mediaPlayer.setLooping(true);
-            mediaPlayer.setVolume(1f, 1f);
-            mediaPlayer.prepare();
-            isPrepared = true;
-            currentlyLoaded = music;
-            mediaPlayer.setOnCompletionListener(this);
-        } catch (Exception e) {
-            throw new GalaxyForceException("Couldn't load music for '" + music.getFileName() + "'");
+        Log.i(GameConstants.LOG_TAG, "Load Music");
+
+        // create new media player
+        this.mediaPlayer = createMediaPlayer();
+
+        // set file as music source
+        try (AssetFileDescriptor assetDescriptor = assets.openFd("music/" + music.getFileName())) {
+            mediaPlayer.setDataSource(
+                assetDescriptor.getFileDescriptor(),
+                assetDescriptor.getStartOffset(),
+                assetDescriptor.getLength());
+        } catch (IOException | IllegalArgumentException e) {
+            throw new GalaxyForceException("Couldn't load music: " + music.getFileName(), e);
         }
+
+        currentlyLoaded = music;
+        mediaPlayer.setLooping(true);
+        mediaPlayer.setVolume(1f, 1f);
+
+        isPrepared = false;
+        mediaPlayer.setOnPreparedListener(this);
+        mediaPlayer.prepareAsync();
+    }
+
+    @SuppressWarnings("deprecation")
+    public static MediaPlayer createMediaPlayer() {
+        if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
+            return createModernMediaPlayer();
+        }
+
+        // return legacy media player
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+        return mediaPlayer;
     }
 
     @Override
     public void play() {
+        // if not prepared then exit
+        // will play automatically once prepared
+        if (!isPrepared || mediaPlayer == null) {
+            return;
+        }
 
+        Log.i(GameConstants.LOG_TAG, "Play Music");
+
+        // no action if already playing or disabled
         if (mediaPlayer.isPlaying() || !musicEnabled) {
             return;
         }
 
-        try {
-            synchronized (this) {
-                if (!isPrepared) {
-                    mediaPlayer.prepare();
-                }
-                mediaPlayer.start();
-            }
-        } catch (IllegalStateException | IOException e) {
-            throw new GalaxyForceException("Unable to play music", e);
-        }
-
+        // otherwise start playing
+        mediaPlayer.start();
     }
 
     @Override
     public void pause() {
-        if (mediaPlayer.isPlaying()) {
+        Log.i(GameConstants.LOG_TAG, "Pause Music");
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
-        }
-    }
-
-    @Override
-    public void stop() {
-        mediaPlayer.stop();
-        synchronized (this) {
-            isPrepared = false;
         }
     }
 
@@ -111,23 +132,41 @@ public class MusicPlayerServiceImpl implements MusicPlayerService, MediaPlayer.O
 
     @Override
     public void dispose() {
-        if (mediaPlayer.isPlaying())
-            mediaPlayer.stop();
-        mediaPlayer.release();
-    }
+        Log.i(GameConstants.LOG_TAG, "Dispose Music");
+        isPrepared = false;
+        currentlyLoaded = null;
 
-    private AssetFileDescriptor assetFileDescriptor(AssetManager assets, String filename) {
-        try {
-            return assets.openFd("music/" + filename);
-        } catch (IOException e) {
-            throw new GalaxyForceException("Couldn't load music '" + filename + "'", e);
+        if (mediaPlayer == null) {
+            return;
         }
+
+        if (mediaPlayer.isPlaying()) {
+            mediaPlayer.stop();
+        }
+        mediaPlayer.release();
+        mediaPlayer = null;
     }
 
+    // music is now prepared - so we can play it.
+    @Override
+    public void onPrepared(MediaPlayer player) {
+        Log.i(GameConstants.LOG_TAG, "Music Prepared");
+        isPrepared = true;
+        play();
+    }
+
+    // called if media player encounters an error
+    @Override
+    public boolean onError(MediaPlayer mp, int what, int extra) {
+        Log.e(GameConstants.LOG_TAG,
+            String.format("Music exception. type: %d. code: %d", what, extra));
+        return false;
+    }
+
+    // ideally this should not be called as our music loops.
+    // may occur in exceptions and clear-up is needed.
     @Override
     public void onCompletion(MediaPlayer mp) {
-        synchronized (this) {
-            isPrepared = false;
-        }
+        dispose();
     }
 }

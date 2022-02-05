@@ -4,7 +4,8 @@ public interface MusicPlayerService {
 
     /**
      * Load new music.
-     * play() will need to be called to start playing music.
+     * <p>
+     * Will automatically play when ready.
      */
     void load(Music music);
 
@@ -19,11 +20,6 @@ public interface MusicPlayerService {
      * Pause current music.
      */
     void pause();
-
-    /**
-     * Stop current music.
-     */
-    void stop();
 
     /**
      * Enable or disable music using supplied parameter.
