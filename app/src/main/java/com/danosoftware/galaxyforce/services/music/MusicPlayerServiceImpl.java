@@ -52,8 +52,6 @@ public class MusicPlayerServiceImpl implements
     @Override
     public void load(Music music) {
 
-        Log.i(GameConstants.LOG_TAG, "Load Music");
-
         // no action if wanted music is already loaded
         if (currentlyLoaded == music) {
             return;
@@ -63,6 +61,8 @@ public class MusicPlayerServiceImpl implements
         if (this.mediaPlayer != null) {
             dispose();
         }
+
+        Log.i(GameConstants.LOG_TAG, "Load Music");
 
         // create new media player
         this.mediaPlayer = createMediaPlayer();
@@ -102,7 +102,7 @@ public class MusicPlayerServiceImpl implements
     public void play() {
         // if not prepared then exit
         // will play automatically once prepared
-        if (!isPrepared) {
+        if (!isPrepared || mediaPlayer == null) {
             return;
         }
 
@@ -120,7 +120,7 @@ public class MusicPlayerServiceImpl implements
     @Override
     public void pause() {
         Log.i(GameConstants.LOG_TAG, "Pause Music");
-        if (mediaPlayer.isPlaying()) {
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
         }
     }
@@ -134,10 +134,17 @@ public class MusicPlayerServiceImpl implements
     public void dispose() {
         Log.i(GameConstants.LOG_TAG, "Dispose Music");
         isPrepared = false;
+        currentlyLoaded = null;
+
+        if (mediaPlayer == null) {
+            return;
+        }
+
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
         }
         mediaPlayer.release();
+        mediaPlayer = null;
     }
 
     // music is now prepared - so we can play it.
