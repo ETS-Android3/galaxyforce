@@ -1,11 +1,11 @@
 package com.danosoftware.galaxyforce.services.music;
 
+import static com.danosoftware.galaxyforce.services.music.MusicPlayerHelper.createModernMediaPlayer;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
-import android.media.AudioAttributes;
-import android.media.AudioAttributes.Builder;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Build.VERSION;
@@ -18,12 +18,13 @@ import java.io.IOException;
 public class MusicPlayerServiceImpl implements
     MusicPlayerService,
     MediaPlayer.OnPreparedListener,
+    MediaPlayer.OnCompletionListener,
     MediaPlayer.OnErrorListener {
 
     private MediaPlayer mediaPlayer;
 
     // is player prepared for playing (prepares asynchronously)
-    private volatile boolean isPrepared;
+    private boolean isPrepared;
 
     // is music player enabled?
     private boolean musicEnabled;
@@ -86,32 +87,29 @@ public class MusicPlayerServiceImpl implements
     }
 
     @SuppressWarnings("deprecation")
-    private MediaPlayer createMediaPlayer() {
-        MediaPlayer mediaPlayer = new MediaPlayer();
+    public static MediaPlayer createMediaPlayer() {
         if (VERSION.SDK_INT >= VERSION_CODES.LOLLIPOP) {
-            mediaPlayer.setAudioAttributes(
-                new Builder()
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
-                    .setUsage(AudioAttributes.USAGE_GAME)
-                    .build()
-            );
-        } else {
-            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            return createModernMediaPlayer();
         }
+
+        // return legacy media player
+        MediaPlayer mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
         return mediaPlayer;
     }
 
     @Override
     public void play() {
-        Log.i(GameConstants.LOG_TAG, "Play Music");
-        // no action if already playing or disabled
-        if (mediaPlayer.isPlaying() || !musicEnabled) {
-            return;
-        }
-
         // if not prepared then exit
         // will play automatically once prepared
         if (!isPrepared) {
+            return;
+        }
+
+        Log.i(GameConstants.LOG_TAG, "Play Music");
+
+        // no action if already playing or disabled
+        if (mediaPlayer.isPlaying() || !musicEnabled) {
             return;
         }
 
@@ -135,6 +133,7 @@ public class MusicPlayerServiceImpl implements
     @Override
     public void dispose() {
         Log.i(GameConstants.LOG_TAG, "Dispose Music");
+        isPrepared = false;
         if (mediaPlayer.isPlaying()) {
             mediaPlayer.stop();
         }
@@ -155,5 +154,12 @@ public class MusicPlayerServiceImpl implements
         Log.e(GameConstants.LOG_TAG,
             String.format("Music exception. type: %d. code: %d", what, extra));
         return false;
+    }
+
+    // ideally this should not be called as our music loops.
+    // may occur in exceptions and clear-up is needed.
+    @Override
+    public void onCompletion(MediaPlayer mp) {
+        dispose();
     }
 }

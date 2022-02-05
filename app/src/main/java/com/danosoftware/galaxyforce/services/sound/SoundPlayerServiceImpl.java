@@ -1,10 +1,11 @@
 package com.danosoftware.galaxyforce.services.sound;
 
+import static com.danosoftware.galaxyforce.services.sound.SoundPlayerHelper.createModernSoundPool;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.AssetFileDescriptor;
 import android.content.res.AssetManager;
-import android.media.AudioAttributes;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.os.Build;
@@ -15,7 +16,6 @@ import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.EnumMap;
-import java.util.Map;
 
 public class SoundPlayerServiceImpl implements SoundPlayerService, SoundPool.OnLoadCompleteListener {
 
@@ -28,7 +28,7 @@ public class SoundPlayerServiceImpl implements SoundPlayerService, SoundPool.OnL
     private boolean soundEnabled;
 
     // map of all sound effects enums to sound IDs
-    private final Map<SoundEffect, Integer> effectsBank;
+    private final EnumMap<SoundEffect, Integer> effectsBank;
 
     // queue of last N stream IDs that have been played
     // allows us to stop any playing streams if user disables sound.
@@ -63,25 +63,24 @@ public class SoundPlayerServiceImpl implements SoundPlayerService, SoundPool.OnL
     @SuppressWarnings("deprecation")
     private SoundPool createSoundPool() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            return new SoundPool.Builder()
-                .setAudioAttributes(
-                    new AudioAttributes.Builder()
-                        .setUsage(AudioAttributes.USAGE_GAME)
-                        .setContentType(AudioAttributes.CONTENT_TYPE_SONIFICATION)
-                        .build())
-                .setMaxStreams(MAX_STREAMS)
-                .build();
+            return createModernSoundPool(MAX_STREAMS);
         } else {
+            // legacy sound pool
             return new SoundPool(MAX_STREAMS, AudioManager.STREAM_MUSIC, 0);
         }
     }
 
     @Override
     public void play(SoundEffect effect) {
-        if (soundEnabled && effectsBank.containsKey(effect)) {
-            int soundId = effectsBank.get(effect);
-            int streamId = soundPool.play(soundId, EFFECTS_VOLUME, EFFECTS_VOLUME, 0, 0, 1);
-            addStreamToQueue(streamId);
+        if (soundEnabled) {
+            Integer soundId = effectsBank.get(effect);
+            if (soundId != null) {
+                int streamId = soundPool.play(soundId, EFFECTS_VOLUME, EFFECTS_VOLUME, 0, 0, 1);
+                addStreamToQueue(streamId);
+            } else {
+                Log.w(GameConstants.LOG_TAG,
+                    "Sound Effect: " + effect.name() + " could not be found.");
+            }
         }
     }
 
@@ -96,8 +95,10 @@ public class SoundPlayerServiceImpl implements SoundPlayerService, SoundPool.OnL
         // otherwise, any streams that were in the middle of playing when we paused will continue.
         if (!soundEnabled) {
             while (!streams.isEmpty()) {
-                int streamId = streams.poll();
-                soundPool.stop(streamId);
+                Integer streamId = streams.poll();
+                if (streamId != null) {
+                    soundPool.stop(streamId);
+                }
             }
         }
 
@@ -115,8 +116,10 @@ public class SoundPlayerServiceImpl implements SoundPlayerService, SoundPool.OnL
         Log.i(GameConstants.LOG_TAG, "Unloading all Sound Effects");
         for (SoundEffect effect : SoundEffect.values()) {
             if (effectsBank.containsKey(effect)) {
-                int soundId = effectsBank.remove(effect);
-                soundPool.unload(soundId);
+                Integer soundId = effectsBank.remove(effect);
+                if (soundId != null) {
+                    soundPool.unload(soundId);
+                }
             }
         }
         // release sound pool

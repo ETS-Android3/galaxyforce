@@ -1,10 +1,11 @@
 package com.danosoftware.galaxyforce.services.vibration;
 
+import static com.danosoftware.galaxyforce.services.vibration.VibrationHelper.getModernVibrator;
+
 import android.content.Context;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.Vibrator;
-import android.os.VibratorManager;
 
 public class VibrationServiceImpl implements VibrationService {
 
@@ -26,9 +27,7 @@ public class VibrationServiceImpl implements VibrationService {
     @SuppressWarnings("deprecation")
     private Vibrator getVibrator(Context context) {
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.S) {
-            VibratorManager vbMgr = (VibratorManager) context
-                .getSystemService(Context.VIBRATOR_MANAGER_SERVICE);
-            return vbMgr.getDefaultVibrator();
+            return getModernVibrator(context);
         } else {
             return (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         }

@@ -3,9 +3,7 @@ package com.danosoftware.galaxyforce.services.vibration;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.os.VibrationEffect;
-import lombok.Getter;
 
-@Getter
 public enum VibrateTime {
 
     TINY(75),
@@ -25,5 +23,13 @@ public enum VibrateTime {
         } else {
             this.vibrationEffect = null;
         }
+    }
+
+    public long getTimeInMilliseconds() {
+        return timeInMilliseconds;
+    }
+
+    public VibrationEffect getVibrationEffect() {
+        return vibrationEffect;
     }
 }
