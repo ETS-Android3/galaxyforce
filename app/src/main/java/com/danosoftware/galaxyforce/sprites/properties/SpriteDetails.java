@@ -760,8 +760,18 @@ public enum SpriteDetails {
           EnumMap<SpriteDetails, TextureRegion> textureRegions,
           EnumMap<SpriteDetails, SpriteDimensions> spriteDimensions) {
 
+    // remove any previously initialised sprite details
+    for (SpriteDetails spriteDetails : SpriteDetails.values()) {
+      spriteDetails.setTextureRegion(null);
+      spriteDetails.setDimensions(null);
+    }
+
     ExecutorService executor = Executors.newSingleThreadExecutor();
 
+    // initialising is time consuming so spin-up a thread for this.
+    // it is possible that later attempts to draw sprites may occur before they
+    // are initialised.
+    // If this happens, the sprites will be skipped by the draw routines.
     Runnable runnableTask = () -> {
       for (SpriteDetails spriteDetails : SpriteDetails.values()) {
         spriteDetails.setTextureRegion(textureRegions.get(spriteDetails));

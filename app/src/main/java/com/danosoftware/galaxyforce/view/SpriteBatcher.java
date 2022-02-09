@@ -2,6 +2,7 @@ package com.danosoftware.galaxyforce.view;
 
 import android.opengl.GLES20;
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.textures.Texture;
 import com.danosoftware.galaxyforce.textures.TextureRegion;
 
@@ -207,6 +208,10 @@ public class SpriteBatcher {
   }
 
   public void endBatch() {
+    if (numSprites == 0) {
+      return;
+    }
+
     vertices.setVertices(verticesBuffer, 0, bufferIndex);
     vertices.bind();
     vertices.draw(GLES20.GL_TRIANGLES, 0, numSprites * INDICES_PER_SPRITE);
