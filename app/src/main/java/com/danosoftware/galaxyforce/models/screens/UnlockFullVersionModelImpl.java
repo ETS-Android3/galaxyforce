@@ -3,6 +3,7 @@ package com.danosoftware.galaxyforce.models.screens;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
+
 import com.android.billingclient.api.SkuDetails;
 import com.danosoftware.galaxyforce.billing.BillingObserver;
 import com.danosoftware.galaxyforce.billing.BillingService;
@@ -25,6 +26,7 @@ import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -156,7 +158,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
               TextPositionX.CENTRE,
               300 + 50));
       messages.add(
-          Text.newTextRelativePositionX(
+          Text.newUntrustedTextRelativePositionX(
               skuDetails.getPrice(),
               TextPositionX.CENTRE,
               300));

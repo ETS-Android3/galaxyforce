@@ -8,8 +8,12 @@ import com.danosoftware.galaxyforce.view.SpriteBatcher;
 public class Font {
 
   private final int glyphWidth;
+
+  // text position must be offset by half a character glyph's width.
+  // pre-calculate to save time later
+  private final float glyphHalfWidth;
   private final int glyphHeight;
-  private final TextureRegion[] glyphs = new TextureRegion[96];
+  private final TextureRegion[] glyphs;
   private final String charsInMap;
 
   /**
@@ -27,13 +31,17 @@ public class Font {
   public Font(Texture texture, int offsetX, int offsetY, int glyphsPerRow, int glyphWidth,
       int glyphHeight, String charsInMap) {
 
+    int charCount = charsInMap.length();
+
     this.glyphWidth = glyphWidth;
+    this.glyphHalfWidth = glyphWidth / 2f;
     this.glyphHeight = glyphHeight;
     this.charsInMap = charsInMap;
+    this.glyphs = new TextureRegion[charCount];
 
     int x = offsetX;
     int y = offsetY;
-    for (int i = 0; i < charsInMap.length(); i++) {
+    for (int i = 0; i < charCount; i++) {
       glyphs[i] = new TextureRegion(texture, x, y, glyphWidth, glyphHeight);
       x += glyphWidth;
       if (x == offsetX + glyphsPerRow * glyphWidth) {
@@ -104,19 +112,15 @@ public class Font {
     // calculate total width of text
     int textLength = text.length() * glyphWidth;
 
-    // text position must be offset by half a character glyph's width
-    // x position represents the centre of the first character.
-    float offset = (glyphWidth / 2f);
-
     switch (posX) {
       case CENTRE:
-        x = ((GameConstants.GAME_WIDTH - textLength) / 2f) + offset;
+        x = ((GameConstants.GAME_WIDTH - textLength) / 2f) + glyphHalfWidth;
         break;
       case LEFT:
-        x = offset;
+        x = glyphHalfWidth;
         break;
       case RIGHT:
-        x = (GameConstants.GAME_WIDTH - textLength) + offset;
+        x = (GameConstants.GAME_WIDTH - textLength) + glyphHalfWidth;
         break;
       default:
         x = 0;
@@ -132,19 +136,15 @@ public class Font {
   private float calculateY(TextPositionY posY) {
     float y;
 
-    // text position must be offset by half a character glyph's height
-    // y position represents the centre of the text.
-    float offset = (glyphWidth / 2f);
-
     switch (posY) {
       case TOP:
-        y = GameConstants.GAME_HEIGHT - offset;
+        y = GameConstants.GAME_HEIGHT - glyphHalfWidth;
         break;
       case CENTRE:
         y = GameConstants.GAME_HEIGHT / 2f;
         break;
       case BOTTOM:
-        y = offset;
+        y = glyphHalfWidth;
         break;
       default:
         y = 0;
@@ -166,7 +166,7 @@ public class Font {
     // 2 characters - offset by half width
     // 3 characters - offset by one width
     // ...etc...
-    float offset = (glyphWidth / 2f) * (text.length() - 1);
+    float offset = glyphHalfWidth * (text.length() - 1);
 
     return x - offset;
   }

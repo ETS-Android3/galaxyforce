@@ -11,9 +11,13 @@ import android.media.MediaPlayer;
 import android.os.Build.VERSION;
 import android.os.Build.VERSION_CODES;
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
+
 import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class MusicPlayerServiceImpl implements
     MusicPlayerService,
@@ -57,22 +61,35 @@ public class MusicPlayerServiceImpl implements
             return;
         }
 
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+
+        Runnable runnableTask = () -> {
+            loader(music);
+        };
+        executor.execute(runnableTask);
+        executor.shutdown();
+    }
+
+    private void loader(Music music) {
         // dispose old media player
         if (this.mediaPlayer != null) {
-            dispose();
+            //dispose();
+            this.mediaPlayer.reset();
+        } else {
+            this.mediaPlayer = createMediaPlayer();
         }
 
         Log.i(GameConstants.LOG_TAG, "Load Music");
 
         // create new media player
-        this.mediaPlayer = createMediaPlayer();
+        //this.mediaPlayer = createMediaPlayer();
 
         // set file as music source
         try (AssetFileDescriptor assetDescriptor = assets.openFd("music/" + music.getFileName())) {
             mediaPlayer.setDataSource(
-                assetDescriptor.getFileDescriptor(),
-                assetDescriptor.getStartOffset(),
-                assetDescriptor.getLength());
+                    assetDescriptor.getFileDescriptor(),
+                    assetDescriptor.getStartOffset(),
+                    assetDescriptor.getLength());
         } catch (IOException | IllegalArgumentException e) {
             throw new GalaxyForceException("Couldn't load music: " + music.getFileName(), e);
         }

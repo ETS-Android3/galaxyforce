@@ -1,7 +1,10 @@
 package com.danosoftware.galaxyforce.sprites.properties;
 
 import com.danosoftware.galaxyforce.textures.TextureRegion;
+
 import java.util.EnumMap;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public enum SpriteDetails {
 
@@ -757,9 +760,16 @@ public enum SpriteDetails {
           EnumMap<SpriteDetails, TextureRegion> textureRegions,
           EnumMap<SpriteDetails, SpriteDimensions> spriteDimensions) {
 
-    for (SpriteDetails spriteDetails : SpriteDetails.values()) {
-      spriteDetails.setTextureRegion(textureRegions.get(spriteDetails));
-      spriteDetails.setDimensions(spriteDimensions.get(spriteDetails));
-    }
+    ExecutorService executor = Executors.newSingleThreadExecutor();
+
+    Runnable runnableTask = () -> {
+      for (SpriteDetails spriteDetails : SpriteDetails.values()) {
+        spriteDetails.setTextureRegion(textureRegions.get(spriteDetails));
+        spriteDetails.setDimensions(spriteDimensions.get(spriteDetails));
+      }
+    };
+
+    executor.execute(runnableTask);
+    executor.shutdown();
   }
 }

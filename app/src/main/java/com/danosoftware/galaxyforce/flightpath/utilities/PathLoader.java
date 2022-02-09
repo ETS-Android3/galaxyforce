@@ -2,11 +2,13 @@ package com.danosoftware.galaxyforce.flightpath.utilities;
 
 import android.content.res.AssetManager;
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
 import com.danosoftware.galaxyforce.flightpath.dto.PathListDTO;
 import com.danosoftware.galaxyforce.flightpath.paths.Path;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.EnumMap;
@@ -18,14 +20,12 @@ public class PathLoader {
 
     private static final String ACTIVITY_TAG = "Path Loader";
     private final EnumMap<Path, PathListDTO> cache;
-    private final ObjectMapper mapper;
 
     private final AssetManager assets;
 
     public PathLoader(AssetManager assets) {
         this.assets = assets;
         this.cache = new EnumMap<>(Path.class);
-        this.mapper = new ObjectMapper();
     }
 
     /**
@@ -46,6 +46,7 @@ public class PathLoader {
     private PathListDTO loader(String jsonFile) {
         Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Loading JSON Path: " + jsonFile);
         try (InputStream is = assets.open("paths/" + jsonFile)) {
+            final ObjectMapper mapper = new ObjectMapper();
             final PathListDTO pathData = mapper.readValue(is, PathListDTO.class);
             Log.i(GameConstants.LOG_TAG,
                 ACTIVITY_TAG + ": Loaded " + pathData.getPathList().size() + " JSON Paths from: "

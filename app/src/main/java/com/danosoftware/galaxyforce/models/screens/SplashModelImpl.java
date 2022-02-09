@@ -3,6 +3,7 @@ package com.danosoftware.galaxyforce.models.screens;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.billing.BillingObserver;
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.billing.PurchaseState;
@@ -25,6 +26,7 @@ import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -121,7 +123,7 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
     // add version name if it exists
     if (versionName != null) {
       text.add(
-          Text.newTextRelativePositionX(
+          Text.newUntrustedTextRelativePositionX(
               "VERSION " + versionName,
               TextPositionX.CENTRE,
               100));
