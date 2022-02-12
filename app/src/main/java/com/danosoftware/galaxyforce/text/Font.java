@@ -4,6 +4,10 @@ import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.textures.Texture;
 import com.danosoftware.galaxyforce.textures.TextureRegion;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Font {
 
@@ -15,6 +19,10 @@ public class Font {
   private final int glyphHeight;
   private final TextureRegion[] glyphs;
   private final String charsInMap;
+
+  // each string is converted into character indexes.
+  // each index represents each character's position within the character map.
+  private final Map<String, List<Integer>> characterIndexesCache;
 
   /**
    * font constructor setting up fonts using the texture map. alternative constructor where list of
@@ -38,6 +46,7 @@ public class Font {
     this.glyphHeight = glyphHeight;
     this.charsInMap = charsInMap;
     this.glyphs = new TextureRegion[charCount];
+    this.characterIndexesCache = new HashMap<>();
 
     int x = offsetX;
     int y = offsetY;
@@ -72,32 +81,18 @@ public class Font {
   }
 
   private void drawText(SpriteBatcher batcher, String text, float x, float y) {
-    int len = text.length();
-    for (int i = 0; i < len; i++) {
 
-      int c;
+    // compute indexes for text or retrieve from cache
+    final List<Integer> characterIndexes;
+    if (characterIndexesCache.containsKey(text)) {
+      characterIndexes = characterIndexesCache.get(text);
+    } else {
+      characterIndexes = computeTextIndexes(text);
+      characterIndexesCache.put(text, characterIndexes);
+    }
 
-      // if character map was supplied find current character's position
-      // in map
-      if (charsInMap != null) {
-        // returns index of current character within the character map
-        c = charsInMap.indexOf(text.charAt(i));
-
-        if (c == -1) {
-          continue;
-        }
-
-      }
-      // otherwise get index based on ASCII value
-      else {
-        c = text.charAt(i) - ' ';
-
-        if (c < 0 || c > glyphs.length - 1) {
-          continue;
-        }
-      }
-
-      TextureRegion glyph = glyphs[c];
+    for (Integer i : characterIndexes) {
+      TextureRegion glyph = glyphs[i];
       batcher.drawSprite(x, y, glyphWidth, glyphHeight, glyph);
       x += glyphWidth;
     }
@@ -171,4 +166,39 @@ public class Font {
     return x - offset;
   }
 
+  // Each string must be converted into a list of character indexes.
+  // Each index represents each character's position in the character map
+  private List<Integer> computeTextIndexes(String text) {
+
+    int len = text.length();
+    final List<Integer> characterIndexes = new ArrayList<>(len);
+
+    for (int i = 0; i < len; i++) {
+
+      int c;
+
+      // if character map was supplied find current character's position in map
+      if (charsInMap != null) {
+        // returns index of current character within the character map
+        c = charsInMap.indexOf(text.charAt(i));
+
+        if (c == -1) {
+          continue;
+        }
+
+      }
+      // otherwise get index based on ASCII value
+      else {
+        c = text.charAt(i) - ' ';
+
+        if (c < 0 || c > glyphs.length - 1) {
+          continue;
+        }
+      }
+
+      characterIndexes.add(c);
+    }
+
+    return characterIndexes;
+  }
 }

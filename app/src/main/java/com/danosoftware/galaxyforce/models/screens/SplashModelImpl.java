@@ -3,7 +3,6 @@ package com.danosoftware.galaxyforce.models.screens;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.billing.BillingObserver;
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.billing.PurchaseState;
@@ -26,7 +25,6 @@ import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +54,10 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
    * Normally triggered by a change in state from a billing thread.
    */
   private volatile boolean reBuildText;
+
+  // have we requested to move to main menu? (we only want to request once)
+  // required to avoid triggering multiple requests (while waiting for main menu screen to be created).
+  private boolean requestedMainMenu;
 
   public SplashModelImpl(Game game,
       Controller controller,
@@ -93,6 +95,8 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
 
     // register this model with the billing service
     billingService.registerPurchasesObserver(this);
+
+    requestedMainMenu = false;
   }
 
   /**
@@ -163,7 +167,8 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
     base.animate(deltaTime);
 
     // if splash screen has been shown for required time, move to main menu
-    if (splashScreenTime >= SPLASH_SCREEN_WAIT) {
+    if (!requestedMainMenu && splashScreenTime >= SPLASH_SCREEN_WAIT) {
+      requestedMainMenu = true;
       game.changeToScreen(ScreenType.MAIN_MENU);
     }
   }
@@ -177,6 +182,7 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
   @Override
   public void screenTouched() {
     // if screen pressed, then go to main menu
+    requestedMainMenu = true;
     game.changeToScreen(ScreenType.MAIN_MENU);
   }
 

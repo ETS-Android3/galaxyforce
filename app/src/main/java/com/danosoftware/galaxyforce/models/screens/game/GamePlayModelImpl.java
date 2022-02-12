@@ -254,7 +254,6 @@ public class GamePlayModelImpl implements Model, GameModel {
 
       case PAUSE:
         game.changeToGamePausedScreen(getPausedSprites(), background());
-        this.modelState = previousModelState;
         break;
 
       case GAME_OVER:
@@ -310,6 +309,12 @@ public class GamePlayModelImpl implements Model, GameModel {
   @Override
   public void resume() {
     Log.i(TAG, "Resume Game.");
+
+    // if we were paused, return to previous state so we can carry on where we left off.
+    if (modelState == ModelState.PAUSE) {
+      this.modelState = this.previousModelState;
+    }
+
     sounds.resume();
   }
 

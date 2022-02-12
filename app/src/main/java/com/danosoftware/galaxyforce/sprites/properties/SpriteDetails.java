@@ -1,10 +1,7 @@
 package com.danosoftware.galaxyforce.sprites.properties;
 
 import com.danosoftware.galaxyforce.textures.TextureRegion;
-
 import java.util.EnumMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public enum SpriteDetails {
 
@@ -750,36 +747,29 @@ public enum SpriteDetails {
   }
 
   /**
-   * Change each sprite's texture regions and dimensions.
-   * Normally triggered when the TextureMap changes.
+   * Change each sprite's texture regions and dimensions. Normally triggered when the TextureMap
+   * changes.
    *
-   * @param textureRegions
-   * @param spriteDimensions
+   * @param textureRegions   - texture regions to initialise
+   * @param spriteDimensions - sprite dimensions to initialise
    */
   public static void initialise(
-          EnumMap<SpriteDetails, TextureRegion> textureRegions,
-          EnumMap<SpriteDetails, SpriteDimensions> spriteDimensions) {
+      EnumMap<SpriteDetails, TextureRegion> textureRegions,
+      EnumMap<SpriteDetails, SpriteDimensions> spriteDimensions) {
+    for (SpriteDetails spriteDetails : SpriteDetails.values()) {
+      spriteDetails.setTextureRegion(textureRegions.get(spriteDetails));
+      spriteDetails.setDimensions(spriteDimensions.get(spriteDetails));
+    }
+  }
 
-    // remove any previously initialised sprite details
+  /**
+   * remove any previously initialised sprite details - normally called before initialise. after
+   * resetting, draw routes will not draw a sprite that is not yet initialised.
+   */
+  public static void reset() {
     for (SpriteDetails spriteDetails : SpriteDetails.values()) {
       spriteDetails.setTextureRegion(null);
       spriteDetails.setDimensions(null);
     }
-
-    ExecutorService executor = Executors.newSingleThreadExecutor();
-
-    // initialising is time consuming so spin-up a thread for this.
-    // it is possible that later attempts to draw sprites may occur before they
-    // are initialised.
-    // If this happens, the sprites will be skipped by the draw routines.
-    Runnable runnableTask = () -> {
-      for (SpriteDetails spriteDetails : SpriteDetails.values()) {
-        spriteDetails.setTextureRegion(textureRegions.get(spriteDetails));
-        spriteDetails.setDimensions(spriteDimensions.get(spriteDetails));
-      }
-    };
-
-    executor.execute(runnableTask);
-    executor.shutdown();
   }
 }
