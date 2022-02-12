@@ -47,6 +47,7 @@ import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.missiles.bases.IBaseMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
 import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
+import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.utilities.OverlapTester;
@@ -123,6 +124,8 @@ public class GamePlayModelImpl implements Model, GameModel {
   // set to false whenever a life is lost
   private boolean noLivesLostInWave;
 
+  private final TaskService taskService;
+
   public GamePlayModelImpl(
       Game game,
       Controller controller,
@@ -133,7 +136,8 @@ public class GamePlayModelImpl implements Model, GameModel {
       SavedGame savedGame,
       AchievementService achievements,
       AssetManager assets,
-      StarField starField) {
+      StarField starField,
+      TaskService taskService) {
     this.game = game;
     this.wave = wave;
     this.billingService = billingService;
@@ -142,6 +146,7 @@ public class GamePlayModelImpl implements Model, GameModel {
     this.savedGame = savedGame;
     this.achievements = achievements;
     this.starField = starField;
+    this.taskService = taskService;
 
     // no text initially
     this.waveText = null;
@@ -650,7 +655,7 @@ public class GamePlayModelImpl implements Model, GameModel {
     WaveCreationUtils creationUtils = new WaveCreationUtils(alienFactory, pathFactory,
         powerUpAllocatorFactory);
     WaveFactory waveFactory = new WaveFactory(creationUtils, powerUpAllocatorFactory);
-    WaveManager waveManager = new WaveManagerImpl(waveFactory);
+    WaveManager waveManager = new WaveManagerImpl(waveFactory, taskService);
 
     return new AlienManager(waveManager, achievements);
   }

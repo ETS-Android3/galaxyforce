@@ -121,7 +121,8 @@ public class GameImpl implements Game, OnTaskCompleteListener<IScreen> {
         assetManager,
         this,
         input,
-        versionName);
+        versionName,
+        taskService);
 
     this.taskService = taskService;
 

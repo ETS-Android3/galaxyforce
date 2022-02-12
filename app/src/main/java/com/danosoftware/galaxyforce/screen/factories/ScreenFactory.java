@@ -36,6 +36,7 @@ import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
+import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.textures.TextureMap;
 import com.danosoftware.galaxyforce.textures.TextureService;
 import com.danosoftware.galaxyforce.view.Camera2D;
@@ -62,6 +63,7 @@ public class ScreenFactory {
   private final String versionName;
   private final StarField starField;
   private final TextureService textureService;
+  private final TaskService taskService;
 
   public ScreenFactory(
       GLGraphics glGraphics,
@@ -76,7 +78,8 @@ public class ScreenFactory {
       AssetManager assets,
       Game game,
       Input input,
-      String versionName) {
+      String versionName,
+      TaskService taskService) {
 
     this.billingService = billingService;
     this.configurationService = configurationService;
@@ -96,6 +99,7 @@ public class ScreenFactory {
         GameConstants.GAME_WIDTH,
         GameConstants.GAME_HEIGHT);
     this.starBatcher = new StarBatcher(glGraphics, starField.getStarField());
+    this.taskService = taskService;
   }
 
   public IScreen newScreen(ScreenType screenType) {
@@ -203,7 +207,8 @@ public class ScreenFactory {
         savedGame,
         achievements,
         assets,
-        starField);
+        starField,
+        taskService);
 
     if (SHOW_FPS) {
       return new GamePlayModelFrameRateDecorator(gameModel);
