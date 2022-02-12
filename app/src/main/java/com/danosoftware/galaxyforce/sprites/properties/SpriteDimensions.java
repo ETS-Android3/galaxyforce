@@ -30,7 +30,9 @@ public class SpriteDimensions {
   }
 
   public SpriteDimensions(int width, int height) {
-    this(width, height, 0);
+    this.width = width;
+    this.height = height;
+    this.boundsReduction = 0;
   }
 
   public int getWidth() {
