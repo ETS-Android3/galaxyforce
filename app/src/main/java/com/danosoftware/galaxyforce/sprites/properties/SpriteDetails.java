@@ -742,9 +742,6 @@ public enum SpriteDetails {
   }
 
   public SpriteDimensions getDimensions() {
-    if (spriteDimensions == null) {
-      return EMPTY_DIMENSIONS;
-    }
     return spriteDimensions;
   }
 

@@ -34,6 +34,7 @@ import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
 import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDimensions;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import java.util.ArrayList;
@@ -186,8 +187,9 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
       // we will place google play icon alongside text.
       // compute the positions of each so combined icon/text is centred.
       final String text = "GOOGLE PLAY";
-      final int iconWidth = GOOGLE_PLAY_ICON.getDimensions().getWidth();
-      final int halfIconWidth = iconWidth > 0 ? iconWidth / 2 : DEFAULT_GOOGLE_PLAY_ICON_WIDTH / 2;
+      final SpriteDimensions dimensions = GOOGLE_PLAY_ICON.getDimensions();
+      final int halfIconWidth =
+          dimensions != null ? dimensions.getWidth() / 2 : DEFAULT_GOOGLE_PLAY_ICON_WIDTH / 2;
       final int fontWidth = 30;
       final int buffer = 10;
       final int textLength = text.length() * fontWidth;

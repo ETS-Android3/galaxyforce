@@ -21,7 +21,11 @@ public class BaseMissileBlast extends AbstractBaseMissile {
       final float angle,
       final BaseMissileSpeed missileSpeed) {
 
-    super(animation, xStart, yStart);
+    super(
+        animation,
+        xStart,
+        yStart,
+        animation.getKeyFrame(0, Animation.ANIMATION_LOOPING));
 
     // convert angle to degrees for sprite rotation.
     // needs to be adjusted by 90 deg for correct rotation.

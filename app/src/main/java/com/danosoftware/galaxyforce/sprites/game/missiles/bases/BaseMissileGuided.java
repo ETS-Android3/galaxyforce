@@ -50,7 +50,8 @@ public class BaseMissileGuided extends AbstractBaseMissile {
     super(
         animation,
         xStart,
-        yStart);
+        yStart,
+        animation.getKeyFrame(0, Animation.ANIMATION_LOOPING));
     this.model = model;
     this.missileSpeed = baseMissileSpeed.getSpeed();
 
