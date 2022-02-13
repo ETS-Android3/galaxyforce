@@ -2,9 +2,7 @@ package com.danosoftware.galaxyforce.models.screens.game;
 
 import android.content.res.AssetManager;
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.billing.BillingService;
-import com.danosoftware.galaxyforce.billing.PurchaseState;
 import com.danosoftware.galaxyforce.buttons.sprite_button.PauseButton;
 import com.danosoftware.galaxyforce.buttons.sprite_button.SpriteButton;
 import com.danosoftware.galaxyforce.constants.GameConstants;
@@ -56,7 +54,6 @@ import com.danosoftware.galaxyforce.waves.managers.WaveManagerImpl;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocatorFactory;
 import com.danosoftware.galaxyforce.waves.utilities.WaveCreationUtils;
 import com.danosoftware.galaxyforce.waves.utilities.WaveFactory;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -123,6 +120,9 @@ public class GamePlayModelImpl implements Model, GameModel {
   // set to false whenever a life is lost
   private boolean noLivesLostInWave;
 
+  private boolean transitioningToUpgradeScreen;
+  private boolean waveCompletedAchievementsSaved;
+
   private final TaskService taskService;
 
   public GamePlayModelImpl(
@@ -144,6 +144,8 @@ public class GamePlayModelImpl implements Model, GameModel {
     this.savedGame = savedGame;
     this.achievements = achievements;
     this.taskService = taskService;
+    this.transitioningToUpgradeScreen = false;
+    this.waveCompletedAchievementsSaved = false;
 
     // no text initially
     this.waveText = null;
@@ -324,6 +326,7 @@ public class GamePlayModelImpl implements Model, GameModel {
     }
 
     sounds.resume();
+    transitioningToUpgradeScreen = false;
   }
 
   @Override
@@ -400,32 +403,41 @@ public class GamePlayModelImpl implements Model, GameModel {
     if (isWaveComplete()) {
 
       // reward user with end of wave achievements
-      achievements.waveCompleted(
-          CompletedWaveAchievements
-              .builder()
-              .wave(wave)
-              .noLivesLostInWave(noLivesLostInWave)
-              .build()
-      );
+      if (!waveCompletedAchievementsSaved) {
+        achievements.waveCompleted(
+            CompletedWaveAchievements
+                .builder()
+                .wave(wave)
+                .noLivesLostInWave(noLivesLostInWave)
+                .build()
+        );
+        waveCompletedAchievementsSaved = true;
+      }
 
       // check user is allowed to play next wave
-      if (wave >= GameConstants.MAX_FREE_WAVE
-          && (billingService.getFullGamePurchaseState() == PurchaseState.NOT_PURCHASED
-          || billingService.getFullGamePurchaseState() == PurchaseState.NOT_READY
-          || billingService.getFullGamePurchaseState() == PurchaseState.PENDING)) {
-        Log.i(TAG, "Exceeded maximum free zone. Must upgrade.");
-        game.changeToReturningScreen(ScreenType.UPGRADE_FULL_VERSION);
+      if (wave >= GameConstants.MAX_FREE_WAVE) {
+//      if (wave >= GameConstants.MAX_FREE_WAVE
+//          && (billingService.getFullGamePurchaseState() == PurchaseState.NOT_PURCHASED
+//          || billingService.getFullGamePurchaseState() == PurchaseState.NOT_READY
+//          || billingService.getFullGamePurchaseState() == PurchaseState.PENDING)) {
 
-        /*
-         * the user may not upgrade but we still want to store the
-         * highest level they have reached. normally this occurs
-         * when the next wave is set-up but if the user does not
-         * upgrade, this set-up will never be called.
-         */
-        final int unlockedWave = wave + 1;
-        int maxLevelUnlocked = savedGame.getGameLevel();
-        if (unlockedWave > maxLevelUnlocked) {
-          savedGame.saveGameLevel(unlockedWave);
+        if (!transitioningToUpgradeScreen) {
+          Log.i(TAG, "Exceeded maximum free zone. Must upgrade.");
+
+          /*
+           * the user may not upgrade but we still want to store the
+           * highest level they have reached. normally this occurs
+           * when the next wave is set-up but if the user does not
+           * upgrade, this set-up will never be called.
+           */
+          final int unlockedWave = wave + 1;
+          int maxLevelUnlocked = savedGame.getGameLevel();
+          if (unlockedWave > maxLevelUnlocked) {
+            savedGame.saveGameLevel(unlockedWave);
+          }
+
+          transitioningToUpgradeScreen = true;
+          game.changeToReturningScreen(ScreenType.UPGRADE_FULL_VERSION);
         }
 
         /*
@@ -565,6 +577,8 @@ public class GamePlayModelImpl implements Model, GameModel {
 
     // reset lives lost for new wave
     this.noLivesLostInWave = true;
+
+    this.waveCompletedAchievementsSaved = false;
   }
 
   /**
