@@ -3,6 +3,7 @@ package com.danosoftware.galaxyforce.screen.factories;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SHOW_FPS;
 
 import android.content.res.AssetManager;
+
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
@@ -12,6 +13,7 @@ import com.danosoftware.galaxyforce.input.Input;
 import com.danosoftware.galaxyforce.models.screens.GameCompleteModelImpl;
 import com.danosoftware.galaxyforce.models.screens.MainMenuModelImpl;
 import com.danosoftware.galaxyforce.models.screens.Model;
+import com.danosoftware.galaxyforce.models.screens.ModelFrameRateDecorator;
 import com.danosoftware.galaxyforce.models.screens.SplashModelImpl;
 import com.danosoftware.galaxyforce.models.screens.UnlockFullVersionModelImpl;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
@@ -43,6 +45,7 @@ import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLGraphics;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 import com.danosoftware.galaxyforce.view.StarBatcher;
+
 import java.util.List;
 
 public class ScreenFactory {
@@ -124,7 +127,7 @@ public class ScreenFactory {
 
       case MAIN_MENU:
         return new ExitingScreen(
-            new MainMenuModelImpl(game, controller, billingService),
+                constructModel(screenType, controller),
             controller,
             textureService,
             TextureMap.MENU,
@@ -255,5 +258,42 @@ public class ScreenFactory {
         starBatcher,
         taskService,
         starField);
+  }
+
+  /**
+   * Create model for screen type.
+   */
+  private Model constructModel(
+          ScreenType type,
+          Controller controller) {
+
+    final Model model;
+    switch (type) {
+      case SPLASH:
+        model = null;
+        break;
+      case MAIN_MENU:
+        model = new MainMenuModelImpl(game, controller, billingService);
+        break;
+      case OPTIONS:
+        model = null;
+        break;
+      case SELECT_LEVEL:
+        model = null;
+        break;
+      case UPGRADE_FULL_VERSION:
+        model = null;
+        break;
+      case GAME_COMPLETE:
+        model = null;
+        break;
+      default:
+        throw new IllegalStateException("Unexpected value: " + type);
+    }
+
+    if (SHOW_FPS) {
+      return new ModelFrameRateDecorator(model);
+    }
+    return model;
   }
 }
