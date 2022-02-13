@@ -112,19 +112,7 @@ public class ScreenFactory {
     Controller controller = new ControllerImpl(input, camera);
 
     switch (screenType) {
-
       case SPLASH:
-        return new ExitingScreen(
-            new SplashModelImpl(game, controller, billingService, versionName, sounds),
-            controller,
-            textureService,
-            TextureMap.MENU,
-            camera,
-            batcher,
-            starBatcher,
-            taskService,
-            starField);
-
       case MAIN_MENU:
         return new ExitingScreen(
                 constructModel(screenType, controller),
@@ -138,9 +126,10 @@ public class ScreenFactory {
             starField);
 
       case OPTIONS:
+      case UPGRADE_FULL_VERSION:
+      case GAME_COMPLETE:
         return new Screen(
-            new OptionsModelImpl(game, controller, configurationService, sounds, music, vibrator,
-                playService),
+                constructModel(screenType, controller),
             controller,
             textureService,
             TextureMap.MENU,
@@ -154,30 +143,6 @@ public class ScreenFactory {
         this.music.load(Music.MAIN_TITLE);
         return new SelectLevelScreen(
             new SelectLevelModelImpl(game, controller, billingService, savedGame),
-            controller,
-            textureService,
-            TextureMap.MENU,
-            camera,
-            batcher,
-            starBatcher,
-            taskService,
-            starField);
-
-      case UPGRADE_FULL_VERSION:
-        return new Screen(
-            new UnlockFullVersionModelImpl(game, controller, billingService),
-            controller,
-            textureService,
-            TextureMap.MENU,
-            camera,
-            batcher,
-            starBatcher,
-            taskService,
-            starField);
-
-      case GAME_COMPLETE:
-        return new Screen(
-            new GameCompleteModelImpl(game, controller),
             controller,
             textureService,
             TextureMap.MENU,
@@ -270,22 +235,22 @@ public class ScreenFactory {
     final Model model;
     switch (type) {
       case SPLASH:
-        model = null;
+        model = new SplashModelImpl(game, controller, billingService, versionName, sounds);
         break;
       case MAIN_MENU:
         model = new MainMenuModelImpl(game, controller, billingService);
         break;
       case OPTIONS:
-        model = null;
+        model = new OptionsModelImpl(game, controller, configurationService, sounds, music, vibrator, playService);
         break;
       case SELECT_LEVEL:
-        model = null;
+        model = new SelectLevelModelImpl(game, controller, billingService, savedGame);
         break;
       case UPGRADE_FULL_VERSION:
-        model = null;
+        model = new UnlockFullVersionModelImpl(game, controller, billingService);
         break;
       case GAME_COMPLETE:
-        model = null;
+        model = new GameCompleteModelImpl(game, controller);
         break;
       default:
         throw new IllegalStateException("Unexpected value: " + type);
