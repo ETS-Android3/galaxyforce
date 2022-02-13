@@ -15,7 +15,6 @@ import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLShaderHelper;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 import com.danosoftware.galaxyforce.view.StarBatcher;
-
 import java.util.List;
 
 public class SelectLevelScreen extends AbstractScreen {
@@ -123,25 +122,27 @@ public class SelectLevelScreen extends AbstractScreen {
      * gets static text from model - this text must not scroll with other
      * elements so offset stars by current camera offset.
      */
-    for (Text text : levelTexts) {
-      gameFont.drawText(
-          batcher,
-          text.getText(),
-          text.getX() + cameraOffset,
-          text.getY(),
-          text.getTextPositionX(),
-          text.getTextPositionY());
-    }
+    if (gameFont != null) {
+      for (Text text : levelTexts) {
+        gameFont.drawText(
+            batcher,
+            text.getText(),
+            text.getX() + cameraOffset,
+            text.getY(),
+            text.getTextPositionX(),
+            text.getTextPositionY());
+      }
 
-    // draw any text
-    for (Text text : texts) {
-      gameFont.drawText(
-          batcher,
-          text.getText(),
-          text.getX(),
-          text.getY(),
-          text.getTextPositionX(),
-          text.getTextPositionY());
+      // draw any text
+      for (Text text : texts) {
+        gameFont.drawText(
+            batcher,
+            text.getText(),
+            text.getX(),
+            text.getY(),
+            text.getTextPositionX(),
+            text.getTextPositionY());
+      }
     }
 
     batcher.endBatch();
