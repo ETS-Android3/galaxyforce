@@ -258,11 +258,11 @@ public class GamePlayModelImpl implements Model, GameModel {
         break;
 
       case PAUSE:
-        game.changeToGamePausedScreen(getPausedSprites(), background());
+        // no action
         break;
 
       case GAME_OVER:
-        game.changeToGameOverScreen(wave);
+        // no action
         break;
 
       default:
@@ -271,10 +271,11 @@ public class GamePlayModelImpl implements Model, GameModel {
         throw new GalaxyForceException(errorMsg);
     }
 
-    // move game sprites
-    starField.animate(deltaTime);
-    alienManager.animate(deltaTime);
-    assets.animate(deltaTime);
+    if (modelState != ModelState.PAUSE) {
+      starField.animate(deltaTime);
+      alienManager.animate(deltaTime);
+      assets.animate(deltaTime);
+    }
 
     // check for game object collision
     collisionDetection();
@@ -303,6 +304,12 @@ public class GamePlayModelImpl implements Model, GameModel {
     if (modelState != ModelState.PAUSE) {
       this.previousModelState = this.modelState;
     }
+
+    // if we're playing start transition to pause screen
+    if (modelState == ModelState.GET_READY || modelState == ModelState.PLAYING) {
+      game.changeToGamePausedScreen(getPausedSprites(), background());
+    }
+
     this.modelState = ModelState.PAUSE;
     vibrator.stop();
     sounds.pause();
@@ -637,6 +644,7 @@ public class GamePlayModelImpl implements Model, GameModel {
     else {
       this.modelState = ModelState.GAME_OVER;
       achievements.gameOver();
+      game.changeToGameOverScreen(wave);
     }
   }
 

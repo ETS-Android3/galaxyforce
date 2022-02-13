@@ -122,8 +122,6 @@ public class TextureService {
         throw new GalaxyForceException("Unknown texture map: " + textureMap);
     }
 
-    // set our chosen texture as the bound one
-    texture.bindActiveTexture();
     currentTextureMap = textureMap;
     return texture;
   }
@@ -305,11 +303,6 @@ public class TextureService {
   private void initaliseSprites(
       EnumMap<SpriteDetails, TextureRegion> textureRegions,
       EnumMap<SpriteDetails, SpriteDimensions> spriteDimensions) {
-
-    // remove any previously initialised sprite details
-    SpriteDetails.reset();
-
-    // initialise sprites in another thread - game will skip drawing sprites that are not initialised
-    taskService.execute(() -> SpriteDetails.initialise(textureRegions, spriteDimensions));
+    SpriteDetails.initialise(textureRegions, spriteDimensions);
   }
 }

@@ -1,7 +1,6 @@
 package com.danosoftware.galaxyforce.sprites.properties;
 
 import com.danosoftware.galaxyforce.textures.TextureRegion;
-
 import java.util.EnumMap;
 
 public enum SpriteDetails {
@@ -743,6 +742,9 @@ public enum SpriteDetails {
   }
 
   public SpriteDimensions getDimensions() {
+    if (spriteDimensions == null) {
+      return EMPTY_DIMENSIONS;
+    }
     return spriteDimensions;
   }
 
@@ -763,17 +765,6 @@ public enum SpriteDetails {
     for (SpriteDetails spriteDetails : SpriteDetails.values()) {
       spriteDetails.setTextureRegion(textureRegions.get(spriteDetails));
       spriteDetails.setDimensions(spriteDimensions.get(spriteDetails));
-    }
-  }
-
-  /**
-   * remove any previously initialised sprite details - normally called before initialise. after
-   * resetting, draw routes will not draw a sprite that is not yet initialised.
-   */
-  public static void reset() {
-    for (SpriteDetails spriteDetails : SpriteDetails.values()) {
-      spriteDetails.setTextureRegion(null);
-      spriteDetails.setDimensions(EMPTY_DIMENSIONS);
     }
   }
 }

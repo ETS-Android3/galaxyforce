@@ -1,14 +1,11 @@
 package com.danosoftware.galaxyforce.screen;
 
-import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_ALPHA;
-
-import android.opengl.GLES20;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
-import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.models.screens.level.LevelModel;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.textures.TextureMap;
 import com.danosoftware.galaxyforce.textures.TextureRegion;
@@ -36,37 +33,34 @@ public class SelectLevelScreen extends AbstractScreen {
       TextureMap textureMap,
       Camera2D camera,
       SpriteBatcher batcher,
-      StarBatcher starBatcher) {
+      StarBatcher starBatcher,
+      TaskService taskService) {
 
-    super(model, controller, textureService, textureMap, camera, batcher, starBatcher);
+    super(model, controller, textureService, textureMap, camera, batcher, starBatcher, taskService);
     this.levelModel = model;
   }
 
-  /*
-   * Overridden version that keeps stars in position as screen wipes from left
-   * to right.
+  /**
+   * Overridden version of draw stars that keeps stars in position as screen wipes from left to
+   * right.
    */
   @Override
-  public void draw() {
-
-    // clear screen
-    final RgbColour backgroundColour = GameConstants.DEFAULT_BACKGROUND_COLOUR;
-    GLES20.glClearColor(
-        backgroundColour.getRed(),
-        backgroundColour.getGreen(),
-        backgroundColour.getBlue(),
-        BACKGROUND_ALPHA);
-    GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT);
-
-    // Enable alpha blending and blend based on the fragment's alpha value
-    GLES20.glEnable(GLES20.GL_BLEND);
-    GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA);
-
-    // Draw Stars
+  void drawStars() {
     GLShaderHelper.setPointShaderProgram();
     camera.moveX(SCREEN_CENTRE);
     camera.setViewportAndMatrices();
     starBatcher.drawStars();
+  }
+
+  /*
+   * Overridden version of draw sprites that handles swiping.
+   */
+  @Override
+  void drawSprites() {
+
+    if (texture == null) {
+      return;
+    }
 
     // count sprites to draw
     final List<ISprite> levelSprites = levelModel.getStaticSprites();
@@ -147,9 +141,6 @@ public class SelectLevelScreen extends AbstractScreen {
     }
 
     batcher.endBatch();
-
-    // Turn alpha blending off
-    GLES20.glDisable(GLES20.GL_BLEND);
   }
 
   @Override

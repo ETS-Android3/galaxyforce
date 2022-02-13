@@ -124,6 +124,7 @@ public class GamePausedModelImpl implements Model, ButtonModel {
       case EXIT:
         // on exit, return to select level screen
         game.changeToScreen(ScreenType.SELECT_LEVEL);
+        this.modelState = PausedState.RUNNING;
         break;
 
       case OPTIONS:
@@ -135,6 +136,7 @@ public class GamePausedModelImpl implements Model, ButtonModel {
       case RESUME:
         // on resume - return back to game screen
         game.screenReturn();
+        this.modelState = PausedState.RUNNING;
         break;
 
       default:

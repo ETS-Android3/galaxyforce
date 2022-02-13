@@ -66,6 +66,9 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
   // current state of google play service connection
   private ConnectionState connectionState;
 
+  private final static SpriteDetails GOOGLE_PLAY_ICON = SpriteDetails.GOOGLE_PLAY;
+  private final static int DEFAULT_GOOGLE_PLAY_ICON_WIDTH = 52; // fallback is dimensions not loaded
+
   public OptionsModelImpl(
       Game game,
       Controller controller,
@@ -183,10 +186,8 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
       // we will place google play icon alongside text.
       // compute the positions of each so combined icon/text is centred.
       final String text = "GOOGLE PLAY";
-      final SpriteDetails icon = SpriteDetails.GOOGLE_PLAY;
-      final int halfIconWidth = (icon.getDimensions() != null ?
-          icon.getDimensions().getWidth() / 2
-          : 0);
+      final int iconWidth = GOOGLE_PLAY_ICON.getDimensions().getWidth();
+      final int halfIconWidth = iconWidth > 0 ? iconWidth / 2 : DEFAULT_GOOGLE_PLAY_ICON_WIDTH / 2;
       final int fontWidth = 30;
       final int buffer = 10;
       final int textLength = text.length() * fontWidth;
@@ -197,7 +198,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
           new SplashSprite(
               iconXPos,
               175 + 170,
-              icon));
+              GOOGLE_PLAY_ICON));
       allText.add(Text.newTextAbsolutePosition(
           text,
           xPos,

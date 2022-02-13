@@ -285,6 +285,7 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
   public void update(float deltaTime) {
     if (modelState == ModelState.GO_BACK) {
       game.changeToScreen(ScreenType.MAIN_MENU);
+      modelState = ModelState.RUNNING;
     }
 
     // calculate screen scroll speed based on distance from target.
@@ -382,7 +383,7 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
 
   @Override
   public void resume() {
-    // no implementation
+    // no action
   }
 
   @Override

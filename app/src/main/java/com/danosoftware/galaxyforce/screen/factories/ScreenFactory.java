@@ -118,7 +118,8 @@ public class ScreenFactory {
             TextureMap.MENU,
             camera,
             batcher,
-            starBatcher);
+            starBatcher,
+            taskService);
 
       case MAIN_MENU:
         return new ExitingScreen(
@@ -128,7 +129,8 @@ public class ScreenFactory {
             TextureMap.MENU,
             camera,
             batcher,
-            starBatcher);
+            starBatcher,
+            taskService);
 
       case OPTIONS:
         return new Screen(
@@ -139,7 +141,8 @@ public class ScreenFactory {
             TextureMap.MENU,
             camera,
             batcher,
-            starBatcher);
+            starBatcher,
+            taskService);
 
       case SELECT_LEVEL:
         this.music.load(Music.MAIN_TITLE);
@@ -151,7 +154,8 @@ public class ScreenFactory {
             TextureMap.MENU,
             camera,
             batcher,
-            starBatcher);
+            starBatcher,
+            taskService);
 
       case UPGRADE_FULL_VERSION:
         return new Screen(
@@ -161,7 +165,8 @@ public class ScreenFactory {
             TextureMap.MENU,
             camera,
             batcher,
-            starBatcher);
+            starBatcher,
+            taskService);
 
       case GAME_COMPLETE:
         return new Screen(
@@ -171,7 +176,8 @@ public class ScreenFactory {
             TextureMap.MENU,
             camera,
             batcher,
-            starBatcher);
+            starBatcher,
+            taskService);
 
       default:
         throw new IllegalArgumentException("Unsupported screen type: '" + screenType + "'.");
@@ -189,7 +195,8 @@ public class ScreenFactory {
         TextureMap.GAME,
         camera,
         batcher,
-        starBatcher);
+        starBatcher,
+        taskService);
   }
 
   /**
@@ -226,7 +233,8 @@ public class ScreenFactory {
         TextureMap.GAME,
         camera,
         batcher,
-        starBatcher);
+        starBatcher,
+        taskService);
   }
 
   public IScreen newGameOverScreen(int previousWave) {
@@ -238,6 +246,7 @@ public class ScreenFactory {
         TextureMap.GAME,
         camera,
         batcher,
-        starBatcher);
+        starBatcher,
+        taskService);
   }
 }

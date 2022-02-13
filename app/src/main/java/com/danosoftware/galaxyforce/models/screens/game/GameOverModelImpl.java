@@ -127,6 +127,7 @@ public class GameOverModelImpl implements Model, ButtonModel {
       case EXIT:
         // exit game. go to select level screen
         game.changeToScreen(ScreenType.SELECT_LEVEL);
+        this.modelState = GameOverState.RUNNING;
         break;
 
       case NEW_GAME:
@@ -138,6 +139,7 @@ public class GameOverModelImpl implements Model, ButtonModel {
           nextWave = lastWave;
         }
         game.changeToGameScreen(nextWave);
+        this.modelState = GameOverState.RUNNING;
         break;
 
       case OPTIONS:

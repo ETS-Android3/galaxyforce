@@ -208,7 +208,7 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
 
   @Override
   public void resume() {
-    // no implementation
+    // no action
   }
 
   @Override

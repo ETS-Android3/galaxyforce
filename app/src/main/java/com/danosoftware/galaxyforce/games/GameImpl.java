@@ -74,6 +74,7 @@ public class GameImpl implements Game, OnTaskCompleteListener<IScreen> {
   private ScreenChangeType screenChangeType;
   private boolean newScreenReady;
   private IScreen newScreen;
+  private boolean transitioningToScreen;
 
   public GameImpl(
       Context context,
@@ -126,9 +127,8 @@ public class GameImpl implements Game, OnTaskCompleteListener<IScreen> {
 
     this.taskService = taskService;
 
-    this.screenChangeType = null;
     this.newScreenReady = false;
-    this.newScreen = null;
+    this.transitioningToScreen = false;
   }
 
   @Override
@@ -139,32 +139,42 @@ public class GameImpl implements Game, OnTaskCompleteListener<IScreen> {
 
   @Override
   public void changeToScreen(ScreenType screenType) {
-    screenChangeType = ScreenChangeType.NO_RETURN_SCREEN;
-    createScreen(() -> screenFactory.newScreen(screenType));
+    if (!transitioningToScreen) {
+      screenChangeType = ScreenChangeType.NO_RETURN_SCREEN;
+      createScreen(() -> screenFactory.newScreen(screenType));
+    }
   }
 
   @Override
   public void changeToReturningScreen(ScreenType screenType) {
-    screenChangeType = ScreenChangeType.RETURN_SCREEN;
-    createScreen(() -> screenFactory.newScreen(screenType));
+    if (!transitioningToScreen) {
+      screenChangeType = ScreenChangeType.RETURN_SCREEN;
+      createScreen(() -> screenFactory.newScreen(screenType));
+    }
   }
 
   @Override
   public void changeToGameScreen(int wave) {
-    screenChangeType = ScreenChangeType.NO_RETURN_SCREEN;
-    createScreen(() -> screenFactory.newGameScreen(wave));
+    if (!transitioningToScreen) {
+      screenChangeType = ScreenChangeType.NO_RETURN_SCREEN;
+      createScreen(() -> screenFactory.newGameScreen(wave));
+    }
   }
 
   @Override
   public void changeToGamePausedScreen(List<ISprite> pausedSprites, RgbColour backgroundColour) {
-    screenChangeType = ScreenChangeType.RETURN_SCREEN;
-    createScreen(() -> screenFactory.newPausedGameScreen(pausedSprites, backgroundColour));
+    if (!transitioningToScreen) {
+      screenChangeType = ScreenChangeType.RETURN_SCREEN;
+      createScreen(() -> screenFactory.newPausedGameScreen(pausedSprites, backgroundColour));
+    }
   }
 
   @Override
   public void changeToGameOverScreen(int previousWave) {
-    screenChangeType = ScreenChangeType.NO_RETURN_SCREEN;
-    createScreen(() -> screenFactory.newGameOverScreen(previousWave));
+    if (!transitioningToScreen) {
+      screenChangeType = ScreenChangeType.NO_RETURN_SCREEN;
+      createScreen(() -> screenFactory.newGameOverScreen(previousWave));
+    }
   }
 
   @Override
@@ -188,6 +198,7 @@ public class GameImpl implements Game, OnTaskCompleteListener<IScreen> {
     screen.resume();
     sounds.resume();
     music.play();
+    transitioningToScreen = false;
   }
 
   @Override
@@ -229,6 +240,7 @@ public class GameImpl implements Game, OnTaskCompleteListener<IScreen> {
       }
       newScreenReady = false;
       newScreen = null;
+      transitioningToScreen = false;
     } else {
       screen.update(deltaTime);
     }
@@ -305,6 +317,7 @@ public class GameImpl implements Game, OnTaskCompleteListener<IScreen> {
   // create a new screen - this can be a long process so is run in another thread to avoid blocking render thread.
   // will callback with the screen when created.
   private void createScreen(ResultTask<IScreen> screenTask) {
+    transitioningToScreen = true;
     TaskCallback<IScreen> callback = new TaskCallback<>(screenTask, this);
     taskService.execute(callback);
   }
