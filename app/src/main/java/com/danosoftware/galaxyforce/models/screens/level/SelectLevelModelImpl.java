@@ -3,6 +3,7 @@ package com.danosoftware.galaxyforce.models.screens.level;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.billing.BillingObserver;
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.billing.PurchaseState;
@@ -25,6 +26,7 @@ import com.danosoftware.galaxyforce.services.savedgame.SavedGame;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -382,6 +384,11 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
   @Override
   public RgbColour background() {
     return DEFAULT_BACKGROUND_COLOUR;
+  }
+
+  @Override
+  public boolean animateStars() {
+    return true;
   }
 
   @Override

@@ -5,6 +5,7 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.LOGO_Y_POS;
 import static com.danosoftware.galaxyforce.constants.GameConstants.PLANET_Y_POS;
 
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.billing.BillingObserver;
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.billing.PurchaseState;
@@ -22,6 +23,7 @@ import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -206,6 +208,11 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
   @Override
   public RgbColour background() {
     return DEFAULT_BACKGROUND_COLOUR;
+  }
+
+  @Override
+  public boolean animateStars() {
+    return true;
   }
 
   @Override

@@ -2,6 +2,7 @@ package com.danosoftware.galaxyforce.models.screens.game;
 
 import android.content.res.AssetManager;
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.billing.PurchaseState;
 import com.danosoftware.galaxyforce.buttons.sprite_button.PauseButton;
@@ -55,6 +56,7 @@ import com.danosoftware.galaxyforce.waves.managers.WaveManagerImpl;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocatorFactory;
 import com.danosoftware.galaxyforce.waves.utilities.WaveCreationUtils;
 import com.danosoftware.galaxyforce.waves.utilities.WaveFactory;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -327,6 +329,11 @@ public class GamePlayModelImpl implements Model, GameModel {
   @Override
   public RgbColour background() {
     return primaryBase.background();
+  }
+
+  @Override
+  public boolean animateStars() {
+    return true;
   }
 
   /**

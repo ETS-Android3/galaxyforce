@@ -17,6 +17,7 @@ import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,6 +104,11 @@ public class GameCompleteModelImpl implements Model, TouchScreenModel {
   @Override
   public RgbColour background() {
     return DEFAULT_BACKGROUND_COLOUR;
+  }
+
+  @Override
+  public boolean animateStars() {
+    return true;
   }
 
   @Override

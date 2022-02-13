@@ -3,6 +3,7 @@ package com.danosoftware.galaxyforce.models.screens.options;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.buttons.sprite_text_button.OptionButton;
 import com.danosoftware.galaxyforce.buttons.toggle_group.ToggleButtonGroup;
 import com.danosoftware.galaxyforce.buttons.toggle_group.ToggleOption;
@@ -36,6 +37,7 @@ import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDimensions;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -393,6 +395,11 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
   @Override
   public RgbColour background() {
     return DEFAULT_BACKGROUND_COLOUR;
+  }
+
+  @Override
+  public boolean animateStars() {
+    return true;
   }
 
   @Override
