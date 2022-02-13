@@ -4,6 +4,7 @@ import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.textures.Texture;
 import com.danosoftware.galaxyforce.textures.TextureRegion;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -12,11 +13,12 @@ import java.util.Map;
 public class Font {
 
   private final int glyphWidth;
+  private final int glyphHeight;
 
   // text position must be offset by half a character glyph's width.
   // pre-calculate to save time later
   private final float glyphHalfWidth;
-  private final int glyphHeight;
+  private final float glyphHalfHeight;
   private final TextureRegion[] glyphs;
   private final String charsInMap;
 
@@ -44,6 +46,7 @@ public class Font {
     this.glyphWidth = glyphWidth;
     this.glyphHalfWidth = glyphWidth / 2f;
     this.glyphHeight = glyphHeight;
+    this.glyphHalfHeight = glyphHeight / 2f;
     this.charsInMap = charsInMap;
     this.glyphs = new TextureRegion[charCount];
     this.characterIndexesCache = new HashMap<>();
@@ -133,13 +136,13 @@ public class Font {
 
     switch (posY) {
       case TOP:
-        y = GameConstants.GAME_HEIGHT - glyphHalfWidth;
+        y = GameConstants.GAME_HEIGHT - glyphHalfHeight;
         break;
       case CENTRE:
         y = GameConstants.GAME_HEIGHT / 2f;
         break;
       case BOTTOM:
-        y = glyphHalfWidth;
+        y = glyphHalfHeight;
         break;
       default:
         y = 0;

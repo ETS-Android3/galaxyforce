@@ -21,6 +21,8 @@ import com.danosoftware.galaxyforce.models.screens.game.GameOverModelImpl;
 import com.danosoftware.galaxyforce.models.screens.game.GamePausedModelImpl;
 import com.danosoftware.galaxyforce.models.screens.game.GamePlayModelFrameRateDecorator;
 import com.danosoftware.galaxyforce.models.screens.game.GamePlayModelImpl;
+import com.danosoftware.galaxyforce.models.screens.level.LevelModel;
+import com.danosoftware.galaxyforce.models.screens.level.LevelModelFrameRateDecorator;
 import com.danosoftware.galaxyforce.models.screens.level.SelectLevelModelImpl;
 import com.danosoftware.galaxyforce.models.screens.options.OptionsModelImpl;
 import com.danosoftware.galaxyforce.screen.ExitingScreen;
@@ -142,7 +144,7 @@ public class ScreenFactory {
       case SELECT_LEVEL:
         this.music.load(Music.MAIN_TITLE);
         return new SelectLevelScreen(
-            new SelectLevelModelImpl(game, controller, billingService, savedGame),
+                constructLevelModel(screenType, controller),
             controller,
             textureService,
             TextureMap.MENU,
@@ -160,9 +162,36 @@ public class ScreenFactory {
   public IScreen newGameScreen(int startingWave) {
     this.music.load(Music.GAME_LOOP);
     Controller controller = new ControllerImpl(input, camera);
-    Model gameModel = createGameModel(controller, startingWave);
     return new Screen(
-        gameModel,
+            createGameModel(controller, startingWave),
+        controller,
+        textureService,
+        TextureMap.GAME,
+        camera,
+        batcher,
+        starBatcher,
+        taskService,
+        starField);
+  }
+
+  public IScreen newPausedGameScreen(List<ISprite> pausedSprites, RgbColour backgroundColour) {
+    Controller controller = new ControllerImpl(input, camera);
+    return new Screen(
+            createGamePausedModel(controller, pausedSprites, backgroundColour),
+        controller,
+        textureService,
+        TextureMap.GAME,
+        camera,
+        batcher,
+        starBatcher,
+        taskService,
+        starField);
+  }
+
+  public IScreen newGameOverScreen(int previousWave) {
+    Controller controller = new ControllerImpl(input, camera);
+    return new Screen(
+            createGameOverModel(controller, previousWave),
         controller,
         textureService,
         TextureMap.GAME,
@@ -179,16 +208,16 @@ public class ScreenFactory {
   private Model createGameModel(Controller controller, int startingWave) {
     final AchievementService achievements = new AchievementService(playService);
     GamePlayModelImpl gameModel = new GamePlayModelImpl(
-        game,
-        controller,
-        startingWave,
-        billingService,
-        sounds,
-        vibrator,
-        savedGame,
-        achievements,
-        assets,
-        taskService);
+            game,
+            controller,
+            startingWave,
+            billingService,
+            sounds,
+            vibrator,
+            savedGame,
+            achievements,
+            assets,
+            taskService);
 
     if (SHOW_FPS) {
       return new GamePlayModelFrameRateDecorator(gameModel);
@@ -197,32 +226,35 @@ public class ScreenFactory {
     return gameModel;
   }
 
-  public IScreen newPausedGameScreen(List<ISprite> pausedSprites, RgbColour backgroundColour) {
-    Controller controller = new ControllerImpl(input, camera);
-    return new Screen(
-        new GamePausedModelImpl(game, controller, pausedSprites, backgroundColour),
-        controller,
-        textureService,
-        TextureMap.GAME,
-        camera,
-        batcher,
-        starBatcher,
-        taskService,
-        starField);
+  /**
+   * Returns a paused game model.
+   */
+  private Model createGamePausedModel(
+          Controller controller,
+          List<ISprite> pausedSprites,
+          RgbColour backgroundColour) {
+    Model gamePausedModel = new GamePausedModelImpl(game, controller, pausedSprites, backgroundColour);
+
+    if (SHOW_FPS) {
+      return new ModelFrameRateDecorator(gamePausedModel);
+    }
+
+    return gamePausedModel;
   }
 
-  public IScreen newGameOverScreen(int previousWave) {
-    Controller controller = new ControllerImpl(input, camera);
-    return new Screen(
-        new GameOverModelImpl(game, controller, previousWave),
-        controller,
-        textureService,
-        TextureMap.GAME,
-        camera,
-        batcher,
-        starBatcher,
-        taskService,
-        starField);
+  /**
+   * Returns a game over model.
+   */
+  private Model createGameOverModel(
+          Controller controller,
+          int previousWave) {
+    Model gameOverModel = new GameOverModelImpl(game, controller, previousWave);
+
+    if (SHOW_FPS) {
+      return new ModelFrameRateDecorator(gameOverModel);
+    }
+
+    return gameOverModel;
   }
 
   /**
@@ -243,21 +275,43 @@ public class ScreenFactory {
       case OPTIONS:
         model = new OptionsModelImpl(game, controller, configurationService, sounds, music, vibrator, playService);
         break;
-      case SELECT_LEVEL:
-        model = new SelectLevelModelImpl(game, controller, billingService, savedGame);
-        break;
       case UPGRADE_FULL_VERSION:
         model = new UnlockFullVersionModelImpl(game, controller, billingService);
         break;
       case GAME_COMPLETE:
         model = new GameCompleteModelImpl(game, controller);
         break;
+      case SELECT_LEVEL:
       default:
         throw new IllegalStateException("Unexpected value: " + type);
     }
 
     if (SHOW_FPS) {
       return new ModelFrameRateDecorator(model);
+    }
+    return model;
+  }
+
+  private LevelModel constructLevelModel(
+          ScreenType type,
+          Controller controller) {
+
+    final LevelModel model;
+    switch (type) {
+      case SELECT_LEVEL:
+        model = new SelectLevelModelImpl(game, controller, billingService, savedGame);
+        break;
+      case SPLASH:
+      case MAIN_MENU:
+      case OPTIONS:
+      case UPGRADE_FULL_VERSION:
+      case GAME_COMPLETE:
+      default:
+        throw new IllegalStateException("Unexpected value: " + type);
+    }
+
+    if (SHOW_FPS) {
+      return new LevelModelFrameRateDecorator(model);
     }
     return model;
   }
