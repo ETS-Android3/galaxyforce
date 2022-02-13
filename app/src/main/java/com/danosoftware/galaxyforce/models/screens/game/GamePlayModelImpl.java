@@ -46,7 +46,6 @@ import com.danosoftware.galaxyforce.sprites.game.factories.AlienFactory;
 import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.missiles.bases.IBaseMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
@@ -110,8 +109,6 @@ public class GamePlayModelImpl implements Model, GameModel {
   private IBasePrimary primaryBase;
   // get ready text instances
   private Text waveText;
-  //stars
-  private final StarField starField;
 
   /*
    * Instance variables required in GET_READY state
@@ -136,7 +133,6 @@ public class GamePlayModelImpl implements Model, GameModel {
       SavedGame savedGame,
       AchievementService achievements,
       AssetManager assets,
-      StarField starField,
       TaskService taskService) {
     this.game = game;
     this.wave = wave;
@@ -145,7 +141,6 @@ public class GamePlayModelImpl implements Model, GameModel {
     this.vibrator = vibrator;
     this.savedGame = savedGame;
     this.achievements = achievements;
-    this.starField = starField;
     this.taskService = taskService;
 
     // no text initially
@@ -272,7 +267,6 @@ public class GamePlayModelImpl implements Model, GameModel {
     }
 
     if (modelState != ModelState.PAUSE) {
-      starField.animate(deltaTime);
       alienManager.animate(deltaTime);
       assets.animate(deltaTime);
     }

@@ -4,6 +4,7 @@ import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
 import com.danosoftware.galaxyforce.models.screens.level.LevelModel;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
+import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.text.Text;
@@ -34,9 +35,11 @@ public class SelectLevelScreen extends AbstractScreen {
       Camera2D camera,
       SpriteBatcher batcher,
       StarBatcher starBatcher,
-      TaskService taskService) {
+      TaskService taskService,
+      StarField starField) {
 
-    super(model, controller, textureService, textureMap, camera, batcher, starBatcher, taskService);
+    super(model, controller, textureService, textureMap, camera, batcher, starBatcher, taskService,
+        starField);
     this.levelModel = model;
   }
 

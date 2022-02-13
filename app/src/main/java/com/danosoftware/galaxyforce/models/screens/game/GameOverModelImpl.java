@@ -17,7 +17,6 @@ import com.danosoftware.galaxyforce.models.screens.flashing.FlashingText;
 import com.danosoftware.galaxyforce.models.screens.flashing.FlashingTextImpl;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
@@ -46,8 +45,6 @@ public class GameOverModelImpl implements Model, ButtonModel {
    */
   /* reference to pause menu buttons */
   private final List<SpriteTextButton> menuButtons;
-  /* stars sprites */
-  private final StarField starField;
   /* reference to flashing game over text */
   private final FlashingText flashingGameOverText;
   private final int lastWave;
@@ -57,10 +54,8 @@ public class GameOverModelImpl implements Model, ButtonModel {
   public GameOverModelImpl(
       Game game,
       Controller controller,
-      int lastWave,
-      StarField starField) {
+      int lastWave) {
     this.game = game;
-    this.starField = starField;
     this.lastWave = lastWave;
     this.menuButtons = new ArrayList<>();
     this.modelState = GameOverState.RUNNING;
@@ -121,7 +116,6 @@ public class GameOverModelImpl implements Model, ButtonModel {
 
       case RUNNING:
         // normal state before any buttons are pressed
-        starField.animate(deltaTime);
         break;
 
       case EXIT:

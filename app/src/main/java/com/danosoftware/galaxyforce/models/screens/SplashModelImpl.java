@@ -21,7 +21,6 @@ import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.BaseMovingSprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.LogoMovingSprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.PlanetMovingSprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
@@ -41,7 +40,6 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
   private final BillingService billingService;
   private final List<Text> text;
   private final List<ISprite> sprites;
-  private final StarField starField;
   // version name of this package
   private final String versionName;
   private final IMovingSprite planet;
@@ -63,13 +61,11 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
       Controller controller,
       BillingService billingService,
       String versionName,
-      StarField starField,
       SoundPlayerService sounds) {
 
     this.game = game;
     this.billingService = billingService;
     this.versionName = versionName;
-    this.starField = starField;
     this.sprites = new ArrayList<>();
     this.text = new ArrayList<>();
     this.splashScreenTime = 0f;
@@ -158,9 +154,6 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
       buildTextMessages();
       reBuildText = false;
     }
-
-    // move stars
-    starField.animate(deltaTime);
 
     planet.animate(deltaTime);
     logo.animate(deltaTime);

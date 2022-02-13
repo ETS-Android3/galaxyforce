@@ -112,72 +112,77 @@ public class ScreenFactory {
 
       case SPLASH:
         return new ExitingScreen(
-            new SplashModelImpl(game, controller, billingService, versionName, starField, sounds),
+            new SplashModelImpl(game, controller, billingService, versionName, sounds),
             controller,
             textureService,
             TextureMap.MENU,
             camera,
             batcher,
             starBatcher,
-            taskService);
+            taskService,
+            starField);
 
       case MAIN_MENU:
         return new ExitingScreen(
-            new MainMenuModelImpl(game, controller, billingService, starField),
+            new MainMenuModelImpl(game, controller, billingService),
             controller,
             textureService,
             TextureMap.MENU,
             camera,
             batcher,
             starBatcher,
-            taskService);
+            taskService,
+            starField);
 
       case OPTIONS:
         return new Screen(
             new OptionsModelImpl(game, controller, configurationService, sounds, music, vibrator,
-                playService, starField),
+                playService),
             controller,
             textureService,
             TextureMap.MENU,
             camera,
             batcher,
             starBatcher,
-            taskService);
+            taskService,
+            starField);
 
       case SELECT_LEVEL:
         this.music.load(Music.MAIN_TITLE);
         return new SelectLevelScreen(
-            new SelectLevelModelImpl(game, controller, billingService, savedGame,
-                starField),
+            new SelectLevelModelImpl(game, controller, billingService, savedGame),
             controller,
             textureService,
             TextureMap.MENU,
             camera,
             batcher,
             starBatcher,
-            taskService);
+            taskService,
+            starField);
 
       case UPGRADE_FULL_VERSION:
         return new Screen(
-            new UnlockFullVersionModelImpl(game, controller, billingService, starField),
+            new UnlockFullVersionModelImpl(game, controller, billingService),
             controller,
             textureService,
             TextureMap.MENU,
             camera,
             batcher,
             starBatcher,
-            taskService);
+            taskService,
+            starField);
 
       case GAME_COMPLETE:
         return new Screen(
-            new GameCompleteModelImpl(game, controller, starField),
+            new GameCompleteModelImpl(game, controller),
             controller,
             textureService,
             TextureMap.MENU,
             camera,
             batcher,
             starBatcher,
-            taskService);
+            taskService,
+            starField);
 
       default:
         throw new IllegalArgumentException("Unsupported screen type: '" + screenType + "'.");
@@ -196,7 +201,8 @@ public class ScreenFactory {
         camera,
         batcher,
         starBatcher,
-        taskService);
+        taskService,
+        starField);
   }
 
   /**
@@ -214,7 +220,6 @@ public class ScreenFactory {
         savedGame,
         achievements,
         assets,
-        starField,
         taskService);
 
     if (SHOW_FPS) {
@@ -234,19 +239,21 @@ public class ScreenFactory {
         camera,
         batcher,
         starBatcher,
-        taskService);
+        taskService,
+        starField);
   }
 
   public IScreen newGameOverScreen(int previousWave) {
     Controller controller = new ControllerImpl(input, camera);
     return new Screen(
-        new GameOverModelImpl(game, controller, previousWave, starField),
+        new GameOverModelImpl(game, controller, previousWave),
         controller,
         textureService,
         TextureMap.GAME,
         camera,
         batcher,
         starBatcher,
-        taskService);
+        taskService,
+        starField);
   }
 }

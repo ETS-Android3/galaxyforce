@@ -9,6 +9,7 @@ import com.danosoftware.galaxyforce.controllers.common.Controller;
 import com.danosoftware.galaxyforce.models.screens.Model;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
+import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.tasks.OnTaskCompleteListener;
 import com.danosoftware.galaxyforce.tasks.TaskCallback;
@@ -31,6 +32,10 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
   /* logger tag */
   private static final String LOCAL_TAG = "Screen";
 
+  private enum ScreenState {
+    PREPARING, PREPARED, RUNNING;
+  }
+
   /**
    * Reference to model and controller. Each screen will have different implementations of models
    * and controllers.
@@ -44,6 +49,8 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
   // sprite batcher used for displaying sprites
   final SpriteBatcher batcher;
   final StarBatcher starBatcher;
+
+  private final StarField starField;
   // camera used for display views
   final Camera2D camera;
   private final Controller controller;
@@ -55,6 +62,7 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
   // font used for displaying text sprites
   Font gameFont;
   private final TaskService taskService;
+  private ScreenState screenState;
 
   AbstractScreen(
       Model model,
@@ -64,7 +72,8 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
       Camera2D camera,
       SpriteBatcher batcher,
       StarBatcher starBatcher,
-      TaskService taskService) {
+      TaskService taskService,
+      StarField starField) {
 
     this.textureService = textureService;
     this.textureMap = textureMap;
@@ -74,6 +83,8 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
     this.model = model;
     this.starBatcher = starBatcher;
     this.taskService = taskService;
+    this.screenState = ScreenState.PREPARING;
+    this.starField = starField;
   }
 
   @Override
@@ -174,8 +185,27 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
 
   @Override
   public void update(float deltaTime) {
-    controller.update(deltaTime);
-    model.update(deltaTime);
+
+    // move stars
+    starField.animate(deltaTime);
+
+    switch (screenState) {
+      case PREPARING:
+        // no action - waiting for screen to be ready
+        break;
+      case PREPARED:
+        model.resume();
+        controller.update(0f);
+        model.update(0f);
+        screenState = ScreenState.RUNNING;
+        break;
+      case RUNNING:
+        controller.update(deltaTime);
+        model.update(deltaTime);
+        break;
+      default:
+        throw new IllegalStateException("Unexpected value: " + screenState);
+    }
   }
 
   @Override
@@ -197,9 +227,8 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
      * (used to draw sprite from texture map) and dimensions
      * (e.g width and height).
      */
+    screenState = ScreenState.PREPARING;
     createTextureAndFontAsync(textureMap);
-
-    model.resume();
   }
 
   // create texture and font from wanted texture map asynchronously.
@@ -220,6 +249,7 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
   public void onCompletion(TextureWithFont textureWithFont) {
     this.texture = textureWithFont.getTexture();
     this.gameFont = textureWithFont.getFont();
+    screenState = ScreenState.PREPARED;
   }
 
   @Override

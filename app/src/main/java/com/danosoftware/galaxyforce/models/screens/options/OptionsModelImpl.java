@@ -31,7 +31,6 @@ import com.danosoftware.galaxyforce.services.vibration.VibrateTime;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDimensions;
@@ -54,9 +53,6 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
   private final VibrationService vibrator;
   private final GooglePlayServices playService;
 
-  // stars
-  private final StarField starField;
-
   // reference to all sprites in model
   private final List<ISprite> allSprites;
   // reference to all text objects in model
@@ -77,8 +73,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
       SoundPlayerService sounds,
       MusicPlayerService music,
       VibrationService vibrator,
-      GooglePlayServices playService,
-      StarField starField) {
+      GooglePlayServices playService) {
     this.game = game;
     this.controller = controller;
     this.configurationService = configurationService;
@@ -86,7 +81,6 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
     this.music = music;
     this.vibrator = vibrator;
     this.playService = playService;
-    this.starField = starField;
     this.allSprites = new ArrayList<>();
     this.allText = new ArrayList<>();
     this.connectionState = playService.connectedState();
@@ -250,9 +244,6 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
       buildAssets();
       reBuildAssets = false;
     }
-
-    // move stars
-    starField.animate(deltaTime);
   }
 
   @Override
