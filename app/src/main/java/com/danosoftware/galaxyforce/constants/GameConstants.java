@@ -35,7 +35,7 @@ public class GameConstants {
     /*
      * maximum free wave. users must upgrade to play beyond this wave.
      */
-    public final static int MAX_FREE_WAVE = 1;
+    public final static int MAX_FREE_WAVE = 12;
 
     /* maximum number of lives possible */
     public final static int MAX_LIVES = 5;

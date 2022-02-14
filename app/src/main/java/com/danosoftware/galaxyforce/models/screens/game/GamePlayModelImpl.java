@@ -3,6 +3,7 @@ package com.danosoftware.galaxyforce.models.screens.game;
 import android.content.res.AssetManager;
 import android.util.Log;
 import com.danosoftware.galaxyforce.billing.BillingService;
+import com.danosoftware.galaxyforce.billing.PurchaseState;
 import com.danosoftware.galaxyforce.buttons.sprite_button.PauseButton;
 import com.danosoftware.galaxyforce.buttons.sprite_button.SpriteButton;
 import com.danosoftware.galaxyforce.constants.GameConstants;
@@ -121,7 +122,7 @@ public class GamePlayModelImpl implements Model, GameModel {
   private boolean noLivesLostInWave;
 
   private boolean transitioningToUpgradeScreen;
-  private boolean waveCompletedAchievementsSaved;
+  private boolean transitioningToGameCompletedScreen;
 
   private final TaskService taskService;
 
@@ -145,7 +146,7 @@ public class GamePlayModelImpl implements Model, GameModel {
     this.achievements = achievements;
     this.taskService = taskService;
     this.transitioningToUpgradeScreen = false;
-    this.waveCompletedAchievementsSaved = false;
+    this.transitioningToGameCompletedScreen = false;
 
     // no text initially
     this.waveText = null;
@@ -256,6 +257,10 @@ public class GamePlayModelImpl implements Model, GameModel {
         updateGetReady(deltaTime);
         break;
 
+      case UPGRADING:
+        // no action
+        break;
+
       case PAUSE:
         // no action
         break;
@@ -325,8 +330,16 @@ public class GamePlayModelImpl implements Model, GameModel {
       this.modelState = this.previousModelState;
     }
 
+    // we want to return back to pause state after upgrading.
+    // give user option of exiting if they didn't upgrade.
+    if (modelState == ModelState.UPGRADING) {
+      modelState = ModelState.PLAYING;
+      pause();
+    }
+
     sounds.resume();
     transitioningToUpgradeScreen = false;
+    transitioningToGameCompletedScreen = false;
   }
 
   @Override
@@ -400,36 +413,36 @@ public class GamePlayModelImpl implements Model, GameModel {
    * base method will manage setting up the next level.
    */
   private void updatePlayingState() {
+    if (isTransitioningToAnotherScreen()) {
+      return;
+    }
+
     if (isWaveComplete()) {
 
       // reward user with end of wave achievements
-      if (!waveCompletedAchievementsSaved) {
-        achievements.waveCompleted(
-            CompletedWaveAchievements
-                .builder()
-                .wave(wave)
-                .noLivesLostInWave(noLivesLostInWave)
-                .build()
-        );
-        waveCompletedAchievementsSaved = true;
-      }
+      achievements.waveCompleted(
+          CompletedWaveAchievements
+              .builder()
+              .wave(wave)
+              .noLivesLostInWave(noLivesLostInWave)
+              .build()
+      );
 
       // check user is allowed to play next wave
-      if (wave >= GameConstants.MAX_FREE_WAVE) {
-//      if (wave >= GameConstants.MAX_FREE_WAVE
-//          && (billingService.getFullGamePurchaseState() == PurchaseState.NOT_PURCHASED
-//          || billingService.getFullGamePurchaseState() == PurchaseState.NOT_READY
-//          || billingService.getFullGamePurchaseState() == PurchaseState.PENDING)) {
+      if (wave >= GameConstants.MAX_FREE_WAVE
+          && (billingService.getFullGamePurchaseState() == PurchaseState.NOT_PURCHASED
+          || billingService.getFullGamePurchaseState() == PurchaseState.NOT_READY
+          || billingService.getFullGamePurchaseState() == PurchaseState.PENDING)) {
 
-        if (!transitioningToUpgradeScreen) {
-          Log.i(TAG, "Exceeded maximum free zone. Must upgrade.");
+        Log.i(TAG, "Exceeded maximum free zone. Must upgrade.");
+        this.modelState = ModelState.UPGRADING;
 
-          /*
-           * the user may not upgrade but we still want to store the
-           * highest level they have reached. normally this occurs
-           * when the next wave is set-up but if the user does not
-           * upgrade, this set-up will never be called.
-           */
+        /*
+         * the user may not upgrade but we still want to store the
+         * highest level they have reached. normally this occurs
+         * when the next wave is set-up but if the user does not
+         * upgrade, this set-up will never be called.
+         */
           final int unlockedWave = wave + 1;
           int maxLevelUnlocked = savedGame.getGameLevel();
           if (unlockedWave > maxLevelUnlocked) {
@@ -438,7 +451,6 @@ public class GamePlayModelImpl implements Model, GameModel {
 
           transitioningToUpgradeScreen = true;
           game.changeToReturningScreen(ScreenType.UPGRADE_FULL_VERSION);
-        }
 
         /*
          * must return at this point to prevent next wave being
@@ -451,6 +463,7 @@ public class GamePlayModelImpl implements Model, GameModel {
       // check if all waves have been completed
       else if (wave >= GameConstants.MAX_WAVES) {
         Log.i(TAG, "Game completed.");
+        transitioningToGameCompletedScreen = true;
         game.changeToScreen(ScreenType.GAME_COMPLETE);
         return;
       }
@@ -494,6 +507,10 @@ public class GamePlayModelImpl implements Model, GameModel {
   private boolean isWaveComplete() {
     return alienManager.isWaveComplete() &&
         assets.alienMissilesDestroyed();
+  }
+
+  private boolean isTransitioningToAnotherScreen() {
+    return transitioningToUpgradeScreen || transitioningToGameCompletedScreen;
   }
 
   /**
@@ -577,8 +594,6 @@ public class GamePlayModelImpl implements Model, GameModel {
 
     // reset lives lost for new wave
     this.noLivesLostInWave = true;
-
-    this.waveCompletedAchievementsSaved = false;
   }
 
   /**
@@ -684,6 +699,6 @@ public class GamePlayModelImpl implements Model, GameModel {
   }
 
   private enum ModelState {
-    GET_READY, PLAYING, PAUSE, GAME_OVER
+    GET_READY, PLAYING, PAUSE, GAME_OVER, UPGRADING
   }
 }
