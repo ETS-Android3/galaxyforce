@@ -1,6 +1,7 @@
 package com.danosoftware.galaxyforce.sprites.properties;
 
 import com.danosoftware.galaxyforce.textures.TextureRegion;
+
 import java.util.EnumMap;
 
 public enum SpriteDetails {
@@ -722,9 +723,6 @@ public enum SpriteDetails {
 
   // null - transparent 1 x 1 sprite (essentially an invisible sprite)
   NULL;
-
-  // empty dimensions to prevent null pointer exceptions if getting dimensions on an uninitialised sprite.
-  private static final SpriteDimensions EMPTY_DIMENSIONS = new SpriteDimensions(0, 0);
 
   // sprite's texture region - represents image's position in texture map.
   // this will be initialised lazily once texture map is loaded.
