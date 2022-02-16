@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
@@ -40,6 +41,7 @@ import com.danosoftware.galaxyforce.textures.TextureLoader;
 import com.danosoftware.galaxyforce.textures.TextureRegionXmlParser;
 import com.danosoftware.galaxyforce.textures.TextureService;
 import com.danosoftware.galaxyforce.view.GLGraphics;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
@@ -317,6 +319,7 @@ public class GameImpl implements Game, OnTaskCompleteListener<IScreen> {
   // create a new screen - this can be a long process so is run in another thread to avoid blocking render thread.
   // will callback with the screen when created.
   private void createScreen(ResultTask<IScreen> screenTask) {
+    Log.i(LOCAL_TAG, "Creating screen");
     transitioningToScreen = true;
     TaskCallback<IScreen> callback = new TaskCallback<>(screenTask, this);
     taskService.execute(callback);
@@ -326,6 +329,7 @@ public class GameImpl implements Game, OnTaskCompleteListener<IScreen> {
   // will callback with the new screen once it has been created.
   @Override
   public void onCompletion(IScreen screen) {
+    Log.i(LOCAL_TAG, "Screen ready: " + screen);
     newScreen = screen;
     newScreenReady = true;
   }
