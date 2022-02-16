@@ -22,10 +22,12 @@ public class PathLoader {
     private final EnumMap<Path, PathListDTO> cache;
 
     private final AssetManager assets;
+    private final ObjectMapper mapper;
 
     public PathLoader(AssetManager assets) {
         this.assets = assets;
         this.cache = new EnumMap<>(Path.class);
+        this.mapper = new ObjectMapper();
     }
 
     /**
@@ -46,7 +48,6 @@ public class PathLoader {
     private PathListDTO loader(String jsonFile) {
         Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Loading JSON Path: " + jsonFile);
         try (InputStream is = assets.open("paths/" + jsonFile)) {
-            final ObjectMapper mapper = new ObjectMapper();
             final PathListDTO pathData = mapper.readValue(is, PathListDTO.class);
             Log.i(GameConstants.LOG_TAG,
                 ACTIVITY_TAG + ": Loaded " + pathData.getPathList().size() + " JSON Paths from: "
