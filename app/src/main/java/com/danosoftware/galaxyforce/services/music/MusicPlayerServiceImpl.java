@@ -50,22 +50,21 @@ public class MusicPlayerServiceImpl implements
      * Load music (if different from currently loaded music) and prepare asynchronously.
      */
     @Override
-    public void load(Music music) {
+    public synchronized void load(Music music) {
 
         // no action if wanted music is already loaded
         if (currentlyLoaded == music) {
             return;
         }
 
-        // dispose old media player
+        // create or reset media player
         if (this.mediaPlayer != null) {
-            dispose();
+            this.mediaPlayer.reset();
+        } else {
+            this.mediaPlayer = createMediaPlayer();
         }
 
         Log.i(GameConstants.LOG_TAG, "Load Music");
-
-        // create new media player
-        this.mediaPlayer = createMediaPlayer();
 
         // set file as music source
         try (AssetFileDescriptor assetDescriptor = assets.openFd("music/" + music.getFileName())) {
@@ -99,7 +98,7 @@ public class MusicPlayerServiceImpl implements
     }
 
     @Override
-    public void play() {
+    public synchronized void play() {
         // if not prepared then exit
         // will play automatically once prepared
         if (!isPrepared || mediaPlayer == null) {
@@ -118,7 +117,7 @@ public class MusicPlayerServiceImpl implements
     }
 
     @Override
-    public void pause() {
+    public synchronized void pause() {
         Log.i(GameConstants.LOG_TAG, "Pause Music");
         if (mediaPlayer != null && mediaPlayer.isPlaying()) {
             mediaPlayer.pause();
@@ -131,7 +130,7 @@ public class MusicPlayerServiceImpl implements
     }
 
     @Override
-    public void dispose() {
+    public synchronized void dispose() {
         Log.i(GameConstants.LOG_TAG, "Dispose Music");
         isPrepared = false;
         currentlyLoaded = null;

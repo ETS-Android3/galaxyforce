@@ -4,28 +4,39 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_AL
 
 import android.opengl.GLES20;
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
 import com.danosoftware.galaxyforce.models.screens.Model;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
+import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.tasks.OnTaskCompleteListener;
+import com.danosoftware.galaxyforce.tasks.TaskCallback;
+import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.text.Font;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.textures.Texture;
 import com.danosoftware.galaxyforce.textures.TextureMap;
 import com.danosoftware.galaxyforce.textures.TextureRegion;
 import com.danosoftware.galaxyforce.textures.TextureService;
+import com.danosoftware.galaxyforce.textures.TextureWithFont;
 import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLShaderHelper;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 import com.danosoftware.galaxyforce.view.StarBatcher;
+
 import java.util.List;
 
-public abstract class AbstractScreen implements IScreen {
+public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<TextureWithFont> {
 
   /* logger tag */
   private static final String LOCAL_TAG = "Screen";
+
+  private enum ScreenState {
+    PREPARING, PREPARED, RUNNING;
+  }
 
   /**
    * Reference to model and controller. Each screen will have different implementations of models
@@ -40,6 +51,8 @@ public abstract class AbstractScreen implements IScreen {
   // sprite batcher used for displaying sprites
   final SpriteBatcher batcher;
   final StarBatcher starBatcher;
+
+  private final StarField starField;
   // camera used for display views
   final Camera2D camera;
   private final Controller controller;
@@ -50,6 +63,10 @@ public abstract class AbstractScreen implements IScreen {
   Texture texture;
   // font used for displaying text sprites
   Font gameFont;
+  private final TaskService taskService;
+  private ScreenState screenState;
+  private boolean animateStars;
+
 
   AbstractScreen(
       Model model,
@@ -58,7 +75,9 @@ public abstract class AbstractScreen implements IScreen {
       TextureMap textureMap,
       Camera2D camera,
       SpriteBatcher batcher,
-      StarBatcher starBatcher) {
+      StarBatcher starBatcher,
+      TaskService taskService,
+      StarField starField) {
 
     this.textureService = textureService;
     this.textureMap = textureMap;
@@ -67,6 +86,10 @@ public abstract class AbstractScreen implements IScreen {
     this.controller = controller;
     this.model = model;
     this.starBatcher = starBatcher;
+    this.taskService = taskService;
+    this.screenState = ScreenState.PREPARING;
+    this.starField = starField;
+    this.animateStars = model.animateStars();
   }
 
   @Override
@@ -85,10 +108,30 @@ public abstract class AbstractScreen implements IScreen {
     GLES20.glEnable(GLES20.GL_BLEND);
     GLES20.glBlendFunc(GLES20.GL_ONE, GLES20.GL_ONE_MINUS_SRC_ALPHA);
 
-    // Draw Stars
+    drawStars();
+    drawSprites();
+
+    // Turn alpha blending off
+    GLES20.glDisable(GLES20.GL_BLEND);
+  }
+
+  /**
+   * Draw Starfield
+   */
+  void drawStars() {
     GLShaderHelper.setPointShaderProgram();
     camera.setViewportAndMatrices();
     starBatcher.drawStars();
+  }
+
+  /**
+   * Draw sprites and sprite text
+   */
+  void drawSprites() {
+
+    if (texture == null) {
+      return;
+    }
 
     // count sprites to draw
     final List<ISprite> sprites = model.getSprites();
@@ -130,26 +173,46 @@ public abstract class AbstractScreen implements IScreen {
     }
 
     // draw any text
-    for (Text text : texts) {
-      gameFont.drawText(
-          batcher,
-          text.getText(),
-          text.getX(),
-          text.getY(),
-          text.getTextPositionX(),
-          text.getTextPositionY());
+    if (gameFont != null) {
+      for (Text text : texts) {
+        gameFont.drawText(
+            batcher,
+            text.getText(),
+            text.getX(),
+            text.getY(),
+            text.getTextPositionX(),
+            text.getTextPositionY());
+      }
     }
 
     batcher.endBatch();
-
-    // Turn alpha blending off
-    GLES20.glDisable(GLES20.GL_BLEND);
   }
 
   @Override
   public void update(float deltaTime) {
-    controller.update(deltaTime);
-    model.update(deltaTime);
+
+    // move stars
+    if (animateStars) {
+      starField.animate(deltaTime);
+    }
+
+    switch (screenState) {
+      case PREPARING:
+        // no action - waiting for screen to be ready
+        break;
+      case PREPARED:
+        model.resume();
+        controller.update(0f);
+        model.update(0f);
+        screenState = ScreenState.RUNNING;
+        break;
+      case RUNNING:
+        controller.update(deltaTime);
+        model.update(deltaTime);
+        break;
+      default:
+        throw new IllegalStateException("Unexpected value: " + screenState);
+    }
   }
 
   @Override
@@ -171,12 +234,29 @@ public abstract class AbstractScreen implements IScreen {
      * (used to draw sprite from texture map) and dimensions
      * (e.g width and height).
      */
-    this.texture = textureService.getOrCreateTexture(textureMap);
+    screenState = ScreenState.PREPARING;
+    createTextureAndFontAsync(textureMap);
+  }
 
-    // set-up fonts
-    this.gameFont = textureService.getOrCreateFont(textureMap);
+  // create texture and font from wanted texture map asynchronously.
+  // callback when ready.
+  private void createTextureAndFontAsync(TextureMap newTextureMap) {
+    TaskCallback<TextureWithFont> callback = new TaskCallback<>(
+        () -> {
+          final Texture texture = textureService.getOrCreateTexture(newTextureMap);
+          final Font font = textureService.getOrCreateFont(textureMap);
+          return new TextureWithFont(texture, font);
+        },
+        this);
+    taskService.execute(callback);
+  }
 
-    model.resume();
+  // callback for texture and font once created.
+  @Override
+  public void onCompletion(TextureWithFont textureWithFont) {
+    this.texture = textureWithFont.getTexture();
+    this.gameFont = textureWithFont.getFont();
+    screenState = ScreenState.PREPARED;
   }
 
   @Override

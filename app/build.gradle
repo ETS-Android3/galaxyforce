@@ -70,10 +70,10 @@ android {
         targetSdkVersion 31
 
         // Defines the version number of your app.
-        versionCode 48
+        versionCode 50
 
         // Defines a user-friendly version name for your app.
-        versionName "0.48(BETA)"
+        versionName "0.50(BETA)"
     }
 
     /**
@@ -114,6 +114,10 @@ android {
          * shrinking, using minifyEnabled, and specifies the Proguard settings file.
          */
         release {
+            // makes it possible to deploy a release directly to a device
+            // releases give more accurate timings for profiling.
+            signingConfig signingConfigs.debug
+
             // uses gradle properties to populate API keys in BuildConfig
             buildConfigField 'String', "public_key1", "\"$PUBLIC_KEY1\""
             buildConfigField 'String', "public_key2", "\"$PUBLIC_KEY2\""

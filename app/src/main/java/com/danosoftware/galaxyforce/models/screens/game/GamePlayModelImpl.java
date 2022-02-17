@@ -46,7 +46,7 @@ import com.danosoftware.galaxyforce.sprites.game.factories.AlienFactory;
 import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.missiles.bases.IBaseMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
+import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.utilities.OverlapTester;
@@ -109,8 +109,6 @@ public class GamePlayModelImpl implements Model, GameModel {
   private IBasePrimary primaryBase;
   // get ready text instances
   private Text waveText;
-  //stars
-  private final StarField starField;
 
   /*
    * Instance variables required in GET_READY state
@@ -123,6 +121,11 @@ public class GamePlayModelImpl implements Model, GameModel {
   // set to false whenever a life is lost
   private boolean noLivesLostInWave;
 
+  private boolean transitioningToUpgradeScreen;
+  private boolean transitioningToGameCompletedScreen;
+
+  private final TaskService taskService;
+
   public GamePlayModelImpl(
       Game game,
       Controller controller,
@@ -133,7 +136,7 @@ public class GamePlayModelImpl implements Model, GameModel {
       SavedGame savedGame,
       AchievementService achievements,
       AssetManager assets,
-      StarField starField) {
+      TaskService taskService) {
     this.game = game;
     this.wave = wave;
     this.billingService = billingService;
@@ -141,7 +144,9 @@ public class GamePlayModelImpl implements Model, GameModel {
     this.vibrator = vibrator;
     this.savedGame = savedGame;
     this.achievements = achievements;
-    this.starField = starField;
+    this.taskService = taskService;
+    this.transitioningToUpgradeScreen = false;
+    this.transitioningToGameCompletedScreen = false;
 
     // no text initially
     this.waveText = null;
@@ -252,13 +257,16 @@ public class GamePlayModelImpl implements Model, GameModel {
         updateGetReady(deltaTime);
         break;
 
+      case UPGRADING:
+        // no action
+        break;
+
       case PAUSE:
-        game.changeToGamePausedScreen(getPausedSprites(), background());
-        this.modelState = previousModelState;
+        // no action
         break;
 
       case GAME_OVER:
-        game.changeToGameOverScreen(wave);
+        // no action
         break;
 
       default:
@@ -267,10 +275,10 @@ public class GamePlayModelImpl implements Model, GameModel {
         throw new GalaxyForceException(errorMsg);
     }
 
-    // move game sprites
-    starField.animate(deltaTime);
-    alienManager.animate(deltaTime);
-    assets.animate(deltaTime);
+    if (modelState != ModelState.PAUSE) {
+      alienManager.animate(deltaTime);
+      assets.animate(deltaTime);
+    }
 
     // check for game object collision
     collisionDetection();
@@ -299,6 +307,12 @@ public class GamePlayModelImpl implements Model, GameModel {
     if (modelState != ModelState.PAUSE) {
       this.previousModelState = this.modelState;
     }
+
+    // if we're playing start transition to pause screen
+    if (modelState == ModelState.GET_READY || modelState == ModelState.PLAYING) {
+      game.changeToGamePausedScreen(getPausedSprites(), background());
+    }
+
     this.modelState = ModelState.PAUSE;
     vibrator.stop();
     sounds.pause();
@@ -310,12 +324,32 @@ public class GamePlayModelImpl implements Model, GameModel {
   @Override
   public void resume() {
     Log.i(TAG, "Resume Game.");
+
+    // if we were paused, return to previous state so we can carry on where we left off.
+    if (modelState == ModelState.PAUSE) {
+      this.modelState = this.previousModelState;
+    }
+
+    // we want to return back to pause state after upgrading.
+    // give user option of exiting if they didn't upgrade.
+    if (modelState == ModelState.UPGRADING) {
+      modelState = ModelState.PLAYING;
+      pause();
+    }
+
     sounds.resume();
+    transitioningToUpgradeScreen = false;
+    transitioningToGameCompletedScreen = false;
   }
 
   @Override
   public RgbColour background() {
     return primaryBase.background();
+  }
+
+  @Override
+  public boolean animateStars() {
+    return true;
   }
 
   /**
@@ -379,6 +413,10 @@ public class GamePlayModelImpl implements Model, GameModel {
    * base method will manage setting up the next level.
    */
   private void updatePlayingState() {
+    if (isTransitioningToAnotherScreen()) {
+      return;
+    }
+
     if (isWaveComplete()) {
 
       // reward user with end of wave achievements
@@ -395,8 +433,9 @@ public class GamePlayModelImpl implements Model, GameModel {
           && (billingService.getFullGamePurchaseState() == PurchaseState.NOT_PURCHASED
           || billingService.getFullGamePurchaseState() == PurchaseState.NOT_READY
           || billingService.getFullGamePurchaseState() == PurchaseState.PENDING)) {
+
         Log.i(TAG, "Exceeded maximum free zone. Must upgrade.");
-        game.changeToReturningScreen(ScreenType.UPGRADE_FULL_VERSION);
+        this.modelState = ModelState.UPGRADING;
 
         /*
          * the user may not upgrade but we still want to store the
@@ -404,11 +443,14 @@ public class GamePlayModelImpl implements Model, GameModel {
          * when the next wave is set-up but if the user does not
          * upgrade, this set-up will never be called.
          */
-        final int unlockedWave = wave + 1;
-        int maxLevelUnlocked = savedGame.getGameLevel();
-        if (unlockedWave > maxLevelUnlocked) {
-          savedGame.saveGameLevel(unlockedWave);
-        }
+          final int unlockedWave = wave + 1;
+          int maxLevelUnlocked = savedGame.getGameLevel();
+          if (unlockedWave > maxLevelUnlocked) {
+            savedGame.saveGameLevel(unlockedWave);
+          }
+
+          transitioningToUpgradeScreen = true;
+          game.changeToReturningScreen(ScreenType.UPGRADE_FULL_VERSION);
 
         /*
          * must return at this point to prevent next wave being
@@ -421,6 +463,7 @@ public class GamePlayModelImpl implements Model, GameModel {
       // check if all waves have been completed
       else if (wave >= GameConstants.MAX_WAVES) {
         Log.i(TAG, "Game completed.");
+        transitioningToGameCompletedScreen = true;
         game.changeToScreen(ScreenType.GAME_COMPLETE);
         return;
       }
@@ -464,6 +507,10 @@ public class GamePlayModelImpl implements Model, GameModel {
   private boolean isWaveComplete() {
     return alienManager.isWaveComplete() &&
         assets.alienMissilesDestroyed();
+  }
+
+  private boolean isTransitioningToAnotherScreen() {
+    return transitioningToUpgradeScreen || transitioningToGameCompletedScreen;
   }
 
   /**
@@ -627,6 +674,7 @@ public class GamePlayModelImpl implements Model, GameModel {
     else {
       this.modelState = ModelState.GAME_OVER;
       achievements.gameOver();
+      game.changeToGameOverScreen(wave);
     }
   }
 
@@ -645,12 +693,12 @@ public class GamePlayModelImpl implements Model, GameModel {
     WaveCreationUtils creationUtils = new WaveCreationUtils(alienFactory, pathFactory,
         powerUpAllocatorFactory);
     WaveFactory waveFactory = new WaveFactory(creationUtils, powerUpAllocatorFactory);
-    WaveManager waveManager = new WaveManagerImpl(waveFactory);
+    WaveManager waveManager = new WaveManagerImpl(waveFactory, taskService);
 
     return new AlienManager(waveManager, achievements);
   }
 
   private enum ModelState {
-    GET_READY, PLAYING, PAUSE, GAME_OVER
+    GET_READY, PLAYING, PAUSE, GAME_OVER, UPGRADING
   }
 }

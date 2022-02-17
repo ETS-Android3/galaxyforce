@@ -13,6 +13,7 @@ import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.text.TextPositionY;
 import com.danosoftware.galaxyforce.view.FPSCounter;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -96,6 +97,11 @@ public class GamePlayModelFrameRateDecorator implements Model, GameModel {
   @Override
   public RgbColour background() {
     return model.background();
+  }
+
+  @Override
+  public boolean animateStars() {
+    return model.animateStars();
   }
 
   @Override

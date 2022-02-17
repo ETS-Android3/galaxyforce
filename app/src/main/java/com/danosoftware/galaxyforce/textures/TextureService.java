@@ -10,6 +10,7 @@ import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDimensions;
+import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.text.Font;
 import java.util.EnumMap;
 
@@ -65,9 +66,12 @@ public class TextureService {
   // current texture map enabled
   private TextureMap currentTextureMap;
 
+  private final TaskService taskService;
+
   public TextureService(
       final TextureRegionXmlParser xmlParser,
-      final TextureLoader textureLoader) {
+      final TextureLoader textureLoader,
+      TaskService taskService) {
     this.xmlParser = xmlParser;
     this.textureLoader = textureLoader;
     this.menuTexture = createTexture(MENU);
@@ -80,6 +84,7 @@ public class TextureService {
     this.texturesLoaded = false;
     this.dimensionsLoaded = false;
     this.fontsLoaded = false;
+    this.taskService = taskService;
   }
 
   /**
@@ -104,21 +109,19 @@ public class TextureService {
       case GAME:
         texture = gameTexture;
         if (switchingTextures) {
-          SpriteDetails.initialise(gameTextureRegions, gameSpriteDimensions);
+          initaliseSprites(gameTextureRegions, gameSpriteDimensions);
         }
         break;
       case MENU:
         texture = menuTexture;
         if (switchingTextures) {
-          SpriteDetails.initialise(menuTextureRegions, menuSpriteDimensions);
+          initaliseSprites(menuTextureRegions, menuSpriteDimensions);
         }
         break;
       default:
         throw new GalaxyForceException("Unknown texture map: " + textureMap);
     }
 
-    // set our chosen texture as the bound one
-    texture.bindActiveTexture();
     currentTextureMap = textureMap;
     return texture;
   }
@@ -282,12 +285,24 @@ public class TextureService {
   private Font createFont(Texture texture, String imageName) {
     TextureDetail textureDetail = texture.getTextureDetail(imageName);
     return new Font(
-            texture,
-            textureDetail.getXPos(),
-            textureDetail.getYPos(),
-            FONT_GLYPHS_PER_ROW,
-            FONT_GLYPHS_WIDTH,
-            FONT_GLYPHS_HEIGHT,
-            GameConstants.FONT_CHARACTER_MAP);
+        texture,
+        textureDetail.getXPos(),
+        textureDetail.getYPos(),
+        FONT_GLYPHS_PER_ROW,
+        FONT_GLYPHS_WIDTH,
+        FONT_GLYPHS_HEIGHT,
+        GameConstants.FONT_CHARACTER_MAP);
+  }
+
+  /**
+   * Initialise sprites for new texture map
+   *
+   * @param textureRegions   - texture regions to initialise
+   * @param spriteDimensions - sprite dimensions to initialise
+   */
+  private void initaliseSprites(
+      EnumMap<SpriteDetails, TextureRegion> textureRegions,
+      EnumMap<SpriteDetails, SpriteDimensions> spriteDimensions) {
+    SpriteDetails.initialise(textureRegions, spriteDimensions);
   }
 }

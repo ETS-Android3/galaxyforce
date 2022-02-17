@@ -75,15 +75,13 @@ public class Texture {
                 + ".");
     }
 
-    public void bindActiveTexture() {
+    public void bind() {
         // Set the active texture unit to texture unit 0.
         GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
 
         // Bind our texture to this unit.
         GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
-    }
 
-    public void bind() {
         // Tell the texture uniform sampler to use this texture in the shader by binding to texture unit 0.
         GLES20.glUniform1i(GLShaderHelper.sTextureHandle, 0);
     }

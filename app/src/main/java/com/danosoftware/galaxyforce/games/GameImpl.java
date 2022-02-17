@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
@@ -32,10 +33,15 @@ import com.danosoftware.galaxyforce.services.sound.SoundPlayerServiceImpl;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.services.vibration.VibrationServiceImpl;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
+import com.danosoftware.galaxyforce.tasks.OnTaskCompleteListener;
+import com.danosoftware.galaxyforce.tasks.ResultTask;
+import com.danosoftware.galaxyforce.tasks.TaskCallback;
+import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.textures.TextureLoader;
 import com.danosoftware.galaxyforce.textures.TextureRegionXmlParser;
 import com.danosoftware.galaxyforce.textures.TextureService;
 import com.danosoftware.galaxyforce.view.GLGraphics;
+
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
@@ -44,7 +50,12 @@ import java.util.List;
  * Initialises model, controller and view for game. Handles the main game loop using the controller,
  * model and view.
  */
-public class GameImpl implements Game {
+public class GameImpl implements Game, OnTaskCompleteListener<IScreen> {
+
+  private enum ScreenChangeType {
+    RETURN_SCREEN,
+    NO_RETURN_SCREEN
+  }
 
   private static final String LOCAL_TAG = "GameImpl";
   // often a screen will temporarily change to another screen (e.g OPTIONS)
@@ -60,13 +71,21 @@ public class GameImpl implements Game {
   // reference to current screen
   private IScreen screen;
 
+  private final TaskService taskService;
+
+  private ScreenChangeType screenChangeType;
+  private boolean newScreenReady;
+  private IScreen newScreen;
+  private boolean transitioningToScreen;
+
   public GameImpl(
       Context context,
       GLGraphics glGraphics,
       GLSurfaceView glView,
       BillingService billingService,
       GooglePlayServices playService,
-      ConfigurationService configurationService) {
+      ConfigurationService configurationService,
+      TaskService taskService) {
 
     this.returningScreens = new ArrayDeque<>();
 
@@ -89,7 +108,8 @@ public class GameImpl implements Game {
     AssetManager assetManager = context.getAssets();
     this.textureService = new TextureService(
         new TextureRegionXmlParser(assetManager),
-        new TextureLoader(assetManager));
+        new TextureLoader(assetManager),
+        taskService);
 
     this.screenFactory = new ScreenFactory(
         glGraphics,
@@ -104,7 +124,13 @@ public class GameImpl implements Game {
         assetManager,
         this,
         input,
-        versionName);
+        versionName,
+        taskService);
+
+    this.taskService = taskService;
+
+    this.newScreenReady = false;
+    this.transitioningToScreen = false;
   }
 
   @Override
@@ -115,32 +141,42 @@ public class GameImpl implements Game {
 
   @Override
   public void changeToScreen(ScreenType screenType) {
-    switchScreenWithoutReturn(
-        screenFactory.newScreen(screenType));
+    if (!transitioningToScreen) {
+      screenChangeType = ScreenChangeType.NO_RETURN_SCREEN;
+      createScreen(() -> screenFactory.newScreen(screenType));
+    }
   }
 
   @Override
   public void changeToReturningScreen(ScreenType screenType) {
-    switchScreenWithReturn(
-        screenFactory.newScreen(screenType));
+    if (!transitioningToScreen) {
+      screenChangeType = ScreenChangeType.RETURN_SCREEN;
+      createScreen(() -> screenFactory.newScreen(screenType));
+    }
   }
 
   @Override
   public void changeToGameScreen(int wave) {
-    switchScreenWithoutReturn(
-        screenFactory.newGameScreen(wave));
+    if (!transitioningToScreen) {
+      screenChangeType = ScreenChangeType.NO_RETURN_SCREEN;
+      createScreen(() -> screenFactory.newGameScreen(wave));
+    }
   }
 
   @Override
   public void changeToGamePausedScreen(List<ISprite> pausedSprites, RgbColour backgroundColour) {
-    switchScreenWithReturn(
-        screenFactory.newPausedGameScreen(pausedSprites, backgroundColour));
+    if (!transitioningToScreen) {
+      screenChangeType = ScreenChangeType.RETURN_SCREEN;
+      createScreen(() -> screenFactory.newPausedGameScreen(pausedSprites, backgroundColour));
+    }
   }
 
   @Override
   public void changeToGameOverScreen(int previousWave) {
-    switchScreenWithoutReturn(
-        screenFactory.newGameOverScreen(previousWave));
+    if (!transitioningToScreen) {
+      screenChangeType = ScreenChangeType.NO_RETURN_SCREEN;
+      createScreen(() -> screenFactory.newGameOverScreen(previousWave));
+    }
   }
 
   @Override
@@ -164,6 +200,7 @@ public class GameImpl implements Game {
     screen.resume();
     sounds.resume();
     music.play();
+    transitioningToScreen = false;
   }
 
   @Override
@@ -192,7 +229,23 @@ public class GameImpl implements Game {
 
   @Override
   public void update(float deltaTime) {
-    screen.update(deltaTime);
+    if (newScreenReady) {
+      switch (screenChangeType) {
+        case NO_RETURN_SCREEN:
+          switchScreenWithoutReturn(newScreen);
+          break;
+        case RETURN_SCREEN:
+          switchScreenWithReturn(newScreen);
+          break;
+        default:
+          throw new IllegalStateException("Unexpected value: " + screenChangeType);
+      }
+      newScreenReady = false;
+      newScreen = null;
+      transitioningToScreen = false;
+    } else {
+      screen.update(deltaTime);
+    }
   }
 
   @Override
@@ -261,5 +314,23 @@ public class GameImpl implements Game {
       }
     }
     return null;
+  }
+
+  // create a new screen - this can be a long process so is run in another thread to avoid blocking render thread.
+  // will callback with the screen when created.
+  private void createScreen(ResultTask<IScreen> screenTask) {
+    Log.i(LOCAL_TAG, "Creating screen");
+    transitioningToScreen = true;
+    TaskCallback<IScreen> callback = new TaskCallback<>(screenTask, this);
+    taskService.execute(callback);
+  }
+
+  // new screens are created in a different thread.
+  // will callback with the new screen once it has been created.
+  @Override
+  public void onCompletion(IScreen screen) {
+    Log.i(LOCAL_TAG, "Screen ready: " + screen);
+    newScreen = screen;
+    newScreenReady = true;
   }
 }

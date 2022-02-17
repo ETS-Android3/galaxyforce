@@ -1,6 +1,7 @@
 package com.danosoftware.galaxyforce.models.screens.game;
 
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.buttons.sprite_text_button.SpriteTextButton;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
@@ -19,6 +20,7 @@ import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -124,6 +126,7 @@ public class GamePausedModelImpl implements Model, ButtonModel {
       case EXIT:
         // on exit, return to select level screen
         game.changeToScreen(ScreenType.SELECT_LEVEL);
+        this.modelState = PausedState.RUNNING;
         break;
 
       case OPTIONS:
@@ -135,6 +138,7 @@ public class GamePausedModelImpl implements Model, ButtonModel {
       case RESUME:
         // on resume - return back to game screen
         game.screenReturn();
+        this.modelState = PausedState.RUNNING;
         break;
 
       default:
@@ -180,6 +184,11 @@ public class GamePausedModelImpl implements Model, ButtonModel {
   @Override
   public RgbColour background() {
     return backgroundColour;
+  }
+
+  @Override
+  public boolean animateStars() {
+    return false;
   }
 
   @Override

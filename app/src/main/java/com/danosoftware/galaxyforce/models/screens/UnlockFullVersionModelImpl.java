@@ -3,6 +3,7 @@ package com.danosoftware.galaxyforce.models.screens;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
+
 import com.android.billingclient.api.SkuDetails;
 import com.danosoftware.galaxyforce.billing.BillingObserver;
 import com.danosoftware.galaxyforce.billing.BillingService;
@@ -20,11 +21,11 @@ import com.danosoftware.galaxyforce.models.screens.flashing.FlashingText;
 import com.danosoftware.galaxyforce.models.screens.flashing.FlashingTextImpl;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -37,7 +38,6 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
   private static final String LOCAL_TAG = "UnlockFullVersionModel";
 
   private final Game game;
-  private final StarField starField;
   private final ISprite logo;
 
   // messages to display on the screen
@@ -59,13 +59,11 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
   public UnlockFullVersionModelImpl(
       Game game,
       Controller controller,
-      BillingService billingService,
-      StarField starField) {
+      BillingService billingService) {
 
     this.game = game;
     this.controller = controller;
     this.billingService = billingService;
-    this.starField = starField;
     this.modelState = ModelState.RUNNING;
     this.buttons = new ArrayList<>();
     this.messages = new ArrayList<>();
@@ -156,7 +154,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
               TextPositionX.CENTRE,
               300 + 50));
       messages.add(
-          Text.newTextRelativePositionX(
+          Text.newUntrustedTextRelativePositionX(
               skuDetails.getPrice(),
               TextPositionX.CENTRE,
               300));
@@ -344,9 +342,6 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
       return;
     }
 
-    // move stars
-    starField.animate(deltaTime);
-
     /*
      * refresh screen sprites. triggered following the billing state change.
      * may result in text and button changes following a successful purchase.
@@ -373,6 +368,11 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
   @Override
   public RgbColour background() {
     return DEFAULT_BACKGROUND_COLOUR;
+  }
+
+  @Override
+  public boolean animateStars() {
+    return true;
   }
 
   @Override

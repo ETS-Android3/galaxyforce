@@ -3,6 +3,7 @@ package com.danosoftware.galaxyforce.models.screens.game;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.buttons.sprite_text_button.SpriteTextButton;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
@@ -17,12 +18,12 @@ import com.danosoftware.galaxyforce.models.screens.flashing.FlashingText;
 import com.danosoftware.galaxyforce.models.screens.flashing.FlashingTextImpl;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.utilities.WaveUtilities;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -46,8 +47,6 @@ public class GameOverModelImpl implements Model, ButtonModel {
    */
   /* reference to pause menu buttons */
   private final List<SpriteTextButton> menuButtons;
-  /* stars sprites */
-  private final StarField starField;
   /* reference to flashing game over text */
   private final FlashingText flashingGameOverText;
   private final int lastWave;
@@ -57,10 +56,8 @@ public class GameOverModelImpl implements Model, ButtonModel {
   public GameOverModelImpl(
       Game game,
       Controller controller,
-      int lastWave,
-      StarField starField) {
+      int lastWave) {
     this.game = game;
-    this.starField = starField;
     this.lastWave = lastWave;
     this.menuButtons = new ArrayList<>();
     this.modelState = GameOverState.RUNNING;
@@ -121,12 +118,12 @@ public class GameOverModelImpl implements Model, ButtonModel {
 
       case RUNNING:
         // normal state before any buttons are pressed
-        starField.animate(deltaTime);
         break;
 
       case EXIT:
         // exit game. go to select level screen
         game.changeToScreen(ScreenType.SELECT_LEVEL);
+        this.modelState = GameOverState.RUNNING;
         break;
 
       case NEW_GAME:
@@ -138,6 +135,7 @@ public class GameOverModelImpl implements Model, ButtonModel {
           nextWave = lastWave;
         }
         game.changeToGameScreen(nextWave);
+        this.modelState = GameOverState.RUNNING;
         break;
 
       case OPTIONS:
@@ -196,6 +194,11 @@ public class GameOverModelImpl implements Model, ButtonModel {
   @Override
   public RgbColour background() {
     return DEFAULT_BACKGROUND_COLOUR;
+  }
+
+  @Override
+  public boolean animateStars() {
+    return true;
   }
 
   @Override

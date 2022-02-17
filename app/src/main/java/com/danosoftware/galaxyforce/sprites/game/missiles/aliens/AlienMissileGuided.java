@@ -51,7 +51,8 @@ public class AlienMissileGuided extends AbstractAlienMissile {
     super(
         animation,
         xStart,
-        yStart);
+        yStart,
+        animation.getKeyFrame(0, Animation.ANIMATION_LOOPING));
 
     this.base = base;
 

@@ -38,7 +38,8 @@ public class AlienMissileRotated extends AbstractAlienMissile {
     super(
         animation,
         xStart,
-        yStart);
+        yStart,
+        animation.getKeyFrame(0, Animation.ANIMATION_LOOPING));
 
     // calculate angle from missile position to base
     final AlienMissileRotateCalculation calculation = calculateAngle(this, base);
@@ -61,7 +62,8 @@ public class AlienMissileRotated extends AbstractAlienMissile {
     super(
         animation,
         xStart,
-        yStart);
+        yStart,
+        animation.getKeyFrame(0, Animation.ANIMATION_LOOPING));
 
     // calculate sprite rotation for wanted angle
     rotate((calculateRotation(angle)));

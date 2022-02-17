@@ -7,7 +7,6 @@ import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenLe
 import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenRight;
 import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenTop;
 
-import android.util.Log;
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.sprites.game.aliens.AbstractAlien;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.explode.ExplosionBehaviourFactory;
@@ -77,12 +76,9 @@ public class DriftingAlien extends AbstractAlien {
     // calculate the deltas to be applied each move
     final int movePixelsPerSecond = alienConfig.getSpeed().getSpeedInPixelsPerSeconds();
     final float angle = alienConfig.getAngle();
-    Log.i("ALIEN", Float.toString(angle));
 
     this.xDelta = movePixelsPerSecond * (float) Math.cos(angle);
     this.yDelta = movePixelsPerSecond * (float) Math.sin(angle);
-    Log.i("ALIEN", Float.toString(xDelta));
-    Log.i("ALIEN", Float.toString(yDelta));
   }
 
     @Override

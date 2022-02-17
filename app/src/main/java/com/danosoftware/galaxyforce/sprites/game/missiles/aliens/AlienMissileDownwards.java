@@ -18,7 +18,8 @@ public class AlienMissileDownwards extends AbstractAlienMissile {
       super(
           animation,
           xStart,
-          yStart);
+          yStart,
+          animation.getKeyFrame(0, Animation.ANIMATION_LOOPING));
       this.missileSpeed = -missileSpeed.getSpeed();
     }
 

@@ -14,10 +14,10 @@ import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.common.RotatingSprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,9 +27,6 @@ public class GameCompleteModelImpl implements Model, TouchScreenModel {
   private static final String TAG = "GameCompleteImpl";
 
   private final Game game;
-
-  // stars
-  private final StarField starField;
 
   // reference to all sprites in model
   private final List<ISprite> allSprites;
@@ -42,10 +39,8 @@ public class GameCompleteModelImpl implements Model, TouchScreenModel {
 
   public GameCompleteModelImpl(
       Game game,
-      Controller controller,
-      StarField starField) {
+      Controller controller) {
     this.game = game;
-    this.starField = starField;
     this.allSprites = new ArrayList<>();
     this.rotatedSprites = new ArrayList<>();
     this.allText = new ArrayList<>();
@@ -90,9 +85,6 @@ public class GameCompleteModelImpl implements Model, TouchScreenModel {
       game.changeToScreen(ScreenType.MAIN_MENU);
     }
 
-    // move stars
-    starField.animate(deltaTime);
-
     // rotate sprites
     for (RotatingSprite eachSprite : rotatedSprites) {
       eachSprite.animate(deltaTime);
@@ -112,6 +104,11 @@ public class GameCompleteModelImpl implements Model, TouchScreenModel {
   @Override
   public RgbColour background() {
     return DEFAULT_BACKGROUND_COLOUR;
+  }
+
+  @Override
+  public boolean animateStars() {
+    return true;
   }
 
   @Override

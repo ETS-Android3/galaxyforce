@@ -3,6 +3,7 @@ package com.danosoftware.galaxyforce.models.screens.level;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.billing.BillingObserver;
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.billing.PurchaseState;
@@ -23,9 +24,9 @@ import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.services.savedgame.HighestLevelChangeObserver;
 import com.danosoftware.galaxyforce.services.savedgame.SavedGame;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -42,7 +43,6 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
   // map of zone number to x position
   private final Map<Integer, Integer> zoneXPosition;
   // on-screen components
-  private final StarField starField;
   private final List<SpriteButton> buttons;
   private final List<SpriteTextButton> textButtons;
   private final List<SpriteTextButton> staticTextButtons;
@@ -74,13 +74,11 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
       Game game,
       Controller controller,
       BillingService billingService,
-      SavedGame savedGame,
-      StarField starField) {
+      SavedGame savedGame) {
     this.game = game;
     this.controller = controller;
     this.billingService = billingService;
     this.savedGame = savedGame;
-    this.starField = starField;
     this.modelState = ModelState.RUNNING;
     this.reBuildAssets = false;
     this.messages = new ArrayList<>();
@@ -285,14 +283,12 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
   public void update(float deltaTime) {
     if (modelState == ModelState.GO_BACK) {
       game.changeToScreen(ScreenType.MAIN_MENU);
+      modelState = ModelState.RUNNING;
     }
 
     // calculate screen scroll speed based on distance from target.
     float speed = (xTarget - xPosition) * 10;
     xPosition = xPosition + (speed * deltaTime);
-
-    // move stars
-    starField.animate(deltaTime);
 
     /*
      * refresh screen sprites. triggered following the billing state change.
@@ -382,12 +378,17 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
 
   @Override
   public void resume() {
-    // no implementation
+    // no action
   }
 
   @Override
   public RgbColour background() {
     return DEFAULT_BACKGROUND_COLOUR;
+  }
+
+  @Override
+  public boolean animateStars() {
+    return true;
   }
 
   @Override

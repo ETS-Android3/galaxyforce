@@ -36,6 +36,7 @@ import com.danosoftware.galaxyforce.services.configurations.ConfigurationService
 import com.danosoftware.galaxyforce.services.googleplay.GooglePlayServices;
 import com.danosoftware.galaxyforce.services.preferences.IPreferences;
 import com.danosoftware.galaxyforce.services.preferences.PreferencesString;
+import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.view.GLGraphics;
 import com.danosoftware.galaxyforce.view.GLShaderHelper;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -74,6 +75,8 @@ public class MainActivity extends Activity {
     /* Google Play Games Services */
     private GooglePlayServices mPlayServices;
 
+    private TaskService taskService = new TaskService();
+
     /* runs when application initially starts */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,10 +109,10 @@ public class MainActivity extends Activity {
         if (launchIntentAction != null &&
             launchIntentAction.equals("com.google.intent.action.TEST_LOOP")) {
             game = new GameLoopTest(this, glGraphics, glView, billingService, mPlayServices,
-                configurationService);
+                configurationService, taskService);
         } else {
             game = new GameImpl(this, glGraphics, glView, billingService, mPlayServices,
-                configurationService);
+                configurationService, taskService);
         }
 
         Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Application Created");
@@ -166,6 +169,8 @@ public class MainActivity extends Activity {
     protected void onDestroy() {
         Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Destroying Application");
         super.onDestroy();
+
+        taskService.dispose();
 
         Log.i(ACTIVITY_TAG, "Destroying Billing Manager.");
         if (mBillingManager != null) {

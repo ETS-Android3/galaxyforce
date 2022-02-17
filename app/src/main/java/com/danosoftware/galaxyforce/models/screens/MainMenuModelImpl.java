@@ -5,6 +5,7 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.LOGO_Y_POS;
 import static com.danosoftware.galaxyforce.constants.GameConstants.PLANET_Y_POS;
 
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.billing.BillingObserver;
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.billing.PurchaseState;
@@ -19,10 +20,10 @@ import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,8 +33,6 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
   private static final String LOCAL_TAG = "MainMenuModelImpl";
 
   private final Game game;
-
-  private final StarField starField;
 
   // sprites
   private final ISprite logo;
@@ -57,12 +56,10 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
   public MainMenuModelImpl(
       Game game,
       Controller controller,
-      BillingService billingService,
-      StarField starField) {
+      BillingService billingService) {
     this.game = game;
     this.controller = controller;
     this.billingService = billingService;
-    this.starField = starField;
     this.buttons = new ArrayList<>();
     this.sprites = new ArrayList<>();
     this.text = new ArrayList<>();
@@ -163,9 +160,6 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
 
   @Override
   public void update(float deltaTime) {
-    // move stars
-    starField.animate(deltaTime);
-
     // do we need to rebuild menu buttons and sprites?
     if (rebuildButtons) {
       buildButtons();
@@ -208,12 +202,17 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
 
   @Override
   public void resume() {
-    // no implementation
+    // no action
   }
 
   @Override
   public RgbColour background() {
     return DEFAULT_BACKGROUND_COLOUR;
+  }
+
+  @Override
+  public boolean animateStars() {
+    return true;
   }
 
   @Override

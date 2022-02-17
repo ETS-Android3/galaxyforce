@@ -3,6 +3,7 @@ package com.danosoftware.galaxyforce.models.screens.options;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.buttons.sprite_text_button.OptionButton;
 import com.danosoftware.galaxyforce.buttons.toggle_group.ToggleButtonGroup;
 import com.danosoftware.galaxyforce.buttons.toggle_group.ToggleOption;
@@ -31,11 +32,12 @@ import com.danosoftware.galaxyforce.services.vibration.VibrateTime;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDimensions;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -53,9 +55,6 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
   private final VibrationService vibrator;
   private final GooglePlayServices playService;
 
-  // stars
-  private final StarField starField;
-
   // reference to all sprites in model
   private final List<ISprite> allSprites;
   // reference to all text objects in model
@@ -66,6 +65,9 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
   // current state of google play service connection
   private ConnectionState connectionState;
 
+  private final static SpriteDetails GOOGLE_PLAY_ICON = SpriteDetails.GOOGLE_PLAY;
+  private final static int DEFAULT_GOOGLE_PLAY_ICON_WIDTH = 52; // fallback is dimensions not loaded
+
   public OptionsModelImpl(
       Game game,
       Controller controller,
@@ -73,8 +75,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
       SoundPlayerService sounds,
       MusicPlayerService music,
       VibrationService vibrator,
-      GooglePlayServices playService,
-      StarField starField) {
+      GooglePlayServices playService) {
     this.game = game;
     this.controller = controller;
     this.configurationService = configurationService;
@@ -82,7 +83,6 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
     this.music = music;
     this.vibrator = vibrator;
     this.playService = playService;
-    this.starField = starField;
     this.allSprites = new ArrayList<>();
     this.allText = new ArrayList<>();
     this.connectionState = playService.connectedState();
@@ -183,10 +183,9 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
       // we will place google play icon alongside text.
       // compute the positions of each so combined icon/text is centred.
       final String text = "GOOGLE PLAY";
-      final SpriteDetails icon = SpriteDetails.GOOGLE_PLAY;
-      final int halfIconWidth = (icon.getDimensions() != null ?
-          icon.getDimensions().getWidth() / 2
-          : 0);
+      final SpriteDimensions dimensions = GOOGLE_PLAY_ICON.getDimensions();
+      final int halfIconWidth =
+          dimensions != null ? dimensions.getWidth() / 2 : DEFAULT_GOOGLE_PLAY_ICON_WIDTH / 2;
       final int fontWidth = 30;
       final int buffer = 10;
       final int textLength = text.length() * fontWidth;
@@ -197,7 +196,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
           new SplashSprite(
               iconXPos,
               175 + 170,
-              icon));
+              GOOGLE_PLAY_ICON));
       allText.add(Text.newTextAbsolutePosition(
           text,
           xPos,
@@ -247,9 +246,6 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
       buildAssets();
       reBuildAssets = false;
     }
-
-    // move stars
-    starField.animate(deltaTime);
   }
 
   @Override
@@ -399,6 +395,11 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
   @Override
   public RgbColour background() {
     return DEFAULT_BACKGROUND_COLOUR;
+  }
+
+  @Override
+  public boolean animateStars() {
+    return true;
   }
 
   @Override
