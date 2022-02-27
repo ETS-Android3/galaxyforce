@@ -622,7 +622,7 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
     this.getReadyFlashingText = new FlashingTextImpl(
         Collections.singletonList(getReadyText),
         0.5f,
-            this);
+        this);
 
     timeSinceGetReady = 0f;
     updateText = true;
