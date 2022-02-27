@@ -2,18 +2,17 @@ package com.danosoftware.galaxyforce.models.screens.level;
 
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
-import com.danosoftware.galaxyforce.models.screens.flashing.FlashingTextListener;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.text.Text;
+import com.danosoftware.galaxyforce.text.TextChangeListener;
 import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.view.FPSCounter;
-
 import java.util.List;
 
 /**
  * Decorator that adds frame-rate calculations and display functionality.
  */
-public class LevelModelFrameRateDecorator implements LevelModel, FlashingTextListener {
+public class LevelModelFrameRateDecorator implements LevelModel, TextChangeListener {
 
   private final static int HALF_GLYPH_WIDTH = 30 / 2;
   private final static int HALF_GLYPH_HEIGHT = 38 / 2;
@@ -114,7 +113,7 @@ public class LevelModelFrameRateDecorator implements LevelModel, FlashingTextLis
   }
 
   @Override
-  public void onFlashingTextChange() {
+  public void onTextChange() {
     updateText = true;
   }
 

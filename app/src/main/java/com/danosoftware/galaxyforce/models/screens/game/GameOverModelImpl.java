@@ -3,7 +3,6 @@ package com.danosoftware.galaxyforce.models.screens.game;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.buttons.sprite_text_button.SpriteTextButton;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
@@ -16,21 +15,20 @@ import com.danosoftware.galaxyforce.models.screens.Model;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.models.screens.flashing.FlashingText;
 import com.danosoftware.galaxyforce.models.screens.flashing.FlashingTextImpl;
-import com.danosoftware.galaxyforce.models.screens.flashing.FlashingTextListener;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
+import com.danosoftware.galaxyforce.text.TextChangeListener;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.utilities.WaveUtilities;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class GameOverModelImpl implements Model, ButtonModel, FlashingTextListener {
+public class GameOverModelImpl implements Model, ButtonModel, TextChangeListener {
 
   /*
    * ******************************************************
@@ -249,7 +247,7 @@ public class GameOverModelImpl implements Model, ButtonModel, FlashingTextListen
   }
 
   @Override
-  public void onFlashingTextChange() {
+  public void onTextChange() {
     updateText = true;
   }
 

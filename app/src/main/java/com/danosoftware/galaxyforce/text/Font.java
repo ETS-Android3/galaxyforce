@@ -4,7 +4,6 @@ import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.textures.Texture;
 import com.danosoftware.galaxyforce.textures.TextureRegion;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -24,8 +23,10 @@ public class Font {
 
   // each string is converted into character indexes.
   // each index represents each character's position within the character map.
+  // speeds-up re-creating characters from previously seen text.
   private final Map<String, List<Integer>> characterIndexesCache;
 
+  // cached characters to draw
   private final List<Character> characters;
 
   /**
@@ -66,55 +67,66 @@ public class Font {
     }
   }
 
+  // draw text to the screen
   public void drawText(SpriteBatcher batcher, TextProvider textProvider) {
 
     if (textProvider.count() == 0) {
       return;
     }
 
+    // if any text has changed, update the cached characters
     if (textProvider.hasUpdated()) {
       characters.clear();
       for (Text text : textProvider.text()) {
-        drawText(
-                text.getText(),
-                text.getX(),
-                text.getY(),
-                text.getTextPositionX(),
-                text.getTextPositionY());
+        updateCharacters(
+            text.getText(),
+            text.getX(),
+            text.getY(),
+            text.getTextPositionX(),
+            text.getTextPositionY());
       }
     }
 
+    // draw all cached characters
     for (Character aChar : characters) {
       batcher.drawSprite(
-              aChar.getX(),
-              aChar.getY(),
-              glyphWidth,
-              glyphHeight,
-              aChar.getRegion());
+          aChar.getX(),
+          aChar.getY(),
+          glyphWidth,
+          glyphHeight,
+          aChar.getRegion());
     }
   }
 
-  // drawText method that calculates x and y from Position enums (e.g. LEFT,
-  // BOTTOM) if supplied. otherwise uses absolute x, y values.
-  //
-  private void drawText(String text, float x, float y, TextPositionX textPosX,
+  /*
+   * Add characters using provided position and text.
+   *
+   * calculates x and y from position enums (e.g. LEFT,BOTTOM)
+   * if supplied. otherwise uses absolute x, y values.
+   */
+  private void updateCharacters(
+      String text,
+      float x,
+      float y,
+      TextPositionX textPosX,
       TextPositionY textPosY) {
 
-    // choose the correct drawText method depending on whether text
-    // position enums have been set.
-    //
+    // choose the correct method depending on whether text position enums have been set.
     if (textPosX != null && textPosY != null) {
-      drawText(text, calculateX(textPosX, text), calculateY(textPosY));
+      updateCharacters(text, calculateX(textPosX, text), calculateY(textPosY));
     } else if (textPosX != null) {
-      drawText(text, calculateX(textPosX, text), y);
+      updateCharacters(text, calculateX(textPosX, text), y);
     } else if (textPosY != null) {
-      drawText(text, x, calculateY(textPosY));
+      updateCharacters(text, x, calculateY(textPosY));
     } else {
-      drawText(text, calculateCentreX(text, x), y);
+      updateCharacters(text, calculateCentreX(text, x), y);
     }
   }
 
-  private void drawText(String text, float x, float y) {
+  /*
+   * Add characters using provided position and text
+   */
+  private void updateCharacters(String text, float x, float y) {
     // compute indexes for text or retrieve from cache
     final List<Integer> characterIndexes;
     if (characterIndexesCache.containsKey(text)) {

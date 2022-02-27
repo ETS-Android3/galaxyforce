@@ -1,7 +1,7 @@
 package com.danosoftware.galaxyforce.models.screens.flashing;
 
 import com.danosoftware.galaxyforce.text.Text;
-
+import com.danosoftware.galaxyforce.text.TextChangeListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -19,21 +19,22 @@ public class FlashingTextImpl implements FlashingText {
   // current flash state - show text or hide text
   private boolean showText;
 
-  private final FlashingTextListener listener;
+  // listener to notify when flash state changes
+  private final TextChangeListener listener;
 
   // default constructor with initial flashing text shown
   public FlashingTextImpl(
-          List<Text> flashingText,
-          float flashDelay,
-          FlashingTextListener listener) {
+      List<Text> flashingText,
+      float flashDelay,
+      TextChangeListener listener) {
     this(flashingText, flashDelay, listener, true);
   }
 
   public FlashingTextImpl(
-          List<Text> flashingText,
-          float flashDelay,
-          FlashingTextListener listener,
-          boolean showText) {
+      List<Text> flashingText,
+      float flashDelay,
+      TextChangeListener listener,
+      boolean showText) {
     this.flashingText = flashingText;
     this.flashDelay = flashDelay;
     this.timeSinceFlashStateChange = 0f;
@@ -56,9 +57,9 @@ public class FlashingTextImpl implements FlashingText {
       // reset time since state change
       timeSinceFlashStateChange = 0f;
 
-      listener.onFlashingTextChange();
+      // notify listener of the flash state change
+      listener.onTextChange();
     }
-
   }
 
   @Override

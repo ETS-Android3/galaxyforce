@@ -2,15 +2,18 @@ package com.danosoftware.galaxyforce.text;
 
 import com.danosoftware.galaxyforce.textures.TextureRegion;
 
+/**
+ * Represents a text character to be drawn to the screen.
+ */
 public class Character {
 
-    private float x,y;
-    private TextureRegion region;
+    private final float x, y;
+    private final TextureRegion region;
 
     public Character(
-            float x,
-            float y,
-            TextureRegion region) {
+        float x,
+        float y,
+        TextureRegion region) {
         this.x = x;
         this.y = y;
         this.region = region;

@@ -4,7 +4,6 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_AL
 
 import android.opengl.GLES20;
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
 import com.danosoftware.galaxyforce.models.screens.Model;
@@ -27,7 +26,6 @@ import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLShaderHelper;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 import com.danosoftware.galaxyforce.view.StarBatcher;
-
 import java.util.List;
 
 public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<TextureWithFont> {
@@ -66,7 +64,7 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
   Font gameFont;
   private final TaskService taskService;
   private ScreenState screenState;
-  private boolean animateStars;
+  private final boolean animateStars;
 
 
   AbstractScreen(
@@ -173,18 +171,8 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
       }
     }
 
-    // draw any text
+    // draw text
     if (gameFont != null) {
-//      for (Text text : texts) {
-//        gameFont.drawText(
-//            batcher,
-//            text.getText(),
-//            text.getX(),
-//            text.getY(),
-//            text.getTextPositionX(),
-//            text.getTextPositionY());
-//      }
-      //TextProvider textProvider = new TextProvider();
       gameFont.drawText(
               batcher,
               textProvider);

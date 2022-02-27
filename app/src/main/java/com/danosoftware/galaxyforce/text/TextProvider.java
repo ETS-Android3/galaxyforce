@@ -4,63 +4,60 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+/**
+ * Provides text to be drawn to the screen.
+ * <p>
+ * Initially starts as empty. Text to be drawn can be added.
+ * <p>
+ * Reports total characters cached and any changes since text was last retrieved.
+ */
 public class TextProvider {
 
     private final List<Text> text;
     private int characters;
-    private boolean countCached;
-    private boolean updated;
+    private boolean updatedSinceLastRetrieve;
 
     public TextProvider() {
         this.text = new ArrayList<>();
         this.characters = 0;
-        this.updated = false;
-        this.countCached = true;
+        this.updatedSinceLastRetrieve = false;
     }
 
+    // empties the contents of any cached text
     public void clear() {
         text.clear();
         characters = 0;
-        countCached = true;
-        updated = true;
+        updatedSinceLastRetrieve = true;
     }
 
+    // how many characters are contained in the cached text
     public int count() {
-        if (!countCached) {
-            characters = countCharacters(text);
-            countCached = true;
-        }
         return characters;
     }
 
+    // return all cached text
+    // also resets "updated since last retrieved" flag
     public List<Text> text() {
-        this.updated = false;
+        this.updatedSinceLastRetrieve = false;
         return text;
     }
 
+    // has any text changed since the last time text was retrieved?
     public boolean hasUpdated() {
-        return updated;
+        return updatedSinceLastRetrieve;
     }
 
+    // add a single text item
     public void add(Text addText) {
         text.add(addText);
         characters += addText.getText().length();
-        this.updated = true;
-        this.countCached = false;
+        this.updatedSinceLastRetrieve = true;
     }
 
+    // add a collection of text
     public void addAll(Collection<Text> addTexts) {
-        text.addAll(addTexts);
-        characters += countCharacters(addTexts);
-        this.updated = true;
-        this.countCached = false;
-    }
-
-    private int countCharacters(Collection<Text> texts) {
-        int charCount = 0;
-        for (Text text : texts) {
-            charCount += text.getText().length();
+        for (Text text : addTexts) {
+            add(text);
         }
-        return charCount;
     }
 }

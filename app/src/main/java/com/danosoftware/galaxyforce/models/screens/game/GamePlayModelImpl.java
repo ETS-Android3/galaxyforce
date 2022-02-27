@@ -2,7 +2,6 @@ package com.danosoftware.galaxyforce.models.screens.game;
 
 import android.content.res.AssetManager;
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.billing.PurchaseState;
 import com.danosoftware.galaxyforce.buttons.sprite_button.PauseButton;
@@ -30,7 +29,6 @@ import com.danosoftware.galaxyforce.models.screens.Model;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.models.screens.flashing.FlashingText;
 import com.danosoftware.galaxyforce.models.screens.flashing.FlashingTextImpl;
-import com.danosoftware.galaxyforce.models.screens.flashing.FlashingTextListener;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.services.achievements.AchievementService;
 import com.danosoftware.galaxyforce.services.achievements.CompletedWaveAchievements;
@@ -50,6 +48,7 @@ import com.danosoftware.galaxyforce.sprites.game.missiles.bases.IBaseMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
 import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.text.Text;
+import com.danosoftware.galaxyforce.text.TextChangeListener;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.utilities.OverlapTester;
@@ -58,12 +57,11 @@ import com.danosoftware.galaxyforce.waves.managers.WaveManagerImpl;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocatorFactory;
 import com.danosoftware.galaxyforce.waves.utilities.WaveCreationUtils;
 import com.danosoftware.galaxyforce.waves.utilities.WaveFactory;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class GamePlayModelImpl implements Model, GameModel, FlashingTextListener {
+public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
 
   /*
    * ******************************************************
@@ -722,7 +720,7 @@ public class GamePlayModelImpl implements Model, GameModel, FlashingTextListener
   }
 
   @Override
-  public void onFlashingTextChange() {
+  public void onTextChange() {
     updateText = true;
   }
 

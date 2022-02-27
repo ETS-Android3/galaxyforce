@@ -6,22 +6,21 @@ import com.danosoftware.galaxyforce.models.assets.PowerUpsDto;
 import com.danosoftware.galaxyforce.models.assets.SpawnedAliensDto;
 import com.danosoftware.galaxyforce.models.screens.Model;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
-import com.danosoftware.galaxyforce.models.screens.flashing.FlashingTextListener;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.bases.IBasePrimary;
 import com.danosoftware.galaxyforce.text.Text;
+import com.danosoftware.galaxyforce.text.TextChangeListener;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.text.TextPositionY;
 import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.view.FPSCounter;
-
 import java.util.List;
 
 /**
  * Game Handler decorator that adds frame-rate calculations and display functionality.
  */
-public class GamePlayModelFrameRateDecorator implements Model, GameModel, FlashingTextListener {
+public class GamePlayModelFrameRateDecorator implements Model, GameModel, TextChangeListener {
 
   // decorated game model
   private final GameModel gameModel;
@@ -163,7 +162,7 @@ public class GamePlayModelFrameRateDecorator implements Model, GameModel, Flashi
   }
 
   @Override
-  public void onFlashingTextChange() {
+  public void onTextChange() {
     updateText = true;
   }
 }
