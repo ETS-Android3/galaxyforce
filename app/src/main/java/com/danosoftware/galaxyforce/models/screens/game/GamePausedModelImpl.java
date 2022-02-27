@@ -108,17 +108,6 @@ public class GamePausedModelImpl implements Model, ButtonModel, TextChangeListen
    * ******************************************************
    */
 
-//  @Override
-//  public List<Text> getText() {
-//
-//    List<Text> text = new ArrayList<>();
-//    for (SpriteTextButton eachButton : menuButtons) {
-//      text.add(eachButton.getText());
-//    }
-//    text.addAll(flashingPausedText.text());
-//    return text;
-//  }
-
   @Override
   public TextProvider getTextProvider() {
     if (updateText) {
@@ -237,6 +226,7 @@ public class GamePausedModelImpl implements Model, ButtonModel, TextChangeListen
     // add new button to list
     menuButtons.add(button);
 
+    // trigger text update
     updateText = true;
   }
 
