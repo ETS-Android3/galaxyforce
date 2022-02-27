@@ -21,16 +21,17 @@ public class ModelFrameRateDecorator implements Model, TextChangeListener {
   // FPS counter
   private final FPSCounter fpsCounter;
 
-  // FPS display text
-  //private Text tempFps;
+  // text provider that includes model text and FPS text
   private final TextProvider textProvider;
+
+  // has FPS text changed?
   private boolean updateText;
 
   public ModelFrameRateDecorator(Model model) {
     this.model = model;
     this.fpsCounter = new FPSCounter(this);
-    //this.tempFps = createFpsText();
     this.textProvider = new TextProvider();
+    this.updateText = false;
   }
 
   private Text createFpsText() {
@@ -40,16 +41,9 @@ public class ModelFrameRateDecorator implements Model, TextChangeListener {
         TextPositionY.TOP);
   }
 
-//  @Override
-//  public List<Text> getText() {
-//    List<Text> text = new ArrayList<>(model.getText());
-//    text.add(tempFps);
-//
-//    return text;
-//  }
-
   @Override
   public TextProvider getTextProvider() {
+    // update text if FPS or model text has changed
     TextProvider modelTextProvider = model.getTextProvider();
     if (updateText || modelTextProvider.hasUpdated()) {
       textProvider.clear();
@@ -64,10 +58,8 @@ public class ModelFrameRateDecorator implements Model, TextChangeListener {
   public void update(float deltaTime) {
     model.update(deltaTime);
 
-    // update fps text
+    // update fps
     fpsCounter.update();
-//    createFpsText();
-//    tempFps = createFpsText();
   }
 
   @Override

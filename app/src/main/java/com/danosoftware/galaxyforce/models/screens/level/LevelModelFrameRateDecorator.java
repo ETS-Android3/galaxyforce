@@ -23,18 +23,17 @@ public class LevelModelFrameRateDecorator implements LevelModel, TextChangeListe
   // FPS counter
   private final FPSCounter fpsCounter;
 
-  // FPS display text
-  private boolean updateText;
-//  private Text tempFps;
+  // text provider that includes model text and FPS text
   private final TextProvider textProvider;
-//  private final TextProvider staticTextProvider;
+
+  // has FPS text changed?
+  private boolean updateText;
 
   public LevelModelFrameRateDecorator(LevelModel model) {
     this.model = model;
     this.fpsCounter = new FPSCounter(this);
-//    this.tempFps = createFpsText();
     this.textProvider = new TextProvider();
-//    this.staticTextProvider = new TextProvider();
+    this.updateText = false;
   }
 
   private Text createFpsText() {
@@ -46,22 +45,17 @@ public class LevelModelFrameRateDecorator implements LevelModel, TextChangeListe
             GameConstants.GAME_HEIGHT - HALF_GLYPH_HEIGHT);
   }
 
-//  @Override
-//  public List<Text> getText() {
-//    return model.getText();
-//  }
-
   @Override
   public void update(float deltaTime) {
     model.update(deltaTime);
 
-    // update fps text
+    // update fps
     fpsCounter.update();
-    //tempFps = createFpsText();
   }
 
   @Override
   public TextProvider getTextProvider() {
+    // update text if FPS or model text has changed
     TextProvider modelTextProvider = model.getTextProvider();
     if (updateText || modelTextProvider.hasUpdated()) {
       textProvider.clear();
@@ -116,29 +110,4 @@ public class LevelModelFrameRateDecorator implements LevelModel, TextChangeListe
   public void onTextChange() {
     updateText = true;
   }
-
-//  @Override
-//  public List<ISprite> getStaticSprites() {
-//    return model.getStaticSprites();
-//  }
-
-//  @Override
-//  public TextProvider getStaticTextProvider() {
-//    staticTextProvider.clear();
-//    staticTextProvider.addAll(model.getStaticTextProvider().text());
-//    staticTextProvider.add(tempFps);
-//    return staticTextProvider;
-//  }
-
-//  @Override
-//  public List<Text> getStaticText() {
-//    textProvider.clear();
-//    textProvider.addAll(model.getTextProvider().text());
-//    return textProvider;
-//
-//
-//    List<Text> text = new ArrayList<>(model.getStaticText());
-//    text.add(tempFps);
-//    return text;
-//  }
 }
