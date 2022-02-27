@@ -3,7 +3,6 @@ package com.danosoftware.galaxyforce.models.screens;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.text.TextProvider;
-
 import java.util.List;
 
 /**
@@ -12,8 +11,6 @@ import java.util.List;
 public interface Model {
 
   List<ISprite> getSprites();
-
-  //List<Text> getText();
 
   TextProvider getTextProvider();
 
