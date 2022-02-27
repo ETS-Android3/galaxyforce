@@ -3,7 +3,6 @@ package com.danosoftware.galaxyforce.models.screens.options;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.buttons.sprite_text_button.OptionButton;
 import com.danosoftware.galaxyforce.buttons.toggle_group.ToggleButtonGroup;
 import com.danosoftware.galaxyforce.buttons.toggle_group.ToggleOption;
@@ -38,7 +37,6 @@ import com.danosoftware.galaxyforce.sprites.properties.SpriteDimensions;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.text.TextProvider;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -59,7 +57,6 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
   // reference to all sprites in model
   private final List<ISprite> allSprites;
   // reference to all text objects in model
-  //private final List<Text> allText;
   private final TextProvider textProvider;
   private ModelState modelState;
   private boolean reBuildAssets;
@@ -86,7 +83,6 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
     this.vibrator = vibrator;
     this.playService = playService;
     this.allSprites = new ArrayList<>();
-    //this.allText = new ArrayList<>();
     this.textProvider = new TextProvider();
     this.connectionState = playService.connectedState();
 
@@ -238,11 +234,6 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
   public TextProvider getTextProvider() {
     return textProvider;
   }
-
-//  @Override
-//  public List<Text> getText() {
-//    return allText;
-//  }
 
   @Override
   public void update(float deltaTime) {
