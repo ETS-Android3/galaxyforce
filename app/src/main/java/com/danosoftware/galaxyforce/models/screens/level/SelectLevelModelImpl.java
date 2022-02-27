@@ -26,6 +26,7 @@ import com.danosoftware.galaxyforce.services.savedgame.SavedGame;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
+import com.danosoftware.galaxyforce.text.TextProvider;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,8 +46,11 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
   // on-screen components
   private final List<SpriteButton> buttons;
   private final List<SpriteTextButton> textButtons;
-  private final List<SpriteTextButton> staticTextButtons;
+  //private final List<SpriteTextButton> staticTextButtons;
   private final List<Text> messages;
+  private final TextProvider textProvider;
+  //private final TextProvider staticTextProvider;
+
   /* reference to controller */
   private final Controller controller;
   // reference to the billing service
@@ -82,9 +86,11 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
     this.modelState = ModelState.RUNNING;
     this.reBuildAssets = false;
     this.messages = new ArrayList<>();
+    this.textProvider = new TextProvider();
+    //this.staticTextProvider = new TextProvider();
     this.buttons = new ArrayList<>();
     this.textButtons = new ArrayList<>();
-    this.staticTextButtons = new ArrayList<>();
+    //this.staticTextButtons = new ArrayList<>();
 
     /*
      * calculate zone from highest wave reached - must use double to avoid
@@ -124,7 +130,7 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
 
     buttons.clear();
     textButtons.clear();
-    staticTextButtons.clear();
+    //staticTextButtons.clear();
     messages.clear();
 
     /*
@@ -158,6 +164,13 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
     this.xPosition = zoneXPosition.get(zone);
     this.xTarget = zoneXPosition.get(zone);
     this.xOffset = 0;
+
+    // update text provider with text to display
+    textProvider.clear();
+    for (SpriteTextButton button : textButtons) {
+      textProvider.add(button.getText());
+    }
+    textProvider.addAll(messages);
   }
 
   /**
@@ -248,35 +261,56 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
     return sprites;
   }
 
+//  @Override
+//  public List<ISprite> getStaticSprites() {
+//    List<ISprite> sprites = new ArrayList<>();
+//    for (SpriteTextButton button : staticTextButtons) {
+//      sprites.add(button.getSprite());
+//    }
+//
+//    return sprites;
+//  }
+
+//  @Override
+//  public List<Text> getStaticText() {
+//    List<Text> text = new ArrayList<>();
+//    for (SpriteTextButton button : staticTextButtons) {
+//      text.add(button.getText());
+//    }
+//
+//    return text;
+//  }
+
+//  @Override
+//  public TextProvider getStaticTextProvider() {
+//    staticTextProvider.clear();
+//    for (SpriteTextButton button : staticTextButtons) {
+//      staticTextProvider.add(button.getText());
+//    }
+//
+//    return staticTextProvider;
+//  }
+
+//  @Override
+//  public List<Text> getText() {
+//    List<Text> text = new ArrayList<>();
+//    for (SpriteTextButton button : textButtons) {
+//      text.add(button.getText());
+//    }
+//    text.addAll(messages);
+//
+//    return text;
+//  }
+
   @Override
-  public List<ISprite> getStaticSprites() {
-    List<ISprite> sprites = new ArrayList<>();
-    for (SpriteTextButton button : staticTextButtons) {
-      sprites.add(button.getSprite());
-    }
+  public TextProvider getTextProvider() {
+//    textProvider.clear();
+//    for (SpriteTextButton button : textButtons) {
+//      textProvider.add(button.getText());
+//    }
+//    textProvider.addAll(messages);
 
-    return sprites;
-  }
-
-  @Override
-  public List<Text> getStaticText() {
-    List<Text> text = new ArrayList<>();
-    for (SpriteTextButton button : staticTextButtons) {
-      text.add(button.getText());
-    }
-
-    return text;
-  }
-
-  @Override
-  public List<Text> getText() {
-    List<Text> text = new ArrayList<>();
-    for (SpriteTextButton button : textButtons) {
-      text.add(button.getText());
-    }
-    text.addAll(messages);
-
-    return text;
+    return textProvider;
   }
 
   @Override

@@ -26,6 +26,8 @@ public class Font {
   // each index represents each character's position within the character map.
   private final Map<String, List<Integer>> characterIndexesCache;
 
+  private final List<Character> characters;
+
   /**
    * font constructor setting up fonts using the texture map. alternative constructor where list of
    * characters in map is passed
@@ -50,6 +52,7 @@ public class Font {
     this.charsInMap = charsInMap;
     this.glyphs = new TextureRegion[charCount];
     this.characterIndexesCache = new HashMap<>();
+    this.characters = new ArrayList<>();
 
     int x = offsetX;
     int y = offsetY;
@@ -63,28 +66,55 @@ public class Font {
     }
   }
 
+  public void drawText(SpriteBatcher batcher, TextProvider textProvider) {
+
+    if (textProvider.count() == 0) {
+      return;
+    }
+
+    if (textProvider.hasUpdated()) {
+      characters.clear();
+      for (Text text : textProvider.text()) {
+        drawText(
+                text.getText(),
+                text.getX(),
+                text.getY(),
+                text.getTextPositionX(),
+                text.getTextPositionY());
+      }
+    }
+
+    for (Character aChar : characters) {
+      batcher.drawSprite(
+              aChar.getX(),
+              aChar.getY(),
+              glyphWidth,
+              glyphHeight,
+              aChar.getRegion());
+    }
+  }
+
   // drawText method that calculates x and y from Position enums (e.g. LEFT,
   // BOTTOM) if supplied. otherwise uses absolute x, y values.
   //
-  public void drawText(SpriteBatcher batcher, String text, float x, float y, TextPositionX textPosX,
+  private void drawText(String text, float x, float y, TextPositionX textPosX,
       TextPositionY textPosY) {
 
     // choose the correct drawText method depending on whether text
     // position enums have been set.
     //
     if (textPosX != null && textPosY != null) {
-      drawText(batcher, text, calculateX(textPosX, text), calculateY(textPosY));
+      drawText(text, calculateX(textPosX, text), calculateY(textPosY));
     } else if (textPosX != null) {
-      drawText(batcher, text, calculateX(textPosX, text), y);
+      drawText(text, calculateX(textPosX, text), y);
     } else if (textPosY != null) {
-      drawText(batcher, text, x, calculateY(textPosY));
+      drawText(text, x, calculateY(textPosY));
     } else {
-      drawText(batcher, text, calculateCentreX(text, x), y);
+      drawText(text, calculateCentreX(text, x), y);
     }
   }
 
-  private void drawText(SpriteBatcher batcher, String text, float x, float y) {
-
+  private void drawText(String text, float x, float y) {
     // compute indexes for text or retrieve from cache
     final List<Integer> characterIndexes;
     if (characterIndexesCache.containsKey(text)) {
@@ -94,9 +124,9 @@ public class Font {
       characterIndexesCache.put(text, characterIndexes);
     }
 
-    for (Integer i : characterIndexes) {
-      TextureRegion glyph = glyphs[i];
-      batcher.drawSprite(x, y, glyphWidth, glyphHeight, glyph);
+    for (Integer idx : characterIndexes) {
+      TextureRegion glyph = glyphs[idx];
+      characters.add(new Character(x, y, glyph));
       x += glyphWidth;
     }
   }

@@ -17,6 +17,7 @@ import com.danosoftware.galaxyforce.tasks.TaskCallback;
 import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.text.Font;
 import com.danosoftware.galaxyforce.text.Text;
+import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.textures.Texture;
 import com.danosoftware.galaxyforce.textures.TextureMap;
 import com.danosoftware.galaxyforce.textures.TextureRegion;
@@ -35,7 +36,7 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
   private static final String LOCAL_TAG = "Screen";
 
   private enum ScreenState {
-    PREPARING, PREPARED, RUNNING;
+    PREPARING, PREPARED, RUNNING
   }
 
   /**
@@ -135,8 +136,8 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
 
     // count sprites to draw
     final List<ISprite> sprites = model.getSprites();
-    final List<Text> texts = model.getText();
-    final int spriteCount = sprites.size() + countCharacters(texts);
+    final TextProvider textProvider = model.getTextProvider();
+    final int spriteCount = sprites.size() + textProvider.count();
 
     // Use our sprite shader program for GL
     GLShaderHelper.setSpriteShaderProgram();
@@ -174,15 +175,19 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
 
     // draw any text
     if (gameFont != null) {
-      for (Text text : texts) {
-        gameFont.drawText(
-            batcher,
-            text.getText(),
-            text.getX(),
-            text.getY(),
-            text.getTextPositionX(),
-            text.getTextPositionY());
-      }
+//      for (Text text : texts) {
+//        gameFont.drawText(
+//            batcher,
+//            text.getText(),
+//            text.getX(),
+//            text.getY(),
+//            text.getTextPositionX(),
+//            text.getTextPositionY());
+//      }
+      //TextProvider textProvider = new TextProvider();
+      gameFont.drawText(
+              batcher,
+              textProvider);
     }
 
     batcher.endBatch();

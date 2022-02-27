@@ -1,9 +1,6 @@
 package com.danosoftware.galaxyforce.models.screens.level;
 
 import com.danosoftware.galaxyforce.models.screens.Model;
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
-import com.danosoftware.galaxyforce.text.Text;
-import java.util.List;
 
 public interface LevelModel extends Model {
 
@@ -20,7 +17,7 @@ public interface LevelModel extends Model {
    *
    * @return list of static sprites
    */
-  List<ISprite> getStaticSprites();
+  //List<ISprite> getStaticSprites();
 
   /**
    * Some text will be rendered separately to level button text and will not be effected by
@@ -28,6 +25,7 @@ public interface LevelModel extends Model {
    *
    * @return list of static text
    */
-  List<Text> getStaticText();
+  //List<Text> getStaticText();
+  //TextProvider getStaticTextProvider();
 
 }

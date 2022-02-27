@@ -16,19 +16,21 @@ import com.danosoftware.galaxyforce.models.screens.Model;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.models.screens.flashing.FlashingText;
 import com.danosoftware.galaxyforce.models.screens.flashing.FlashingTextImpl;
+import com.danosoftware.galaxyforce.models.screens.flashing.FlashingTextListener;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
+import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.utilities.WaveUtilities;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class GameOverModelImpl implements Model, ButtonModel {
+public class GameOverModelImpl implements Model, ButtonModel, FlashingTextListener {
 
   /*
    * ******************************************************
@@ -47,8 +49,10 @@ public class GameOverModelImpl implements Model, ButtonModel {
    */
   /* reference to pause menu buttons */
   private final List<SpriteTextButton> menuButtons;
+  private final TextProvider textProvider;
   /* reference to flashing game over text */
   private final FlashingText flashingGameOverText;
+  private boolean updateText;
   private final int lastWave;
   /* reference to current state */
   private GameOverState modelState;
@@ -61,6 +65,7 @@ public class GameOverModelImpl implements Model, ButtonModel {
     this.lastWave = lastWave;
     this.menuButtons = new ArrayList<>();
     this.modelState = GameOverState.RUNNING;
+    this.textProvider = new TextProvider();
 
     // build menu buttons
     addNewMenuButton(controller, 3, "PLAY", ButtonType.PLAY);
@@ -74,7 +79,9 @@ public class GameOverModelImpl implements Model, ButtonModel {
         100 + (4 * 170));
     this.flashingGameOverText = new FlashingTextImpl(
         Collections.singletonList(gameOver),
-        0.5f);
+        0.5f,
+            this);
+    this.updateText = true;
   }
 
   /*
@@ -101,15 +108,30 @@ public class GameOverModelImpl implements Model, ButtonModel {
    * ******************************************************
    */
 
-  @Override
-  public List<Text> getText() {
+//  @Override
+//  public List<Text> getText() {
+//
+//    textProvider.clear();
+//    //List<Text> text = new ArrayList<>();
+//    for (SpriteTextButton eachButton : menuButtons) {
+//      textProvider.add(eachButton.getText());
+//    }
+//    textProvider.addAll(flashingGameOverText.text());
+//    return textProvider;
+//  }
 
-    List<Text> text = new ArrayList<>();
-    for (SpriteTextButton eachButton : menuButtons) {
-      text.add(eachButton.getText());
+  @Override
+  public TextProvider getTextProvider() {
+    if (updateText) {
+      textProvider.clear();
+      //List<Text> text = new ArrayList<>();
+      for (SpriteTextButton eachButton : menuButtons) {
+        textProvider.add(eachButton.getText());
+      }
+      textProvider.addAll(flashingGameOverText.text());
+      updateText = false;
     }
-    text.addAll(flashingGameOverText.text());
-    return text;
+    return textProvider;
   }
 
   @Override
@@ -222,6 +244,13 @@ public class GameOverModelImpl implements Model, ButtonModel {
 
     // add new button to list
     menuButtons.add(button);
+
+    updateText = true;
+  }
+
+  @Override
+  public void onFlashingTextChange() {
+    updateText = true;
   }
 
   /*

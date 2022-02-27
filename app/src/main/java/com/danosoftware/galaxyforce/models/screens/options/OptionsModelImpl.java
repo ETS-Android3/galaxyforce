@@ -37,6 +37,7 @@ import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDimensions;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
+import com.danosoftware.galaxyforce.text.TextProvider;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,7 +59,8 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
   // reference to all sprites in model
   private final List<ISprite> allSprites;
   // reference to all text objects in model
-  private final List<Text> allText;
+  //private final List<Text> allText;
+  private final TextProvider textProvider;
   private ModelState modelState;
   private boolean reBuildAssets;
 
@@ -84,7 +86,8 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
     this.vibrator = vibrator;
     this.playService = playService;
     this.allSprites = new ArrayList<>();
-    this.allText = new ArrayList<>();
+    //this.allText = new ArrayList<>();
+    this.textProvider = new TextProvider();
     this.connectionState = playService.connectedState();
 
     // build screen assets on next update
@@ -102,10 +105,11 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
 
     // clear current sprites prior to rebuilding
     allSprites.clear();
-    allText.clear();
+    textProvider.clear();
+    //allText.clear();
 
     // add buttons
-    allText.add(Text.newTextRelativePositionX(
+    textProvider.add(Text.newTextRelativePositionX(
         "SOUND EFFECTS",
         TextPositionX.CENTRE,
         175 + (4 * 170)));
@@ -128,7 +132,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
         soundToggleGroup,
         90);
 
-    allText.add(Text.newTextRelativePositionX(
+    textProvider.add(Text.newTextRelativePositionX(
         "MUSIC",
         TextPositionX.CENTRE,
         175 + (3 * 170)));
@@ -151,7 +155,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
         musicToggleGroup,
         90);
 
-    allText.add(Text.newTextRelativePositionX(
+    textProvider.add(Text.newTextRelativePositionX(
         "VIBRATION",
         TextPositionX.CENTRE,
         175 + (2 * 170)));
@@ -197,7 +201,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
               iconXPos,
               175 + 170,
               GOOGLE_PLAY_ICON));
-      allText.add(Text.newTextAbsolutePosition(
+      textProvider.add(Text.newTextAbsolutePosition(
           text,
           xPos,
           175 + 170));
@@ -231,9 +235,14 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
   }
 
   @Override
-  public List<Text> getText() {
-    return allText;
+  public TextProvider getTextProvider() {
+    return textProvider;
   }
+
+//  @Override
+//  public List<Text> getText() {
+//    return allText;
+//  }
 
   @Override
   public void update(float deltaTime) {
@@ -277,7 +286,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
     allSprites.add(button.getSprite());
 
     // add new button's text to list of text objects
-    allText.add(button.getText());
+    textProvider.add(button.getText());
 
     // add button to option group
     toggleGroup.addOption(button, optionType);
@@ -307,7 +316,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
 
     /// add new button
     allSprites.add(button.getSprite());
-    allText.add(button.getText());
+    textProvider.add(button.getText());
   }
 
   @Override

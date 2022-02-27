@@ -1,19 +1,20 @@
 package com.danosoftware.galaxyforce.models.screens;
 
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
+import com.danosoftware.galaxyforce.models.screens.flashing.FlashingTextListener;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.text.TextPositionY;
+import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.view.FPSCounter;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Decorator that adds frame-rate calculations and display functionality.
  */
-public class ModelFrameRateDecorator implements Model {
+public class ModelFrameRateDecorator implements Model, FlashingTextListener {
 
   // decorated model
   private final Model model;
@@ -22,12 +23,15 @@ public class ModelFrameRateDecorator implements Model {
   private final FPSCounter fpsCounter;
 
   // FPS display text
-  private Text tempFps;
+  //private Text tempFps;
+  private final TextProvider textProvider;
+  private boolean updateText;
 
   public ModelFrameRateDecorator(Model model) {
     this.model = model;
-    this.fpsCounter = new FPSCounter();
-    this.tempFps = createFpsText();
+    this.fpsCounter = new FPSCounter(this);
+    //this.tempFps = createFpsText();
+    this.textProvider = new TextProvider();
   }
 
   private Text createFpsText() {
@@ -37,12 +41,24 @@ public class ModelFrameRateDecorator implements Model {
         TextPositionY.TOP);
   }
 
-  @Override
-  public List<Text> getText() {
-    List<Text> text = new ArrayList<>(model.getText());
-    text.add(tempFps);
+//  @Override
+//  public List<Text> getText() {
+//    List<Text> text = new ArrayList<>(model.getText());
+//    text.add(tempFps);
+//
+//    return text;
+//  }
 
-    return text;
+  @Override
+  public TextProvider getTextProvider() {
+    TextProvider modelTextProvider = model.getTextProvider();
+    if (updateText || modelTextProvider.hasUpdated()) {
+      textProvider.clear();
+      textProvider.addAll(modelTextProvider.text());
+      textProvider.add(createFpsText());
+      updateText = false;
+    }
+    return textProvider;
   }
 
   @Override
@@ -50,7 +66,9 @@ public class ModelFrameRateDecorator implements Model {
     model.update(deltaTime);
 
     // update fps text
-    tempFps = createFpsText();
+    fpsCounter.update();
+//    createFpsText();
+//    tempFps = createFpsText();
   }
 
   @Override
@@ -86,5 +104,10 @@ public class ModelFrameRateDecorator implements Model {
   @Override
   public boolean animateStars() {
     return model.animateStars();
+  }
+
+  @Override
+  public void onFlashingTextChange() {
+    updateText = true;
   }
 }
