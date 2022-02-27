@@ -124,6 +124,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
       prepareUnknownPurchaseState();
     }
 
+    // trigger refresh of model text
     updateText = true;
   }
 
@@ -336,21 +337,6 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
     }
     return textProvider;
   }
-
-//  @Override
-//  public List<Text> getText() {
-//
-//    List<Text> text = new ArrayList<>();
-//    for (SpriteTextButton button : buttons) {
-//      text.add(button.getText());
-//    }
-//    text.addAll(messages);
-//    if (flashingText != null) {
-//      text.addAll(flashingText.text());
-//    }
-//
-//    return text;
-//  }
 
   @Override
   public void update(float deltaTime) {
