@@ -106,23 +106,10 @@ public class GameOverModelImpl implements Model, ButtonModel, TextChangeListener
    * ******************************************************
    */
 
-//  @Override
-//  public List<Text> getText() {
-//
-//    textProvider.clear();
-//    //List<Text> text = new ArrayList<>();
-//    for (SpriteTextButton eachButton : menuButtons) {
-//      textProvider.add(eachButton.getText());
-//    }
-//    textProvider.addAll(flashingGameOverText.text());
-//    return textProvider;
-//  }
-
   @Override
   public TextProvider getTextProvider() {
     if (updateText) {
       textProvider.clear();
-      //List<Text> text = new ArrayList<>();
       for (SpriteTextButton eachButton : menuButtons) {
         textProvider.add(eachButton.getText());
       }
@@ -243,6 +230,7 @@ public class GameOverModelImpl implements Model, ButtonModel, TextChangeListener
     // add new button to list
     menuButtons.add(button);
 
+    // trigger text update
     updateText = true;
   }
 
