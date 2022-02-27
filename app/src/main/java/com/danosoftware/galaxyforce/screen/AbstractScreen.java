@@ -15,7 +15,6 @@ import com.danosoftware.galaxyforce.tasks.OnTaskCompleteListener;
 import com.danosoftware.galaxyforce.tasks.TaskCallback;
 import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.text.Font;
-import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.textures.Texture;
 import com.danosoftware.galaxyforce.textures.TextureMap;
@@ -261,13 +260,5 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
   public boolean handleBackButton() {
     model.goBack();
     return true;
-  }
-
-  private int countCharacters(List<Text> texts) {
-    int charCount = 0;
-    for (Text text : texts) {
-      charCount += text.getText().length();
-    }
-    return charCount;
   }
 }
