@@ -102,7 +102,6 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
     // clear current sprites prior to rebuilding
     allSprites.clear();
     textProvider.clear();
-    //allText.clear();
 
     // add buttons
     textProvider.add(Text.newTextRelativePositionX(
