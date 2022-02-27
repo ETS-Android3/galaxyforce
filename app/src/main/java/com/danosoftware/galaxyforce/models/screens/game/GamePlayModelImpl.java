@@ -244,18 +244,6 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
     return pausedSprites;
   }
 
-//  @Override
-//  public List<Text> getText() {
-//
-//    List<Text> text = new ArrayList<>();
-//    if (modelState == ModelState.GET_READY) {
-//      text.add(waveText);
-//      text.addAll(getReadyFlashingText.text());
-//    }
-//
-//    return text;
-//  }
-
   @Override
   public void update(float deltaTime) {
 
