@@ -14,6 +14,7 @@ import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.tasks.OnTaskCompleteListener;
 import com.danosoftware.galaxyforce.tasks.TaskCallback;
 import com.danosoftware.galaxyforce.tasks.TaskService;
+import com.danosoftware.galaxyforce.text.Character;
 import com.danosoftware.galaxyforce.text.Font;
 import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.textures.Texture;
@@ -25,6 +26,7 @@ import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLShaderHelper;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 import com.danosoftware.galaxyforce.view.StarBatcher;
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<TextureWithFont> {
@@ -64,6 +66,8 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
   private final TaskService taskService;
   private ScreenState screenState;
   private final boolean animateStars;
+  // cached characters to draw
+  private final List<Character> characters;
 
 
   AbstractScreen(
@@ -88,6 +92,7 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
     this.screenState = ScreenState.PREPARING;
     this.starField = starField;
     this.animateStars = model.animateStars();
+    this.characters = new ArrayList<>();
   }
 
   @Override
@@ -172,12 +177,27 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
 
     // draw text
     if (gameFont != null) {
-      gameFont.drawText(
-              batcher,
-              textProvider);
+      drawText(batcher, textProvider);
     }
 
     batcher.endBatch();
+  }
+
+  // draw text to the screen
+  void drawText(SpriteBatcher batcher, TextProvider textProvider) {
+
+    if (textProvider.count() == 0) {
+      return;
+    }
+
+    // if any text has changed, update the cached characters
+    if (textProvider.hasUpdated()) {
+      characters.clear();
+      characters.addAll(gameFont.createCharacters(textProvider));
+    }
+
+    // draw all cached characters
+    gameFont.drawText(batcher, characters);
   }
 
   @Override

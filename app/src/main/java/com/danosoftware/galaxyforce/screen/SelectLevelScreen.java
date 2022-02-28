@@ -98,7 +98,7 @@ public class SelectLevelScreen extends AbstractScreen {
 
     if (gameFont != null) {
       // draw text
-      gameFont.drawText(batcher, textProvider);
+      drawText(batcher, textProvider);
     }
 
     batcher.endBatch();

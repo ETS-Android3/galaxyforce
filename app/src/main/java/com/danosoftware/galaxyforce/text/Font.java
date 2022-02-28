@@ -26,9 +26,6 @@ public class Font {
   // speeds-up re-creating characters from previously seen text.
   private final Map<String, List<Integer>> characterIndexesCache;
 
-  // cached characters to draw
-  private final List<Character> characters;
-
   /**
    * font constructor setting up fonts using the texture map. alternative constructor where list of
    * characters in map is passed
@@ -53,7 +50,6 @@ public class Font {
     this.charsInMap = charsInMap;
     this.glyphs = new TextureRegion[charCount];
     this.characterIndexesCache = new HashMap<>();
-    this.characters = new ArrayList<>();
 
     int x = offsetX;
     int y = offsetY;
@@ -67,27 +63,29 @@ public class Font {
     }
   }
 
-  // draw text to the screen
-  public void drawText(SpriteBatcher batcher, TextProvider textProvider) {
+  /*
+   * compute the characters for all text in provider
+   */
+  public List<Character> createCharacters(TextProvider textProvider) {
+    List<Character> characters = new ArrayList<>();
 
-    if (textProvider.count() == 0) {
-      return;
+    for (Text text : textProvider.text()) {
+      updateCharacters(
+          characters,
+          text.getText(),
+          text.getX(),
+          text.getY(),
+          text.getTextPositionX(),
+          text.getTextPositionY());
     }
 
-    // if any text has changed, update the cached characters
-    if (textProvider.hasUpdated()) {
-      characters.clear();
-      for (Text text : textProvider.text()) {
-        updateCharacters(
-            text.getText(),
-            text.getX(),
-            text.getY(),
-            text.getTextPositionX(),
-            text.getTextPositionY());
-      }
-    }
+    return characters;
+  }
 
-    // draw all cached characters
+  /*
+   * Draw characters to the screen
+   */
+  public void drawText(SpriteBatcher batcher, List<Character> characters) {
     for (Character aChar : characters) {
       batcher.drawSprite(
           aChar.getX(),
@@ -105,6 +103,7 @@ public class Font {
    * if supplied. otherwise uses absolute x, y values.
    */
   private void updateCharacters(
+      List<Character> characters,
       String text,
       float x,
       float y,
@@ -113,20 +112,24 @@ public class Font {
 
     // choose the correct method depending on whether text position enums have been set.
     if (textPosX != null && textPosY != null) {
-      updateCharacters(text, calculateX(textPosX, text), calculateY(textPosY));
+      updateCharacters(characters, text, calculateX(textPosX, text), calculateY(textPosY));
     } else if (textPosX != null) {
-      updateCharacters(text, calculateX(textPosX, text), y);
+      updateCharacters(characters, text, calculateX(textPosX, text), y);
     } else if (textPosY != null) {
-      updateCharacters(text, x, calculateY(textPosY));
+      updateCharacters(characters, text, x, calculateY(textPosY));
     } else {
-      updateCharacters(text, calculateCentreX(text, x), y);
+      updateCharacters(characters, text, calculateCentreX(text, x), y);
     }
   }
 
   /*
    * Add characters using provided position and text
    */
-  private void updateCharacters(String text, float x, float y) {
+  private void updateCharacters(
+      List<Character> characters,
+      String text,
+      float x,
+      float y) {
     // compute indexes for text or retrieve from cache
     final List<Integer> characterIndexes;
     if (characterIndexesCache.containsKey(text)) {
