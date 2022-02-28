@@ -5,7 +5,6 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.LOGO_Y_POS;
 import static com.danosoftware.galaxyforce.constants.GameConstants.PLANET_Y_POS;
 
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.billing.BillingObserver;
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.billing.PurchaseState;
@@ -22,8 +21,7 @@ import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
-import com.danosoftware.galaxyforce.text.Text;
-
+import com.danosoftware.galaxyforce.text.TextProvider;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +43,8 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
   private final BillingService billingService;
 
   private final List<ISprite> sprites;
-  private final List<Text> text;
+
+  private final TextProvider textProvider;
 
   /*
    * Should we rebuild the buttons?
@@ -62,7 +61,7 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
     this.billingService = billingService;
     this.buttons = new ArrayList<>();
     this.sprites = new ArrayList<>();
-    this.text = new ArrayList<>();
+    this.textProvider = new TextProvider();
     this.logo = new SplashSprite(GameConstants.SCREEN_MID_X, LOGO_Y_POS,
         SpriteDetails.GALAXY_FORCE);
     this.planet = new SplashSprite(GameConstants.SCREEN_MID_X, PLANET_Y_POS,
@@ -94,14 +93,14 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
 
   private void buildSprites() {
     sprites.clear();
-    text.clear();
+    textProvider.clear();
 
     sprites.add(planet);
     sprites.add(logo);
 
     for (SpriteTextButton button : buttons) {
       sprites.add(button.getSprite());
-      text.add(button.getText());
+      textProvider.add(button.getText());
     }
   }
 
@@ -154,8 +153,8 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
   }
 
   @Override
-  public List<Text> getText() {
-    return text;
+  public TextProvider getTextProvider() {
+    return textProvider;
   }
 
   @Override

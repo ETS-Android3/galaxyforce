@@ -10,17 +10,17 @@ import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.bases.IBasePrimary;
 import com.danosoftware.galaxyforce.text.Text;
+import com.danosoftware.galaxyforce.text.TextChangeListener;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.text.TextPositionY;
+import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.view.FPSCounter;
-
-import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Game Handler decorator that adds frame-rate calculations and display functionality.
  */
-public class GamePlayModelFrameRateDecorator implements Model, GameModel {
+public class GamePlayModelFrameRateDecorator implements Model, GameModel, TextChangeListener {
 
   // decorated game model
   private final GameModel gameModel;
@@ -31,14 +31,18 @@ public class GamePlayModelFrameRateDecorator implements Model, GameModel {
   // FPS counter
   private final FPSCounter fpsCounter;
 
-  // FPS display text
-  private Text tempFps;
+  // text provider that includes model text and FPS text
+  private final TextProvider textProvider;
+
+  // has FPS text changed?
+  private boolean updateText;
 
   public GamePlayModelFrameRateDecorator(GamePlayModelImpl gameHandler) {
     this.gameModel = gameHandler;
     this.model = gameHandler;
-    this.fpsCounter = new FPSCounter();
-    this.tempFps = createFpsText();
+    this.fpsCounter = new FPSCounter(this);
+    this.textProvider = new TextProvider();
+    this.updateText = false;
   }
 
   private Text createFpsText() {
@@ -49,19 +53,24 @@ public class GamePlayModelFrameRateDecorator implements Model, GameModel {
   }
 
   @Override
-  public List<Text> getText() {
-    List<Text> text = new ArrayList<>(model.getText());
-    text.add(tempFps);
-
-    return text;
+  public TextProvider getTextProvider() {
+    // update text if FPS or model text has changed
+    TextProvider modelTextProvider = model.getTextProvider();
+    if (updateText || modelTextProvider.hasUpdated()) {
+      textProvider.clear();
+      textProvider.addAll(modelTextProvider.text());
+      textProvider.add(createFpsText());
+      updateText = false;
+    }
+    return textProvider;
   }
 
   @Override
   public void update(float deltaTime) {
     model.update(deltaTime);
 
-    // update fps text
-    tempFps = createFpsText();
+    // update fps
+    fpsCounter.update();
   }
 
   @Override
@@ -142,5 +151,10 @@ public class GamePlayModelFrameRateDecorator implements Model, GameModel {
   @Override
   public List<IAlien> getActiveAliens() {
     return gameModel.getActiveAliens();
+  }
+
+  @Override
+  public void onTextChange() {
+    updateText = true;
   }
 }

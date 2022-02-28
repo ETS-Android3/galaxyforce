@@ -17,14 +17,11 @@ import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
-
+import com.danosoftware.galaxyforce.text.TextProvider;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameCompleteModelImpl implements Model, TouchScreenModel {
-
-  /* logger tag */
-  private static final String TAG = "GameCompleteImpl";
 
   private final Game game;
 
@@ -34,7 +31,7 @@ public class GameCompleteModelImpl implements Model, TouchScreenModel {
   // reference to all sprites in model to be rotated
   private final List<RotatingSprite> rotatedSprites;
   // reference to all text objects in model
-  private final List<Text> allText;
+  private final TextProvider textProvider;
   private ModelState modelState;
 
   public GameCompleteModelImpl(
@@ -43,7 +40,7 @@ public class GameCompleteModelImpl implements Model, TouchScreenModel {
     this.game = game;
     this.allSprites = new ArrayList<>();
     this.rotatedSprites = new ArrayList<>();
-    this.allText = new ArrayList<>();
+    this.textProvider = new TextProvider();
     this.modelState = ModelState.RUNNING;
 
     // add model sprites
@@ -65,7 +62,7 @@ public class GameCompleteModelImpl implements Model, TouchScreenModel {
     allSprites
         .add(new SplashSprite(GameConstants.SCREEN_MID_X, 817, SpriteDetails.GALAXY_FORCE));
 
-    allText.add(
+    textProvider.add(
         Text.newTextRelativePositionX("GAME COMPLETED!", TextPositionX.CENTRE, 175 + (3 * 170)));
   }
 
@@ -75,8 +72,8 @@ public class GameCompleteModelImpl implements Model, TouchScreenModel {
   }
 
   @Override
-  public List<Text> getText() {
-    return allText;
+  public TextProvider getTextProvider() {
+    return textProvider;
   }
 
   @Override

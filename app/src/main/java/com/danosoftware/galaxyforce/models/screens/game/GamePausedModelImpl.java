@@ -1,7 +1,6 @@
 package com.danosoftware.galaxyforce.models.screens.game;
 
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.buttons.sprite_text_button.SpriteTextButton;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
@@ -19,13 +18,14 @@ import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
+import com.danosoftware.galaxyforce.text.TextChangeListener;
 import com.danosoftware.galaxyforce.text.TextPositionX;
-
+import com.danosoftware.galaxyforce.text.TextProvider;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class GamePausedModelImpl implements Model, ButtonModel {
+public class GamePausedModelImpl implements Model, ButtonModel, TextChangeListener {
 
   /*
    * ******************************************************
@@ -48,6 +48,8 @@ public class GamePausedModelImpl implements Model, ButtonModel {
   private final List<ISprite> pausedSprites;
   /* reference to flashing paused text */
   private final FlashingText flashingPausedText;
+  private final TextProvider textProvider;
+  private boolean updateText;
   private final RgbColour backgroundColour;
   /* reference to current state */
   private PausedState modelState;
@@ -62,6 +64,7 @@ public class GamePausedModelImpl implements Model, ButtonModel {
     this.menuButtons = new ArrayList<>();
     this.backgroundColour = backgroundColour;
     this.modelState = PausedState.RUNNING;
+    this.textProvider = new TextProvider();
 
     // create list of menu buttons
     addNewMenuButton(controller, 3, "RESUME", ButtonType.RESUME);
@@ -75,7 +78,10 @@ public class GamePausedModelImpl implements Model, ButtonModel {
         100 + (4 * 170));
     this.flashingPausedText = new FlashingTextImpl(
         Collections.singletonList(pausedText),
-        0.5f);
+        0.5f,
+            this);
+
+    this.updateText = true;
   }
 
   /*
@@ -103,14 +109,16 @@ public class GamePausedModelImpl implements Model, ButtonModel {
    */
 
   @Override
-  public List<Text> getText() {
-
-    List<Text> text = new ArrayList<>();
-    for (SpriteTextButton eachButton : menuButtons) {
-      text.add(eachButton.getText());
+  public TextProvider getTextProvider() {
+    if (updateText) {
+      textProvider.clear();
+      for (SpriteTextButton eachButton : menuButtons) {
+        textProvider.add(eachButton.getText());
+      }
+      textProvider.addAll(flashingPausedText.text());
+      updateText = false;
     }
-    text.addAll(flashingPausedText.text());
-    return text;
+    return textProvider;
   }
 
   @Override
@@ -217,6 +225,14 @@ public class GamePausedModelImpl implements Model, ButtonModel {
 
     // add new button to list
     menuButtons.add(button);
+
+    // trigger text update
+    updateText = true;
+  }
+
+  @Override
+  public void onTextChange() {
+    updateText = true;
   }
 
   /*

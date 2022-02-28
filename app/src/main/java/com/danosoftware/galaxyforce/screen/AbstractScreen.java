@@ -4,7 +4,6 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_AL
 
 import android.opengl.GLES20;
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
 import com.danosoftware.galaxyforce.models.screens.Model;
@@ -15,8 +14,9 @@ import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.tasks.OnTaskCompleteListener;
 import com.danosoftware.galaxyforce.tasks.TaskCallback;
 import com.danosoftware.galaxyforce.tasks.TaskService;
+import com.danosoftware.galaxyforce.text.Character;
 import com.danosoftware.galaxyforce.text.Font;
-import com.danosoftware.galaxyforce.text.Text;
+import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.textures.Texture;
 import com.danosoftware.galaxyforce.textures.TextureMap;
 import com.danosoftware.galaxyforce.textures.TextureRegion;
@@ -26,7 +26,7 @@ import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLShaderHelper;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 import com.danosoftware.galaxyforce.view.StarBatcher;
-
+import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<TextureWithFont> {
@@ -35,7 +35,7 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
   private static final String LOCAL_TAG = "Screen";
 
   private enum ScreenState {
-    PREPARING, PREPARED, RUNNING;
+    PREPARING, PREPARED, RUNNING
   }
 
   /**
@@ -65,7 +65,9 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
   Font gameFont;
   private final TaskService taskService;
   private ScreenState screenState;
-  private boolean animateStars;
+  private final boolean animateStars;
+  // cached characters to draw
+  private final List<Character> characters;
 
 
   AbstractScreen(
@@ -90,6 +92,7 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
     this.screenState = ScreenState.PREPARING;
     this.starField = starField;
     this.animateStars = model.animateStars();
+    this.characters = new ArrayList<>();
   }
 
   @Override
@@ -135,8 +138,8 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
 
     // count sprites to draw
     final List<ISprite> sprites = model.getSprites();
-    final List<Text> texts = model.getText();
-    final int spriteCount = sprites.size() + countCharacters(texts);
+    final TextProvider textProvider = model.getTextProvider();
+    final int spriteCount = sprites.size() + textProvider.count();
 
     // Use our sprite shader program for GL
     GLShaderHelper.setSpriteShaderProgram();
@@ -172,20 +175,29 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
       }
     }
 
-    // draw any text
+    // draw text
     if (gameFont != null) {
-      for (Text text : texts) {
-        gameFont.drawText(
-            batcher,
-            text.getText(),
-            text.getX(),
-            text.getY(),
-            text.getTextPositionX(),
-            text.getTextPositionY());
-      }
+      drawText(batcher, textProvider);
     }
 
     batcher.endBatch();
+  }
+
+  // draw text to the screen
+  void drawText(SpriteBatcher batcher, TextProvider textProvider) {
+
+    if (textProvider.count() == 0) {
+      return;
+    }
+
+    // if any text has changed, update the cached characters
+    if (textProvider.hasUpdated()) {
+      characters.clear();
+      characters.addAll(gameFont.createCharacters(textProvider));
+    }
+
+    // draw all cached characters
+    gameFont.drawText(batcher, characters);
   }
 
   @Override
@@ -268,13 +280,5 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
   public boolean handleBackButton() {
     model.goBack();
     return true;
-  }
-
-  private int countCharacters(List<Text> texts) {
-    int charCount = 0;
-    for (Text text : texts) {
-      charCount += text.getText().length();
-    }
-    return charCount;
   }
 }

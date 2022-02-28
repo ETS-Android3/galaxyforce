@@ -48,7 +48,9 @@ import com.danosoftware.galaxyforce.sprites.game.missiles.bases.IBaseMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
 import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.text.Text;
+import com.danosoftware.galaxyforce.text.TextChangeListener;
 import com.danosoftware.galaxyforce.text.TextPositionX;
+import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.utilities.OverlapTester;
 import com.danosoftware.galaxyforce.waves.managers.WaveManager;
 import com.danosoftware.galaxyforce.waves.managers.WaveManagerImpl;
@@ -59,7 +61,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class GamePlayModelImpl implements Model, GameModel {
+public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
 
   /*
    * ******************************************************
@@ -109,6 +111,8 @@ public class GamePlayModelImpl implements Model, GameModel {
   private IBasePrimary primaryBase;
   // get ready text instances
   private Text waveText;
+  private final TextProvider textProvider;
+  private boolean updateText;
 
   /*
    * Instance variables required in GET_READY state
@@ -151,6 +155,7 @@ public class GamePlayModelImpl implements Model, GameModel {
     // no text initially
     this.waveText = null;
     this.getReadyFlashingText = null;
+    this.textProvider = new TextProvider();
 
     /*
      * create alien manager used to co-ordinate aliens waves.
@@ -207,6 +212,19 @@ public class GamePlayModelImpl implements Model, GameModel {
     return gameSprites;
   }
 
+  @Override
+  public TextProvider getTextProvider() {
+    if (updateText) {
+      textProvider.clear();
+      if (modelState == ModelState.GET_READY) {
+        textProvider.add(waveText);
+        textProvider.addAll(getReadyFlashingText.text());
+      }
+      updateText = false;
+    }
+    return textProvider;
+  }
+
   /*
    * ******************************************************
    * PUBLIC INTERFACE METHODS
@@ -224,18 +242,6 @@ public class GamePlayModelImpl implements Model, GameModel {
     pausedSprites.addAll(assets.getLives());
 
     return pausedSprites;
-  }
-
-  @Override
-  public List<Text> getText() {
-
-    List<Text> text = new ArrayList<>();
-    if (modelState == ModelState.GET_READY) {
-      text.add(waveText);
-      text.addAll(getReadyFlashingText.text());
-    }
-
-    return text;
   }
 
   @Override
@@ -615,9 +621,11 @@ public class GamePlayModelImpl implements Model, GameModel {
         yPosition);
     this.getReadyFlashingText = new FlashingTextImpl(
         Collections.singletonList(getReadyText),
-        0.5f);
+        0.5f,
+        this);
 
     timeSinceGetReady = 0f;
+    updateText = true;
   }
 
   /**
@@ -655,6 +663,7 @@ public class GamePlayModelImpl implements Model, GameModel {
       getReadyFlashingText = null;
       waveText = null;
       modelState = ModelState.PLAYING;
+      updateText = true;
     }
   }
 
@@ -696,6 +705,11 @@ public class GamePlayModelImpl implements Model, GameModel {
     WaveManager waveManager = new WaveManagerImpl(waveFactory, taskService);
 
     return new AlienManager(waveManager, achievements);
+  }
+
+  @Override
+  public void onTextChange() {
+    updateText = true;
   }
 
   private enum ModelState {

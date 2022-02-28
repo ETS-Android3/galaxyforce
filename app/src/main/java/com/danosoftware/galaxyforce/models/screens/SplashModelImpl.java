@@ -3,7 +3,6 @@ package com.danosoftware.galaxyforce.models.screens;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.billing.BillingObserver;
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.billing.PurchaseState;
@@ -25,7 +24,7 @@ import com.danosoftware.galaxyforce.sprites.game.splash.PlanetMovingSprite;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
-
+import com.danosoftware.galaxyforce.text.TextProvider;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
   private static final int START_LOGO_Y_POS = GameConstants.GAME_HEIGHT + (184 / 2);
   private final Game game;
   private final BillingService billingService;
-  private final List<Text> text;
+  private final TextProvider textProvider;
   private final List<ISprite> sprites;
   // version name of this package
   private final String versionName;
@@ -69,7 +68,7 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
     this.billingService = billingService;
     this.versionName = versionName;
     this.sprites = new ArrayList<>();
-    this.text = new ArrayList<>();
+    this.textProvider = new TextProvider();
     this.splashScreenTime = 0f;
     this.reBuildText = true;
     this.planet = new PlanetMovingSprite(
@@ -102,20 +101,20 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
    */
   private void buildTextMessages() {
 
-    text.clear();
+    textProvider.clear();
 
     /*
      * Add text to indicate whether full game has been purchased
      */
     if (billingService.getFullGamePurchaseState() == PurchaseState.NOT_PURCHASED
         || billingService.getFullGamePurchaseState() == PurchaseState.PENDING) {
-      text.add(
+      textProvider.add(
           Text.newTextRelativePositionX(
               "FREE TRIAL",
               TextPositionX.CENTRE,
               150));
     } else if (billingService.getFullGamePurchaseState() == PurchaseState.PURCHASED) {
-      text.add(
+      textProvider.add(
           Text.newTextRelativePositionX(
               "FULL GAME",
               TextPositionX.CENTRE,
@@ -124,7 +123,7 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
 
     // add version name if it exists
     if (versionName != null) {
-      text.add(
+      textProvider.add(
           Text.newUntrustedTextRelativePositionX(
               "VERSION " + versionName,
               TextPositionX.CENTRE,
@@ -139,8 +138,8 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
   }
 
   @Override
-  public List<Text> getText() {
-    return text;
+  public TextProvider getTextProvider() {
+    return textProvider;
   }
 
   @Override

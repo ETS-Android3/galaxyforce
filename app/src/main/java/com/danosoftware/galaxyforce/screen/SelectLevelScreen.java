@@ -7,7 +7,7 @@ import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.tasks.TaskService;
-import com.danosoftware.galaxyforce.text.Text;
+import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.textures.TextureMap;
 import com.danosoftware.galaxyforce.textures.TextureRegion;
 import com.danosoftware.galaxyforce.textures.TextureService;
@@ -66,14 +66,10 @@ public class SelectLevelScreen extends AbstractScreen {
     }
 
     // count sprites to draw
-    final List<ISprite> levelSprites = levelModel.getStaticSprites();
     final List<ISprite> sprites = model.getSprites();
-    final List<Text> levelTexts = levelModel.getStaticText();
-    final List<Text> texts = model.getText();
-    final int spriteCount = levelSprites.size()
-        + sprites.size()
-        + countCharacters(levelTexts)
-        + countCharacters(texts);
+    final TextProvider textProvider = model.getTextProvider();
+    final int spriteCount = sprites.size()
+        + textProvider.count();
 
     // Use our sprite shader program for GL
     GLShaderHelper.setSpriteShaderProgram();
@@ -84,24 +80,6 @@ public class SelectLevelScreen extends AbstractScreen {
     camera.setViewportAndMatrices();
 
     batcher.beginBatch(texture, spriteCount);
-
-    /*
-     * gets static sprites from model (e.g. stars) - these sprites must not
-     * scroll with other elements so offset stars by current camera offset.
-     */
-    for (ISprite sprite : levelSprites) {
-      SpriteDetails spriteDetails = sprite.spriteDetails();
-      TextureRegion textureRegion = spriteDetails.getTextureRegion();
-
-      if (textureRegion != null) {
-        batcher.drawSprite(
-            sprite.x() + cameraOffset,
-            sprite.y(),
-            sprite.width(),
-            sprite.height(),
-            textureRegion);
-      }
-    }
 
     // gets sprites from model
     for (ISprite sprite : sprites) {
@@ -118,31 +96,9 @@ public class SelectLevelScreen extends AbstractScreen {
       }
     }
 
-    /*
-     * gets static text from model - this text must not scroll with other
-     * elements so offset stars by current camera offset.
-     */
     if (gameFont != null) {
-      for (Text text : levelTexts) {
-        gameFont.drawText(
-            batcher,
-            text.getText(),
-            text.getX() + cameraOffset,
-            text.getY(),
-            text.getTextPositionX(),
-            text.getTextPositionY());
-      }
-
-      // draw any text
-      for (Text text : texts) {
-        gameFont.drawText(
-            batcher,
-            text.getText(),
-            text.getX(),
-            text.getY(),
-            text.getTextPositionX(),
-            text.getTextPositionY());
-      }
+      // draw text
+      drawText(batcher, textProvider);
     }
 
     batcher.endBatch();
@@ -155,13 +111,5 @@ public class SelectLevelScreen extends AbstractScreen {
     // reset camera position
     // other screens rely on default camera position
     camera.resetPosition();
-  }
-
-  private int countCharacters(List<Text> texts) {
-    int charCount = 0;
-    for (Text text : texts) {
-      charCount += text.getText().length();
-    }
-    return charCount;
   }
 }
