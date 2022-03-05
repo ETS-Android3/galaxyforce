@@ -56,17 +56,20 @@ public class StarField {
         for (int idx = 0; idx < starField.length; idx++) {
 
             // move star down screen according to speed.
+            float starY = starField[idx].y;
             if (idx < SLOW_STAR_INDEX) {
-                starField[idx].y = starField[idx].y - slowDistanceDelta;
+                starY -= slowDistanceDelta;
             } else if (idx < FAST_STAR_INDEX) {
-                starField[idx].y = starField[idx].y - normalDistanceDelta;
+                starY -= normalDistanceDelta;
             } else {
-                starField[idx].y = starField[idx].y - fastDistanceDelta;
+                starY -= fastDistanceDelta;
             }
 
             // if star has reached the bottom of screen then re-position at the top.
-            if (starField[idx].y < 0) {
-                starField[idx].y = height + starField[idx].y;
+            if (starY < 0) {
+                starField[idx].y = height + starY;
+            } else {
+                starField[idx].y = starY;
             }
         }
     }
