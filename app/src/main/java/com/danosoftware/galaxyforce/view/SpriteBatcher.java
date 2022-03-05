@@ -2,7 +2,6 @@ package com.danosoftware.galaxyforce.view;
 
 import android.opengl.GLES20;
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.textures.Texture;
 import com.danosoftware.galaxyforce.textures.TextureRegion;
 
@@ -123,26 +122,26 @@ public class SpriteBatcher {
     // vertex 0 - bottom-left
     verticesBuffer[bufferIndex++] = x1;
     verticesBuffer[bufferIndex++] = y1;
-    verticesBuffer[bufferIndex++] = region.getU1();
-    verticesBuffer[bufferIndex++] = region.getV2();
+    verticesBuffer[bufferIndex++] = region.u1;
+    verticesBuffer[bufferIndex++] = region.v2;
 
     // vertex 1 - bottom-right
     verticesBuffer[bufferIndex++] = x2;
     verticesBuffer[bufferIndex++] = y1;
-    verticesBuffer[bufferIndex++] = region.getU2();
-    verticesBuffer[bufferIndex++] = region.getV2();
+    verticesBuffer[bufferIndex++] = region.u2;
+    verticesBuffer[bufferIndex++] = region.v2;
 
     // vertex 2 - top-right
     verticesBuffer[bufferIndex++] = x2;
     verticesBuffer[bufferIndex++] = y2;
-    verticesBuffer[bufferIndex++] = region.getU2();
-    verticesBuffer[bufferIndex++] = region.getV1();
+    verticesBuffer[bufferIndex++] = region.u2;
+    verticesBuffer[bufferIndex++] = region.v1;
 
     // vertex 3 - top-left
     verticesBuffer[bufferIndex++] = x1;
     verticesBuffer[bufferIndex++] = y2;
-    verticesBuffer[bufferIndex++] = region.getU1();
-    verticesBuffer[bufferIndex++] = region.getV1();
+    verticesBuffer[bufferIndex++] = region.u1;
+    verticesBuffer[bufferIndex++] = region.v1;
 
     numSprites++;
   }
@@ -183,26 +182,26 @@ public class SpriteBatcher {
     // vertex 0 - bottom-left (with rotation)
     verticesBuffer[bufferIndex++] = x1;
     verticesBuffer[bufferIndex++] = y1;
-    verticesBuffer[bufferIndex++] = region.getU1();
-    verticesBuffer[bufferIndex++] = region.getV2();
+    verticesBuffer[bufferIndex++] = region.u1;
+    verticesBuffer[bufferIndex++] = region.v2;
 
     // vertex 1 - bottom-right (with rotation)
     verticesBuffer[bufferIndex++] = x2;
     verticesBuffer[bufferIndex++] = y2;
-    verticesBuffer[bufferIndex++] = region.getU2();
-    verticesBuffer[bufferIndex++] = region.getV2();
+    verticesBuffer[bufferIndex++] = region.u2;
+    verticesBuffer[bufferIndex++] = region.v2;
 
     // vertex 2 - top-right (with rotation)
     verticesBuffer[bufferIndex++] = x3;
     verticesBuffer[bufferIndex++] = y3;
-    verticesBuffer[bufferIndex++] = region.getU2();
-    verticesBuffer[bufferIndex++] = region.getV1();
+    verticesBuffer[bufferIndex++] = region.u2;
+    verticesBuffer[bufferIndex++] = region.v1;
 
     // vertex 3 - top-left (with rotation)
     verticesBuffer[bufferIndex++] = x4;
     verticesBuffer[bufferIndex++] = y4;
-    verticesBuffer[bufferIndex++] = region.getU1();
-    verticesBuffer[bufferIndex++] = region.getV1();
+    verticesBuffer[bufferIndex++] = region.u1;
+    verticesBuffer[bufferIndex++] = region.v1;
 
     numSprites++;
   }

@@ -4,6 +4,7 @@ import android.opengl.GLES20;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.sprites.game.starfield.Star;
+import com.danosoftware.galaxyforce.sprites.game.starfield.StarColour;
 
 public class StarBatcher {
 
@@ -50,13 +51,14 @@ public class StarBatcher {
    */
   private void setUpVertices() {
     int index = 0;
-    for (Star star2 : starField) {
+    for (Star star : starField) {
       // position vertex - x,y position
-      verticesBuffer[index++] = star2.getX();
-      verticesBuffer[index++] = star2.getY();
+      verticesBuffer[index++] = star.x;
+      verticesBuffer[index++] = star.y;
 
       // colour vertex - rgba colour
-      final RgbColour colour = star2.colour();
+      final StarColour starColour = star.colour;
+      final RgbColour colour = starColour.getRgb();
       verticesBuffer[index++] = colour.getRed(); // red
       verticesBuffer[index++] = colour.getGreen(); // green
       verticesBuffer[index++] = colour.getBlue(); // blue
@@ -65,23 +67,18 @@ public class StarBatcher {
   }
 
   public void drawStars() {
-    // since each star's x-position will never change,
-    // we will only modify the y-position and the colour of our stars.
+    // since each star's x-position or colour will never change,
+    // we will only modify the y-position of our stars.
 
     // the first star's y-position within the buffer is at index = 1
     int bufferIndex = 1;
 
     // update y-position and colour of each star and increment index to next vertex.
-    for (Star star2 : starField) {
-      verticesBuffer[bufferIndex++] = star2.getY();
+    for (Star star : starField) {
+      verticesBuffer[bufferIndex] = star.y;
 
-      final RgbColour colour = star2.colour();
-      verticesBuffer[bufferIndex++] = colour.getRed();
-      verticesBuffer[bufferIndex++] = colour.getGreen();
-      verticesBuffer[bufferIndex++] = colour.getBlue();
-
-      // skip modifying colour's alpha or next star's x-pos
-      bufferIndex += 2;
+      // increment index to next star's y-position
+      bufferIndex += 6;
     }
 
     // Calculate the stars point size so it scales correctly for screen size.

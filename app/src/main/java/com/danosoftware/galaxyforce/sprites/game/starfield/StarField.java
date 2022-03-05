@@ -5,19 +5,11 @@ import static com.danosoftware.galaxyforce.waves.utilities.Randomiser.randomFloa
 
 /**
  * Star field of multiple animated stars.
- * <p>
- * Stars are created from a supplied template.
- * <p>
- * The created stars can be fast-forwarded to the current state. This allows
- * a new starfield to be created using different sprite IDs that should be
- * the identical state to the previous starfield.
- * <p>
- * This ensures seamless animation of the starfield when switching screens.
  */
 public class StarField {
 
     /* number of stars to show */
-    private static final int NUMBER_OF_STARS = 250;
+    private static final int NUMBER_OF_STARS = 125;
 
     // Star speed will either be slow, normal or fast.
     // Stars with an index less than "slow index" will be slow.
@@ -34,22 +26,10 @@ public class StarField {
 
     private float stateTime;
 
-    private static final StarColourAnimation[] STAR_ANIMATIONS = {
-        new StarColourAnimation(
-            0.5f,
-            StarColour.WHITE,
-            StarColour.WHITE_SPARKLE,
-            StarColour.WHITE),
-        new StarColourAnimation(
-            0.5f,
-            StarColour.RED,
-            StarColour.BLACK,
-            StarColour.RED),
-        new StarColourAnimation(
-            0.5f,
-            StarColour.BLUE,
-            StarColour.BLACK,
-            StarColour.BLUE)
+    // star colours to choose from when creating a random colour.
+    // weighted so white stars are more common
+    private static final StarColour[] STAR_COLOURS = {
+        StarColour.WHITE, StarColour.BLUE, StarColour.RED, StarColour.WHITE
     };
 
     public StarField(int width, int height) {
@@ -76,22 +56,21 @@ public class StarField {
         for (int idx = 0; idx < starField.length; idx++) {
 
             // move star down screen according to speed.
-            float starY;
+            float starY = starField[idx].y;
             if (idx < SLOW_STAR_INDEX) {
-                starY = starField[idx].getY() - slowDistanceDelta;
+                starY -= slowDistanceDelta;
             } else if (idx < FAST_STAR_INDEX) {
-                starY = starField[idx].getY() - normalDistanceDelta;
+                starY -= normalDistanceDelta;
             } else {
-                starY = starField[idx].getY() - fastDistanceDelta;
+                starY -= fastDistanceDelta;
             }
 
             // if star has reached the bottom of screen then re-position at the top.
             if (starY < 0) {
-                starY = height + starY;
+                starField[idx].y = height + starY;
+            } else {
+                starField[idx].y = starY;
             }
-
-            starField[idx].setY(starY);
-            starField[idx].animate(deltaTime);
         }
     }
 
@@ -112,28 +91,11 @@ public class StarField {
         for (int idx = 0; idx < stars.length; idx++) {
             float x = width * randomFloat();
             float y = height * randomFloat();
-            StarColourAnimation starAnimation = getRandomStarColourAnimation();
-            float randomAnimationOffset = getRandomAnimationStartTime();
-
-            stars[idx] = Star
-                    .builder()
-                    .x(x)
-                    .y(y)
-                    .colourAnimation(starAnimation)
-                    .animationStateTime(randomAnimationOffset)
-                    .build();
-            stars[idx].animate(0);
+            StarColour starColour = getRandomStarColour();
+            stars[idx] = new Star(x, y, starColour);
         }
 
         return stars;
-    }
-
-    /**
-     * return a random star colour animation
-     */
-    private StarColourAnimation getRandomStarColourAnimation() {
-        int colourIndex = (int) (STAR_ANIMATIONS.length * random());
-        return STAR_ANIMATIONS[colourIndex];
     }
 
     /**
@@ -144,10 +106,10 @@ public class StarField {
     }
 
     /**
-     * get random animation start time so all stars' animations are not synchronised.
-     * makes animation look more natural.
+     * return a random star colour
      */
-    private float getRandomAnimationStartTime() {
-        return (1.5f * randomFloat());
+    private StarColour getRandomStarColour() {
+        int colourIndex = (int) (STAR_COLOURS.length * random());
+        return STAR_COLOURS[colourIndex];
     }
 }
