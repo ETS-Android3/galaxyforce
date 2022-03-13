@@ -22,8 +22,9 @@ import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.services.savedgame.HighestLevelChangeObserver;
 import com.danosoftware.galaxyforce.services.savedgame.SavedGame;
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.providers.ScrollableSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextProvider;
 import java.util.ArrayList;
@@ -46,7 +47,7 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
   private final List<SpriteTextButton> textButtons;
   private final List<Text> messages;
   private final TextProvider textProvider;
-  private boolean updateText;
+  private final ScrollableSpriteProvider spriteProvider;
 
   /* reference to controller */
   private final Controller controller;
@@ -84,6 +85,7 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
     this.reBuildAssets = false;
     this.messages = new ArrayList<>();
     this.textProvider = new TextProvider();
+    this.spriteProvider = new ScrollableSpriteProvider();
     this.buttons = new ArrayList<>();
     this.textButtons = new ArrayList<>();
 
@@ -158,7 +160,22 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
     this.xPosition = zoneXPosition.get(zone);
     this.xTarget = zoneXPosition.get(zone);
     this.xOffset = 0;
-    this.updateText = true;
+
+    // update sprites to display
+    spriteProvider.clear();
+    for (SpriteButton button : buttons) {
+      spriteProvider.add(button.getSprite());
+    }
+    for (SpriteTextButton button : textButtons) {
+      spriteProvider.add(button.getSprite());
+    }
+
+    // update text to display
+    textProvider.clear();
+    for (SpriteTextButton button : textButtons) {
+      textProvider.add(button.getText());
+    }
+    textProvider.addAll(messages);
   }
 
   /**
@@ -237,31 +254,14 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
   }
 
   @Override
-  public List<ISprite> getSprites() {
-    List<ISprite> sprites = new ArrayList<>();
-    for (SpriteButton button : buttons) {
-      sprites.add(button.getSprite());
-    }
-    for (SpriteTextButton button : textButtons) {
-      sprites.add(button.getSprite());
-    }
-
-    return sprites;
+  public TextProvider getTextProvider() {
+    return textProvider;
   }
 
   @Override
-  public TextProvider getTextProvider() {
-    if (updateText) {
-      // update text provider with text to display
-      textProvider.clear();
-      for (SpriteTextButton button : textButtons) {
-        textProvider.add(button.getText());
-      }
-      textProvider.addAll(messages);
-      updateText = false;
-    }
-
-    return textProvider;
+  public SpriteProvider getSpriteProvider() {
+    spriteProvider.updateScrollPosition(xPosition);
+    return spriteProvider;
   }
 
   @Override

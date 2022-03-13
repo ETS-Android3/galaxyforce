@@ -15,6 +15,7 @@ import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.common.RotatingSprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.text.TextProvider;
@@ -66,7 +67,7 @@ public class GameCompleteModelImpl implements Model, TouchScreenModel {
         Text.newTextRelativePositionX("GAME COMPLETED!", TextPositionX.CENTRE, 175 + (3 * 170)));
   }
 
-  @Override
+  //@Override
   public List<ISprite> getSprites() {
     return allSprites;
   }
@@ -74,6 +75,11 @@ public class GameCompleteModelImpl implements Model, TouchScreenModel {
   @Override
   public TextProvider getTextProvider() {
     return textProvider;
+  }
+
+  @Override
+  public SpriteProvider getSpriteProvider() {
+    return null;
   }
 
   @Override

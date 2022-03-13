@@ -34,6 +34,7 @@ import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDimensions;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.text.TextProvider;
@@ -224,7 +225,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
     addNewMenuButton(controller, 0, "BACK", ButtonType.EXIT);
   }
 
-  @Override
+  //@Override
   public List<ISprite> getSprites() {
     return allSprites;
   }
@@ -232,6 +233,11 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
   @Override
   public TextProvider getTextProvider() {
     return textProvider;
+  }
+
+  @Override
+  public SpriteProvider getSpriteProvider() {
+    return null;
   }
 
   @Override

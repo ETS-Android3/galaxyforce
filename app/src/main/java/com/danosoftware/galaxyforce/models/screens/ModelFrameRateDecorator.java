@@ -1,14 +1,13 @@
 package com.danosoftware.galaxyforce.models.screens;
 
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextChangeListener;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.text.TextPositionY;
 import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.view.FPSCounter;
-import java.util.List;
 
 /**
  * Decorator that adds frame-rate calculations and display functionality.
@@ -55,16 +54,16 @@ public class ModelFrameRateDecorator implements Model, TextChangeListener {
   }
 
   @Override
+  public SpriteProvider getSpriteProvider() {
+    return model.getSpriteProvider();
+  }
+
+  @Override
   public void update(float deltaTime) {
     model.update(deltaTime);
 
     // update fps
     fpsCounter.update();
-  }
-
-  @Override
-  public List<ISprite> getSprites() {
-    return model.getSprites();
   }
 
   @Override

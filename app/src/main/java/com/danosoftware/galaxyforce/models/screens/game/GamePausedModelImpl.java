@@ -17,6 +17,7 @@ import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextChangeListener;
 import com.danosoftware.galaxyforce.text.TextPositionX;
@@ -92,7 +93,7 @@ public class GamePausedModelImpl implements Model, ButtonModel, TextChangeListen
    * ******************************************************
    */
 
-  @Override
+  //@Override
   public List<ISprite> getSprites() {
 
     List<ISprite> sprites = new ArrayList<>(pausedSprites);
@@ -119,6 +120,11 @@ public class GamePausedModelImpl implements Model, ButtonModel, TextChangeListen
       updateText = false;
     }
     return textProvider;
+  }
+
+  @Override
+  public SpriteProvider getSpriteProvider() {
+    return null;
   }
 
   @Override

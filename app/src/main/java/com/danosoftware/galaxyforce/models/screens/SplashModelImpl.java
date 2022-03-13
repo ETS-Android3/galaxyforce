@@ -17,16 +17,15 @@ import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.sprites.common.IMovingSprite;
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.BaseMovingSprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.LogoMovingSprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.PlanetMovingSprite;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.providers.BasicSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.text.TextProvider;
-import java.util.ArrayList;
-import java.util.List;
 
 public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver {
 
@@ -40,7 +39,7 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
   private final Game game;
   private final BillingService billingService;
   private final TextProvider textProvider;
-  private final List<ISprite> sprites;
+  private final SpriteProvider spriteProvider;
   // version name of this package
   private final String versionName;
   private final IMovingSprite planet;
@@ -67,8 +66,8 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
     this.game = game;
     this.billingService = billingService;
     this.versionName = versionName;
-    this.sprites = new ArrayList<>();
     this.textProvider = new TextProvider();
+    this.spriteProvider = new BasicSpriteProvider();
     this.splashScreenTime = 0f;
     this.reBuildText = true;
     this.planet = new PlanetMovingSprite(
@@ -82,9 +81,9 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
     this.base = new BaseMovingSprite(
         sounds);
 
-    sprites.add(planet);
-    sprites.add(base);
-    sprites.add(logo);
+    spriteProvider.add(planet);
+    spriteProvider.add(base);
+    spriteProvider.add(logo);
 
     // add button that covers the entire screen
     Button screenTouch = new ScreenTouch(this);
@@ -131,15 +130,14 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
     }
   }
 
-
-  @Override
-  public List<ISprite> getSprites() {
-    return sprites;
-  }
-
   @Override
   public TextProvider getTextProvider() {
     return textProvider;
+  }
+
+  @Override
+  public SpriteProvider getSpriteProvider() {
+    return spriteProvider;
   }
 
   @Override

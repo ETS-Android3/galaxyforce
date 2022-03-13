@@ -6,9 +6,9 @@ import com.danosoftware.galaxyforce.models.assets.PowerUpsDto;
 import com.danosoftware.galaxyforce.models.assets.SpawnedAliensDto;
 import com.danosoftware.galaxyforce.models.screens.Model;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.bases.IBasePrimary;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextChangeListener;
 import com.danosoftware.galaxyforce.text.TextPositionX;
@@ -66,6 +66,11 @@ public class GamePlayModelFrameRateDecorator implements Model, GameModel, TextCh
   }
 
   @Override
+  public SpriteProvider getSpriteProvider() {
+    return model.getSpriteProvider();
+  }
+
+  @Override
   public void update(float deltaTime) {
     model.update(deltaTime);
 
@@ -76,11 +81,6 @@ public class GamePlayModelFrameRateDecorator implements Model, GameModel, TextCh
   @Override
   public IBasePrimary getBase() {
     return gameModel.getBase();
-  }
-
-  @Override
-  public List<ISprite> getSprites() {
-    return model.getSprites();
   }
 
   @Override

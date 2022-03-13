@@ -46,6 +46,7 @@ import com.danosoftware.galaxyforce.sprites.game.factories.AlienFactory;
 import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.missiles.bases.IBaseMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextChangeListener;
@@ -197,7 +198,7 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
    * ******************************************************
    */
 
-  @Override
+  //@Override
   public List<ISprite> getSprites() {
     List<ISprite> gameSprites = new ArrayList<>();
     gameSprites.addAll(alienManager.allAliens());
@@ -223,6 +224,11 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
       updateText = false;
     }
     return textProvider;
+  }
+
+  @Override
+  public SpriteProvider getSpriteProvider() {
+    return null;
   }
 
   /*

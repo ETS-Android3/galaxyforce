@@ -22,6 +22,7 @@ import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextChangeListener;
 import com.danosoftware.galaxyforce.text.TextPositionX;
@@ -309,7 +310,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
     buttons.add(button);
   }
 
-  @Override
+  //@Override
   public List<ISprite> getSprites() {
 
     List<ISprite> sprites = new ArrayList<>();
@@ -336,6 +337,11 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
       updateText = false;
     }
     return textProvider;
+  }
+
+  @Override
+  public SpriteProvider getSpriteProvider() {
+    return null;
   }
 
   @Override

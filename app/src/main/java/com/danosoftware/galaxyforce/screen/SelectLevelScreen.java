@@ -6,6 +6,7 @@ import com.danosoftware.galaxyforce.models.screens.level.LevelModel;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.textures.TextureMap;
@@ -15,7 +16,6 @@ import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLShaderHelper;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 import com.danosoftware.galaxyforce.view.StarBatcher;
-import java.util.List;
 
 public class SelectLevelScreen extends AbstractScreen {
 
@@ -66,10 +66,9 @@ public class SelectLevelScreen extends AbstractScreen {
     }
 
     // count sprites to draw
-    final List<ISprite> sprites = model.getSprites();
+    final SpriteProvider spriteProvider = model.getSpriteProvider();
     final TextProvider textProvider = model.getTextProvider();
-    final int spriteCount = sprites.size()
-        + textProvider.count();
+    final int spriteCount = spriteProvider.count() + textProvider.count();
 
     // Use our sprite shader program for GL
     GLShaderHelper.setSpriteShaderProgram();
@@ -82,7 +81,7 @@ public class SelectLevelScreen extends AbstractScreen {
     batcher.beginBatch(texture, spriteCount);
 
     // gets sprites from model
-    for (ISprite sprite : sprites) {
+    for (ISprite sprite : spriteProvider) {
       SpriteDetails spriteDetails = sprite.spriteDetails();
       TextureRegion textureRegion = spriteDetails.getTextureRegion();
 

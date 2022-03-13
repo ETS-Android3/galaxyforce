@@ -2,12 +2,11 @@ package com.danosoftware.galaxyforce.models.screens.level;
 
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextChangeListener;
 import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.view.FPSCounter;
-import java.util.List;
 
 /**
  * Decorator that adds frame-rate calculations and display functionality.
@@ -67,8 +66,8 @@ public class LevelModelFrameRateDecorator implements LevelModel, TextChangeListe
   }
 
   @Override
-  public List<ISprite> getSprites() {
-    return model.getSprites();
+  public SpriteProvider getSpriteProvider() {
+    return model.getSpriteProvider();
   }
 
   @Override

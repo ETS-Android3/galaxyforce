@@ -13,6 +13,7 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.os.Trace;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -106,16 +107,29 @@ public class MainActivity extends Activity {
         // create instance of game
         Intent launchIntent = getIntent();
         String launchIntentAction = launchIntent.getAction();
-        if (launchIntentAction != null &&
-            launchIntentAction.equals("com.google.intent.action.TEST_LOOP")) {
-            game = new GameLoopTest(this, glGraphics, glView, billingService, mPlayServices,
-                configurationService, taskService);
-        } else {
-            game = new GameImpl(this, glGraphics, glView, billingService, mPlayServices,
-                configurationService, taskService);
-        }
+      if (launchIntentAction != null &&
+          launchIntentAction.equals("com.google.intent.action.TEST_LOOP")) {
+        game = new GameLoopTest(this, glGraphics, glView, billingService, mPlayServices,
+            configurationService, taskService);
+      } else {
+        game = new GameImpl(this, glGraphics, glView, billingService, mPlayServices,
+            configurationService, taskService);
+      }
 
-        Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Application Created");
+      Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Application Created");
+      StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
+          .detectDiskReads()
+          .detectDiskWrites()
+          .detectAll()
+          .penaltyLog()
+          .penaltyDeath()
+          .build());
+      StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
+          .detectLeakedSqlLiteObjects()
+          .detectLeakedClosableObjects()
+          .penaltyLog()
+          //.penaltyDeath()
+          .build());
     }
 
     /* runs after onCreate or resuming after being in background */
@@ -135,7 +149,7 @@ public class MainActivity extends Activity {
         }
 
         // sign-in to google play services
-        mPlayServices.signInSilently();
+      taskService.execute(() -> mPlayServices.signInSilently());
     }
 
     /* runs when application is paused */

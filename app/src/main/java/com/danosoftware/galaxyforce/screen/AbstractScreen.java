@@ -11,6 +11,7 @@ import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.tasks.OnTaskCompleteListener;
 import com.danosoftware.galaxyforce.tasks.TaskCallback;
 import com.danosoftware.galaxyforce.tasks.TaskService;
@@ -137,9 +138,9 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
     }
 
     // count sprites to draw
-    final List<ISprite> sprites = model.getSprites();
+    final SpriteProvider spriteProvider = model.getSpriteProvider();
     final TextProvider textProvider = model.getTextProvider();
-    final int spriteCount = sprites.size() + textProvider.count();
+    final int spriteCount = spriteProvider.count() + textProvider.count();
 
     // Use our sprite shader program for GL
     GLShaderHelper.setSpriteShaderProgram();
@@ -149,7 +150,7 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
     batcher.beginBatch(texture, spriteCount);
 
     // gets sprites from model
-    for (ISprite sprite : sprites) {
+    for (ISprite sprite : spriteProvider) {
       SpriteDetails spriteDetails = sprite.spriteDetails();
       TextureRegion textureRegion = spriteDetails.getTextureRegion();
 

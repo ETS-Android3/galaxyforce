@@ -21,6 +21,8 @@ import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.providers.BasicSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.TextProvider;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,9 +44,8 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
   private final Controller controller;
   private final BillingService billingService;
 
-  private final List<ISprite> sprites;
-
   private final TextProvider textProvider;
+  private final SpriteProvider spriteProvider;
 
   /*
    * Should we rebuild the buttons?
@@ -60,8 +61,8 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
     this.controller = controller;
     this.billingService = billingService;
     this.buttons = new ArrayList<>();
-    this.sprites = new ArrayList<>();
     this.textProvider = new TextProvider();
+    this.spriteProvider = new BasicSpriteProvider();
     this.logo = new SplashSprite(GameConstants.SCREEN_MID_X, LOGO_Y_POS,
         SpriteDetails.GALAXY_FORCE);
     this.planet = new SplashSprite(GameConstants.SCREEN_MID_X, PLANET_Y_POS,
@@ -92,14 +93,14 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
   }
 
   private void buildSprites() {
-    sprites.clear();
+    spriteProvider.clear();
     textProvider.clear();
 
-    sprites.add(planet);
-    sprites.add(logo);
+    spriteProvider.add(planet);
+    spriteProvider.add(logo);
 
     for (SpriteTextButton button : buttons) {
-      sprites.add(button.getSprite());
+      spriteProvider.add(button.getSprite());
       textProvider.add(button.getText());
     }
   }
@@ -148,13 +149,13 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
   }
 
   @Override
-  public List<ISprite> getSprites() {
-    return sprites;
+  public TextProvider getTextProvider() {
+    return textProvider;
   }
 
   @Override
-  public TextProvider getTextProvider() {
-    return textProvider;
+  public SpriteProvider getSpriteProvider() {
+    return spriteProvider;
   }
 
   @Override
