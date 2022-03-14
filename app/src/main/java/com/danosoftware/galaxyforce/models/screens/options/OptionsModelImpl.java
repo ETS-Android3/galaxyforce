@@ -29,17 +29,15 @@ import com.danosoftware.galaxyforce.services.sound.SoundEffect;
 import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.services.vibration.VibrateTime;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDimensions;
+import com.danosoftware.galaxyforce.sprites.providers.BasicSpriteProvider;
 import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.text.TextProvider;
-import java.util.ArrayList;
-import java.util.List;
 
 public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayConnectionObserver {
 
@@ -55,10 +53,9 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
   private final VibrationService vibrator;
   private final GooglePlayServices playService;
 
-  // reference to all sprites in model
-  private final List<ISprite> allSprites;
   // reference to all text objects in model
   private final TextProvider textProvider;
+  private final SpriteProvider spriteProvider;
   private ModelState modelState;
   private boolean reBuildAssets;
 
@@ -83,8 +80,8 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
     this.music = music;
     this.vibrator = vibrator;
     this.playService = playService;
-    this.allSprites = new ArrayList<>();
     this.textProvider = new TextProvider();
+    this.spriteProvider = new BasicSpriteProvider();
     this.connectionState = playService.connectedState();
 
     // build screen assets on next update
@@ -101,7 +98,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
     controller.clearTouchControllers();
 
     // clear current sprites prior to rebuilding
-    allSprites.clear();
+    spriteProvider.clear();
     textProvider.clear();
 
     // add buttons
@@ -192,7 +189,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
       final int xPos = (GameConstants.GAME_WIDTH / 2) + halfIconWidth + buffer;
       final int iconXPos = xPos - (textLength / 2) - halfIconWidth - buffer;
 
-      allSprites.add(
+      spriteProvider.add(
           new SplashSprite(
               iconXPos,
               175 + 170,
@@ -225,11 +222,6 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
     addNewMenuButton(controller, 0, "BACK", ButtonType.EXIT);
   }
 
-  //@Override
-  public List<ISprite> getSprites() {
-    return allSprites;
-  }
-
   @Override
   public TextProvider getTextProvider() {
     return textProvider;
@@ -237,7 +229,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
 
   @Override
   public SpriteProvider getSpriteProvider() {
-    return null;
+    return spriteProvider;
   }
 
   @Override
@@ -279,7 +271,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
     controller.addTouchController(new DetectButtonTouch(button));
 
     // add new button's sprite to list of sprites
-    allSprites.add(button.getSprite());
+    spriteProvider.add(button.getSprite());
 
     // add new button's text to list of text objects
     textProvider.add(button.getText());
@@ -311,7 +303,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
     controller.addTouchController(new DetectButtonTouch(button));
 
     /// add new button
-    allSprites.add(button.getSprite());
+    spriteProvider.add(button.getSprite());
     textProvider.add(button.getText());
   }
 
