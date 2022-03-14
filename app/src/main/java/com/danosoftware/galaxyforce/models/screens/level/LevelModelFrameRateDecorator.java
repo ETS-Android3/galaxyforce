@@ -3,10 +3,14 @@ package com.danosoftware.galaxyforce.models.screens.level;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
+import com.danosoftware.galaxyforce.text.ScrollableTextProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextChangeListener;
 import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.view.FPSCounter;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Decorator that adds frame-rate calculations and display functionality.
@@ -23,7 +27,8 @@ public class LevelModelFrameRateDecorator implements LevelModel, TextChangeListe
   private final FPSCounter fpsCounter;
 
   // text provider that includes model text and FPS text
-  private final TextProvider textProvider;
+  private final ScrollableTextProvider textProvider;
+  private List<Text> modelText;
 
   // has FPS text changed?
   private boolean updateText;
@@ -31,7 +36,8 @@ public class LevelModelFrameRateDecorator implements LevelModel, TextChangeListe
   public LevelModelFrameRateDecorator(LevelModel model) {
     this.model = model;
     this.fpsCounter = new FPSCounter(this);
-    this.textProvider = new TextProvider();
+    this.textProvider = new ScrollableTextProvider();
+    this.modelText = new ArrayList<>();
     this.updateText = false;
   }
 
@@ -56,12 +62,16 @@ public class LevelModelFrameRateDecorator implements LevelModel, TextChangeListe
   public TextProvider getTextProvider() {
     // update text if FPS or model text has changed
     TextProvider modelTextProvider = model.getTextProvider();
-    if (updateText || modelTextProvider.hasUpdated()) {
+    List<Text> latestModelText = modelTextProvider.text();
+    if (updateText || !modelText.equals(latestModelText)) {
       textProvider.clear();
       textProvider.addAll(modelTextProvider.text());
       textProvider.add(createFpsText());
       updateText = false;
+      modelText = latestModelText;
     }
+    float scrollPosition = model.getScrollPosition();
+    textProvider.updateScrollPosition(scrollPosition);
     return textProvider;
   }
 

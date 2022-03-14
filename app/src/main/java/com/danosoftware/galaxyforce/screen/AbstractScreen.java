@@ -4,6 +4,7 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_AL
 
 import android.opengl.GLES20;
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
 import com.danosoftware.galaxyforce.models.screens.Model;
@@ -15,7 +16,6 @@ import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.tasks.OnTaskCompleteListener;
 import com.danosoftware.galaxyforce.tasks.TaskCallback;
 import com.danosoftware.galaxyforce.tasks.TaskService;
-import com.danosoftware.galaxyforce.text.Character;
 import com.danosoftware.galaxyforce.text.Font;
 import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.textures.Texture;
@@ -27,8 +27,6 @@ import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.GLShaderHelper;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 import com.danosoftware.galaxyforce.view.StarBatcher;
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<TextureWithFont> {
 
@@ -67,9 +65,6 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
   private final TaskService taskService;
   private ScreenState screenState;
   private final boolean animateStars;
-  // cached characters to draw
-  private final List<Character> characters;
-
 
   AbstractScreen(
       Model model,
@@ -93,7 +88,6 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
     this.screenState = ScreenState.PREPARING;
     this.starField = starField;
     this.animateStars = model.animateStars();
-    this.characters = new ArrayList<>();
   }
 
   @Override
@@ -191,14 +185,8 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
       return;
     }
 
-    // if any text has changed, update the cached characters
-    if (textProvider.hasUpdated()) {
-      characters.clear();
-      characters.addAll(gameFont.createCharacters(textProvider));
-    }
-
     // draw all cached characters
-    gameFont.drawText(batcher, characters);
+    gameFont.drawText(batcher, textProvider.characters());
   }
 
   @Override
@@ -269,6 +257,8 @@ public abstract class AbstractScreen implements IScreen, OnTaskCompleteListener<
   public void onCompletion(TextureWithFont textureWithFont) {
     this.texture = textureWithFont.getTexture();
     this.gameFont = textureWithFont.getFont();
+    TextProvider textProvider = model.getTextProvider();
+    textProvider.updateFont(gameFont);
     screenState = ScreenState.PREPARED;
   }
 

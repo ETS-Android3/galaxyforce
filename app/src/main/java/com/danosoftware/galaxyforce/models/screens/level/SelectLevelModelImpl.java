@@ -3,6 +3,7 @@ package com.danosoftware.galaxyforce.models.screens.level;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.billing.BillingObserver;
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.billing.PurchaseState;
@@ -25,8 +26,10 @@ import com.danosoftware.galaxyforce.services.savedgame.SavedGame;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.sprites.providers.ScrollableSpriteProvider;
 import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
+import com.danosoftware.galaxyforce.text.ScrollableTextProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextProvider;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +49,7 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
   private final List<SpriteButton> buttons;
   private final List<SpriteTextButton> textButtons;
   private final List<Text> messages;
-  private final TextProvider textProvider;
+  private final ScrollableTextProvider textProvider;
   private final ScrollableSpriteProvider spriteProvider;
 
   /* reference to controller */
@@ -84,7 +87,7 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
     this.modelState = ModelState.RUNNING;
     this.reBuildAssets = false;
     this.messages = new ArrayList<>();
-    this.textProvider = new TextProvider();
+    this.textProvider = new ScrollableTextProvider();
     this.spriteProvider = new ScrollableSpriteProvider();
     this.buttons = new ArrayList<>();
     this.textButtons = new ArrayList<>();
@@ -255,6 +258,7 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
 
   @Override
   public TextProvider getTextProvider() {
+    textProvider.updateScrollPosition(xPosition);
     return textProvider;
   }
 
