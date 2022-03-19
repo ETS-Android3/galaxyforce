@@ -22,6 +22,7 @@ import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.providers.BasicSpriteProvider;
 import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextChangeListener;
@@ -44,12 +45,14 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
   // messages to display on the screen
   private final List<Text> messages;
   private final TextProvider textProvider;
+  private final SpriteProvider spriteProvider;
   private final Controller controller;
   private final BillingService billingService;
   // all visible buttons
   private final List<SpriteTextButton> buttons;
   private FlashingText flashingText;
   private boolean updateText;
+  private boolean updateSprites;
   private ModelState modelState;
   // details of the full game unlock purchase
   private volatile SkuDetails skuDetails;
@@ -71,6 +74,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
     this.buttons = new ArrayList<>();
     this.messages = new ArrayList<>();
     this.textProvider = new TextProvider();
+    this.spriteProvider = new BasicSpriteProvider();
     this.flashingText = null;
     this.logo = new SplashSprite(GameConstants.SCREEN_MID_X, 817,
         SpriteDetails.GALAXY_FORCE);
@@ -125,8 +129,9 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
       prepareUnknownPurchaseState();
     }
 
-    // trigger refresh of model text
+    // trigger refresh of model sprites/text
     updateText = true;
+    updateSprites = true;
   }
 
   private void prepareUpgradeFullVersion(boolean showButtons) {
@@ -310,19 +315,6 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
     buttons.add(button);
   }
 
-  //@Override
-  public List<ISprite> getSprites() {
-
-    List<ISprite> sprites = new ArrayList<>();
-    sprites.add(logo);
-
-    for (SpriteTextButton button : buttons) {
-      sprites.add(button.getSprite());
-    }
-
-    return sprites;
-  }
-
   @Override
   public TextProvider getTextProvider() {
     if (updateText) {
@@ -341,7 +333,15 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
 
   @Override
   public SpriteProvider getSpriteProvider() {
-    return null;
+    if (updateSprites) {
+      spriteProvider.clear();
+      spriteProvider.add(logo);
+      for (SpriteTextButton button : buttons) {
+        spriteProvider.add(button.getSprite());
+      }
+      updateSprites = false;
+    }
+    return spriteProvider;
   }
 
   @Override
