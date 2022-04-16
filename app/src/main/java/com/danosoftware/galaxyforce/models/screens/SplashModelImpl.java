@@ -21,7 +21,8 @@ import com.danosoftware.galaxyforce.sprites.game.splash.BaseMovingSprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.LogoMovingSprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.PlanetMovingSprite;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
-import com.danosoftware.galaxyforce.sprites.providers.BasicSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.BasicMenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.MenuSpriteProvider;
 import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
@@ -39,7 +40,7 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
   private final Game game;
   private final BillingService billingService;
   private final TextProvider textProvider;
-  private final SpriteProvider spriteProvider;
+  private final MenuSpriteProvider spriteProvider;
   // version name of this package
   private final String versionName;
   private final IMovingSprite planet;
@@ -67,7 +68,7 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
     this.billingService = billingService;
     this.versionName = versionName;
     this.textProvider = new TextProvider();
-    this.spriteProvider = new BasicSpriteProvider();
+    this.spriteProvider = new BasicMenuSpriteProvider();
     this.splashScreenTime = 0f;
     this.reBuildText = true;
     this.planet = new PlanetMovingSprite(

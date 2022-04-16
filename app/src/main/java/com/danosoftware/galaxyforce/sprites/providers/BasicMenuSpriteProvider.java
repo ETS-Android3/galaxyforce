@@ -7,12 +7,12 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-public class BasicSpriteProvider implements SpriteProvider {
+public class BasicMenuSpriteProvider implements MenuSpriteProvider {
 
   private final List<ISprite> sprites;
   private int count;
 
-  public BasicSpriteProvider() {
+  public BasicMenuSpriteProvider() {
     this.sprites = new ArrayList<>();
     this.count = 0;
   }
@@ -28,14 +28,16 @@ public class BasicSpriteProvider implements SpriteProvider {
     return count;
   }
 
+  // synchronised since can be called from task thread and main thread
   @Override
-  public void add(ISprite aSprite) {
+  public synchronized void add(ISprite aSprite) {
     sprites.add(aSprite);
     count += 1;
   }
 
+  // synchronised since can be called from task thread and main thread
   @Override
-  public void addAll(Collection<ISprite> spriteColl) {
+  public synchronized void addAll(Collection<ISprite> spriteColl) {
     sprites.addAll(spriteColl);
     count += spriteColl.size();
   }

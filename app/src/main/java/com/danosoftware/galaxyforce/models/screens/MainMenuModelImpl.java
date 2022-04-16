@@ -21,7 +21,8 @@ import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
-import com.danosoftware.galaxyforce.sprites.providers.BasicSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.BasicMenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.MenuSpriteProvider;
 import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.TextProvider;
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
   private final BillingService billingService;
 
   private final TextProvider textProvider;
-  private final SpriteProvider spriteProvider;
+  private final MenuSpriteProvider spriteProvider;
 
   /*
    * Should we rebuild the buttons?
@@ -62,7 +63,7 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
     this.billingService = billingService;
     this.buttons = new ArrayList<>();
     this.textProvider = new TextProvider();
-    this.spriteProvider = new BasicSpriteProvider();
+    this.spriteProvider = new BasicMenuSpriteProvider();
     this.logo = new SplashSprite(GameConstants.SCREEN_MID_X, LOGO_Y_POS,
         SpriteDetails.GALAXY_FORCE);
     this.planet = new SplashSprite(GameConstants.SCREEN_MID_X, PLANET_Y_POS,

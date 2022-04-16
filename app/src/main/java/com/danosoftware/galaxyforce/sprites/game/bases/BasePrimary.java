@@ -34,6 +34,7 @@ import com.danosoftware.galaxyforce.sprites.game.factories.BaseMissileFactory;
 import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.providers.GamePlaySpriteProvider;
 import com.danosoftware.galaxyforce.utilities.MoveBaseHelper;
 import com.danosoftware.galaxyforce.view.Animation;
 import java.util.ArrayList;
@@ -47,6 +48,8 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
 
     // explosion behaviour
     private final IBaseMultiExploder explosion;
+
+    private final GamePlaySpriteProvider spriteProvider;
 
     // all sprites
     // cached as an optimisation to improve performance
@@ -123,18 +126,20 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
     private final BackgroundFlash backgroundFlash;
 
     public BasePrimary(
-            final GameModel model,
-            final SoundPlayerService sounds,
-            final VibrationService vibrator) {
+        final GameModel model,
+        final SoundPlayerService sounds,
+        final VibrationService vibrator,
+        final GamePlaySpriteProvider spriteProvider) {
 
-      super(BASE, SCREEN_MID_X, SCREEN_BOTTOM);
-      this.state = ACTIVE;
-      this.helpers = new EnumMap<>(HelperSide.class);
-      this.activeHelpers = new EnumMap<>(HelperSide.class);
-      this.allSprites = buildAllSprites();
-      this.activeBases = buildActiveBases();
-      this.lean = BaseLean.NONE;
-      this.moveHelper = new MoveBaseHelper(this);
+        super(BASE, SCREEN_MID_X, SCREEN_BOTTOM);
+        this.spriteProvider = spriteProvider;
+        this.state = ACTIVE;
+        this.helpers = new EnumMap<>(HelperSide.class);
+        this.activeHelpers = new EnumMap<>(HelperSide.class);
+        this.allSprites = buildAllSprites();
+        this.activeBases = buildActiveBases();
+        this.lean = BaseLean.NONE;
+        this.moveHelper = new MoveBaseHelper(this);
       this.backgroundFlash = new BackgroundFlash();
 
       this.explosion = new BaseMultiExploder(
@@ -188,6 +193,8 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
         if (isExploding()) {
             sprites.addAll(explosion.getMultiExplosion());
         }
+
+        spriteProvider.setBases(sprites);
 
         return sprites;
     }

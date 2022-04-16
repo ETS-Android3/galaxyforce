@@ -22,7 +22,8 @@ import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
-import com.danosoftware.galaxyforce.sprites.providers.BasicSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.BasicMenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.MenuSpriteProvider;
 import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextChangeListener;
@@ -45,7 +46,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
   // messages to display on the screen
   private final List<Text> messages;
   private final TextProvider textProvider;
-  private final SpriteProvider spriteProvider;
+  private final MenuSpriteProvider spriteProvider;
   private final Controller controller;
   private final BillingService billingService;
   // all visible buttons
@@ -74,7 +75,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
     this.buttons = new ArrayList<>();
     this.messages = new ArrayList<>();
     this.textProvider = new TextProvider();
-    this.spriteProvider = new BasicSpriteProvider();
+    this.spriteProvider = new BasicMenuSpriteProvider();
     this.flashingText = null;
     this.logo = new SplashSprite(GameConstants.SCREEN_MID_X, 817,
         SpriteDetails.GALAXY_FORCE);

@@ -17,7 +17,8 @@ import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
-import com.danosoftware.galaxyforce.sprites.providers.BasicSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.BasicMenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.MenuSpriteProvider;
 import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextChangeListener;
@@ -51,7 +52,7 @@ public class GamePausedModelImpl implements Model, ButtonModel, TextChangeListen
   /* reference to flashing paused text */
   private final FlashingText flashingPausedText;
   private final TextProvider textProvider;
-  private final SpriteProvider spriteProvider;
+  private final MenuSpriteProvider spriteProvider;
   private boolean updateText;
   private boolean updateSprites;
   private final RgbColour backgroundColour;
@@ -69,7 +70,7 @@ public class GamePausedModelImpl implements Model, ButtonModel, TextChangeListen
     this.backgroundColour = backgroundColour;
     this.modelState = PausedState.RUNNING;
     this.textProvider = new TextProvider();
-    this.spriteProvider = new BasicSpriteProvider();
+    this.spriteProvider = new BasicMenuSpriteProvider();
 
     // create list of menu buttons
     addNewMenuButton(controller, 3, "RESUME", ButtonType.RESUME);

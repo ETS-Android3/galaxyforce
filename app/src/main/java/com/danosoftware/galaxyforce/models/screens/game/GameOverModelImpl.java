@@ -18,7 +18,8 @@ import com.danosoftware.galaxyforce.models.screens.flashing.FlashingTextImpl;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
-import com.danosoftware.galaxyforce.sprites.providers.BasicSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.BasicMenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.MenuSpriteProvider;
 import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextChangeListener;
@@ -49,7 +50,7 @@ public class GameOverModelImpl implements Model, ButtonModel, TextChangeListener
   /* reference to pause menu buttons */
   private final List<SpriteTextButton> menuButtons;
   private final TextProvider textProvider;
-  private final SpriteProvider spriteProvider;
+  private final MenuSpriteProvider spriteProvider;
   /* reference to flashing game over text */
   private final FlashingText flashingGameOverText;
   private boolean updateText;
@@ -67,7 +68,7 @@ public class GameOverModelImpl implements Model, ButtonModel, TextChangeListener
     this.menuButtons = new ArrayList<>();
     this.modelState = GameOverState.RUNNING;
     this.textProvider = new TextProvider();
-    this.spriteProvider = new BasicSpriteProvider();
+    this.spriteProvider = new BasicMenuSpriteProvider();
 
     // build menu buttons
     addNewMenuButton(controller, 3, "PLAY", ButtonType.PLAY);

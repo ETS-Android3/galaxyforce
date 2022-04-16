@@ -5,19 +5,22 @@ import com.danosoftware.galaxyforce.sprites.game.assets.Life;
 import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.missiles.bases.IBaseMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
+import com.danosoftware.galaxyforce.sprites.providers.GamePlaySpriteProvider;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GamePlayAssetsManager implements IGamePlayAssetsManager {
 
+  private final GamePlaySpriteProvider spriteProvider;
   private List<IAlienMissile> aliensMissiles;
   private List<IBaseMissile> baseMissiles;
   private List<IPowerUp> powerUps;
   private List<Flag> flags;
   private List<Life> lives;
 
-  public GamePlayAssetsManager() {
+  public GamePlayAssetsManager(GamePlaySpriteProvider spriteProvider) {
 
+    this.spriteProvider = spriteProvider;
     this.aliensMissiles = new ArrayList<>();
     this.baseMissiles = new ArrayList<>();
     this.powerUps = new ArrayList<>();
@@ -36,6 +39,7 @@ public class GamePlayAssetsManager implements IGamePlayAssetsManager {
       }
     }
     baseMissiles = nonDestroyedBaseMissiles;
+    spriteProvider.setBaseMissiles(baseMissiles);
 
     List<IAlienMissile> nonDestroyedAlienMissiles = new ArrayList<>();
     for (IAlienMissile alienMissile : aliensMissiles) {
@@ -45,6 +49,7 @@ public class GamePlayAssetsManager implements IGamePlayAssetsManager {
       }
     }
     aliensMissiles = nonDestroyedAlienMissiles;
+    spriteProvider.setAlienMissiles(aliensMissiles);
 
     List<IPowerUp> nonDestroyedPowerUps = new ArrayList<>();
     for (IPowerUp powerUp : powerUps) {
@@ -54,11 +59,13 @@ public class GamePlayAssetsManager implements IGamePlayAssetsManager {
       }
     }
     powerUps = nonDestroyedPowerUps;
+    spriteProvider.setPowerUps(powerUps);
   }
 
   @Override
   public void setLevelFlags(int wave) {
     flags = Flag.getFlagList(wave);
+    spriteProvider.setFlags(flags);
   }
 
   @Override
@@ -104,6 +111,7 @@ public class GamePlayAssetsManager implements IGamePlayAssetsManager {
   @Override
   public void setLives(int livesRemaining) {
     lives = Life.getLives(livesRemaining);
+    spriteProvider.setLives(lives);
   }
 
   @Override

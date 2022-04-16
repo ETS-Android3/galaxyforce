@@ -46,6 +46,8 @@ import com.danosoftware.galaxyforce.sprites.game.factories.AlienFactory;
 import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.missiles.bases.IBaseMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
+import com.danosoftware.galaxyforce.sprites.providers.GamePlaySpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.GameSpriteProvider;
 import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.text.Text;
@@ -113,6 +115,7 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
   // get ready text instances
   private Text waveText;
   private final TextProvider textProvider;
+  private final GamePlaySpriteProvider spriteProvider;
   private boolean updateText;
 
   /*
@@ -157,6 +160,7 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
     this.waveText = null;
     this.getReadyFlashingText = null;
     this.textProvider = new TextProvider();
+    this.spriteProvider = new GameSpriteProvider();
 
     /*
      * create alien manager used to co-ordinate aliens waves.
@@ -166,7 +170,7 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
     /*
      * create asset manager to co-ordinate in-game assets
      */
-    this.assets = new GamePlayAssetsManager();
+    this.assets = new GamePlayAssetsManager(spriteProvider);
 
     // reset lives
     this.lives = START_LIVES;
@@ -176,6 +180,7 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
      */
     this.pauseButton = new PauseButton(this);
     controller.addTouchController(new DetectButtonTouch(pauseButton));
+    spriteProvider.setButtons(Collections.singletonList(pauseButton.getSprite()));
 
     /*
      * add base controller
@@ -228,7 +233,7 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
 
   @Override
   public SpriteProvider getSpriteProvider() {
-    return null;
+    return spriteProvider;
   }
 
   /*
@@ -638,7 +643,7 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
    * add new base - normally called at start of game or after losing a life.
    */
   private void addNewBase() {
-    primaryBase = new BasePrimary(this, sounds, vibrator);
+    primaryBase = new BasePrimary(this, sounds, vibrator, spriteProvider);
 
     // bind base controller to the new base
     TouchBaseControllerModel baseController = new BaseDragModel(primaryBase);
@@ -710,7 +715,7 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
     WaveFactory waveFactory = new WaveFactory(creationUtils, powerUpAllocatorFactory);
     WaveManager waveManager = new WaveManagerImpl(waveFactory, taskService);
 
-    return new AlienManager(waveManager, achievements);
+    return new AlienManager(waveManager, achievements, spriteProvider);
   }
 
   @Override

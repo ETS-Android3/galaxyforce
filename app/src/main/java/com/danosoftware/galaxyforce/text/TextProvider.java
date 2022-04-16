@@ -64,13 +64,14 @@ public class TextProvider {
     }
 
     // add a single text item
-    public void add(Text addText) {
+    // synchronised since can be called from task thread and main thread
+    public synchronized void add(Text addText) {
         text.add(addText);
         this.updatedSinceLastRetrieve = true;
     }
 
     // add a collection of text
-    public void addAll(Collection<Text> addTexts) {
+    public synchronized void addAll(Collection<Text> addTexts) {
         for (Text text : addTexts) {
             add(text);
         }

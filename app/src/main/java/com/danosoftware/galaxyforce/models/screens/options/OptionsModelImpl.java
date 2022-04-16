@@ -33,7 +33,8 @@ import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDimensions;
-import com.danosoftware.galaxyforce.sprites.providers.BasicSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.BasicMenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.MenuSpriteProvider;
 import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
@@ -55,7 +56,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
 
   // reference to all text objects in model
   private final TextProvider textProvider;
-  private final SpriteProvider spriteProvider;
+  private final MenuSpriteProvider spriteProvider;
   private ModelState modelState;
   private boolean reBuildAssets;
 
@@ -81,7 +82,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
     this.vibrator = vibrator;
     this.playService = playService;
     this.textProvider = new TextProvider();
-    this.spriteProvider = new BasicSpriteProvider();
+    this.spriteProvider = new BasicMenuSpriteProvider();
     this.connectionState = playService.connectedState();
 
     // build screen assets on next update

@@ -13,7 +13,7 @@ import java.util.List;
  * A sprite provider that only provides on-screen sprites when the screen can be scrolled
  * left-or-right.
  */
-public class ScrollableSpriteProvider implements SpriteProvider {
+public class ScrollableSpriteProvider implements MenuSpriteProvider {
 
   private final List<ISprite> sprites;
   private final List<ISprite> onScreenSprites;

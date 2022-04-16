@@ -14,7 +14,8 @@ import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.sprites.common.RotatingSprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
-import com.danosoftware.galaxyforce.sprites.providers.BasicSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.BasicMenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.MenuSpriteProvider;
 import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
@@ -30,7 +31,7 @@ public class GameCompleteModelImpl implements Model, TouchScreenModel {
   private final List<RotatingSprite> rotatedSprites;
   // reference to all text objects in model
   private final TextProvider textProvider;
-  private final SpriteProvider spriteProvider;
+  private final MenuSpriteProvider spriteProvider;
   private ModelState modelState;
 
   public GameCompleteModelImpl(
@@ -39,7 +40,7 @@ public class GameCompleteModelImpl implements Model, TouchScreenModel {
     this.game = game;
     this.rotatedSprites = new ArrayList<>();
     this.textProvider = new TextProvider();
-    this.spriteProvider = new BasicSpriteProvider();
+    this.spriteProvider = new BasicMenuSpriteProvider();
     this.modelState = ModelState.RUNNING;
 
     // add model sprites

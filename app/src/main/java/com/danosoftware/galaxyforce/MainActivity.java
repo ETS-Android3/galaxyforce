@@ -13,7 +13,6 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
-import android.os.StrictMode;
 import android.os.Trace;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -117,19 +116,6 @@ public class MainActivity extends Activity {
       }
 
       Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Application Created");
-      StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder()
-          .detectDiskReads()
-          .detectDiskWrites()
-          .detectAll()
-          .penaltyLog()
-          .penaltyDeath()
-          .build());
-      StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder()
-          .detectLeakedSqlLiteObjects()
-          .detectLeakedClosableObjects()
-          .penaltyLog()
-          //.penaltyDeath()
-          .build());
     }
 
     /* runs after onCreate or resuming after being in background */

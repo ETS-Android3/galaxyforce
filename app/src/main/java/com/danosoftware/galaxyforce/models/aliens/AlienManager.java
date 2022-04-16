@@ -11,6 +11,7 @@ import android.util.Log;
 import com.danosoftware.galaxyforce.services.achievements.AchievementService;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IResettableAlien;
+import com.danosoftware.galaxyforce.sprites.providers.GamePlaySpriteProvider;
 import com.danosoftware.galaxyforce.waves.SubWave;
 import com.danosoftware.galaxyforce.waves.managers.WaveManager;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class AlienManager implements IAlienManager {
   private static final String TAG = AlienManager.class.getSimpleName();
   // provides waves
   private final WaveManager waveManager;
+  private final GamePlaySpriteProvider spriteProvider;
   private final AchievementService achievements;
   // temporary queue of spawned aliens that will be added to the
   // main alien list at start of each animation loop
@@ -35,9 +37,11 @@ public class AlienManager implements IAlienManager {
 
   public AlienManager(
       WaveManager waveManager,
-      AchievementService achievements) {
+      AchievementService achievements,
+      GamePlaySpriteProvider spriteProvider) {
     this.waveManager = waveManager;
     this.achievements = achievements;
+    this.spriteProvider = spriteProvider;
     this.aliens = new ArrayList<>();
     this.activeAliens = new ArrayList<>();
     this.visibleAliens = new ArrayList<>();
@@ -90,6 +94,8 @@ public class AlienManager implements IAlienManager {
     this.aliens = nonDestroyedAliens;
     this.activeAliens = currentActiveAliens;
     this.visibleAliens = currentVisibleAliens;
+
+    this.spriteProvider.setAliens(visibleAliens);
 
     // have all aliens finished pass or been destroyed
     if (subWaveState == PLAYING && aliens.size() == 0) {
@@ -180,6 +186,8 @@ public class AlienManager implements IAlienManager {
 
     this.activeAliens = currentActiveAliens;
     this.visibleAliens = currentVisibleAliens;
+
+    this.spriteProvider.setAliens(visibleAliens);
   }
 
   /**
