@@ -15,7 +15,6 @@ import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.text.TextPositionY;
 import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.view.FPSCounter;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -66,7 +65,7 @@ public class GamePlayModelFrameRateDecorator implements Model, GameModel, TextCh
       textProvider.addAll(latestModelText);
       textProvider.add(createFpsText());
       updateText = false;
-      modelText = latestModelText;
+      modelText = new ArrayList<>(latestModelText);
     }
     return textProvider;
   }
