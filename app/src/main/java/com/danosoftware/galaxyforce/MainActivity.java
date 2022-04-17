@@ -135,7 +135,7 @@ public class MainActivity extends Activity {
         }
 
         // sign-in to google play services
-      taskService.execute(() -> mPlayServices.signInSilently());
+        taskService.execute(() -> mPlayServices.signInSilently());
     }
 
     /* runs when application is paused */
