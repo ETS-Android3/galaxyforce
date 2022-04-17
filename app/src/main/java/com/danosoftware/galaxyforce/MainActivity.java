@@ -106,16 +106,16 @@ public class MainActivity extends Activity {
         // create instance of game
         Intent launchIntent = getIntent();
         String launchIntentAction = launchIntent.getAction();
-      if (launchIntentAction != null &&
-          launchIntentAction.equals("com.google.intent.action.TEST_LOOP")) {
-        game = new GameLoopTest(this, glGraphics, glView, billingService, mPlayServices,
-            configurationService, taskService);
-      } else {
-        game = new GameImpl(this, glGraphics, glView, billingService, mPlayServices,
-            configurationService, taskService);
-      }
+        if (launchIntentAction != null &&
+            launchIntentAction.equals("com.google.intent.action.TEST_LOOP")) {
+            game = new GameLoopTest(this, glGraphics, glView, billingService, mPlayServices,
+                configurationService, taskService);
+        } else {
+            game = new GameImpl(this, glGraphics, glView, billingService, mPlayServices,
+                configurationService, taskService);
+        }
 
-      Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Application Created");
+        Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Application Created");
     }
 
     /* runs after onCreate or resuming after being in background */
