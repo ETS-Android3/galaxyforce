@@ -9,8 +9,6 @@ import com.danosoftware.galaxyforce.text.TextProvider;
  */
 public interface Model {
 
-  //List<ISprite> getSprites();
-
   TextProvider getTextProvider();
 
   SpriteProvider getSpriteProvider();
