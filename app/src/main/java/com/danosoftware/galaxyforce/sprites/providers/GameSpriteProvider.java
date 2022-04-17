@@ -10,14 +10,10 @@ import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.missiles.bases.IBaseMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
 public class GameSpriteProvider implements GamePlaySpriteProvider {
-
-  // chained-collection of all sprites
-  private final Collection<Collection<ISprite>> chainedList;
 
   // holds in-game sprites
   private final List<ISprite> aliens;
@@ -29,6 +25,8 @@ public class GameSpriteProvider implements GamePlaySpriteProvider {
   private final List<ISprite> flags;
   private final List<ISprite> lives;
 
+  private final List<ISprite> allSprites;
+
   private int aliensCount;
   private int basesCount;
   private int alienMissilesCount;
@@ -39,12 +37,10 @@ public class GameSpriteProvider implements GamePlaySpriteProvider {
   private int livesCount;
 
   private int totalCount;
-  private boolean countChanged;
+  private boolean spritesChanged;
 
 
   public GameSpriteProvider() {
-    this.chainedList = new ArrayList<>();
-
     this.aliens = new ArrayList<>();
     this.bases = new ArrayList<>();
     this.alienMissiles = new ArrayList<>();
@@ -53,6 +49,8 @@ public class GameSpriteProvider implements GamePlaySpriteProvider {
     this.buttons = new ArrayList<>();
     this.flags = new ArrayList<>();
     this.lives = new ArrayList<>();
+
+    this.allSprites = new ArrayList<>();
 
     this.aliensCount = 0;
     this.basesCount = 0;
@@ -64,32 +62,13 @@ public class GameSpriteProvider implements GamePlaySpriteProvider {
     this.livesCount = 0;
 
     this.totalCount = 0;
-    this.countChanged = false;
-
-    // add all in-game sprites to chain
-    chainedList.add(aliens);
-    chainedList.add(bases);
-    chainedList.add(alienMissiles);
-    chainedList.add(baseMissiles);
-    chainedList.add(powerUps);
-    chainedList.add(buttons);
-    chainedList.add(flags);
-    chainedList.add(lives);
+    this.spritesChanged = false;
   }
 
   @Override
   public int count() {
-
-    if (countChanged) {
-      totalCount = aliensCount +
-          basesCount +
-          alienMissilesCount +
-          baseMissilesCount +
-          powerUpsCount +
-          buttonsCount +
-          flagsCount +
-          livesCount;
-      countChanged = false;
+    if (spritesChanged) {
+      refreshSprites();
     }
 
     return totalCount;
@@ -98,7 +77,11 @@ public class GameSpriteProvider implements GamePlaySpriteProvider {
   @NonNull
   @Override
   public Iterator<ISprite> iterator() {
-    return new ChainedIterator<>(chainedList);
+    if (spritesChanged) {
+      refreshSprites();
+    }
+
+    return allSprites.iterator();
   }
 
   // sprites to display when paused
@@ -121,7 +104,7 @@ public class GameSpriteProvider implements GamePlaySpriteProvider {
     this.aliens.clear();
     this.aliens.addAll(aliens);
     aliensCount = aliens.size();
-    countChanged = true;
+    spritesChanged = true;
   }
 
   @Override
@@ -129,7 +112,7 @@ public class GameSpriteProvider implements GamePlaySpriteProvider {
     this.bases.clear();
     this.bases.addAll(bases);
     basesCount = bases.size();
-    countChanged = true;
+    spritesChanged = true;
   }
 
   @Override
@@ -137,7 +120,7 @@ public class GameSpriteProvider implements GamePlaySpriteProvider {
     this.alienMissiles.clear();
     this.alienMissiles.addAll(alienMissiles);
     alienMissilesCount = alienMissiles.size();
-    countChanged = true;
+    spritesChanged = true;
   }
 
   @Override
@@ -145,7 +128,7 @@ public class GameSpriteProvider implements GamePlaySpriteProvider {
     this.baseMissiles.clear();
     this.baseMissiles.addAll(baseMissiles);
     baseMissilesCount = baseMissiles.size();
-    countChanged = true;
+    spritesChanged = true;
   }
 
   @Override
@@ -153,7 +136,7 @@ public class GameSpriteProvider implements GamePlaySpriteProvider {
     this.powerUps.clear();
     this.powerUps.addAll(powerUps);
     powerUpsCount = powerUps.size();
-    countChanged = true;
+    spritesChanged = true;
   }
 
   @Override
@@ -161,7 +144,7 @@ public class GameSpriteProvider implements GamePlaySpriteProvider {
     this.buttons.clear();
     this.buttons.addAll(buttons);
     buttonsCount = buttons.size();
-    countChanged = true;
+    spritesChanged = true;
   }
 
   @Override
@@ -169,7 +152,7 @@ public class GameSpriteProvider implements GamePlaySpriteProvider {
     this.flags.clear();
     this.flags.addAll(flags);
     flagsCount = flags.size();
-    countChanged = true;
+    spritesChanged = true;
   }
 
   @Override
@@ -177,6 +160,29 @@ public class GameSpriteProvider implements GamePlaySpriteProvider {
     this.lives.clear();
     this.lives.addAll(lives);
     livesCount = lives.size();
-    countChanged = true;
+    spritesChanged = true;
+  }
+
+  private void refreshSprites() {
+    totalCount = aliensCount +
+        basesCount +
+        alienMissilesCount +
+        baseMissilesCount +
+        powerUpsCount +
+        buttonsCount +
+        flagsCount +
+        livesCount;
+
+    allSprites.clear();
+    allSprites.addAll(aliens);
+    allSprites.addAll(bases);
+    allSprites.addAll(alienMissiles);
+    allSprites.addAll(baseMissiles);
+    allSprites.addAll(powerUps);
+    allSprites.addAll(buttons);
+    allSprites.addAll(flags);
+    allSprites.addAll(lives);
+
+    spritesChanged = false;
   }
 }
