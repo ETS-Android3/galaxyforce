@@ -85,7 +85,6 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
    */
   // handles aliens and waves
   private final IAlienManager alienManager;
-  private final SpriteButton pauseButton;
   // sound player that provide sound effects
   private final SoundPlayerService sounds;
   // vibration service
@@ -176,7 +175,7 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
     /*
      * add pause button
      */
-    this.pauseButton = new PauseButton(this);
+    final SpriteButton pauseButton = new PauseButton(this);
     controller.addTouchController(new DetectButtonTouch(pauseButton));
     spriteProvider.setButtons(Collections.singletonList(pauseButton.getSprite()));
 
@@ -245,13 +244,7 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
         break;
 
       case UPGRADING:
-        // no action
-        break;
-
       case PAUSE:
-        // no action
-        break;
-
       case GAME_OVER:
         // no action
         break;
