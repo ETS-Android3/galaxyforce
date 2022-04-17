@@ -27,4 +27,6 @@ public interface GamePlaySpriteProvider extends SpriteProvider {
   void setFlags(List<Flag> flags);
 
   void setLives(List<Life> lives);
+
+  List<ISprite> pausedSprites();
 }

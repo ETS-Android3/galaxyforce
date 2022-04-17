@@ -37,7 +37,6 @@ import com.danosoftware.galaxyforce.services.sound.SoundEffect;
 import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.sprites.common.ICollidingSprite;
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.bases.BasePrimary;
 import com.danosoftware.galaxyforce.sprites.game.bases.IBase;
@@ -60,7 +59,6 @@ import com.danosoftware.galaxyforce.waves.managers.WaveManagerImpl;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocatorFactory;
 import com.danosoftware.galaxyforce.waves.utilities.WaveCreationUtils;
 import com.danosoftware.galaxyforce.waves.utilities.WaveFactory;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -203,21 +201,6 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
    * ******************************************************
    */
 
-  //@Override
-  public List<ISprite> getSprites() {
-    List<ISprite> gameSprites = new ArrayList<>();
-    gameSprites.addAll(alienManager.allAliens());
-    gameSprites.addAll(primaryBase.allSprites());
-    gameSprites.addAll(assets.getAliensMissiles());
-    gameSprites.addAll(assets.getBaseMissiles());
-    gameSprites.addAll(assets.getPowerUps());
-    gameSprites.add(pauseButton.getSprite());
-    gameSprites.addAll(assets.getFlags());
-    gameSprites.addAll(assets.getLives());
-
-    return gameSprites;
-  }
-
   @Override
   public TextProvider getTextProvider() {
     if (updateText) {
@@ -241,19 +224,6 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
    * PUBLIC INTERFACE METHODS
    * ******************************************************
    */
-
-  private List<ISprite> getPausedSprites() {
-    List<ISprite> pausedSprites = new ArrayList<>();
-    pausedSprites.addAll(alienManager.allAliens());
-    pausedSprites.addAll(primaryBase.allSprites());
-    pausedSprites.addAll(assets.getAliensMissiles());
-    pausedSprites.addAll(assets.getBaseMissiles());
-    pausedSprites.addAll(assets.getPowerUps());
-    pausedSprites.addAll(assets.getFlags());
-    pausedSprites.addAll(assets.getLives());
-
-    return pausedSprites;
-  }
 
   @Override
   public void update(float deltaTime) {
@@ -327,7 +297,7 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
 
     // if we're playing start transition to pause screen
     if (modelState == ModelState.GET_READY || modelState == ModelState.PLAYING) {
-      game.changeToGamePausedScreen(getPausedSprites(), background());
+      game.changeToGamePausedScreen(spriteProvider.pausedSprites(), background());
     }
 
     this.modelState = ModelState.PAUSE;

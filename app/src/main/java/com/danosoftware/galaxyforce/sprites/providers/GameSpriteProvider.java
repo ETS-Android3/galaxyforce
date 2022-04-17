@@ -101,6 +101,21 @@ public class GameSpriteProvider implements GamePlaySpriteProvider {
     return new ChainedIterator<>(chainedList);
   }
 
+  // sprites to display when paused
+  @Override
+  public List<ISprite> pausedSprites() {
+    List<ISprite> pausedSprites = new ArrayList<>();
+    pausedSprites.addAll(aliens);
+    pausedSprites.addAll(bases);
+    pausedSprites.addAll(alienMissiles);
+    pausedSprites.addAll(baseMissiles);
+    pausedSprites.addAll(powerUps);
+    pausedSprites.addAll(flags);
+    pausedSprites.addAll(lives);
+
+    return pausedSprites;
+  }
+
   @Override
   public void setAliens(List<IAlien> aliens) {
     this.aliens.clear();
