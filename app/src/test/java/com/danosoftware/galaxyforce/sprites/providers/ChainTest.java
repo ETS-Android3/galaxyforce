@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 
-public class Chain implements Iterable<Integer> {
+public class ChainTest implements Iterable<Integer> {
 
   @NonNull
   @Override
