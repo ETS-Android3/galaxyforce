@@ -35,6 +35,7 @@ import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
 import com.danosoftware.galaxyforce.sprites.game.powerups.PowerUp;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.providers.GamePlaySpriteProvider;
 import com.danosoftware.galaxyforce.textures.TextureDetail;
 import com.danosoftware.galaxyforce.textures.TextureService;
 import java.lang.reflect.Field;
@@ -57,6 +58,7 @@ public class PrimaryBaseTest {
     private IBaseHelper rightHelper;
 
     private GameModel model;
+    private GamePlaySpriteProvider spriteprovider;
 
     @Before
     public void setUp() {
@@ -69,9 +71,10 @@ public class PrimaryBaseTest {
       model = mock(GameModel.class);
       SoundPlayerService sounds = mock(SoundPlayerService.class);
       VibrationService vibrator = mock(VibrationService.class);
+        spriteprovider = mock(GamePlaySpriteProvider.class);
 
-      primaryBase = new BasePrimary(model, sounds, vibrator);
-      primaryBaseSpy = spy(primaryBase);
+        primaryBase = new BasePrimary(model, sounds, vibrator, spriteprovider);
+        primaryBaseSpy = spy(primaryBase);
 
       leftHelper = mock(IBaseHelper.class);
       rightHelper = mock(IBaseHelper.class);

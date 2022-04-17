@@ -17,6 +17,7 @@ import android.util.Log;
 import com.danosoftware.galaxyforce.services.achievements.AchievementService;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IResettableAlien;
+import com.danosoftware.galaxyforce.sprites.providers.GamePlaySpriteProvider;
 import com.danosoftware.galaxyforce.waves.SubWave;
 import com.danosoftware.galaxyforce.waves.managers.WaveManager;
 import java.util.ArrayList;
@@ -36,6 +37,7 @@ public class AlienManagerTest {
     private WaveManager mockWaveMgr;
     private IResettableAlien mockAlien;
     private AchievementService achievements;
+    private GamePlaySpriteProvider spriteprovider;
 
     private static final int ALIEN_COUNT = 10;
 
@@ -65,8 +67,9 @@ public class AlienManagerTest {
         when(mockWaveMgr.next()).thenReturn(subWave);
 
         achievements = mock(AchievementService.class);
+        spriteprovider = mock(GamePlaySpriteProvider.class);
 
-        alienMgr = new AlienManager(mockWaveMgr, achievements);
+        alienMgr = new AlienManager(mockWaveMgr, achievements, spriteprovider);
         alienMgr.isWaveReady();
     }
 
