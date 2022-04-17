@@ -8,7 +8,6 @@ import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextChangeListener;
 import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.view.FPSCounter;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -68,7 +67,7 @@ public class LevelModelFrameRateDecorator implements LevelModel, TextChangeListe
       textProvider.addAll(modelTextProvider.text());
       textProvider.add(createFpsText());
       updateText = false;
-      modelText = latestModelText;
+      modelText = new ArrayList<>(latestModelText);
     }
     float scrollPosition = model.getScrollPosition();
     textProvider.updateScrollPosition(scrollPosition);
