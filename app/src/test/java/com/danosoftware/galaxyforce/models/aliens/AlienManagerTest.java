@@ -1,6 +1,5 @@
 package com.danosoftware.galaxyforce.models.aliens;
 
-import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.CoreMatchers.not;
 import static org.hamcrest.CoreMatchers.nullValue;
@@ -26,6 +25,8 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -36,10 +37,12 @@ public class AlienManagerTest {
     private AlienManager alienMgr;
     private WaveManager mockWaveMgr;
     private IResettableAlien mockAlien;
-    private AchievementService achievements;
     private GamePlaySpriteProvider spriteprovider;
 
     private static final int ALIEN_COUNT = 10;
+
+    @Captor
+    private ArgumentCaptor<List<IAlien>> argumentCaptor;
 
     @Before
     public void setUp() {
@@ -66,7 +69,7 @@ public class AlienManagerTest {
         when(mockWaveMgr.hasNext()).thenReturn(true);
         when(mockWaveMgr.next()).thenReturn(subWave);
 
-        achievements = mock(AchievementService.class);
+        AchievementService achievements = mock(AchievementService.class);
         spriteprovider = mock(GamePlaySpriteProvider.class);
 
         alienMgr = new AlienManager(mockWaveMgr, achievements, spriteprovider);
@@ -81,10 +84,16 @@ public class AlienManagerTest {
     }
 
     @Test
-    public void shouldReturnAllVisibleAliens() {
-        List<IAlien> allAliens = alienMgr.allAliens();
+    public void shouldProvideAllVisibleAliens() {
         alienMgr.animate(0);
-        assertThat(allAliens.size(), is(ALIEN_COUNT));
+
+        // sprite provider will only be called once
+        // with original aliens on initialisation.
+        // the animation cycle should not send any more aliens
+        // since nothing will change.
+        verify(spriteprovider, times(1)).setAliens(argumentCaptor.capture());
+        List<IAlien> capturedAliens = argumentCaptor.getValue();
+        assertThat(capturedAliens.size(), is(ALIEN_COUNT));
     }
 
     @Test
@@ -95,12 +104,20 @@ public class AlienManagerTest {
         assertThat(activeAliens.size(), is(0));
     }
 
+    // check the expected visible aliens are sent to the sprite provider
     @Test
-    public void shouldReturnNoVisibleAliens() {
-        when(mockAlien.isVisible()).thenReturn(false);
+    public void shouldProvideNoVisibleAliens() {
+        // set-up mock so alien is initially visible and then invisible
+        when(mockAlien.isVisible()).thenReturn(true, false);
         alienMgr.animate(0);
-        List<IAlien> activeAliens = alienMgr.allAliens();
-        assertThat(activeAliens.size(), is(0));
+
+        // sprite provider will be called twice.
+        // 1st time with original aliens on initialisation.
+        // 2nd time with no aliens once all are set to invisible.
+        verify(spriteprovider, times(2)).setAliens(argumentCaptor.capture());
+        List<List<IAlien>> capturedAliens = argumentCaptor.getAllValues();
+        assertThat(capturedAliens.get(0).size(), is(ALIEN_COUNT));
+        assertThat(capturedAliens.get(1).size(), is(0));
     }
 
     @Test
@@ -136,6 +153,7 @@ public class AlienManagerTest {
         for (IAlien alien : alienMgr.activeAliens()) {
             when(alien.isActive()).thenReturn(false);
         }
+        alienMgr.animate(0f);
 
         IAlien selectedAlien = alienMgr.chooseActiveAlien();
         assertThat(selectedAlien, is(nullValue()));
@@ -164,7 +182,12 @@ public class AlienManagerTest {
         // spawned aliens will be added in second loop
         alienMgr.animate(0);
 
-        // confirm every alien has spawned a new alien
-        assertThat(alienMgr.allAliens().size(), equalTo(20));
+        // sprite provider will be called twice.
+        // 1st time with original aliens on initialisation.
+        // 2nd time with original aliens plus spawned aliens.
+        verify(spriteprovider, times(2)).setAliens(argumentCaptor.capture());
+        List<List<IAlien>> capturedAliens = argumentCaptor.getAllValues();
+        assertThat(capturedAliens.get(0).size(), is(ALIEN_COUNT));
+        assertThat(capturedAliens.get(1).size(), is(ALIEN_COUNT * 2));
     }
 }

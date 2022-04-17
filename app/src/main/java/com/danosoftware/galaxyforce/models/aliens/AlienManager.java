@@ -16,6 +16,7 @@ import com.danosoftware.galaxyforce.waves.SubWave;
 import com.danosoftware.galaxyforce.waves.managers.WaveManager;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class AlienManager implements IAlienManager {
 
@@ -29,9 +30,8 @@ public class AlienManager implements IAlienManager {
   // main alien list at start of each animation loop
   private final List<IAlien> spawnedAliens;
   // state of current sub-wave
-  private List<IAlien> aliens;
-  private List<IAlien> activeAliens;
-  private List<IAlien> visibleAliens;
+  private final List<IAlien> aliens;
+  private final List<IAlien> activeAliens;
   private SubWaveState subWaveState;
   private boolean repeatedSubWave;
 
@@ -44,7 +44,6 @@ public class AlienManager implements IAlienManager {
     this.spriteProvider = spriteProvider;
     this.aliens = new ArrayList<>();
     this.activeAliens = new ArrayList<>();
-    this.visibleAliens = new ArrayList<>();
     this.spawnedAliens = new ArrayList<>();
     this.subWaveState = IDLE;
   }
@@ -55,47 +54,71 @@ public class AlienManager implements IAlienManager {
   }
 
   @Override
-  public List<IAlien> allAliens() {
-    return visibleAliens;
-  }
-
-  @Override
   public void animate(float deltaTime) {
+    // track finished aliens
     int finishedAliens = 0;
-    List<IAlien> nonDestroyedAliens = new ArrayList<>();
-    List<IAlien> currentActiveAliens = new ArrayList<>();
-    List<IAlien> currentVisibleAliens = new ArrayList<>();
+
+    // track if any aliens change visibility
+    boolean alienVisibilityChanged = false;
 
     // add queued spawned aliens.
     // spawned aliens are newly created aliens to the wave.
     // they should appear behind existing sprites so are added to beginning of list
-    aliens.addAll(0, spawnedAliens);
-    spawnedAliens.clear();
+    if (!spawnedAliens.isEmpty()) {
+      aliens.addAll(0, spawnedAliens);
+      spawnedAliens.clear();
+      alienVisibilityChanged = true;
+    }
 
-    for (IAlien alien : aliens) {
+    // create list to track visible aliens
+    List<IAlien> visibleAliens = new ArrayList<>(aliens.size());
+
+    // clear existing list of active aliens
+    activeAliens.clear();
+
+    ListIterator<IAlien> alienIterator = aliens.listIterator();
+    while (alienIterator.hasNext()) {
+      IAlien alien = alienIterator.next();
+      boolean alienVisibleBefore = alien.isVisible();
+
+      // animate
       alien.animate(deltaTime);
 
-      if (alien.isActive()) {
-        currentActiveAliens.add(alien);
+      // has visibility changed after animation?
+      boolean alienVisibleAfter = alien.isVisible();
+      if (alienVisibleAfter != alienVisibleBefore) {
+        alienVisibilityChanged = true;
       }
+
+      // update list of visible aliens
       if (alien.isVisible()) {
-        currentVisibleAliens.add(alien);
+        visibleAliens.add(alien);
       }
+
+      // update list of active aliens
+      if (alien.isActive()) {
+        activeAliens.add(alien);
+      }
+
+      // has alien finished it's pass
+      // (wave will be reset when all have finished)
       if (alien instanceof IResettableAlien && ((IResettableAlien) alien).isEndOfPass()) {
         finishedAliens++;
       }
-      if (!alien.isDestroyed()) {
-        nonDestroyedAliens.add(alien);
-      } else {
+
+      // has alien been destroyed
+      if (alien.isDestroyed()) {
+        alienIterator.remove();
+        alienVisibilityChanged = true;
         achievements.alienDestroyed(alien.character());
       }
     }
 
-    this.aliens = nonDestroyedAliens;
-    this.activeAliens = currentActiveAliens;
-    this.visibleAliens = currentVisibleAliens;
-
-    this.spriteProvider.setAliens(visibleAliens);
+    // if the visibility of any alien has changed,
+    // send the list of visible aliens to the sprite provider
+    if (alienVisibilityChanged) {
+      spriteProvider.setAliens(visibleAliens);
+    }
 
     // have all aliens finished pass or been destroyed
     if (subWaveState == PLAYING && aliens.size() == 0) {
@@ -145,15 +168,6 @@ public class AlienManager implements IAlienManager {
   @Override
   public IAlien chooseActiveAlien() {
 
-    // refresh active alien list
-    List<IAlien> currentActiveAliens = new ArrayList<>();
-    for (IAlien alien : aliens) {
-      if (alien.isActive()) {
-        currentActiveAliens.add(alien);
-      }
-    }
-    this.activeAliens = currentActiveAliens;
-
     // if no aliens are active return null
     if (activeAliens.size() == 0) {
       return null;
@@ -168,26 +182,24 @@ public class AlienManager implements IAlienManager {
    * Initialises a new sub alien sub-wave
    */
   private void createAlienSubWave(final SubWave subWave) {
-    this.aliens = subWave.getAliens();
+    aliens.clear();
+    aliens.addAll(subWave.getAliens());
     this.repeatedSubWave = subWave.isWaveRepeated();
     this.subWaveState = PLAYING;
 
-    List<IAlien> currentActiveAliens = new ArrayList<>();
-    List<IAlien> currentVisibleAliens = new ArrayList<>();
+    activeAliens.clear();
+    List<IAlien> visibleAliens = new ArrayList<>(aliens.size());
 
     for (IAlien alien : aliens) {
       if (alien.isActive()) {
-        currentActiveAliens.add(alien);
+        activeAliens.add(alien);
       }
       if (alien.isVisible()) {
-        currentVisibleAliens.add(alien);
+        visibleAliens.add(alien);
       }
     }
 
-    this.activeAliens = currentActiveAliens;
-    this.visibleAliens = currentVisibleAliens;
-
-    this.spriteProvider.setAliens(visibleAliens);
+    spriteProvider.setAliens(visibleAliens);
   }
 
   /**
