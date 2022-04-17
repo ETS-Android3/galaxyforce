@@ -1,18 +1,17 @@
 package com.danosoftware.galaxyforce.models.screens;
 
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.TextProvider;
-import java.util.List;
 
 /**
  * Generic interface for any models containing the logic behind any screens.
  */
 public interface Model {
 
-  List<ISprite> getSprites();
-
   TextProvider getTextProvider();
+
+  SpriteProvider getSpriteProvider();
 
   void update(float deltaTime);
 

@@ -11,10 +11,12 @@ import com.danosoftware.galaxyforce.games.Game;
 import com.danosoftware.galaxyforce.models.buttons.TouchScreenModel;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.common.RotatingSprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.providers.BasicMenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.MenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.text.TextProvider;
@@ -25,22 +27,20 @@ public class GameCompleteModelImpl implements Model, TouchScreenModel {
 
   private final Game game;
 
-  // reference to all sprites in model
-  private final List<ISprite> allSprites;
-
   // reference to all sprites in model to be rotated
   private final List<RotatingSprite> rotatedSprites;
   // reference to all text objects in model
   private final TextProvider textProvider;
+  private final MenuSpriteProvider spriteProvider;
   private ModelState modelState;
 
   public GameCompleteModelImpl(
       Game game,
       Controller controller) {
     this.game = game;
-    this.allSprites = new ArrayList<>();
     this.rotatedSprites = new ArrayList<>();
     this.textProvider = new TextProvider();
+    this.spriteProvider = new BasicMenuSpriteProvider();
     this.modelState = ModelState.RUNNING;
 
     // add model sprites
@@ -56,10 +56,10 @@ public class GameCompleteModelImpl implements Model, TouchScreenModel {
       RotatingSprite base = new RotatingSprite(100 + (column * 170), 580,
           SpriteDetails.BASE_LARGE);
       rotatedSprites.add(base);
-      allSprites.add(base);
+      spriteProvider.add(base);
     }
 
-    allSprites
+    spriteProvider
         .add(new SplashSprite(GameConstants.SCREEN_MID_X, 817, SpriteDetails.GALAXY_FORCE));
 
     textProvider.add(
@@ -67,13 +67,13 @@ public class GameCompleteModelImpl implements Model, TouchScreenModel {
   }
 
   @Override
-  public List<ISprite> getSprites() {
-    return allSprites;
+  public TextProvider getTextProvider() {
+    return textProvider;
   }
 
   @Override
-  public TextProvider getTextProvider() {
-    return textProvider;
+  public SpriteProvider getSpriteProvider() {
+    return spriteProvider;
   }
 
   @Override

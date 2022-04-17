@@ -14,50 +14,87 @@ import java.util.List;
 public class TextProvider {
 
     private final List<Text> text;
-    private int characters;
+    // cached characters to draw
+    private final List<Character> characters;
+    // font used to create characters - may be null initially
+    private Font font;
+    private int charactersCount;
     private boolean updatedSinceLastRetrieve;
 
     public TextProvider() {
         this.text = new ArrayList<>();
-        this.characters = 0;
+        this.characters = new ArrayList<>();
+        this.charactersCount = 0;
         this.updatedSinceLastRetrieve = false;
+    }
+
+    public void updateFont(Font font) {
+        this.font = font;
     }
 
     // empties the contents of any cached text
     public void clear() {
         text.clear();
-        characters = 0;
+        characters.clear();
+        charactersCount = 0;
         updatedSinceLastRetrieve = true;
     }
 
-    // how many characters are contained in the cached text
+    // count all stored characters in the cached text
     public int count() {
-        return characters;
+        // do we need to re-build the characters list?
+        if (updatedSinceLastRetrieve) {
+            rebuildCharacters();
+        }
+        return charactersCount;
     }
 
     // return all cached text
-    // also resets "updated since last retrieved" flag
     public List<Text> text() {
-        this.updatedSinceLastRetrieve = false;
         return text;
     }
 
-    // has any text changed since the last time text was retrieved?
-    public boolean hasUpdated() {
-        return updatedSinceLastRetrieve;
+    // return all stored characters in the cached text
+    public List<Character> characters() {
+        // do we need to re-build the characters list?
+        if (updatedSinceLastRetrieve) {
+            rebuildCharacters();
+        }
+        return characters;
     }
 
     // add a single text item
-    public void add(Text addText) {
+    // synchronised since can be called from task thread and main thread
+    public synchronized void add(Text addText) {
         text.add(addText);
-        characters += addText.getText().length();
         this.updatedSinceLastRetrieve = true;
     }
 
     // add a collection of text
-    public void addAll(Collection<Text> addTexts) {
+    public synchronized void addAll(Collection<Text> addTexts) {
         for (Text text : addTexts) {
             add(text);
         }
+    }
+
+    private void rebuildCharacters() {
+        characters.clear();
+        charactersCount = 0;
+
+        if (font == null) {
+            return;
+        }
+
+        for (Text eachText : text) {
+            font.updateCharacters(
+                    characters,
+                    eachText.getText(),
+                    eachText.getX(),
+                    eachText.getY(),
+                    eachText.getTextPositionX(),
+                    eachText.getTextPositionY());
+        }
+        charactersCount = characters.size();
+        this.updatedSinceLastRetrieve = false;
     }
 }

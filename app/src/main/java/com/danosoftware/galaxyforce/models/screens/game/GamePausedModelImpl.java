@@ -17,6 +17,9 @@ import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.providers.BasicMenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.MenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextChangeListener;
 import com.danosoftware.galaxyforce.text.TextPositionX;
@@ -49,7 +52,9 @@ public class GamePausedModelImpl implements Model, ButtonModel, TextChangeListen
   /* reference to flashing paused text */
   private final FlashingText flashingPausedText;
   private final TextProvider textProvider;
+  private final MenuSpriteProvider spriteProvider;
   private boolean updateText;
+  private boolean updateSprites;
   private final RgbColour backgroundColour;
   /* reference to current state */
   private PausedState modelState;
@@ -65,6 +70,7 @@ public class GamePausedModelImpl implements Model, ButtonModel, TextChangeListen
     this.backgroundColour = backgroundColour;
     this.modelState = PausedState.RUNNING;
     this.textProvider = new TextProvider();
+    this.spriteProvider = new BasicMenuSpriteProvider();
 
     // create list of menu buttons
     addNewMenuButton(controller, 3, "RESUME", ButtonType.RESUME);
@@ -82,24 +88,7 @@ public class GamePausedModelImpl implements Model, ButtonModel, TextChangeListen
             this);
 
     this.updateText = true;
-  }
-
-  /*
-   * ******************************************************
-   *
-   * PUBLIC CONSTRUCTOR
-   *
-   * ******************************************************
-   */
-
-  @Override
-  public List<ISprite> getSprites() {
-
-    List<ISprite> sprites = new ArrayList<>(pausedSprites);
-    for (SpriteTextButton eachButton : menuButtons) {
-      sprites.add(eachButton.getSprite());
-    }
-    return sprites;
+    this.updateSprites = true;
   }
 
   /*
@@ -119,6 +108,19 @@ public class GamePausedModelImpl implements Model, ButtonModel, TextChangeListen
       updateText = false;
     }
     return textProvider;
+  }
+
+  @Override
+  public SpriteProvider getSpriteProvider() {
+    if (updateSprites) {
+      spriteProvider.clear();
+      spriteProvider.addAll(pausedSprites);
+      for (SpriteTextButton eachButton : menuButtons) {
+        spriteProvider.add(eachButton.getSprite());
+      }
+      updateSprites = false;
+    }
+    return spriteProvider;
   }
 
   @Override
@@ -226,8 +228,9 @@ public class GamePausedModelImpl implements Model, ButtonModel, TextChangeListen
     // add new button to list
     menuButtons.add(button);
 
-    // trigger text update
+    // trigger view update
     updateText = true;
+    updateSprites = true;
   }
 
   @Override

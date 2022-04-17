@@ -29,19 +29,23 @@ import com.danosoftware.galaxyforce.models.assets.BaseMissilesDto;
 import com.danosoftware.galaxyforce.models.screens.game.GameModel;
 import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
+import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState;
 import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
 import com.danosoftware.galaxyforce.sprites.game.powerups.PowerUp;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
-import com.danosoftware.galaxyforce.textures.TextureDetail;
+import com.danosoftware.galaxyforce.sprites.providers.GamePlaySpriteProvider;
 import com.danosoftware.galaxyforce.textures.TextureService;
 import java.lang.reflect.Field;
 import java.util.Collections;
+import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.ArgumentCaptor;
+import org.mockito.Captor;
 import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 
@@ -49,32 +53,33 @@ import org.powermock.modules.junit4.PowerMockRunner;
 @PrepareForTest({Log.class, TextureService.class})
 public class PrimaryBaseTest {
 
-    private final TextureDetail mockTextureDetail = new TextureDetail("mock", "0", "0", "100", "100");
-
     private IBasePrimary primaryBase;
     private IBasePrimary primaryBaseSpy;
     private IBaseHelper leftHelper;
     private IBaseHelper rightHelper;
 
     private GameModel model;
+    private GamePlaySpriteProvider spriteprovider;
+
+    @Captor
+    private ArgumentCaptor<List<ISprite>> argumentCaptor;
 
     @Before
     public void setUp() {
-      // mock any static android logging
-      mockStatic(Log.class);
+        // mock any static android logging
+        mockStatic(Log.class);
 
-      // pre-populate sprite details
-      setUpSpriteDetailsForTests();
+        // pre-populate sprite details
+        setUpSpriteDetailsForTests();
 
-      model = mock(GameModel.class);
-      SoundPlayerService sounds = mock(SoundPlayerService.class);
-      VibrationService vibrator = mock(VibrationService.class);
-
-      primaryBase = new BasePrimary(model, sounds, vibrator);
-      primaryBaseSpy = spy(primaryBase);
-
-      leftHelper = mock(IBaseHelper.class);
-      rightHelper = mock(IBaseHelper.class);
+        model = mock(GameModel.class);
+        SoundPlayerService sounds = mock(SoundPlayerService.class);
+        VibrationService vibrator = mock(VibrationService.class);
+        spriteprovider = mock(GamePlaySpriteProvider.class);
+        primaryBase = new BasePrimary(model, sounds, vibrator, spriteprovider);
+        primaryBaseSpy = spy(primaryBase);
+        leftHelper = mock(IBaseHelper.class);
+        rightHelper = mock(IBaseHelper.class);
     }
 
 
@@ -140,8 +145,14 @@ public class PrimaryBaseTest {
         primaryBase.destroy();
         assertThat(baseState(primaryBase), is(EXPLODING));
 
-        assertThat(primaryBase.allSprites(), hasItem(primaryBase));
+        // base should not be active when exploding
         assertThat(primaryBase.activeBases(), not(hasItem(primaryBase)));
+
+        // base should be visible in sprite provider when exploding
+        verify(spriteprovider, times(1)).setBases(argumentCaptor.capture());
+        List<ISprite> capturedBases = argumentCaptor.getValue();
+        assertThat(capturedBases.size(), is(1));
+        assertThat(capturedBases, hasItem(primaryBase));
     }
 
     @Test()
@@ -230,10 +241,21 @@ public class PrimaryBaseTest {
         primaryBase.helperCreated(RIGHT, rightHelper);
 
         // assert helpers are in sprite list and active
-        assertThat(primaryBase.allSprites(), hasItem(leftHelper));
         assertThat(primaryBase.activeBases(), hasItem(leftHelper));
-        assertThat(primaryBase.allSprites(), hasItem(rightHelper));
         assertThat(primaryBase.activeBases(), hasItem(rightHelper));
+
+        // sprite provider will be called three times
+        // 1st with original primary base
+        // 2nd with left helper base
+        // 3rd with right helper base
+        verify(spriteprovider, times(3)).setBases(argumentCaptor.capture());
+        List<List<ISprite>> capturedBases = argumentCaptor.getAllValues();
+        assertThat(capturedBases.get(0).size(), is(1));
+        assertThat(capturedBases.get(1).size(), is(2));
+        assertThat(capturedBases.get(2).size(), is(3));
+        assertThat(capturedBases.get(2), hasItem(primaryBase));
+        assertThat(capturedBases.get(2), hasItem(leftHelper));
+        assertThat(capturedBases.get(2), hasItem(rightHelper));
 
         // destroy primary base
         primaryBase.destroy();
@@ -243,15 +265,16 @@ public class PrimaryBaseTest {
         verify(rightHelper, times(1)).destroy();
 
         // assert helpers are in sprite list but no longer active
-        assertThat(primaryBase.allSprites(), hasItem(leftHelper));
         assertThat(primaryBase.activeBases(), not(hasItem(leftHelper)));
-        assertThat(primaryBase.allSprites(), hasItem(rightHelper));
         assertThat(primaryBase.activeBases(), not(hasItem(rightHelper)));
+
+        // sprite provider should not be called again since helper bases
+        // are still visible (but not active)
+        verify(spriteprovider, times(3)).setBases(any());
     }
 
     @Test
-    public void helperBasesShouldBeShieldedWithPrimaryBase() {
-
+    public void helperBasesShouldBeGivenShields() {
         // add mock helpers to primary base
         primaryBase.helperCreated(LEFT, leftHelper);
         primaryBase.helperCreated(RIGHT, rightHelper);
@@ -264,36 +287,120 @@ public class PrimaryBaseTest {
         // verify helper bases were also given shields
         verify(leftHelper, times(1)).addSynchronisedShield(any(float.class));
         verify(rightHelper, times(1)).addSynchronisedShield(any(float.class));
+    }
 
-        // count number of primary base shields
-        Long shields = primaryBase.allSprites().stream().filter(
+    @Test
+    public void helperBasesShouldBeShieldedWithPrimaryBase() {
+
+        // collect helper power-up to create helper bases
+        IPowerUp helperBasePowerUp = new PowerUp(SpriteDetails.POWERUP_HELPER_BASES, 0, 0,
+            PowerUpType.HELPER_BASES);
+        primaryBase.collectPowerUp(helperBasePowerUp);
+
+        // add shield to primary base
+        IPowerUp shieldPowerUp = mock(IPowerUp.class);
+        when(shieldPowerUp.getPowerUpType()).thenReturn(PowerUpType.SHIELD);
+        primaryBase.collectPowerUp(shieldPowerUp);
+
+        // sprite provider will be called four times
+        // 1st with original primary base (1)
+        // 2nd with left helper base (2)
+        // 3rd with right helper base (3)
+        // 4th with primary and helper bases plus all shields (3 + 3)
+        verify(spriteprovider, times(4)).setBases(argumentCaptor.capture());
+        List<List<ISprite>> capturedBases = argumentCaptor.getAllValues();
+        assertThat(capturedBases.get(0).size(), is(1));
+        assertThat(capturedBases.get(1).size(), is(2));
+        assertThat(capturedBases.get(2).size(), is(3));
+        assertThat(capturedBases.get(3).size(), is(6));
+
+        List<ISprite> finalSprites = capturedBases.get(3);
+
+        // count instances
+        Long primaryBase = finalSprites.stream().filter(
+            iSprite -> iSprite instanceof BasePrimary).count();
+        assertThat(primaryBase, is(1L));
+
+        Long primaryShield = finalSprites.stream().filter(
             iSprite -> iSprite instanceof BaseShieldPrimary).count();
-        assertThat(shields, is(1L));
+        assertThat(primaryShield, is(1L));
+
+        Long helpers = finalSprites.stream().filter(
+            iSprite -> iSprite instanceof BaseHelper).count();
+        assertThat(helpers, is(2L));
+
+        Long helperShields = finalSprites.stream().filter(
+            iSprite -> iSprite instanceof BaseShieldHelper).count();
+        assertThat(helperShields, is(2L));
+    }
+
+    @Test
+    public void helperBasesShouldHaveShieldsRemovedWithPrimaryBase() {
+
+        // add mock helpers to primary base
+        primaryBase.helperCreated(LEFT, leftHelper);
+        primaryBase.helperCreated(RIGHT, rightHelper);
+
+        // add shield to primary base
+        IPowerUp shieldPowerUp = new PowerUp(SpriteDetails.POWERUP_SHIELD, 0, 0,
+            PowerUpType.SHIELD);
+        primaryBase.collectPowerUp(shieldPowerUp);
+        primaryBase.animate(20f);
+
+        // verify helper bases had shields removed
+        verify(leftHelper, times(1)).removeShield();
+        verify(rightHelper, times(1)).removeShield();
     }
 
     @Test
     public void helperBasesShouldRemoveShieldedWithPrimaryBase() {
 
-      // add mock helpers to primary base
-      primaryBase.helperCreated(LEFT, leftHelper);
-      primaryBase.helperCreated(RIGHT, rightHelper);
+        // collect helper power-up to create helper bases
+        IPowerUp helperBasePowerUp = new PowerUp(SpriteDetails.POWERUP_HELPER_BASES, 0, 0,
+            PowerUpType.HELPER_BASES);
+        primaryBase.collectPowerUp(helperBasePowerUp);
 
-      // add shield to primary base
-      IPowerUp shieldPowerUp = new PowerUp(SpriteDetails.POWERUP_SHIELD, 0, 0,
-          PowerUpType.SHIELD);
-      primaryBase.collectPowerUp(shieldPowerUp);
-      primaryBase.animate(20f);
+        // add shield to primary base and animate for 8 seconds.
+        // this is long enough for shields to be removed
+        // but not long enough for helpers to explode.
+        IPowerUp shieldPowerUp = new PowerUp(SpriteDetails.POWERUP_SHIELD, 0, 0,
+            PowerUpType.SHIELD);
+        primaryBase.collectPowerUp(shieldPowerUp);
+        primaryBase.animate(8f);
 
-      // verify helper bases were also given shields
-      verify(leftHelper, times(1)).removeShield();
-      verify(rightHelper, times(1)).removeShield();
+        // sprite provider will be called five times
+        // 1st with original primary base (1)
+        // 2nd with left helper base (2)
+        // 3rd with right helper base (3)
+        // 4th with primary and helper bases plus all shields (3 + 3)
+        // 5th with primary and helper bases but shields removed (3)
+        verify(spriteprovider, times(5)).setBases(argumentCaptor.capture());
+        List<List<ISprite>> capturedBases = argumentCaptor.getAllValues();
+        assertThat(capturedBases.get(0).size(), is(1));
+        assertThat(capturedBases.get(1).size(), is(2));
+        assertThat(capturedBases.get(2).size(), is(3));
+        assertThat(capturedBases.get(3).size(), is(6));
+        assertThat(capturedBases.get(4).size(), is(3));
 
-      // count number of primary base shields
-      Long shields = primaryBase.allSprites().stream().filter(
-          iSprite -> iSprite instanceof BaseShieldPrimary).count();
-        assertThat(shields, is(0L));
+        List<ISprite> finalSprites = capturedBases.get(4);
+
+        // count instances
+        Long primaryBase = finalSprites.stream().filter(
+            iSprite -> iSprite instanceof BasePrimary).count();
+        assertThat(primaryBase, is(1L));
+
+        Long primaryShield = finalSprites.stream().filter(
+            iSprite -> iSprite instanceof BaseShieldPrimary).count();
+        assertThat(primaryShield, is(0L));
+
+        Long helpers = finalSprites.stream().filter(
+            iSprite -> iSprite instanceof BaseHelper).count();
+        assertThat(helpers, is(2L));
+
+        Long helperShields = finalSprites.stream().filter(
+            iSprite -> iSprite instanceof BaseShieldHelper).count();
+        assertThat(helperShields, is(0L));
     }
-
 
     @Test
     public void helperBasesShouldFireWithPrimaryBase() {

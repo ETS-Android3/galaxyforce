@@ -6,15 +6,16 @@ import com.danosoftware.galaxyforce.models.assets.PowerUpsDto;
 import com.danosoftware.galaxyforce.models.assets.SpawnedAliensDto;
 import com.danosoftware.galaxyforce.models.screens.Model;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.bases.IBasePrimary;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextChangeListener;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.text.TextPositionY;
 import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.view.FPSCounter;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,6 +34,7 @@ public class GamePlayModelFrameRateDecorator implements Model, GameModel, TextCh
 
   // text provider that includes model text and FPS text
   private final TextProvider textProvider;
+  private List<Text> modelText;
 
   // has FPS text changed?
   private boolean updateText;
@@ -42,6 +44,7 @@ public class GamePlayModelFrameRateDecorator implements Model, GameModel, TextCh
     this.model = gameHandler;
     this.fpsCounter = new FPSCounter(this);
     this.textProvider = new TextProvider();
+    this.modelText = new ArrayList<>();
     this.updateText = false;
   }
 
@@ -56,13 +59,20 @@ public class GamePlayModelFrameRateDecorator implements Model, GameModel, TextCh
   public TextProvider getTextProvider() {
     // update text if FPS or model text has changed
     TextProvider modelTextProvider = model.getTextProvider();
-    if (updateText || modelTextProvider.hasUpdated()) {
+    List<Text> latestModelText = modelTextProvider.text();
+    if (updateText || !modelText.equals(latestModelText)) {
       textProvider.clear();
-      textProvider.addAll(modelTextProvider.text());
+      textProvider.addAll(latestModelText);
       textProvider.add(createFpsText());
       updateText = false;
+      modelText = new ArrayList<>(latestModelText);
     }
     return textProvider;
+  }
+
+  @Override
+  public SpriteProvider getSpriteProvider() {
+    return model.getSpriteProvider();
   }
 
   @Override
@@ -76,11 +86,6 @@ public class GamePlayModelFrameRateDecorator implements Model, GameModel, TextCh
   @Override
   public IBasePrimary getBase() {
     return gameModel.getBase();
-  }
-
-  @Override
-  public List<ISprite> getSprites() {
-    return model.getSprites();
   }
 
   @Override

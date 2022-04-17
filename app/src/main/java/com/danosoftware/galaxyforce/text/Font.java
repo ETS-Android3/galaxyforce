@@ -4,6 +4,7 @@ import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.textures.Texture;
 import com.danosoftware.galaxyforce.textures.TextureRegion;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -64,25 +65,6 @@ public class Font {
   }
 
   /*
-   * compute the characters for all text in provider
-   */
-  public List<Character> createCharacters(TextProvider textProvider) {
-    List<Character> characters = new ArrayList<>();
-
-    for (Text text : textProvider.text()) {
-      updateCharacters(
-          characters,
-          text.getText(),
-          text.getX(),
-          text.getY(),
-          text.getTextPositionX(),
-          text.getTextPositionY());
-    }
-
-    return characters;
-  }
-
-  /*
    * Draw characters to the screen
    */
   public void drawText(SpriteBatcher batcher, List<Character> characters) {
@@ -102,7 +84,7 @@ public class Font {
    * calculates x and y from position enums (e.g. LEFT,BOTTOM)
    * if supplied. otherwise uses absolute x, y values.
    */
-  private void updateCharacters(
+  public void updateCharacters(
       List<Character> characters,
       String text,
       float x,

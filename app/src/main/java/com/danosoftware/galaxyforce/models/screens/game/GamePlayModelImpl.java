@@ -37,7 +37,6 @@ import com.danosoftware.galaxyforce.services.sound.SoundEffect;
 import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.sprites.common.ICollidingSprite;
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.bases.BasePrimary;
 import com.danosoftware.galaxyforce.sprites.game.bases.IBase;
@@ -46,6 +45,9 @@ import com.danosoftware.galaxyforce.sprites.game.factories.AlienFactory;
 import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.missiles.bases.IBaseMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
+import com.danosoftware.galaxyforce.sprites.providers.GamePlaySpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.GameSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextChangeListener;
@@ -57,7 +59,6 @@ import com.danosoftware.galaxyforce.waves.managers.WaveManagerImpl;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocatorFactory;
 import com.danosoftware.galaxyforce.waves.utilities.WaveCreationUtils;
 import com.danosoftware.galaxyforce.waves.utilities.WaveFactory;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -84,7 +85,6 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
    */
   // handles aliens and waves
   private final IAlienManager alienManager;
-  private final SpriteButton pauseButton;
   // sound player that provide sound effects
   private final SoundPlayerService sounds;
   // vibration service
@@ -112,6 +112,7 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
   // get ready text instances
   private Text waveText;
   private final TextProvider textProvider;
+  private final GamePlaySpriteProvider spriteProvider;
   private boolean updateText;
 
   /*
@@ -156,6 +157,7 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
     this.waveText = null;
     this.getReadyFlashingText = null;
     this.textProvider = new TextProvider();
+    this.spriteProvider = new GameSpriteProvider();
 
     /*
      * create alien manager used to co-ordinate aliens waves.
@@ -165,7 +167,7 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
     /*
      * create asset manager to co-ordinate in-game assets
      */
-    this.assets = new GamePlayAssetsManager();
+    this.assets = new GamePlayAssetsManager(spriteProvider);
 
     // reset lives
     this.lives = START_LIVES;
@@ -173,8 +175,9 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
     /*
      * add pause button
      */
-    this.pauseButton = new PauseButton(this);
+    final SpriteButton pauseButton = new PauseButton(this);
     controller.addTouchController(new DetectButtonTouch(pauseButton));
+    spriteProvider.setButtons(Collections.singletonList(pauseButton.getSprite()));
 
     /*
      * add base controller
@@ -198,21 +201,6 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
    */
 
   @Override
-  public List<ISprite> getSprites() {
-    List<ISprite> gameSprites = new ArrayList<>();
-    gameSprites.addAll(alienManager.allAliens());
-    gameSprites.addAll(primaryBase.allSprites());
-    gameSprites.addAll(assets.getAliensMissiles());
-    gameSprites.addAll(assets.getBaseMissiles());
-    gameSprites.addAll(assets.getPowerUps());
-    gameSprites.add(pauseButton.getSprite());
-    gameSprites.addAll(assets.getFlags());
-    gameSprites.addAll(assets.getLives());
-
-    return gameSprites;
-  }
-
-  @Override
   public TextProvider getTextProvider() {
     if (updateText) {
       textProvider.clear();
@@ -225,24 +213,16 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
     return textProvider;
   }
 
+  @Override
+  public SpriteProvider getSpriteProvider() {
+    return spriteProvider;
+  }
+
   /*
    * ******************************************************
    * PUBLIC INTERFACE METHODS
    * ******************************************************
    */
-
-  private List<ISprite> getPausedSprites() {
-    List<ISprite> pausedSprites = new ArrayList<>();
-    pausedSprites.addAll(alienManager.allAliens());
-    pausedSprites.addAll(primaryBase.allSprites());
-    pausedSprites.addAll(assets.getAliensMissiles());
-    pausedSprites.addAll(assets.getBaseMissiles());
-    pausedSprites.addAll(assets.getPowerUps());
-    pausedSprites.addAll(assets.getFlags());
-    pausedSprites.addAll(assets.getLives());
-
-    return pausedSprites;
-  }
 
   @Override
   public void update(float deltaTime) {
@@ -264,13 +244,7 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
         break;
 
       case UPGRADING:
-        // no action
-        break;
-
       case PAUSE:
-        // no action
-        break;
-
       case GAME_OVER:
         // no action
         break;
@@ -316,7 +290,7 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
 
     // if we're playing start transition to pause screen
     if (modelState == ModelState.GET_READY || modelState == ModelState.PLAYING) {
-      game.changeToGamePausedScreen(getPausedSprites(), background());
+      game.changeToGamePausedScreen(spriteProvider.pausedSprites(), background());
     }
 
     this.modelState = ModelState.PAUSE;
@@ -632,7 +606,7 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
    * add new base - normally called at start of game or after losing a life.
    */
   private void addNewBase() {
-    primaryBase = new BasePrimary(this, sounds, vibrator);
+    primaryBase = new BasePrimary(this, sounds, vibrator, spriteProvider);
 
     // bind base controller to the new base
     TouchBaseControllerModel baseController = new BaseDragModel(primaryBase);
@@ -704,7 +678,7 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
     WaveFactory waveFactory = new WaveFactory(creationUtils, powerUpAllocatorFactory);
     WaveManager waveManager = new WaveManagerImpl(waveFactory, taskService);
 
-    return new AlienManager(waveManager, achievements);
+    return new AlienManager(waveManager, achievements, spriteProvider);
   }
 
   @Override

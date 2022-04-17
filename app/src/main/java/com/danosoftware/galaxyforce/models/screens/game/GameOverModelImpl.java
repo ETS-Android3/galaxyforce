@@ -16,9 +16,11 @@ import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.models.screens.flashing.FlashingText;
 import com.danosoftware.galaxyforce.models.screens.flashing.FlashingTextImpl;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.providers.BasicMenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.MenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextChangeListener;
 import com.danosoftware.galaxyforce.text.TextPositionX;
@@ -48,9 +50,11 @@ public class GameOverModelImpl implements Model, ButtonModel, TextChangeListener
   /* reference to pause menu buttons */
   private final List<SpriteTextButton> menuButtons;
   private final TextProvider textProvider;
+  private final MenuSpriteProvider spriteProvider;
   /* reference to flashing game over text */
   private final FlashingText flashingGameOverText;
   private boolean updateText;
+  private boolean updateSprites;
   private final int lastWave;
   /* reference to current state */
   private GameOverState modelState;
@@ -64,6 +68,7 @@ public class GameOverModelImpl implements Model, ButtonModel, TextChangeListener
     this.menuButtons = new ArrayList<>();
     this.modelState = GameOverState.RUNNING;
     this.textProvider = new TextProvider();
+    this.spriteProvider = new BasicMenuSpriteProvider();
 
     // build menu buttons
     addNewMenuButton(controller, 3, "PLAY", ButtonType.PLAY);
@@ -80,6 +85,7 @@ public class GameOverModelImpl implements Model, ButtonModel, TextChangeListener
         0.5f,
             this);
     this.updateText = true;
+    this.updateSprites = true;
   }
 
   /*
@@ -89,16 +95,6 @@ public class GameOverModelImpl implements Model, ButtonModel, TextChangeListener
    *
    * ******************************************************
    */
-
-  @Override
-  public List<ISprite> getSprites() {
-
-    List<ISprite> sprites = new ArrayList<>();
-    for (SpriteTextButton eachButton : menuButtons) {
-      sprites.add(eachButton.getSprite());
-    }
-    return sprites;
-  }
 
   /*
    * ******************************************************
@@ -117,6 +113,18 @@ public class GameOverModelImpl implements Model, ButtonModel, TextChangeListener
       updateText = false;
     }
     return textProvider;
+  }
+
+  @Override
+  public SpriteProvider getSpriteProvider() {
+    if (updateSprites) {
+      spriteProvider.clear();
+      for (SpriteTextButton eachButton : menuButtons) {
+        spriteProvider.add(eachButton.getSprite());
+      }
+      updateSprites = false;
+    }
+    return spriteProvider;
   }
 
   @Override
@@ -230,8 +238,9 @@ public class GameOverModelImpl implements Model, ButtonModel, TextChangeListener
     // add new button to list
     menuButtons.add(button);
 
-    // trigger text update
+    // trigger update
     updateText = true;
+    updateSprites = true;
   }
 
   @Override
