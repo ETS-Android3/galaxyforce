@@ -4,14 +4,21 @@ import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDimensions;
 import com.danosoftware.galaxyforce.utilities.Rectangle;
 
-public abstract class AbstractCollidingSprite extends AbstractMovingSprite implements ICollidingSprite {
+public abstract class AbstractCollidingSprite extends AbstractMovingSprite implements
+    ICollidingSprite {
 
-    // sprite bounds for collision detection
-    private Rectangle bounds;
+  // sprite bounds for collision detection
+  private Rectangle bounds;
 
-    // are bounds cached?
-    // once cached, bounds are valid until sprite moves or changes size
-    private boolean boundsCached;
+  // are bounds cached?
+  // once cached, bounds are valid until sprite moves or changes size
+  private boolean boundsCached;
+
+  // dimensions used to calculate bounds
+  // effective width/height includes any bounds reduction wanted
+  private boolean dimensionsOffsetsCached;
+  private int effectiveHalfWidth;
+  private int effectiveHalfHeight;
 
   AbstractCollidingSprite(
       final SpriteDetails spriteId,
@@ -20,6 +27,7 @@ public abstract class AbstractCollidingSprite extends AbstractMovingSprite imple
       final int rotation) {
     super(spriteId, x, y, rotation);
     this.boundsCached = false;
+    this.dimensionsOffsetsCached = false;
   }
 
   protected AbstractCollidingSprite(
@@ -65,6 +73,7 @@ public abstract class AbstractCollidingSprite extends AbstractMovingSprite imple
   public void changeType(SpriteDetails newSpriteId) {
     if (this.spriteDetails() != newSpriteId) {
       this.boundsCached = false;
+      this.dimensionsOffsetsCached = false;
     }
     super.changeType(newSpriteId);
   }
@@ -78,21 +87,31 @@ public abstract class AbstractCollidingSprite extends AbstractMovingSprite imple
         cacheBounds(dimensions);
         return bounds;
       }
-      return new Rectangle(x(), y(), 0, 0);
+      return new Rectangle(x, y, 0, 0);
     }
 
   // cache dimensions and bounds
   private void cacheBounds(SpriteDimensions dimensions) {
 
-    final int boundsReduction = dimensions.getBoundsReduction();
-    final int twiceBoundsReduction = boundsReduction * 2;
+    // update offsets used for computing rectangle
+    if (!dimensionsOffsetsCached) {
+      updateDimensionsOffsets(dimensions);
+    }
 
-    // bounds represents bottom-left position then width and height
+    // bounds represents x,y centre position then half-width and half-height
     this.bounds = new Rectangle(
-        x() - halfWidth() + boundsReduction,
-        y() - halfHeight() + boundsReduction,
-        width() - twiceBoundsReduction,
-        height() - twiceBoundsReduction);
+        x,
+        y,
+        effectiveHalfWidth,
+        effectiveHalfHeight);
     this.boundsCached = true;
+  }
+
+  // compute offsets used for bounds creation
+  private void updateDimensionsOffsets(SpriteDimensions dimensions) {
+    final int boundsReduction = dimensions.getBoundsReduction();
+    effectiveHalfWidth = halfWidth() - boundsReduction;
+    effectiveHalfHeight = halfHeight() - boundsReduction;
+    dimensionsOffsetsCached = true;
   }
 }

@@ -25,14 +25,14 @@ public class AbstractCollidingSpriteTest {
   private static final int Y = 200;
 
   private static final Rectangle EXPECTED_EMPTY_BOUNDS = new Rectangle(X, Y, 0, 0);
-  private static final Rectangle EXPECTED_BOUNDS = new Rectangle(X - HALF_WIDTH, Y - HALF_HEIGHT,
-      WIDTH, HEIGHT);
+  private static final Rectangle EXPECTED_BOUNDS = new Rectangle(X, Y,
+      HALF_WIDTH, HALF_HEIGHT);
 
   // moved sprite
   private static final int MOVED_X = 300;
   private static final int MOVED_Y = 400;
-  private static final Rectangle MOVED_BOUNDS = new Rectangle(MOVED_X - HALF_WIDTH,
-      MOVED_Y - HALF_HEIGHT, WIDTH, HEIGHT);
+  private static final Rectangle MOVED_BOUNDS = new Rectangle(MOVED_X,
+      MOVED_Y, HALF_WIDTH, HALF_HEIGHT);
 
 
   // test implementation of an abstract sprite
@@ -169,9 +169,9 @@ public class AbstractCollidingSpriteTest {
 
 
     private void verifyRectangle(Rectangle bounds, Rectangle expected) {
-        assertThat(bounds.height, equalTo(expected.height));
-        assertThat(bounds.width, equalTo(expected.width));
-        assertThat(bounds.lowerLeft.x, equalTo(expected.lowerLeft.x));
-        assertThat(bounds.lowerLeft.y, equalTo(expected.lowerLeft.y));
+      assertThat(bounds.top, equalTo(expected.top));
+      assertThat(bounds.right, equalTo(expected.right));
+      assertThat(bounds.left, equalTo(expected.left));
+      assertThat(bounds.bottom, equalTo(expected.bottom));
     }
 }

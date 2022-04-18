@@ -36,7 +36,6 @@ import com.danosoftware.galaxyforce.services.savedgame.SavedGame;
 import com.danosoftware.galaxyforce.services.sound.SoundEffect;
 import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
-import com.danosoftware.galaxyforce.sprites.common.ICollidingSprite;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.bases.BasePrimary;
 import com.danosoftware.galaxyforce.sprites.game.bases.IBase;
@@ -54,6 +53,7 @@ import com.danosoftware.galaxyforce.text.TextChangeListener;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.utilities.OverlapTester;
+import com.danosoftware.galaxyforce.utilities.Rectangle;
 import com.danosoftware.galaxyforce.waves.managers.WaveManager;
 import com.danosoftware.galaxyforce.waves.managers.WaveManagerImpl;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocatorFactory;
@@ -498,51 +498,71 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
    */
   private void collisionDetection() {
 
-    for (IAlien eachAlien : alienManager.activeAliens()) {
-      // check for base and alien collisions
-      for (IBase eachBase : primaryBase.activeBases()) {
-        if (checkCollision(eachAlien, eachBase)) {
-          eachBase.onHitBy(eachAlien);
-        }
-      }
+    List<IBase> bases = primaryBase.activeBases();
+    List<IAlien> aliens = alienManager.activeAliens();
+    List<IAlienMissile> aliensMissiles = assets.getAliensMissiles();
+    List<IPowerUp> powerUps = assets.getPowerUps();
 
-      /*
-       * check for base missiles and alien collisions.
-       *
-       * we also check if base missile and alien have collided before.
-       * base missiles can only damage the same alien once.
-       * used for missile implementations that do not destroy
-       * themselves on initial collision (e.g. laser).
-       *
-       * lastly, each missile could already be destroyed if it has hit another alien
-       * in the current collision detection loop. So, we also check for this.
-       * Failure to do this, could result in a single base missile destroying
-       * multiple closely located aliens.
-       */
-      for (IBaseMissile eachBaseMissile : assets.getBaseMissiles()) {
-        if (checkCollision(eachAlien, eachBaseMissile)
-            && !eachBaseMissile.hitBefore(eachAlien)
-            && !eachBaseMissile.isDestroyed()) {
-          eachAlien.onHitBy(eachBaseMissile);
+    // collision detection for base with aliens, alien missiles and power-ups
+    if (!aliens.isEmpty() || !aliensMissiles.isEmpty() || !powerUps.isEmpty()) {
+      for (IBase eachBase : bases) {
+        Rectangle baseBounds = eachBase.getBounds();
+
+        // collision detection for base and aliens
+        for (IAlien eachAlien : aliens) {
+          Rectangle alienBounds = eachAlien.getBounds();
+          if (checkCollision(alienBounds, baseBounds)) {
+            eachBase.onHitBy(eachAlien);
+          }
+        }
+
+        // collision detection for base and alien missiles
+        if (eachBase.isActive()) {
+          for (IAlienMissile eachAlienMissile : aliensMissiles) {
+            Rectangle alienMissileBounds = eachAlienMissile.getBounds();
+            if (checkCollision(alienMissileBounds, baseBounds)) {
+              eachBase.onHitBy(eachAlienMissile);
+            }
+          }
+        }
+
+        // collision detection for base and power ups
+        if (eachBase.isActive()) {
+          for (IPowerUp eachPowerUp : powerUps) {
+            Rectangle powerUpBounds = eachPowerUp.getBounds();
+            if (checkCollision(powerUpBounds, baseBounds)) {
+              eachBase.collectPowerUp(eachPowerUp);
+              sounds.play(SoundEffect.POWER_UP_COLLIDE);
+              achievements.powerUpCollected(eachPowerUp.getPowerUpType());
+            }
+          }
         }
       }
     }
 
-    for (IBase eachBase : primaryBase.activeBases()) {
-
-      // collision detection for base and alien missiles
-      for (IAlienMissile eachAlienMissile : assets.getAliensMissiles()) {
-        if (checkCollision(eachAlienMissile, eachBase)) {
-          eachBase.onHitBy(eachAlienMissile);
-        }
-      }
-
-      // collision detection for base and power ups
-      for (IPowerUp eachPowerUp : assets.getPowerUps()) {
-        if (checkCollision(eachPowerUp, eachBase)) {
-          eachBase.collectPowerUp(eachPowerUp);
-          sounds.play(SoundEffect.POWER_UP_COLLIDE);
-          achievements.powerUpCollected(eachPowerUp.getPowerUpType());
+    /*
+     * check for base missiles and alien collisions.
+     *
+     * we also check if base missile and alien have collided before.
+     * base missiles can only damage the same alien once.
+     * used for missile implementations that do not destroy
+     * themselves on initial collision (e.g. laser).
+     *
+     * lastly, each missile could already be destroyed if it has hit another alien
+     * in the current collision detection loop. So, we also check for this.
+     * Failure to do this, could result in a single base missile destroying
+     * multiple closely located aliens.
+     */
+    if (!aliens.isEmpty()) {
+      for (IBaseMissile eachBaseMissile : assets.getBaseMissiles()) {
+        Rectangle baseMissileBounds = eachBaseMissile.getBounds();
+        for (IAlien eachAlien : aliens) {
+          if (!eachBaseMissile.isDestroyed() && !eachBaseMissile.hitBefore(eachAlien)) {
+            Rectangle alienBounds = eachAlien.getBounds();
+            if (checkCollision(alienBounds, baseMissileBounds)) {
+              eachAlien.onHitBy(eachBaseMissile);
+            }
+          }
         }
       }
     }
@@ -551,8 +571,8 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
   /**
    * helper method to check if two sprites have collided. returns true if sprites have collided.
    */
-  private boolean checkCollision(ICollidingSprite sprite1, ICollidingSprite sprite2) {
-    return OverlapTester.overlapRectangles(sprite1.getBounds(), sprite2.getBounds());
+  private boolean checkCollision(Rectangle r1, Rectangle r2) {
+    return OverlapTester.overlapRectangles(r1, r2);
   }
 
   /**

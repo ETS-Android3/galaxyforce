@@ -13,6 +13,7 @@ import static org.mockito.Mockito.when;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 import android.util.Log;
+import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.services.achievements.AchievementService;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IResettableAlien;
@@ -54,6 +55,10 @@ public class AlienManagerTest {
         when(mockAlien.isVisible()).thenReturn(true);
         when(mockAlien.isDestroyed()).thenReturn(false);
         when(mockAlien.isEndOfPass()).thenReturn(false);
+        when(mockAlien.x()).thenReturn((float) GameConstants.SCREEN_MID_X);
+        when(mockAlien.y()).thenReturn((float) GameConstants.SCREEN_MID_Y);
+        when(mockAlien.halfHeight()).thenReturn(50);
+        when(mockAlien.halfWidth()).thenReturn(50);
 
         List<IAlien> aliens = new ArrayList<>();
         for (int i = 0; i < ALIEN_COUNT; i++) {

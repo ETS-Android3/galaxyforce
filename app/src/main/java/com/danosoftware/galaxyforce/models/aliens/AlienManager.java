@@ -5,6 +5,7 @@ import static com.danosoftware.galaxyforce.models.aliens.AlienManager.SubWaveSta
 import static com.danosoftware.galaxyforce.models.aliens.AlienManager.SubWaveState.IDLE;
 import static com.danosoftware.galaxyforce.models.aliens.AlienManager.SubWaveState.PLAYING;
 import static com.danosoftware.galaxyforce.models.aliens.AlienManager.SubWaveState.WAVE_COMPLETE;
+import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenAnySide;
 import static com.danosoftware.galaxyforce.waves.utilities.Randomiser.random;
 
 import android.util.Log;
@@ -96,7 +97,7 @@ public class AlienManager implements IAlienManager {
       }
 
       // update list of active aliens
-      if (alien.isActive()) {
+      if (alien.isActive() && !offScreenAnySide(alien)) {
         activeAliens.add(alien);
       }
 
@@ -191,7 +192,7 @@ public class AlienManager implements IAlienManager {
     List<IAlien> visibleAliens = new ArrayList<>(aliens.size());
 
     for (IAlien alien : aliens) {
-      if (alien.isActive()) {
+      if (alien.isActive() && !offScreenAnySide(alien)) {
         activeAliens.add(alien);
       }
       if (alien.isVisible()) {
