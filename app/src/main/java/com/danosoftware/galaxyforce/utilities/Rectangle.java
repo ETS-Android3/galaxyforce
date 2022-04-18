@@ -7,10 +7,13 @@ public class Rectangle {
     public final float top;
     public final float bottom;
 
-    public Rectangle(float x, float y, float width, float height) {
-        this.left = x;
-        this.right = x + width;
-        this.bottom = y;
-        this.top = y + height;
+    /**
+     * Create a rectangle from a centre x,y and value representing half the width and height.
+     */
+    public Rectangle(float x, float y, float halfWidth, float halfHeight) {
+        this.left = x - halfWidth;
+        this.right = x + halfWidth;
+        this.bottom = y - halfHeight;
+        this.top = y + halfHeight;
     }
 }

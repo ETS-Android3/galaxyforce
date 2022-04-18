@@ -25,14 +25,14 @@ public class AbstractCollidingSpriteTest {
   private static final int Y = 200;
 
   private static final Rectangle EXPECTED_EMPTY_BOUNDS = new Rectangle(X, Y, 0, 0);
-  private static final Rectangle EXPECTED_BOUNDS = new Rectangle(X - HALF_WIDTH, Y - HALF_HEIGHT,
-      WIDTH, HEIGHT);
+  private static final Rectangle EXPECTED_BOUNDS = new Rectangle(X, Y,
+      HALF_WIDTH, HALF_HEIGHT);
 
   // moved sprite
   private static final int MOVED_X = 300;
   private static final int MOVED_Y = 400;
-  private static final Rectangle MOVED_BOUNDS = new Rectangle(MOVED_X - HALF_WIDTH,
-      MOVED_Y - HALF_HEIGHT, WIDTH, HEIGHT);
+  private static final Rectangle MOVED_BOUNDS = new Rectangle(MOVED_X,
+      MOVED_Y, HALF_WIDTH, HALF_HEIGHT);
 
 
   // test implementation of an abstract sprite

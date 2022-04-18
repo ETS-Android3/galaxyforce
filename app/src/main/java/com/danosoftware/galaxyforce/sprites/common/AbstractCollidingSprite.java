@@ -15,10 +15,10 @@ public abstract class AbstractCollidingSprite extends AbstractMovingSprite imple
   private boolean boundsCached;
 
   // dimensions used to calculate bounds
+  // effective width/height includes any bounds reduction wanted
   private boolean dimensionsOffsetsCached;
-  private int twiceBoundsReduction;
-  private int xOffset;
-  private int yOffset;
+  private int effectiveHalfWidth;
+  private int effectiveHalfHeight;
 
   AbstractCollidingSprite(
       final SpriteDetails spriteId,
@@ -87,7 +87,7 @@ public abstract class AbstractCollidingSprite extends AbstractMovingSprite imple
         cacheBounds(dimensions);
         return bounds;
       }
-      return new Rectangle(x(), y(), 0, 0);
+      return new Rectangle(x, y, 0, 0);
     }
 
   // cache dimensions and bounds
@@ -98,21 +98,20 @@ public abstract class AbstractCollidingSprite extends AbstractMovingSprite imple
       updateDimensionsOffsets(dimensions);
     }
 
-    // bounds represents bottom-left position then width and height
+    // bounds represents x,y centre position then half-width and half-height
     this.bounds = new Rectangle(
-        x() - xOffset,
-        y() - yOffset,
-        width() - twiceBoundsReduction,
-        height() - twiceBoundsReduction);
+        x,
+        y,
+        effectiveHalfWidth,
+        effectiveHalfHeight);
     this.boundsCached = true;
   }
 
   // compute offsets used for bounds creation
   private void updateDimensionsOffsets(SpriteDimensions dimensions) {
     final int boundsReduction = dimensions.getBoundsReduction();
-    twiceBoundsReduction = boundsReduction * 2;
-    xOffset = halfWidth() - boundsReduction;
-    yOffset = halfHeight() - boundsReduction;
+    effectiveHalfWidth = halfWidth() - boundsReduction;
+    effectiveHalfHeight = halfHeight() - boundsReduction;
     dimensionsOffsetsCached = true;
   }
 }

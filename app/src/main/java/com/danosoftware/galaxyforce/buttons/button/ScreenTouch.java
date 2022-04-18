@@ -18,7 +18,8 @@ public class ScreenTouch implements Button {
 
   public ScreenTouch(TouchScreenModel model) {
     this.model = model;
-    this.bounds = new Rectangle(0, 0, GameConstants.GAME_WIDTH, GameConstants.GAME_HEIGHT);
+    this.bounds = new Rectangle(GameConstants.SCREEN_MID_X, GameConstants.SCREEN_MID_Y,
+        GameConstants.SCREEN_MID_X, GameConstants.SCREEN_MID_Y);
   }
 
   @Override
