@@ -498,14 +498,44 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
    */
   private void collisionDetection() {
 
-    // collision detection for base and aliens
-    for (IBase eachBase : primaryBase.activeBases()) {
-      Rectangle baseBounds = eachBase.getBounds();
-      for (IAlien eachAlien : alienManager.activeAliens()) {
-        Rectangle alienBounds = eachAlien.getBounds();
-        // check for base and alien collisions
-        if (checkCollision(alienBounds, baseBounds)) {
-          eachBase.onHitBy(eachAlien);
+    List<IBase> bases = primaryBase.activeBases();
+    List<IAlien> aliens = alienManager.activeAliens();
+    List<IAlienMissile> aliensMissiles = assets.getAliensMissiles();
+    List<IPowerUp> powerUps = assets.getPowerUps();
+
+    // collision detection for base with aliens, alien missiles and power-ups
+    if (!aliens.isEmpty() || !aliensMissiles.isEmpty() || !powerUps.isEmpty()) {
+      for (IBase eachBase : bases) {
+        Rectangle baseBounds = eachBase.getBounds();
+
+        // collision detection for base and aliens
+        for (IAlien eachAlien : aliens) {
+          Rectangle alienBounds = eachAlien.getBounds();
+          if (checkCollision(alienBounds, baseBounds)) {
+            eachBase.onHitBy(eachAlien);
+          }
+        }
+
+        // collision detection for base and alien missiles
+        if (eachBase.isActive()) {
+          for (IAlienMissile eachAlienMissile : aliensMissiles) {
+            Rectangle alienMissileBounds = eachAlienMissile.getBounds();
+            if (checkCollision(alienMissileBounds, baseBounds)) {
+              eachBase.onHitBy(eachAlienMissile);
+            }
+          }
+        }
+
+        // collision detection for base and power ups
+        if (eachBase.isActive()) {
+          for (IPowerUp eachPowerUp : powerUps) {
+            Rectangle powerUpBounds = eachPowerUp.getBounds();
+            if (checkCollision(powerUpBounds, baseBounds)) {
+              eachBase.collectPowerUp(eachPowerUp);
+              sounds.play(SoundEffect.POWER_UP_COLLIDE);
+              achievements.powerUpCollected(eachPowerUp.getPowerUpType());
+            }
+          }
         }
       }
     }
@@ -523,38 +553,16 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
      * Failure to do this, could result in a single base missile destroying
      * multiple closely located aliens.
      */
-    for (IBaseMissile eachBaseMissile : assets.getBaseMissiles()) {
-      Rectangle baseMissileBounds = eachBaseMissile.getBounds();
-      for (IAlien eachAlien : alienManager.activeAliens()) {
-        Rectangle alienBounds = eachAlien.getBounds();
-        if (checkCollision(alienBounds, baseMissileBounds)
-            && !eachBaseMissile.hitBefore(eachAlien)
-            && !eachBaseMissile.isDestroyed()) {
-          eachAlien.onHitBy(eachBaseMissile);
-        }
-      }
-    }
-
-    // collision detection for base and alien missiles
-    for (IAlienMissile eachAlienMissile : assets.getAliensMissiles()) {
-      Rectangle alienMissileBounds = eachAlienMissile.getBounds();
-      for (IBase eachBase : primaryBase.activeBases()) {
-        Rectangle baseBounds = eachBase.getBounds();
-        if (checkCollision(alienMissileBounds, baseBounds)) {
-          eachBase.onHitBy(eachAlienMissile);
-        }
-      }
-    }
-
-    // collision detection for base and power ups
-    for (IPowerUp eachPowerUp : assets.getPowerUps()) {
-      Rectangle powerUpBounds = eachPowerUp.getBounds();
-      for (IBase eachBase : primaryBase.activeBases()) {
-        Rectangle baseBounds = eachBase.getBounds();
-        if (checkCollision(powerUpBounds, baseBounds)) {
-          eachBase.collectPowerUp(eachPowerUp);
-          sounds.play(SoundEffect.POWER_UP_COLLIDE);
-          achievements.powerUpCollected(eachPowerUp.getPowerUpType());
+    if (!aliens.isEmpty()) {
+      for (IBaseMissile eachBaseMissile : assets.getBaseMissiles()) {
+        Rectangle baseMissileBounds = eachBaseMissile.getBounds();
+        for (IAlien eachAlien : aliens) {
+          if (!eachBaseMissile.isDestroyed() && !eachBaseMissile.hitBefore(eachAlien)) {
+            Rectangle alienBounds = eachAlien.getBounds();
+            if (checkCollision(alienBounds, baseMissileBounds)) {
+              eachAlien.onHitBy(eachBaseMissile);
+            }
+          }
         }
       }
     }
