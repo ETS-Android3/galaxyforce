@@ -498,6 +498,7 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
    */
   private void collisionDetection() {
 
+    // collision detection for base and aliens
     for (IBase eachBase : primaryBase.activeBases()) {
       Rectangle baseBounds = eachBase.getBounds();
       for (IAlien eachAlien : alienManager.activeAliens()) {
@@ -562,9 +563,6 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
   /**
    * helper method to check if two sprites have collided. returns true if sprites have collided.
    */
-//  private boolean checkCollision(ICollidingSprite sprite1, ICollidingSprite sprite2) {
-//    return OverlapTester.overlapRectangles(sprite1.getBounds(), sprite2.getBounds());
-//  }
   private boolean checkCollision(Rectangle r1, Rectangle r2) {
     return OverlapTester.overlapRectangles(r1, r2);
   }
