@@ -169,9 +169,9 @@ public class AbstractCollidingSpriteTest {
 
 
     private void verifyRectangle(Rectangle bounds, Rectangle expected) {
-        assertThat(bounds.height, equalTo(expected.height));
-        assertThat(bounds.width, equalTo(expected.width));
-        assertThat(bounds.lowerLeft.x, equalTo(expected.lowerLeft.x));
-        assertThat(bounds.lowerLeft.y, equalTo(expected.lowerLeft.y));
+      assertThat(bounds.top, equalTo(expected.top));
+      assertThat(bounds.right, equalTo(expected.right));
+      assertThat(bounds.left, equalTo(expected.left));
+      assertThat(bounds.bottom, equalTo(expected.bottom));
     }
 }

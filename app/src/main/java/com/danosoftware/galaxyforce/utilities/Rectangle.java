@@ -1,15 +1,16 @@
 package com.danosoftware.galaxyforce.utilities;
 
-import com.danosoftware.galaxyforce.view.Vector2;
-
 public class Rectangle {
-    public final Vector2 lowerLeft;
-    public final float width;
-    public final float height;
+
+    public final float left;
+    public final float right;
+    public final float top;
+    public final float bottom;
 
     public Rectangle(float x, float y, float width, float height) {
-        this.lowerLeft = new Vector2(x, y);
-        this.width = width;
-        this.height = height;
+        this.left = x;
+        this.right = x + width;
+        this.bottom = y;
+        this.top = y + height;
     }
 }

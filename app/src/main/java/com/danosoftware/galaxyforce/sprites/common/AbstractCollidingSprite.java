@@ -4,14 +4,21 @@ import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.sprites.properties.SpriteDimensions;
 import com.danosoftware.galaxyforce.utilities.Rectangle;
 
-public abstract class AbstractCollidingSprite extends AbstractMovingSprite implements ICollidingSprite {
+public abstract class AbstractCollidingSprite extends AbstractMovingSprite implements
+    ICollidingSprite {
 
-    // sprite bounds for collision detection
-    private Rectangle bounds;
+  // sprite bounds for collision detection
+  private Rectangle bounds;
 
-    // are bounds cached?
-    // once cached, bounds are valid until sprite moves or changes size
-    private boolean boundsCached;
+  // are bounds cached?
+  // once cached, bounds are valid until sprite moves or changes size
+  private boolean boundsCached;
+
+  // dimensions used to calculate bounds
+  private boolean dimensionsOffsetsCached;
+  private int twiceBoundsReduction;
+  private int xOffset;
+  private int yOffset;
 
   AbstractCollidingSprite(
       final SpriteDetails spriteId,
@@ -20,6 +27,7 @@ public abstract class AbstractCollidingSprite extends AbstractMovingSprite imple
       final int rotation) {
     super(spriteId, x, y, rotation);
     this.boundsCached = false;
+    this.dimensionsOffsetsCached = false;
   }
 
   protected AbstractCollidingSprite(
@@ -65,6 +73,7 @@ public abstract class AbstractCollidingSprite extends AbstractMovingSprite imple
   public void changeType(SpriteDetails newSpriteId) {
     if (this.spriteDetails() != newSpriteId) {
       this.boundsCached = false;
+      this.dimensionsOffsetsCached = false;
     }
     super.changeType(newSpriteId);
   }
@@ -84,15 +93,26 @@ public abstract class AbstractCollidingSprite extends AbstractMovingSprite imple
   // cache dimensions and bounds
   private void cacheBounds(SpriteDimensions dimensions) {
 
-    final int boundsReduction = dimensions.getBoundsReduction();
-    final int twiceBoundsReduction = boundsReduction * 2;
+    // update offsets used for computing rectangle
+    if (!dimensionsOffsetsCached) {
+      updateDimensionsOffsets(dimensions);
+    }
 
     // bounds represents bottom-left position then width and height
     this.bounds = new Rectangle(
-        x() - halfWidth() + boundsReduction,
-        y() - halfHeight() + boundsReduction,
+        x() - xOffset,
+        y() - yOffset,
         width() - twiceBoundsReduction,
         height() - twiceBoundsReduction);
     this.boundsCached = true;
+  }
+
+  // compute offsets used for bounds creation
+  private void updateDimensionsOffsets(SpriteDimensions dimensions) {
+    final int boundsReduction = dimensions.getBoundsReduction();
+    twiceBoundsReduction = boundsReduction * 2;
+    xOffset = halfWidth() - boundsReduction;
+    yOffset = halfHeight() - boundsReduction;
+    dimensionsOffsetsCached = true;
   }
 }
