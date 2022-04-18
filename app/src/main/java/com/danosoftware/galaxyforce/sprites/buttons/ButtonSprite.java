@@ -46,8 +46,8 @@ public class ButtonSprite extends AbstractSprite implements IButtonSprite {
       Rectangle tmpBounds = new Rectangle(
           x,
           y,
-          halfWidth() - buffer,
-          halfHeight() - buffer);
+          halfWidth() + buffer,
+          halfHeight() + buffer);
 
       // only cache if dimensions available
       if (width() > 0 && height() > 0) {
