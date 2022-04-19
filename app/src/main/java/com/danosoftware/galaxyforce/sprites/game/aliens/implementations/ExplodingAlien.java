@@ -15,7 +15,6 @@ import com.danosoftware.galaxyforce.sprites.game.behaviours.spawn.SpawnBehaviour
 import com.danosoftware.galaxyforce.sprites.game.behaviours.spinner.SpinningBehaviourFactory;
 import com.danosoftware.galaxyforce.sprites.game.factories.AlienMissileFactory;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.ExplodingConfig;
-
 import lombok.Builder;
 import lombok.NonNull;
 
@@ -26,7 +25,7 @@ import lombok.NonNull;
 public class ExplodingAlien extends AbstractAlien {
 
     /* how many seconds before bomb explodes */
-    private final float timeBeforeExpolosion;
+    private final float timeBeforeExplosion;
 
     // exploding missile
     private final AlienMissileCharacter explodingMissileCharacter;
@@ -40,45 +39,45 @@ public class ExplodingAlien extends AbstractAlien {
 
     @Builder
     public ExplodingAlien(
-            @NonNull final ExplosionBehaviourFactory explosionFactory,
-            @NonNull final SpawnBehaviourFactory spawnFactory,
-            @NonNull final SpinningBehaviourFactory spinningFactory,
-            @NonNull final PowerUpBehaviourFactory powerUpFactory,
-            @NonNull final FireBehaviourFactory fireFactory,
-            @NonNull final HitBehaviourFactory hitFactory,
-            @NonNull final GameModel model,
-            @NonNull final ExplodingConfig alienConfig,
-            final PowerUpType powerUpType,
-            @NonNull final Integer xStart,
-            @NonNull final Integer yStart) {
+        @NonNull final ExplosionBehaviourFactory explosionFactory,
+        @NonNull final SpawnBehaviourFactory spawnFactory,
+        @NonNull final SpinningBehaviourFactory spinningFactory,
+        @NonNull final PowerUpBehaviourFactory powerUpFactory,
+        @NonNull final FireBehaviourFactory fireFactory,
+        @NonNull final HitBehaviourFactory hitFactory,
+        @NonNull final GameModel model,
+        @NonNull final ExplodingConfig alienConfig,
+        final PowerUpType powerUpType,
+        @NonNull final Float xStart,
+        @NonNull final Float yStart) {
 
-        super(
-                alienConfig.getAlienCharacter(),
-                alienConfig.getAlienCharacter().getAnimation(),
-                xStart,
-                yStart,
-                alienConfig.getEnergy(),
-                fireFactory.createFireBehaviour(
-                        alienConfig.getMissileConfig()),
-                powerUpFactory.createPowerUpBehaviour(
-                        powerUpType),
-                spawnFactory.createSpawnBehaviour(
-                        alienConfig.getSpawnConfig()),
-                hitFactory.createHitBehaviour(
-                        alienConfig.getAlienCharacter().getHitAnimation()),
-                explosionFactory.createExplosionBehaviour(
-                        alienConfig.getExplosionConfig(),
-                        alienConfig.getAlienCharacter()),
-                spinningFactory.createSpinningBehaviour(
-                        alienConfig.getSpinningConfig()));
+      super(
+          alienConfig.getAlienCharacter(),
+          alienConfig.getAlienCharacter().getAnimation(),
+          xStart,
+          yStart,
+          alienConfig.getEnergy(),
+          fireFactory.createFireBehaviour(
+              alienConfig.getMissileConfig()),
+          powerUpFactory.createPowerUpBehaviour(
+              powerUpType),
+          spawnFactory.createSpawnBehaviour(
+              alienConfig.getSpawnConfig()),
+          hitFactory.createHitBehaviour(
+              alienConfig.getAlienCharacter().getHitAnimation()),
+          explosionFactory.createExplosionBehaviour(
+              alienConfig.getExplosionConfig(),
+              alienConfig.getAlienCharacter()),
+          spinningFactory.createSpinningBehaviour(
+              alienConfig.getSpinningConfig()));
 
-        this.model = model;
-        this.timeBeforeExpolosion = alienConfig.getExplosionTime();
-        this.explodingMissileCharacter = alienConfig.getExplodingMissileCharacter();
+      this.model = model;
+      this.timeBeforeExplosion = alienConfig.getExplosionTime();
+      this.explodingMissileCharacter = alienConfig.getExplodingMissileCharacter();
 
-        // reset timer
-        timer = 0f;
-        isExploding = false;
+      // reset timer
+      timer = 0f;
+      isExploding = false;
     }
 
     @Override
@@ -87,19 +86,19 @@ public class ExplodingAlien extends AbstractAlien {
         super.animate(deltaTime);
 
         if (!isExploding) {
-            timer += deltaTime;
-            if (timer > timeBeforeExpolosion) {
-                explode();
-                // send missiles to model
-                AlienMissilesDto missiles = AlienMissileFactory.createAlienMissile(
-                        model.getBase(),
-                        this,
-                        AlienMissileType.SPRAY,
-                        AlienMissileSpeed.MEDIUM,
-                        explodingMissileCharacter);
-                model.fireAlienMissiles(missiles);
-                isExploding = true;
-            }
+          timer += deltaTime;
+          if (timer > timeBeforeExplosion) {
+            explode();
+            // send missiles to model
+            AlienMissilesDto missiles = AlienMissileFactory.createAlienMissile(
+                model.getBase(),
+                this,
+                AlienMissileType.SPRAY,
+                AlienMissileSpeed.MEDIUM,
+                explodingMissileCharacter);
+            model.fireAlienMissiles(missiles);
+            isExploding = true;
+          }
         }
     }
 }

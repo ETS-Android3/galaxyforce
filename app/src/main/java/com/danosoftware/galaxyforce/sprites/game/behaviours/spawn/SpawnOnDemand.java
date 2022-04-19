@@ -13,7 +13,7 @@ import java.util.List;
 
 /**
  * Spawn behaviour where an alien only spawns on demands.
- * This spawner does make its ownn decision on when to spawn.
+ * This spawner does make its own decision on when to spawn.
  */
 public class SpawnOnDemand implements SpawnBehaviour {
 
@@ -29,11 +29,11 @@ public class SpawnOnDemand implements SpawnBehaviour {
     private final AlienFactory alienFactory;
 
     /**
-     * @param alienFactory     - factory to create aliens
+     * @param alienFactory            - factory to create aliens
      * @param powerUpAllocatorFactory - factory to create power-up allocators
-     * @param model            - model to receive aliens
-     * @param alienConfig      - config of alien to spawn
-     * @param powerUpTypes     - allocated power-ups assigned to spawned aliens
+     * @param model                   - model to receive aliens
+     * @param alienConfig             - config of alien to spawn
+     * @param powerUpTypes            - allocated power-ups assigned to spawned aliens
      */
     SpawnOnDemand(
             final AlienFactory alienFactory,

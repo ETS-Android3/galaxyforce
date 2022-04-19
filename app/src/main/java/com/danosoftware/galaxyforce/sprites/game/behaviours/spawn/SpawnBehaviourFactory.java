@@ -6,6 +6,7 @@ import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawnConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawnOnDemandConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningAlienConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningAndExplodingAlienConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningLimitedActiveAlienConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningLimitedAlienConfig;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocatorFactory;
 
@@ -38,13 +39,13 @@ public class SpawnBehaviourFactory {
 
             // behaviour that spawns aliens using spawnedAlienConfig
             return new SpawnRandomDelay(
-                    alienFactory,
-                    powerUpAllocatorFactory,
-                    model,
-                    spawningConfig.getSpawnedAlienConfig(),
-                    spawningConfig.getSpwanedPowerUpTypes(),
-                    spawningConfig.getMinimumSpawnDelayTime(),
-                    spawningConfig.getMaximumAdditionalRandomSpawnDelayTime());
+                alienFactory,
+                powerUpAllocatorFactory,
+                model,
+                spawningConfig.getSpawnedAlienConfig(),
+                spawningConfig.getSpawnedPowerUpTypes(),
+                spawningConfig.getMinimumSpawnDelayTime(),
+                spawningConfig.getMaximumAdditionalRandomSpawnDelayTime());
         }
 
         if (spawnConfig != null
@@ -55,15 +56,34 @@ public class SpawnBehaviourFactory {
 
             // behaviour that spawns aliens using a limited spawnedAlienConfig
             return new SpawnRandomDelayLimiter(
-                    alienFactory,
-                    powerUpAllocatorFactory,
-                    model,
-                    spawningConfig.getSpawnedAlienConfig(),
-                    spawningConfig.getSpwanedPowerUpTypes(),
-                    spawningConfig.getMinimumSpawnDelayTime(),
-                    spawningConfig.getMaximumAdditionalRandomSpawnDelayTime(),
-                    spawningConfig.getMaximumActiveSpawnedAliens(),
-                    spawningConfig.getLimitedCharacter());
+                alienFactory,
+                powerUpAllocatorFactory,
+                model,
+                spawningConfig.getSpawnedAlienConfig(),
+                spawningConfig.getSpawnedPowerUpTypes(),
+                spawningConfig.getMinimumSpawnDelayTime(),
+                spawningConfig.getMaximumAdditionalRandomSpawnDelayTime(),
+                spawningConfig.getMaximumActiveSpawnedAliens(),
+                spawningConfig.getLimitedCharacter());
+        }
+
+        if (spawnConfig != null
+                && spawnConfig.getType() == SpawnConfig.SpawnType.SPAWN_LIMITED_ACTIVE_ALIEN
+                && spawnConfig instanceof SpawningLimitedActiveAlienConfig) {
+
+            final SpawningLimitedActiveAlienConfig spawningConfig = ((SpawningLimitedActiveAlienConfig) spawnConfig);
+
+            // behaviour that spawns aliens using a limited spawnedAlienConfig
+            return new SpawnRandomDelayActiveAlienLimiter(
+                alienFactory,
+                powerUpAllocatorFactory,
+                model,
+                spawningConfig.getSpawnedAlienConfig(),
+                spawningConfig.getSpawnedPowerUpTypes(),
+                spawningConfig.getMinimumSpawnDelayTime(),
+                spawningConfig.getMaximumAdditionalRandomSpawnDelayTime(),
+                spawningConfig.getMaximumActiveSpawnedAliens(),
+                spawningConfig.getLimitedCharacter());
         }
 
         if (spawnConfig != null
@@ -78,7 +98,7 @@ public class SpawnBehaviourFactory {
                     powerUpAllocatorFactory,
                     model,
                     spawningConfig.getSpawnedAlienConfig(),
-                    spawningConfig.getSpwanedPowerUpType(),
+                    spawningConfig.getSpawnedPowerUpType(),
                     spawningConfig.getSpawnDelayTime());
         }
 
@@ -94,7 +114,7 @@ public class SpawnBehaviourFactory {
                     powerUpAllocatorFactory,
                     model,
                     spawningConfig.getSpawnedAlienConfig(),
-                    spawningConfig.getSpwanedPowerUpTypes());
+                    spawningConfig.getSpawnedPowerUpTypes());
         }
 
         // behaviour that disables spawning

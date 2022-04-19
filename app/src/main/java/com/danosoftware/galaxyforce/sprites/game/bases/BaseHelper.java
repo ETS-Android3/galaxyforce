@@ -1,5 +1,11 @@
 package com.danosoftware.galaxyforce.sprites.game.bases;
 
+import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.ACTIVE;
+import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.DESTROYED;
+import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.EXPLODING;
+import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.LEFT;
+import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.HELPER;
+
 import com.danosoftware.galaxyforce.enumerations.BaseMissileType;
 import com.danosoftware.galaxyforce.models.assets.BaseMissilesDto;
 import com.danosoftware.galaxyforce.models.screens.game.GameModel;
@@ -17,15 +23,8 @@ import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.view.Animation;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.ACTIVE;
-import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.DESTROYED;
-import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.EXPLODING;
-import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.LEFT;
-import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.HELPER;
 
 /**
  * Base Helper that moves alongside the Primary Base
@@ -254,13 +253,13 @@ public class BaseHelper extends AbstractCollidingSprite implements IBaseHelper {
      * Shifts helper base by the wanted x offset
      */
     @Override
-    public void move(int x, int y) {
-        if (state == ACTIVE) {
-            super.move(x + xOffset, y + Y_OFFSET_FROM_PRIMARY_BASE);
-            // if base has a shield, move it with base
-            if (shielded) {
-                shield.move(x + xOffset, y + Y_OFFSET_FROM_PRIMARY_BASE);
-            }
+    public void move(float x, float y) {
+      if (state == ACTIVE) {
+        super.move(x + xOffset, y + Y_OFFSET_FROM_PRIMARY_BASE);
+        // if base has a shield, move it with base
+        if (shielded) {
+          shield.move(x + xOffset, y + Y_OFFSET_FROM_PRIMARY_BASE);
         }
+      }
     }
 }

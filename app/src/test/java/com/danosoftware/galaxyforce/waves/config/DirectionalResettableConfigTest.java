@@ -1,5 +1,12 @@
 package com.danosoftware.galaxyforce.waves.config;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsNot.not;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+
 import com.danosoftware.galaxyforce.enumerations.AlienMissileCharacter;
 import com.danosoftware.galaxyforce.enumerations.AlienMissileSpeed;
 import com.danosoftware.galaxyforce.enumerations.AlienMissileType;
@@ -22,18 +29,9 @@ import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningFixedAngularConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.DirectionalResettableConfig;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocatorFactory;
-
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.List;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.IsNot.not;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
+import org.junit.Test;
 
 public class DirectionalResettableConfigTest {
 
@@ -86,10 +84,10 @@ public class DirectionalResettableConfigTest {
                 .angle(23f)
                 .speed(AlienSpeed.SLOW)
                 .spawnConfig(new SpawningAlienConfig(
-                        mock(AlienConfig.class),
-                        new ArrayList<PowerUpType>(),
-                        0f,
-                        0f))
+                    mock(AlienConfig.class),
+                    new ArrayList<>(),
+                    0f,
+                    0f))
                 .missileConfig(new MissileFiringConfig(
                         AlienMissileType.DOWNWARDS,
                         AlienMissileSpeed.MEDIUM,

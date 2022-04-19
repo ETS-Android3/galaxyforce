@@ -2,8 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/galaxyforce.iml" filepath="$PROJECT_DIR$/galaxyforce.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/galaxyforce.iml" filepath="$PROJECT_DIR$/.idea/modules/galaxyforce.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/app/galaxyforce.app.iml" filepath="$PROJECT_DIR$/.idea/modules/app/galaxyforce.app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/macrobenchmark/galaxyforce.macrobenchmark.iml" filepath="$PROJECT_DIR$/.idea/modules/macrobenchmark/galaxyforce.macrobenchmark.iml" />
     </modules>
   </component>
 </project>

@@ -21,26 +21,26 @@ public class AlienMissileFactory {
             AlienMissileSpeed missileSpeed,
             AlienMissileCharacter missileCharacter) {
 
-        /*
-         * create missile's starting x and y positions and offset based
-         * on alien size.
-         */
-        int x = alien.x();
-        int y = alien.y();
-        int offset = (alien.height() / 2);
+      /*
+       * create missile's starting x and y positions and offset based
+       * on alien size.
+       */
+      float x = alien.x();
+      float y = alien.y();
+      int offset = (alien.height() / 2);
 
-        /*
-         * Create new missiles
-         */
-        return new AlienMissilesDto(
-                missileType.getMissiles(
-                        x,
-                        y,
-                        offset,
-                        missileCharacter,
-                        missileSpeed,
-                        base),
-                missileType.getSound(
-                        missileCharacter));
+      /*
+       * Create new missiles
+       */
+      return new AlienMissilesDto(
+          missileType.getMissiles(
+              x,
+              y,
+              offset,
+              missileCharacter,
+              missileSpeed,
+              base),
+          missileType.getSound(
+              missileCharacter));
     }
 }

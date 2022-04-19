@@ -79,8 +79,8 @@ public class GameConstants {
 
     // fixed points on screen to help define alien-flight paths
     public static final int SCREEN_TOP = GameConstants.GAME_HEIGHT + (MAX_SPRITE_WIDTH / 2);
-    public static final int SCREEN_BOTTOM = 0 - (MAX_SPRITE_HEIGHT / 2);
-    public static final int SCREEN_LEFT = 0 - (MAX_SPRITE_WIDTH / 2);
+    public static final int SCREEN_BOTTOM = -(MAX_SPRITE_HEIGHT / 2);
+    public static final int SCREEN_LEFT = -(MAX_SPRITE_WIDTH / 2);
     public static final int SCREEN_RIGHT = GameConstants.GAME_WIDTH + (MAX_SPRITE_HEIGHT / 2);
     public static final int SCREEN_MID_X = GameConstants.GAME_WIDTH / 2;
     public static final int SCREEN_MID_Y = GameConstants.GAME_HEIGHT / 2;
@@ -91,4 +91,5 @@ public class GameConstants {
     public static final int SCREEN_LEFT_EDGE = (MAX_SPRITE_WIDTH / 2);
     public static final int SCREEN_RIGHT_EDGE = GameConstants.GAME_WIDTH - (MAX_SPRITE_WIDTH / 2);
 
+    public static final double ANGLE_TO_RADIANS_MULTIPLIER = (Math.PI / 180);
 }

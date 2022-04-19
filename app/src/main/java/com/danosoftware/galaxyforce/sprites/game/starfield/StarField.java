@@ -1,7 +1,6 @@
 package com.danosoftware.galaxyforce.sprites.game.starfield;
 
 import com.danosoftware.galaxyforce.view.Animation;
-
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -39,7 +38,7 @@ public class StarField {
         // initialise map
         this.starSpeedMap = new EnumMap<>(StarSpeed.class);
         for (StarSpeed speed : StarSpeed.values()) {
-            starSpeedMap.put(speed, new ArrayList<StarTuple>());
+            starSpeedMap.put(speed, new ArrayList<>());
         }
 
         final Animation[] animations = starAnimationType.getAnimations();
@@ -74,13 +73,13 @@ public class StarField {
 
             // for consistent movement, we compute the distance from the initial
             // position using the total time elapsed since initial construction.
-            int distanceDelta = (int) (
-                    (speed.getPixelsPerSecond() * starFieldTemplate.getTimeElapsed())
-                            % starFieldTemplate.getHeight());
+            float distanceDelta =
+                (speed.getPixelsPerSecond() * starFieldTemplate.getTimeElapsed())
+                    % starFieldTemplate.getHeight();
 
             for (StarTuple starTuple : starSpeedMap.get(speed)) {
 
-                int starY = starTuple.getInitialY() - distanceDelta;
+                float starY = starTuple.getInitialY() - distanceDelta;
 
                 // if star has reached the bottom of screen then re-position at the top.
                 if (starY < 0) {

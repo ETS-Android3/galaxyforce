@@ -1,24 +1,24 @@
 package com.danosoftware.galaxyforce.flightpath.utilities;
 
-import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
-
-import org.junit.Test;
-
 import static com.danosoftware.galaxyforce.flightpath.utilities.PointMathematics.addition;
 import static com.danosoftware.galaxyforce.flightpath.utilities.PointMathematics.multiply;
 import static com.danosoftware.galaxyforce.flightpath.utilities.PointMathematics.subtraction;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
+import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
+
+import org.junit.Test;
+
 /**
  * Test Point Mathematics Utility Methods
  */
 public class PointMathematicsTest {
 
-    @Test
-    public void multiplyTest() {
-        final DoublePoint point = new DoublePoint(10, 20);
-        final DoublePoint multipliedPoint = multiply(point, 1.5);
+  @Test
+  public void multiplyTest() {
+    final DoublePoint point = new DoublePoint(10, 20);
+    final DoublePoint multipliedPoint = multiply(point, 1.5);
         assertThat(multipliedPoint.getX(), is(15D));
         assertThat(multipliedPoint.getY(), is(30D));
     }

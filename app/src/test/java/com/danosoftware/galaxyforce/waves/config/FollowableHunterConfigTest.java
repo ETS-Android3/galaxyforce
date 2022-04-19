@@ -1,5 +1,16 @@
 package com.danosoftware.galaxyforce.waves.config;
 
+import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
+import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.hamcrest.core.IsNot.not;
+import static org.junit.Assert.assertThat;
+import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+
 import com.danosoftware.galaxyforce.enumerations.AlienMissileCharacter;
 import com.danosoftware.galaxyforce.enumerations.AlienMissileSpeed;
 import com.danosoftware.galaxyforce.enumerations.AlienMissileType;
@@ -21,30 +32,17 @@ import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawnConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawningAlienConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningFixedAngularConfig;
+import com.danosoftware.galaxyforce.waves.config.aliens.types.BoundariesConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowableHunterConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowerConfig;
-import com.danosoftware.galaxyforce.waves.config.aliens.types.HunterBoundariesConfig;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocator;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocatorFactory;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.mockito.ArgumentMatchers;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
-import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
-import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.hamcrest.core.IsNot.not;
-import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
+import org.junit.Before;
+import org.junit.Test;
+import org.mockito.ArgumentMatchers;
 
 public class FollowableHunterConfigTest {
 
@@ -60,8 +58,8 @@ public class FollowableHunterConfigTest {
     @Before
     public void setUp() {
         when(powerUpAllocatorFactory.createAllocator(
-                ArgumentMatchers.<PowerUpType>anyList(),
-                anyInt()))
+            ArgumentMatchers.anyList(),
+            anyInt()))
                 .thenReturn(powerUpAllocator);
     }
 
@@ -81,7 +79,7 @@ public class FollowableHunterConfigTest {
                         .energy(10)
                         .speed(AlienSpeed.SLOW)
                         .build())
-                .boundaries(HunterBoundariesConfig.builder().build())
+                .boundaries(BoundariesConfig.builder().build())
                 .build();
 
         assertThat(config.getAlienCharacter(), equalTo(AlienCharacter.OCTOPUS));
@@ -124,7 +122,7 @@ public class FollowableHunterConfigTest {
                 .followerPowerUps(Collections.singletonList(PowerUpType.LIFE))
                 .numberOfFollowers(1)
                 .boundaries(
-                        HunterBoundariesConfig
+                        BoundariesConfig
                                 .builder()
                                 .minX(100)
                                 .maxX(400)
@@ -138,10 +136,10 @@ public class FollowableHunterConfigTest {
                         .speed(AlienSpeed.SLOW)
                         .build())
                 .spawnConfig(new SpawningAlienConfig(
-                        mock(AlienConfig.class),
-                        new ArrayList<PowerUpType>(),
-                        0f,
-                        0f))
+                    mock(AlienConfig.class),
+                    new ArrayList<>(),
+                    0f,
+                    0f))
                 .missileConfig(new MissileFiringConfig(
                         AlienMissileType.DOWNWARDS,
                         AlienMissileSpeed.MEDIUM,

@@ -4,52 +4,52 @@ import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 
 public abstract class AbstractMovingSprite extends AbstractSprite implements IMovingSprite {
 
-    AbstractMovingSprite(
-            ISpriteIdentifier spriteId,
-            int x,
-            int y,
-            int rotation) {
+  AbstractMovingSprite(
+      ISpriteIdentifier spriteId,
+      float x,
+      float y,
+      float rotation) {
 
-        super(spriteId, x, y, rotation);
-    }
+    super(spriteId, x, y, rotation);
+  }
 
-    protected AbstractMovingSprite(
-            ISpriteIdentifier spriteId,
-            int x,
-            int y) {
+  protected AbstractMovingSprite(
+      ISpriteIdentifier spriteId,
+      float x,
+      float y) {
 
-        this(spriteId, x, y, 0);
-    }
+    this(spriteId, x, y, 0);
+  }
 
-    @Override
-    public void move(int x, int y) {
-        this.x = x;
-        this.y = y;
-    }
+  @Override
+  public void move(float x, float y) {
+    this.x = x;
+    this.y = y;
+  }
 
-    @Override
-    public void moveY(int y) {
-        this.y = y;
-    }
+  @Override
+  public void moveY(float y) {
+    this.y = y;
+  }
 
-    @Override
-    public void moveByDelta(int xDelta, int yDelta) {
-        this.x += xDelta;
-        this.y += yDelta;
-    }
+  @Override
+  public void moveByDelta(float xDelta, float yDelta) {
+    this.x += xDelta;
+    this.y += yDelta;
+  }
 
-    @Override
-    public void moveYByDelta(int yDelta) {
-        this.y += yDelta;
-    }
+  @Override
+  public void moveYByDelta(float yDelta) {
+    this.y += yDelta;
+  }
 
-    @Override
-    public void moveXByDelta(int xDelta) {
-        this.x += xDelta;
-    }
+  @Override
+  public void moveXByDelta(float xDelta) {
+    this.x += xDelta;
+  }
 
-    @Override
-    public void rotate(int rotation) {
-        this.rotation = rotation;
-    }
+  @Override
+  public void rotate(float rotation) {
+    this.rotation = rotation;
+  }
 }

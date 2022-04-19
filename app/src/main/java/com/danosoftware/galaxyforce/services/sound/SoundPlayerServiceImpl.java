@@ -7,10 +7,8 @@ import android.content.res.AssetManager;
 import android.media.AudioManager;
 import android.media.SoundPool;
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
-
 import java.io.IOException;
 import java.util.ArrayDeque;
 import java.util.Deque;
@@ -109,13 +107,11 @@ public class SoundPlayerServiceImpl implements SoundPlayerService, SoundPool.OnL
     }
 
     /**
-     * Load sound effect from file (loaded asynchronously).
-     * Add to effects bank prior to loading.
-     *
-     * Ideally we should only add effects to bank after loading completes
-     * but this would require additional logic to temporarily
-     * hold sound IDs and enums until loading completes.
-     *
+     * Load sound effect from file (loaded asynchronously). Add to effects bank prior to loading.
+     * <p>
+     * Ideally we should only add effects to bank after loading completes but this would require
+     * additional logic to temporarily hold sound IDs and enums until loading completes.
+     * <p>
      * Not worth the additional effort. It's likely all effects will be loaded within seconds.
      * Attempting to play an unloaded effect just produces a warning (not an exception).
      */
@@ -123,12 +119,12 @@ public class SoundPlayerServiceImpl implements SoundPlayerService, SoundPool.OnL
 
         String filename = soundEffect.getFileName();
 
-        try {
-            AssetFileDescriptor assetDescriptor = assets.openFd("sounds/" + filename);
+        try (AssetFileDescriptor assetDescriptor = assets.openFd("sounds/" + filename)) {
             soundPool.setOnLoadCompleteListener(this);
             int sampleId = soundPool.load(assetDescriptor, 0);
             effectsBank.put(soundEffect, sampleId);
-            Log.i(GameConstants.LOG_TAG, "Loading Sound Effect: " + soundEffect.name() + " with ID: " + sampleId);
+            Log.i(GameConstants.LOG_TAG,
+                "Loading Sound Effect: " + soundEffect.name() + " with ID: " + sampleId);
         } catch (IOException e) {
             throw new GalaxyForceException("Couldn't load sound '" + filename + "'");
         }

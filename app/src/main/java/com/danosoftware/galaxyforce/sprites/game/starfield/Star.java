@@ -17,28 +17,26 @@ public class Star extends AbstractMovingSprite {
     private final Animation animation;
 
     Star(
-            int x,
-            int y,
-            Animation animation,
-            float animationStateTime) {
+        float x,
+        float y,
+        Animation animation,
+        float animationStateTime) {
 
-        // set star's start position and initial sprite from animation
-        super(
-                animation.getKeyFrame(animationStateTime, Animation.ANIMATION_LOOPING),
-                x,
-                y);
+      // set star's start position and initial sprite from animation
+      super(
+          animation.getKeyFrame(animationStateTime, Animation.ANIMATION_LOOPING),
+          x,
+          y);
 
-        this.animation = animation;
-        this.initialAnimationStateTime = animationStateTime;
+      this.animation = animation;
+      this.initialAnimationStateTime = animationStateTime;
     }
 
     /**
-     * Update animation for star.
-     * Position changes are more efficiently handled by star-field.
-     *
-     * NOTE: deltaTime represents total time since the initial star-field
-     * was created (not time since the last update). Helps seamless star-field
-     * animation when switching screens.
+     * Update animation for star. Position changes are more efficiently handled by star-field.
+     * <p>
+     * NOTE: deltaTime represents total time since the initial star-field was created (not time since
+     * the last update). Helps seamless star-field animation when switching screens.
      *
      * @param deltaTime - total time since initial star-field was first created
      */

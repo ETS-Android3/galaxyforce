@@ -7,6 +7,6 @@ import lombok.Value;
 @Builder
 public class CompletedWaveAchievements {
 
-    private final int wave;
-    private final boolean nolivesLostInWave;
+  int wave;
+  boolean noLivesLostInWave;
 }

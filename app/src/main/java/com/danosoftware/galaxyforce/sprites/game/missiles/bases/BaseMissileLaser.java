@@ -1,13 +1,12 @@
 package com.danosoftware.galaxyforce.sprites.game.missiles.bases;
 
+import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenTop;
+
 import com.danosoftware.galaxyforce.enumerations.BaseMissileSpeed;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.view.Animation;
-
 import java.util.HashSet;
 import java.util.Set;
-
-import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenTop;
 
 /**
  * Laser missile that is not destroyed on contact with an alien.
@@ -21,14 +20,14 @@ public class BaseMissileLaser extends AbstractBaseMissile {
     private final Set<IAlien> hitAliens;
 
     public BaseMissileLaser(
-            final int xStart,
-            final int yStart,
-            final Animation animation,
-            final BaseMissileSpeed baseMissileSpeed) {
+        final float xStart,
+        final float yStart,
+        final Animation animation,
+        final BaseMissileSpeed baseMissileSpeed) {
         super(
-                animation,
-                xStart,
-                yStart);
+            animation,
+            xStart,
+            yStart);
         this.missileSpeed = baseMissileSpeed.getSpeed();
         this.hitAliens = new HashSet<>();
     }
@@ -68,7 +67,7 @@ public class BaseMissileLaser extends AbstractBaseMissile {
     @Override
     public void animate(float deltaTime) {
         // move missile until off-screen and then destroy it
-        moveYByDelta((int) (missileSpeed * deltaTime));
+        moveYByDelta(missileSpeed * deltaTime);
 
         // missile can only be destroyed when off screen
         // use superclass destroy() since our destroy()

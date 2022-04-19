@@ -11,49 +11,49 @@ package com.danosoftware.galaxyforce.sprites.game.starfield;
  */
 class StarTemplate {
 
-    // star's initial x,y position
-    private final int initialX;
-    private final int initialY;
+  // star's initial x,y position
+  private final float initialX;
+  private final float initialY;
 
-    // index of animation used by star
-    private final int animationIndex;
+  // index of animation used by star
+  private final int animationIndex;
 
-    // inital animation elapsed time
-    private final float animationStateTime;
+  // initial animation elapsed time
+  private final float animationStateTime;
 
-    // speed of star
-    private final StarSpeed speed;
+  // speed of star
+  private final StarSpeed speed;
 
-    StarTemplate(
-            int initialX,
-            int initialY,
-            int animationIndex,
-            float animationStateTime,
-            StarSpeed speed) {
-        this.initialX = initialX;
-        this.initialY = initialY;
-        this.animationIndex = animationIndex;
-        this.animationStateTime = animationStateTime;
-        this.speed = speed;
-    }
+  StarTemplate(
+      float initialX,
+      float initialY,
+      int animationIndex,
+      float animationStateTime,
+      StarSpeed speed) {
+    this.initialX = initialX;
+    this.initialY = initialY;
+    this.animationIndex = animationIndex;
+    this.animationStateTime = animationStateTime;
+    this.speed = speed;
+  }
 
-    int getInitialX() {
-        return initialX;
-    }
+  float getInitialX() {
+    return initialX;
+  }
 
-    int getInitialY() {
-        return initialY;
-    }
+  float getInitialY() {
+    return initialY;
+  }
 
-    int getAnimationIndex() {
-        return animationIndex;
-    }
+  int getAnimationIndex() {
+    return animationIndex;
+  }
 
-    float getAnimationStateTime() {
-        return animationStateTime;
-    }
+  float getAnimationStateTime() {
+    return animationStateTime;
+  }
 
-    StarSpeed getSpeed() {
+  StarSpeed getSpeed() {
         return speed;
     }
 }

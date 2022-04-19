@@ -1,23 +1,31 @@
 package com.danosoftware.galaxyforce;
 
+import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_ALPHA;
+import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_BLUE;
+import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_GREEN;
+import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_RED;
+import static com.danosoftware.galaxyforce.constants.GameConstants.RC_SIGN_IN;
+
 import android.app.Activity;
 import android.content.Intent;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
+import android.os.Trace;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-
-import com.android.billingclient.api.BillingClient;
 import com.danosoftware.galaxyforce.billing.BillingManager;
+import com.danosoftware.galaxyforce.billing.BillingManagerImpl;
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.billing.BillingServiceImpl;
+import com.danosoftware.galaxyforce.billing.BillingUpdatesListener;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.games.Game;
 import com.danosoftware.galaxyforce.games.GameImpl;
+import com.danosoftware.galaxyforce.games.GameLoopTest;
 import com.danosoftware.galaxyforce.services.configurations.ConfigurationService;
 import com.danosoftware.galaxyforce.services.configurations.ConfigurationServiceImpl;
 import com.danosoftware.galaxyforce.services.googleplay.GooglePlayServices;
@@ -27,15 +35,8 @@ import com.danosoftware.galaxyforce.view.GLGraphics;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.Task;
-
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
-
-import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_ALPHA;
-import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_BLUE;
-import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_GREEN;
-import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_RED;
-import static com.danosoftware.galaxyforce.constants.GameConstants.RC_SIGN_IN;
 
 public class MainActivity extends Activity {
 
@@ -74,13 +75,7 @@ public class MainActivity extends Activity {
 
         Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Create Application");
 
-        // set application to use full screen
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        // stop window dimming when window is visible (recommended over
-        // deprecated full wake lock)
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        setupScreen();
 
         // set-up GL view
         glView = new GLSurfaceView(this);
@@ -90,8 +85,8 @@ public class MainActivity extends Activity {
 
         // Create and initialize billing
         BillingService billingService = new BillingServiceImpl();
-        BillingManager.BillingUpdatesListener billingListener = (BillingManager.BillingUpdatesListener) billingService;
-        this.mBillingManager = new BillingManager(this, billingListener);
+        BillingUpdatesListener billingListener = (BillingUpdatesListener) billingService;
+        this.mBillingManager = new BillingManagerImpl(this, billingListener);
 
         // set-up configuration service that uses shared preferences
         // for persisting configuration
@@ -102,7 +97,16 @@ public class MainActivity extends Activity {
         this.mPlayServices = new GooglePlayServices(this, configurationService);
 
         // create instance of game
-        game = new GameImpl(this, glGraphics, glView, billingService, mPlayServices, configurationService);
+        Intent launchIntent = getIntent();
+        String launchIntentAction = launchIntent.getAction();
+        if (launchIntentAction != null &&
+            launchIntentAction.equals("com.google.intent.action.TEST_LOOP")) {
+            game = new GameLoopTest(this, glGraphics, glView, billingService, mPlayServices,
+                configurationService);
+        } else {
+            game = new GameImpl(this, glGraphics, glView, billingService, mPlayServices,
+                configurationService);
+        }
     }
 
     /* runs after onCreate or resuming after being in background */
@@ -117,8 +121,7 @@ public class MainActivity extends Activity {
         // is inactive. For example, this can happen if the activity is destroyed during the
         // purchase flow. This ensures that when the activity is resumed it reflects the user's
         // current purchases.
-        if (mBillingManager != null
-                && mBillingManager.getBillingClientResponseCode() == BillingClient.BillingResponse.OK) {
+        if (mBillingManager != null && mBillingManager.isConnected()) {
             mBillingManager.queryPurchases();
         }
 
@@ -138,13 +141,12 @@ public class MainActivity extends Activity {
             } else {
                 state = ActivityState.PAUSED;
             }
-
             while (true) {
                 try {
                     stateChanged.wait();
                     break;
                 } catch (InterruptedException e) {
-
+                    Log.w(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Unexpected InterruptedException", e);
                 }
             }
 
@@ -187,10 +189,21 @@ public class MainActivity extends Activity {
         }
     }
 
+    private void setupScreen() {
+        // set application to use full screen
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        // stop window dimming when window is visible (recommended over
+        // deprecated full wake lock)
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    }
+
+    // setSystemUiVisibility() is deprecated but WindowInsetsController replacement requires API 30.
+    // not replaced to simply support older APIs.
     private void hideSystemUI() {
-        // Enables "sticky immersive" mode.
-        // hides UI system bars until user swipes to reveal them
-        // see: https://developer.android.com/training/system-ui/immersive#sticky-immersive
+        // See https://developer.android.com/training/system-ui/immersive
+        // Using "sticky immersive"
         View decorView = getWindow().getDecorView();
         decorView.setSystemUiVisibility(
                 View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
@@ -235,8 +248,12 @@ public class MainActivity extends Activity {
                 float deltaTime = (System.nanoTime() - startTime) / 1000000000.0f;
                 startTime = System.nanoTime();
 
+                Trace.beginSection("onDrawFrame.update");
                 game.update(deltaTime);
-                game.draw(deltaTime);
+                Trace.endSection();
+                Trace.beginSection("onDrawFrame.draw");
+                game.draw();
+                Trace.endSection();
             }
 
             if (stateCheck == ActivityState.PAUSED) {

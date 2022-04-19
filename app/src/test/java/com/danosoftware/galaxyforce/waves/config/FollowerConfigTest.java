@@ -1,10 +1,15 @@
 package com.danosoftware.galaxyforce.waves.config;
 
+import static org.hamcrest.CoreMatchers.is;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.core.IsEqual.equalTo;
+import static org.junit.Assert.assertThat;
+import static org.mockito.Mockito.mock;
+
 import com.danosoftware.galaxyforce.enumerations.AlienMissileCharacter;
 import com.danosoftware.galaxyforce.enumerations.AlienMissileSpeed;
 import com.danosoftware.galaxyforce.enumerations.AlienMissileType;
 import com.danosoftware.galaxyforce.enumerations.AlienSpeed;
-import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.models.screens.game.GameModel;
 import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
@@ -20,16 +25,8 @@ import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningFixedAngularConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.FollowerConfig;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocatorFactory;
-
-import org.junit.Test;
-
 import java.util.ArrayList;
-
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.core.IsEqual.equalTo;
-import static org.junit.Assert.assertThat;
-import static org.mockito.Mockito.mock;
+import org.junit.Test;
 
 public class FollowerConfigTest {
 
@@ -65,10 +62,10 @@ public class FollowerConfigTest {
                 .energy(10)
                 .speed(AlienSpeed.SLOW)
                 .spawnConfig(new SpawningAlienConfig(
-                        mock(AlienConfig.class),
-                        new ArrayList<PowerUpType>(),
-                        0f,
-                        0f))
+                    mock(AlienConfig.class),
+                    new ArrayList<>(),
+                    0f,
+                    0f))
                 .missileConfig(new MissileFiringConfig(
                         AlienMissileType.DOWNWARDS,
                         AlienMissileSpeed.MEDIUM,

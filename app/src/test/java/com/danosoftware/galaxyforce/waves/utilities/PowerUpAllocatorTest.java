@@ -1,11 +1,21 @@
 package com.danosoftware.galaxyforce.waves.utilities;
 
-import android.util.Log;
+import static org.hamcrest.CoreMatchers.equalTo;
+import static org.hamcrest.CoreMatchers.nullValue;
+import static org.hamcrest.MatcherAssert.assertThat;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.when;
+import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
+import android.util.Log;
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
 import com.danosoftware.galaxyforce.models.screens.game.GameModel;
-
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,19 +23,6 @@ import org.powermock.core.classloader.annotations.PrepareForTest;
 import org.powermock.modules.junit4.PowerMockRunner;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static org.hamcrest.CoreMatchers.equalTo;
-import static org.hamcrest.CoreMatchers.nullValue;
-import static org.hamcrest.MatcherAssert.assertThat;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
-import static org.powermock.api.mockito.PowerMockito.mockStatic;
 
 /**
  * Test that power-up allocator behaves as expected when allocating a list of power-ups
@@ -35,30 +32,31 @@ import static org.powermock.api.mockito.PowerMockito.mockStatic;
 @PrepareForTest(Log.class)
 public class PowerUpAllocatorTest {
 
-    private final static Logger logger = LoggerFactory.getLogger(PowerUpAllocatorTest.class);
+  private final static Logger logger = LoggerFactory.getLogger(PowerUpAllocatorTest.class);
 
-    private PowerUpAllocator powerUpAllocator;
+  private PowerUpAllocator powerUpAllocator;
 
-    @Before
-    public void setUp() {
-        // mock any static android logging
-        mockStatic(Log.class);
-    }
+  @Before
+  public void setUp() {
+    // mock any static android logging
+    mockStatic(Log.class);
+  }
 
-    /**
-     * Allocate power-ups across the same number of aliens.
-     * Each alien shoud have a power-up.
-     */
-    @Test
-    public void shouldAllocateOnePowerUpPerAlien() {
+  /**
+   * Allocate power-ups across the same number of aliens. Each alien should have a power-up.
+   */
+  @Test
+  public void shouldAllocateOnePowerUpPerAlien() {
 
-        // create one alien per power-up
-        List<PowerUpType> powerUpTypes = Arrays.asList(PowerUpType.MISSILE_PARALLEL, PowerUpType.MISSILE_PARALLEL, PowerUpType.LIFE, PowerUpType.LIFE, PowerUpType.MISSILE_FAST);
-        int numberOfAliens = powerUpTypes.size();
-        powerUpAllocator = new PowerUpAllocator(powerUpTypes, numberOfAliens, 3);
+    // create one alien per power-up
+    List<PowerUpType> powerUpTypes = Arrays
+        .asList(PowerUpType.MISSILE_PARALLEL, PowerUpType.MISSILE_PARALLEL, PowerUpType.LIFE,
+            PowerUpType.LIFE, PowerUpType.MISSILE_FAST);
+    int numberOfAliens = powerUpTypes.size();
+    powerUpAllocator = new PowerUpAllocator(powerUpTypes, numberOfAliens, 3);
 
-        shouldAllocateExpectedPowerUps(numberOfAliens, powerUpTypes);
-    }
+    shouldAllocateExpectedPowerUps(numberOfAliens, powerUpTypes);
+  }
 
     /**
      * Allocate power-ups across twice as many aliens.
@@ -120,9 +118,9 @@ public class PowerUpAllocatorTest {
         }
     }
 
-    /**
-     * Should only allocate lifes up to a maximum
-     */
+  /**
+   * Should only allocate lives up to a maximum
+   */
     @Test
     public void shouldOnlyAllocateUpToMaximumLives() {
 

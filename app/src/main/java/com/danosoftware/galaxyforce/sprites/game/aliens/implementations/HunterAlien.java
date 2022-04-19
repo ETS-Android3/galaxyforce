@@ -12,7 +12,6 @@ import com.danosoftware.galaxyforce.sprites.game.behaviours.powerup.PowerUpBehav
 import com.danosoftware.galaxyforce.sprites.game.behaviours.spawn.SpawnBehaviourFactory;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.spinner.SpinningBehaviourFactory;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.HunterConfig;
-
 import lombok.Builder;
 import lombok.NonNull;
 
@@ -49,28 +48,28 @@ public class HunterAlien extends AbstractAlien {
      */
     @Builder
     public HunterAlien(
-            @NonNull final ExplosionBehaviourFactory explosionFactory,
-            @NonNull final SpawnBehaviourFactory spawnFactory,
-            @NonNull final SpinningBehaviourFactory spinningFactory,
-            @NonNull final PowerUpBehaviourFactory powerUpFactory,
-            @NonNull final FireBehaviourFactory fireFactory,
-            @NonNull final HitBehaviourFactory hitFactory,
-            @NonNull final GameModel model,
-            @NonNull final HunterConfig alienConfig,
-            final PowerUpType powerUpType,
-            @NonNull final Integer xStart,
-            @NonNull final Integer yStart,
-            @NonNull final Float timeDelayStart) {
+        @NonNull final ExplosionBehaviourFactory explosionFactory,
+        @NonNull final SpawnBehaviourFactory spawnFactory,
+        @NonNull final SpinningBehaviourFactory spinningFactory,
+        @NonNull final PowerUpBehaviourFactory powerUpFactory,
+        @NonNull final FireBehaviourFactory fireFactory,
+        @NonNull final HitBehaviourFactory hitFactory,
+        @NonNull final GameModel model,
+        @NonNull final HunterConfig alienConfig,
+        final PowerUpType powerUpType,
+        @NonNull final Float xStart,
+        @NonNull final Float yStart,
+        @NonNull final Float timeDelayStart) {
 
-        super(
-                alienConfig.getAlienCharacter(),
-                alienConfig.getAlienCharacter().getAnimation(),
-                xStart,
-                yStart,
-                alienConfig.getEnergy(),
-                fireFactory.createFireBehaviour(
-                        alienConfig.getMissileConfig()),
-                powerUpFactory.createPowerUpBehaviour(
+      super(
+          alienConfig.getAlienCharacter(),
+          alienConfig.getAlienCharacter().getAnimation(),
+          xStart,
+          yStart,
+          alienConfig.getEnergy(),
+          fireFactory.createFireBehaviour(
+              alienConfig.getMissileConfig()),
+          powerUpFactory.createPowerUpBehaviour(
                         powerUpType),
                 spawnFactory.createSpawnBehaviour(
                         alienConfig.getSpawnConfig()),
@@ -88,7 +87,9 @@ public class HunterAlien extends AbstractAlien {
                 alienConfig.getBoundaries().getMinX(),
                 alienConfig.getBoundaries().getMaxX(),
                 alienConfig.getBoundaries().getMinY(),
-                alienConfig.getBoundaries().getMaxY());
+                alienConfig.getBoundaries().getMaxY(),
+                alienConfig.getBoundaries().getLanePolicy(),
+                alienConfig.getBoundaries().getLanes());
 
         waiting();
 
@@ -119,24 +120,23 @@ public class HunterAlien extends AbstractAlien {
              * Guide alien every x seconds so the alien changes direction to
              * follow any changes in the base's position.
              */
-            if (timeSinceLastDirectionChange > ALIEN_DIRECTION_CHANGE_DELAY) {
+          if (timeSinceLastDirectionChange > ALIEN_DIRECTION_CHANGE_DELAY) {
 
-                // recalculate direction angle
-                this.angle = recalculateAngle(this.angle);
+            // recalculate direction angle
+            this.angle = recalculateAngle(this.angle);
 
-                // reset timer since last missile direction change
-                timeSinceLastDirectionChange = 0f;
-            }
+            // reset timer since last missile direction change
+            timeSinceLastDirectionChange = 0f;
+          }
 
+          // calculate the deltas to be applied each move
+          float xDelta = speedInPixelsPerSecond * (float) Math.cos(this.angle);
+          float yDelta = speedInPixelsPerSecond * (float) Math.sin(this.angle);
 
-            // calculate the deltas to be applied each move
-            int xDelta = (int) (speedInPixelsPerSecond * (float) Math.cos(this.angle));
-            int yDelta = (int) (speedInPixelsPerSecond * (float) Math.sin(this.angle));
-
-            // move alien by calculated deltas
-            moveByDelta(
-                    (int) (xDelta * deltaTime),
-                    (int) (yDelta * deltaTime));
+          // move alien by calculated deltas
+          moveByDelta(
+              xDelta * deltaTime,
+              yDelta * deltaTime);
 
         } else if (isWaiting()) {
             // countdown until activation time

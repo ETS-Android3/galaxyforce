@@ -41,12 +41,12 @@ public class SpawnAndExplode implements SpawnBehaviour {
     private final AlienFactory alienFactory;
 
     /**
-     * @param alienFactory     - factory to create aliens
+     * @param alienFactory            - factory to create aliens
      * @param powerUpAllocatorFactory - factory to create power-up allocators
-     * @param model            - model to receive aliens
-     * @param alienConfig      - config of alien to spawn
-     * @param powerUpType      - allocated power-up (can be null)
-     * @param delayUntilSpawn  - time before spawns
+     * @param model                   - model to receive aliens
+     * @param alienConfig             - config of alien to spawn
+     * @param powerUpType             - allocated power-up (can be null)
+     * @param delayUntilSpawn         - time before spawns
      */
     SpawnAndExplode(
             final AlienFactory alienFactory,

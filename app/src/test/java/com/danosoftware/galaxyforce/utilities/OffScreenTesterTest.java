@@ -1,13 +1,5 @@
 package com.danosoftware.galaxyforce.utilities;
 
-import com.danosoftware.galaxyforce.sprites.common.AbstractSprite;
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteProperties;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
 import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenAnySide;
@@ -17,6 +9,14 @@ import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
+
+import com.danosoftware.galaxyforce.sprites.common.AbstractSprite;
+import com.danosoftware.galaxyforce.sprites.common.ISprite;
+import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.ISpriteProperties;
+
+import org.junit.Before;
+import org.junit.Test;
 
 /**
  * Confirms the the off-screen tester correctly identifies when

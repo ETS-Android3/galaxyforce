@@ -18,17 +18,17 @@ public class BaseExplosion extends AbstractSprite implements IBaseExplosion {
     private final IBaseExploder exploder;
 
     public BaseExplosion(
-            int x,
-            int y,
-            SoundPlayerService sounds,
-            VibrationService vibrator) {
-        super(
-                ANIMATION.getKeyFrame(
-                0,
-                Animation.ANIMATION_LOOPING),
-                x,
-                y);
-        this.exploder = new BaseExploderSimple(sounds, vibrator, ANIMATION);
+        float x,
+        float y,
+        SoundPlayerService sounds,
+        VibrationService vibrator) {
+      super(
+          ANIMATION.getKeyFrame(
+              0,
+              Animation.ANIMATION_LOOPING),
+          x,
+          y);
+      this.exploder = new BaseExploderSimple(sounds, vibrator, ANIMATION);
     }
 
     @Override

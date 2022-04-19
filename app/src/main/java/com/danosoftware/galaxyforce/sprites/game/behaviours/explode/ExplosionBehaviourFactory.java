@@ -7,6 +7,7 @@ import com.danosoftware.galaxyforce.sprites.game.behaviours.spawn.SpawnBehaviour
 import com.danosoftware.galaxyforce.sprites.game.behaviours.spawn.SpawnBehaviourFactory;
 import com.danosoftware.galaxyforce.sprites.game.factories.AlienFactory;
 import com.danosoftware.galaxyforce.waves.AlienCharacter;
+import com.danosoftware.galaxyforce.waves.config.aliens.exploding.DelayedFollowerExplosionConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.exploding.ExplosionConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.exploding.MultiExplosionConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.exploding.NormalExplosionConfig;
@@ -87,6 +88,22 @@ public class ExplosionBehaviourFactory {
                             vibrator,
                             character.getExplosionAnimation()),
                     spawner
+            );
+        }
+
+        if (explosionConfig != null
+                && explosionConfig.getType() == ExplosionConfig.ExplosionConfigType.FOLLOWER_DELAYED
+                && explosionConfig instanceof DelayedFollowerExplosionConfig) {
+
+            // behaviour that delays follower to sync with head followable alien
+            final DelayedFollowerExplosionConfig delayedFollowerExplosionConfig = (DelayedFollowerExplosionConfig) explosionConfig;
+
+            // create delayed explode behaviour
+            return new ExplodeFollowerDelayed(
+                    sounds,
+                    vibrator,
+                    character,
+                    delayedFollowerExplosionConfig.getDelayTime()
             );
         }
 

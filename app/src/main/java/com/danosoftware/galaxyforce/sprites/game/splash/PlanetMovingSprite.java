@@ -1,9 +1,9 @@
 package com.danosoftware.galaxyforce.sprites.game.splash;
 
+import static com.danosoftware.galaxyforce.constants.GameConstants.PLANET_Y_POS;
+
 import com.danosoftware.galaxyforce.sprites.common.AbstractMovingSprite;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
-
-import static com.danosoftware.galaxyforce.constants.GameConstants.PLANET_Y_POS;
 
 public class PlanetMovingSprite extends AbstractMovingSprite {
 
@@ -24,8 +24,10 @@ public class PlanetMovingSprite extends AbstractMovingSprite {
 
     @Override
     public void animate(float deltaTime) {
-        timeElapsed += deltaTime;
-        int distance = (int) Math.min((timeElapsed - DELAY_IN_SECONDS_BEFORE_START) * DISTANCE_PER_SECOND, maxDistanceToTravel);
-        moveY(startPosition + distance);
+      timeElapsed += deltaTime;
+      float distance = Math
+          .min((timeElapsed - DELAY_IN_SECONDS_BEFORE_START) * DISTANCE_PER_SECOND,
+              maxDistanceToTravel);
+      moveY(startPosition + distance);
     }
 }

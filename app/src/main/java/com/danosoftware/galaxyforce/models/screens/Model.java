@@ -3,7 +3,6 @@ package com.danosoftware.galaxyforce.models.screens;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.text.Text;
-
 import java.util.List;
 
 /**
@@ -11,45 +10,44 @@ import java.util.List;
  */
 public interface Model {
 
-    /**
-     * Used to initialise model after model has been instantiated. The model
-     * should only be initialised once.
-     */
+  /**
+   * Used to initialise model after model has been instantiated. The model should only be
+   * initialised once.
+   */
 //    void initialise();
 
-    List<ISprite> getSprites();
+  List<ISprite> getSprites();
 
-    List<Text> getText();
+  List<Text> getText();
 
-    void update(float deltaTime);
+  void update(float deltaTime);
 
-    /**
-     * Called when model associated with screen can be disposed with. Since
-     * references to the models can be held, any objects that do not need
-     * references to be kept should be disposed. This allows these objects to be
-     * garbage collected. Setting references of unneeded objects to null will
-     * allow garbage collection. If the model is needed again, objects should be
-     * re-initialised using the initialise() method.
-     */
-    void dispose();
+  /**
+   * Called when model associated with screen can be disposed with. Since references to the models
+   * can be held, any objects that do not need references to be kept should be disposed. This allows
+   * these objects to be garbage collected. Setting references of unneeded objects to null will
+   * allow garbage collection. If the model is needed again, objects should be re-initialised using
+   * the initialise() method.
+   */
+  void dispose();
 
-    /**
-     * Handle "back button" behaviour
-     */
-    void goBack();
+  /**
+   * Handle "back button" behaviour
+   */
+  void goBack();
 
-    /**
-     * Pause the current game model. Has no effect if model is already paused.
-     */
-    void pause();
+  /**
+   * Pause the current game model. Has no effect if model is already paused.
+   */
+  void pause();
 
-    /**
-     * Resume the current game model.
-     */
-    void resume();
+  /**
+   * Resume the current game model.
+   */
+  void resume();
 
-    /**
-     * Get background colour.
-     */
-    RgbColour background();
+  /**
+   * Get background colour.
+   */
+  RgbColour background();
 }

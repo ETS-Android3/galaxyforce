@@ -1,5 +1,7 @@
 package com.danosoftware.galaxyforce.sprites.game.behaviours.spinner;
 
+import static com.danosoftware.galaxyforce.waves.utilities.Randomiser.random;
+
 import com.danosoftware.galaxyforce.enumerations.AlienSpeed;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 
@@ -13,7 +15,7 @@ public class SpinningByFixedAngularRotation implements SpinningBehaviour {
     private float angle;
 
     /* speed of sprite rotation */
-    private final int anglularSpeed;
+    private final int angularSpeed;
 
     /**
      * construct fixed speed spinning behaviour based on supplied alien speed
@@ -30,8 +32,8 @@ public class SpinningByFixedAngularRotation implements SpinningBehaviour {
     public SpinningByFixedAngularRotation(final int angularSpeed) {
 
         // set random starting rotation angle
-        this.angle = (float) (Math.random() * 360);
-        this.anglularSpeed = angularSpeed;
+        this.angle = (float) (random() * 360);
+        this.angularSpeed = angularSpeed;
     }
 
     @Override
@@ -42,7 +44,7 @@ public class SpinningByFixedAngularRotation implements SpinningBehaviour {
     @Override
     public void spin(IAlien alien, float deltaTime) {
         // rotate alien
-        angle = (angle + (deltaTime * anglularSpeed)) % 360;
-        alien.rotate((int) (angle));
+        angle = (angle + (deltaTime * angularSpeed)) % 360;
+        alien.rotate(angle);
     }
 }

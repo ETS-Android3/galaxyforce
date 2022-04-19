@@ -1,5 +1,7 @@
 package com.danosoftware.galaxyforce.sprites.game.behaviours.spawn;
 
+import static com.danosoftware.galaxyforce.waves.utilities.Randomiser.random;
+
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.models.assets.SpawnedAliensDto;
 import com.danosoftware.galaxyforce.models.screens.game.GameModel;
@@ -9,7 +11,6 @@ import com.danosoftware.galaxyforce.waves.AlienCharacter;
 import com.danosoftware.galaxyforce.waves.config.aliens.AlienConfig;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocator;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocatorFactory;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,7 +29,7 @@ public class SpawnRandomDelayLimiter implements SpawnBehaviour {
     /* reference to game model */
     private final GameModel model;
 
-    /* minimum delay between alien spqwning in seconds */
+    /* minimum delay between alien spawning in seconds */
     private final float minSpawnDelay;
 
     /*
@@ -65,13 +66,13 @@ public class SpawnRandomDelayLimiter implements SpawnBehaviour {
     private final AlienCharacter limitedCharacter;
 
     /**
-     * @param alienFactory     - factory to create aliens
+     * @param alienFactory            - factory to create aliens
      * @param powerUpAllocatorFactory - factory to create power-up allocators
-     * @param model            - model to receive aliens
-     * @param alienConfig      - config of alien to spawn
-     * @param minSpawnDelay    - minimum delay between spawns
-     * @param spawnDelayRandom - additional maximum random time before spawns
-     * @param maxActiveSpawnedAliens - max allowed active spawned aliens
+     * @param model                   - model to receive aliens
+     * @param alienConfig             - config of alien to spawn
+     * @param minSpawnDelay           - minimum delay between spawns
+     * @param spawnDelayRandom        - additional maximum random time before spawns
+     * @param maxActiveSpawnedAliens  - max allowed active spawned aliens
      */
     SpawnRandomDelayLimiter(
             final AlienFactory alienFactory,
@@ -94,13 +95,13 @@ public class SpawnRandomDelayLimiter implements SpawnBehaviour {
         this.spawnDelayRandom = spawnDelayRandom;
 
         /* reset time delay until alien can spawn */
-        delayUntilNextSpawn = minSpawnDelay + (spawnDelayRandom * Math.random());
+        delayUntilNextSpawn = minSpawnDelay + (spawnDelayRandom * random());
 
         /*
          * reset time since missile last fired to random value. initialise with
          * random delay to further randomise each alien's firing delay
          */
-        timeSinceLastSpawn = (float) (delayUntilNextSpawn * Math.random());
+        timeSinceLastSpawn = (float) (delayUntilNextSpawn * random());
 
         this.powerUpAllocator = powerUpAllocatorFactory.createAllocator(
                 powerUpTypes,
@@ -122,7 +123,7 @@ public class SpawnRandomDelayLimiter implements SpawnBehaviour {
         timeSinceLastSpawn = 0f;
 
         /* reset time delay until alien can spawn */
-        delayUntilNextSpawn = minSpawnDelay + (spawnDelayRandom * Math.random());
+        delayUntilNextSpawn = minSpawnDelay + (spawnDelayRandom * random());
 
         if (countSpawnedAliens() < maxActiveSpawnedAliens) {
             // create and send new alien bean
@@ -138,14 +139,15 @@ public class SpawnRandomDelayLimiter implements SpawnBehaviour {
 
     // how many spawned aliens are still active
     private int countSpawnedAliens() {
-        int count = 0;
-        for (SpawnedAliensDto spawnedAliensDto: spawnedAliens) {
-            for (IAlien alien: spawnedAliensDto.getAliens()) {
-                if (alien.isActive() && (limitedCharacter == null || limitedCharacter == alien.character())) {
-                    count++;
-                }
-            }
+      int count = 0;
+      for (SpawnedAliensDto spawnedAliensDto : spawnedAliens) {
+        for (IAlien alien : spawnedAliensDto.getAliens()) {
+          if (alien.isActive() && (limitedCharacter == null || limitedCharacter == alien
+              .character())) {
+            count++;
+          }
         }
-        return count;
+      }
+      return count;
     }
 }

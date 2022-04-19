@@ -4,7 +4,6 @@ import com.danosoftware.galaxyforce.R;
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.services.googleplay.GooglePlayServices;
 import com.danosoftware.galaxyforce.waves.AlienCharacter;
-
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.HashMap;
@@ -14,20 +13,18 @@ import java.util.Map;
 
 /**
  * Typical achievements:
- *
- * completing specific waves
- * completing specific waves with no lives lost
- * completing a set number of waves without losing a life
- * total waves completed in a single game
- * failing to complete a single wave
- *
- * number or types of power ups collected
- * number or types of aliens destroyed
+ * <p>
+ * completing specific waves completing specific waves with no lives lost completing a set number of
+ * waves without losing a life total waves completed in a single game failing to complete a single
+ * wave
+ * <p>
+ * number or types of power ups collected number or types of aliens destroyed
  */
 public class AchievementService {
 
     // map of waves completed to unlocked achievements
     private static final Map<Integer, Integer> completedWaveAchievementsMap = new HashMap<>();
+
     static {
         completedWaveAchievementsMap.put(
                 1,
@@ -42,6 +39,7 @@ public class AchievementService {
 
     // map of waves completed in one life to unlocked achievements
     private static final Map<Integer, Integer> oneLifeCompletedWaveAchievementsMap = new HashMap<>();
+
     static {
         oneLifeCompletedWaveAchievementsMap.put(
                 12,
@@ -54,6 +52,7 @@ public class AchievementService {
 
     // map of power-up types to incremental achievements
     private static final Map<PowerUpType, Integer> powerUpAchievementsMap = new EnumMap<>(PowerUpType.class);
+
     static {
         powerUpAchievementsMap.put(
                 PowerUpType.LIFE,
@@ -86,6 +85,7 @@ public class AchievementService {
 
     // map of aliens to incremental achievements
     private static final Map<AlienCharacter, Integer> aliensAchievementsMap = new EnumMap<>(AlienCharacter.class);
+
     static {
         aliensAchievementsMap.put(
                 AlienCharacter.OCTOPUS,
@@ -114,7 +114,7 @@ public class AchievementService {
 
     /**
      * Request any achievements for a completed wave.
-     *
+     * <p>
      * Achievements may be generated for completing specific
      * waves and for completing waves with no lives lost.
      */
@@ -123,14 +123,14 @@ public class AchievementService {
         unlockPendingAchievements();
 
         totalWavesCompletedInCurrentGame++;
-        if (completedWaveAchievements.isNolivesLostInWave()) {
+        if (completedWaveAchievements.isNoLivesLostInWave()) {
             sequentialWavesCompletedWithoutLosingALife++;
         } else {
             sequentialWavesCompletedWithoutLosingALife = 0;
         }
 
         // trigger unlocks based on total waves completed in one game
-        switch(totalWavesCompletedInCurrentGame) {
+        switch (totalWavesCompletedInCurrentGame) {
             case 3:
                 unlockAchievement(R.string.achievement_complete_3_waves_in_one_game);
                 break;
@@ -140,7 +140,7 @@ public class AchievementService {
         }
 
         // trigger unlocks based on sequential waves completed without losing a life
-        switch(sequentialWavesCompletedWithoutLosingALife) {
+        switch (sequentialWavesCompletedWithoutLosingALife) {
             case 1:
                 unlockAchievement(R.string.achievement_complete_1_wave_without_losing_a_life);
                 break;
@@ -159,7 +159,7 @@ public class AchievementService {
         }
 
         // trigger unlocks based on waves completed in one life
-        final boolean completedWaveInOneLife = completedWaveAchievements.isNolivesLostInWave();
+        final boolean completedWaveInOneLife = completedWaveAchievements.isNoLivesLostInWave();
         if (completedWaveInOneLife && oneLifeCompletedWaveAchievementsMap.containsKey(completedWave)) {
             unlockAchievement(oneLifeCompletedWaveAchievementsMap.get(completedWave));
         }
@@ -188,7 +188,7 @@ public class AchievementService {
 
     /**
      * Register a collected power-up.
-     *
+     * <p>
      * Power-up collected won't trigger any achievements until either
      * the wave is completed or game over.
      */
@@ -201,7 +201,7 @@ public class AchievementService {
 
     /**
      * Register a destroyed alien.
-     *
+     * <p>
      * Aliens destroyed won't trigger any achievements until either
      * the wave is completed or game over.
      */
@@ -217,15 +217,16 @@ public class AchievementService {
      */
     private void submitPendingPowerUpsCollected() {
         int totalPowerUpsCollected = 0;
-        for (Iterator<PowerUpType> powerUps = powerUpsCollected.keySet().iterator(); powerUps.hasNext();) {
+        for (Iterator<PowerUpType> powerUps = powerUpsCollected.keySet().iterator();
+            powerUps.hasNext(); ) {
             final PowerUpType powerUp = powerUps.next();
             final int collected = powerUpsCollected.get(powerUp);
 
             // increment achievement of specific power-up type
             if (powerUpAchievementsMap.containsKey(powerUp) &&
-                    playService.incrementAchievement(
-                        powerUpAchievementsMap.get(powerUp),
-                        collected)) {
+                playService.incrementAchievement(
+                    powerUpAchievementsMap.get(powerUp),
+                    collected)) {
                 powerUps.remove();
                 totalPowerUpsCollected += collected;
             }
@@ -244,16 +245,17 @@ public class AchievementService {
      */
     private void submitPendingAliensDestroyed() {
         int totalAliensDestroyed = 0;
-        for (Iterator<AlienCharacter> aliens = aliensDestroyed.keySet().iterator(); aliens.hasNext();) {
+        for (Iterator<AlienCharacter> aliens = aliensDestroyed.keySet().iterator();
+            aliens.hasNext(); ) {
             final AlienCharacter alien = aliens.next();
             final int destroyed = aliensDestroyed.get(alien);
 
             // increment achievement of specific alien destroyed.
             // remove from map if successful
             if (aliensAchievementsMap.containsKey(alien) &&
-                    playService.incrementAchievement(
-                            aliensAchievementsMap.get(alien),
-                            destroyed)) {
+                playService.incrementAchievement(
+                    aliensAchievementsMap.get(alien),
+                    destroyed)) {
                 aliens.remove();
                 totalAliensDestroyed += destroyed;
             }
@@ -283,8 +285,9 @@ public class AchievementService {
      * Remove from list if successful.
      */
     private void unlockPendingAchievements() {
-        for (Iterator<Integer> achievements = unclaimedAchievements.iterator(); achievements.hasNext();) {
-            if(playService.unlockAchievement(achievements.next())) {
+        for (Iterator<Integer> achievements = unclaimedAchievements.iterator();
+            achievements.hasNext(); ) {
+            if (playService.unlockAchievement(achievements.next())) {
                 achievements.remove();
             }
         }

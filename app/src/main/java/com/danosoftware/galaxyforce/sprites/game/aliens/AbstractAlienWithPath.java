@@ -1,5 +1,7 @@
 package com.danosoftware.galaxyforce.sprites.game.aliens;
 
+import static com.danosoftware.galaxyforce.sprites.game.aliens.enums.AlienState.FINISHED_PASS;
+
 import com.danosoftware.galaxyforce.flightpath.paths.PathPoint;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.explode.ExplodeBehaviour;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.fire.FireBehaviour;
@@ -9,10 +11,7 @@ import com.danosoftware.galaxyforce.sprites.game.behaviours.spawn.SpawnBehaviour
 import com.danosoftware.galaxyforce.sprites.game.behaviours.spinner.SpinningBehaviour;
 import com.danosoftware.galaxyforce.view.Animation;
 import com.danosoftware.galaxyforce.waves.AlienCharacter;
-
 import java.util.List;
-
-import static com.danosoftware.galaxyforce.sprites.game.aliens.enums.AlienState.FINISHED_PASS;
 
 /**
  * @author Danny

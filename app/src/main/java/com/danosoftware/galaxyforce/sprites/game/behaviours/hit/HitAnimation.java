@@ -48,18 +48,25 @@ public class HitAnimation implements HitBehaviour {
         this.timeSinceHit = 0f;
     }
 
+    private void initialiseHit(float stateTime) {
+        this.hit = true;
+        this.stateTime = stateTime;
+        this.timeSinceHit = 0f;
+    }
+
     @Override
     public void startHit(float stateTime) {
-        startHitSilently(stateTime);
+        initialiseHit(stateTime);
         sounds.play(SoundEffect.ALIEN_HIT);
         vibrator.vibrate(VibrateTime.TINY);
     }
 
+    // does not cause a hit sound or any vibration.
+    // Used for followers when head followable sprite will
+    // handle sound/vibration effects.
     @Override
-    public void startHitSilently(float stateTime) {
-        this.hit = true;
-        this.stateTime = stateTime;
-        this.timeSinceHit = 0f;
+    public void startHitFollower(float stateTime) {
+        initialiseHit(stateTime);
     }
 
     @Override

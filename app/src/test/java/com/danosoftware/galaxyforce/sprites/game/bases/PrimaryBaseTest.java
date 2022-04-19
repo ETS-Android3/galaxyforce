@@ -1,36 +1,5 @@
 package com.danosoftware.galaxyforce.sprites.game.bases;
 
-import android.util.Log;
-
-import com.danosoftware.galaxyforce.enumerations.BaseMissileType;
-import com.danosoftware.galaxyforce.enumerations.PowerUpType;
-import com.danosoftware.galaxyforce.models.assets.BaseMissilesDto;
-import com.danosoftware.galaxyforce.models.screens.game.GameModel;
-import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
-import com.danosoftware.galaxyforce.services.vibration.VibrationService;
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
-import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
-import com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState;
-import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
-import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
-import com.danosoftware.galaxyforce.sprites.game.powerups.PowerUp;
-import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
-import com.danosoftware.galaxyforce.textures.Texture;
-import com.danosoftware.galaxyforce.textures.TextureDetail;
-import com.danosoftware.galaxyforce.textures.TextureService;
-
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.invocation.InvocationOnMock;
-import org.mockito.stubbing.Answer;
-import org.powermock.core.classloader.annotations.PrepareForTest;
-import org.powermock.modules.junit4.PowerMockRunner;
-
-import java.lang.reflect.Field;
-import java.util.Collections;
-import java.util.function.Predicate;
-
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
 import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
@@ -51,6 +20,30 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.powermock.api.mockito.PowerMockito.mockStatic;
 import static org.powermock.api.mockito.PowerMockito.when;
+
+import android.util.Log;
+import com.danosoftware.galaxyforce.enumerations.BaseMissileType;
+import com.danosoftware.galaxyforce.enumerations.PowerUpType;
+import com.danosoftware.galaxyforce.models.assets.BaseMissilesDto;
+import com.danosoftware.galaxyforce.models.screens.game.GameModel;
+import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
+import com.danosoftware.galaxyforce.services.vibration.VibrationService;
+import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
+import com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState;
+import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
+import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
+import com.danosoftware.galaxyforce.sprites.game.powerups.PowerUp;
+import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
+import com.danosoftware.galaxyforce.textures.Texture;
+import com.danosoftware.galaxyforce.textures.TextureDetail;
+import com.danosoftware.galaxyforce.textures.TextureService;
+import java.lang.reflect.Field;
+import java.util.Collections;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.powermock.core.classloader.annotations.PrepareForTest;
+import org.powermock.modules.junit4.PowerMockRunner;
 
 @RunWith(PowerMockRunner.class)
 @PrepareForTest({Log.class, TextureService.class})
@@ -102,15 +95,15 @@ public class PrimaryBaseTest {
         // move x left to right
         primaryBase.moveTarget(300, 0);
         primaryBase.animate(10f);
-        assertThat(primaryBase.x(), is(300));
-        assertThat(primaryBase.y(), is(0));
+        assertThat(primaryBase.x(), is(300f));
+        assertThat(primaryBase.y(), is(0f));
 
         // move x right to left
         primaryBase.move(GAME_WIDTH, 0);
         primaryBase.moveTarget(300, 0);
         primaryBase.animate(10f);
-        assertThat(primaryBase.x(), is(300));
-        assertThat(primaryBase.y(), is(0));
+        assertThat(primaryBase.x(), is(300f));
+        assertThat(primaryBase.y(), is(0f));
     }
 
     @Test()
@@ -122,15 +115,15 @@ public class PrimaryBaseTest {
         // move y bottom to top
         primaryBase.moveTarget(0, 300);
         primaryBase.animate(10f);
-        assertThat(primaryBase.x(), is(0));
-        assertThat(primaryBase.y(), is(300));
+        assertThat(primaryBase.x(), is(0f));
+        assertThat(primaryBase.y(), is(300f));
 
         // move y top to bottom
         primaryBase.move(0, GAME_HEIGHT);
         primaryBase.moveTarget(0, 300);
         primaryBase.animate(10f);
-        assertThat(primaryBase.x(), is(0));
-        assertThat(primaryBase.y(), is(300));
+        assertThat(primaryBase.x(), is(0f));
+        assertThat(primaryBase.y(), is(300f));
     }
 
     @Test()
@@ -141,8 +134,8 @@ public class PrimaryBaseTest {
         primaryBase.animate(10f);
 
         // confirm base hasn't moved
-        assertThat(primaryBase.x(), is(0));
-        assertThat(primaryBase.y(), is(0));
+        assertThat(primaryBase.x(), is(0f));
+        assertThat(primaryBase.y(), is(0f));
     }
 
     @Test()
@@ -222,23 +215,17 @@ public class PrimaryBaseTest {
     public void helperBasesShouldBeDestroyedWithPrimaryBase() {
 
         // return list containing helper base when allSprites() is called on each one
-        when(leftHelper.allSprites()).thenReturn(Collections.singletonList((ISprite) leftHelper));
-        when(rightHelper.allSprites()).thenReturn(Collections.singletonList((ISprite) rightHelper));
+        when(leftHelper.allSprites()).thenReturn(Collections.singletonList(leftHelper));
+        when(rightHelper.allSprites()).thenReturn(Collections.singletonList(rightHelper));
 
         // call primaryBase.helperExploding() when mock helpers are destroyed
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) {
-                primaryBase.helperExploding(LEFT);
-                return null;
-            }
+        doAnswer(invocation -> {
+            primaryBase.helperExploding(LEFT);
+            return null;
         }).when(leftHelper).destroy();
-        doAnswer(new Answer() {
-            @Override
-            public Object answer(InvocationOnMock invocation) {
-                primaryBase.helperExploding(RIGHT);
-                return null;
-            }
+        doAnswer(invocation -> {
+            primaryBase.helperExploding(RIGHT);
+            return null;
         }).when(rightHelper).destroy();
 
         // add mock helpers to primary base
@@ -282,12 +269,8 @@ public class PrimaryBaseTest {
         verify(rightHelper, times(1)).addSynchronisedShield(any(float.class));
 
         // count number of primary base shields
-        Long shields = primaryBase.allSprites().stream().filter(new Predicate<ISprite>() {
-            @Override
-            public boolean test(ISprite iSprite) {
-                return iSprite instanceof BaseShieldPrimary;
-            }
-        }).count();
+        Long shields = primaryBase.allSprites().stream().filter(
+            iSprite -> iSprite instanceof BaseShieldPrimary).count();
         assertThat(shields, is(1L));
     }
 
@@ -299,7 +282,8 @@ public class PrimaryBaseTest {
         primaryBase.helperCreated(RIGHT, rightHelper);
 
         // add shield to primary base
-        IPowerUp shieldPowerUp = new PowerUp(GameSpriteIdentifier.POWERUP_SHIELD, 0, 0, PowerUpType.SHIELD);
+        IPowerUp shieldPowerUp = new PowerUp(GameSpriteIdentifier.POWERUP_SHIELD, 0, 0,
+            PowerUpType.SHIELD);
         primaryBase.collectPowerUp(shieldPowerUp);
         primaryBase.animate(20f);
 
@@ -308,12 +292,8 @@ public class PrimaryBaseTest {
         verify(rightHelper, times(1)).removeShield();
 
         // count number of primary base shields
-        Long shields = primaryBase.allSprites().stream().filter(new Predicate<ISprite>() {
-            @Override
-            public boolean test(ISprite iSprite) {
-                return iSprite instanceof BaseShieldPrimary;
-            }
-        }).count();
+        Long shields = primaryBase.allSprites().stream().filter(
+            iSprite -> iSprite instanceof BaseShieldPrimary).count();
         assertThat(shields, is(0L));
     }
 

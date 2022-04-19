@@ -52,7 +52,7 @@ public final class AlienMissileRotater {
             }
 
             // calculate missile sprite rotation
-            final int missileRotation = calculateRotation(angleInRadians);
+            final float missileRotation = calculateRotation(angleInRadians);
 
             return AlienMissileRotateCalculation
                     .builder()
@@ -61,27 +61,26 @@ public final class AlienMissileRotater {
                     .build();
         }
 
-        // if base is null, fire downwards
-        return AlienMissileRotateCalculation
-                .builder()
-                .angle((float) Math.atan2(-1, 0))
-                .rotation(0)
-                .build();
+      // if base is null, fire downwards
+      return AlienMissileRotateCalculation
+          .builder()
+          .angle((float) Math.atan2(-1, 0))
+          .rotation(0f)
+          .build();
     }
 
-    /**
-     * Return alien missile's rotation angle in degrees from it's angle of travel (in radians).
-     * An angle of zero represents a missile travelling straight downwards.
-     *
-     * @param angleInRadians
-     * @return missile rotation angle in degrees
-     */
-    public static int calculateRotation(
-            final float angleInRadians
-    ) {
-        // we adjust our angle by PI/2 since we want our origin (0 degrees) to point downwards
-        return (int) Math.round(
-                (angleInRadians + HALF_PI_OFFSET) * TO_DEGREES);
-    }
+  /**
+   * Return alien missile's rotation angle in degrees from it's angle of travel (in radians). An
+   * angle of zero represents a missile travelling straight downwards.
+   *
+   * @param angleInRadians - rotation angle in radians
+   * @return missile rotation angle in degrees
+   */
+  public static float calculateRotation(
+      final float angleInRadians
+  ) {
+    // we adjust our angle by PI/2 since we want our origin (0 degrees) to point downwards
+    return (float) ((angleInRadians + HALF_PI_OFFSET) * TO_DEGREES);
+  }
 
 }

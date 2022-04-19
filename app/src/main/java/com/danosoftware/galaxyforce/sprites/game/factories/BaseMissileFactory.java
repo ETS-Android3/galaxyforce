@@ -13,7 +13,6 @@ import com.danosoftware.galaxyforce.sprites.game.missiles.bases.BaseMissileGuide
 import com.danosoftware.galaxyforce.sprites.game.missiles.bases.BaseMissileLaser;
 import com.danosoftware.galaxyforce.sprites.game.missiles.bases.BaseMissileUpwards;
 import com.danosoftware.galaxyforce.sprites.game.missiles.bases.IBaseMissile;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,25 +36,25 @@ public class BaseMissileFactory {
             final BaseMissileType baseMissileType,
             final GameModel model) {
 
-        final List<IBaseMissile> baseMissiles = new ArrayList<>();
-        final BaseMissileCharacter missileCharacter = baseMissileType.getCharacter();
-        final SoundEffect effect = missileCharacter.getSound();
+      final List<IBaseMissile> baseMissiles = new ArrayList<>();
+      final BaseMissileCharacter missileCharacter = baseMissileType.getCharacter();
+      final SoundEffect effect = missileCharacter.getSound();
 
-        // set missile default starting x and y positions.
-        final int x = base.x();
-        final int y = base.y() + (base.height() / 2) - FIRE_Y_OFFSET;
+      // set missile default starting x and y positions.
+      final float x = base.x();
+      final float y = base.y() + (base.height() / 2f) - FIRE_Y_OFFSET;
 
-        switch (baseMissileType) {
-            case BLAST:
-                // create multiple missiles that fire in different directions
-                for (float angle = 0; angle <= Math.PI; angle += BLAST_ANGLE_DELTA) {
-                    baseMissiles.add(
-                            new BaseMissileBlast(
-                                    x,
-                                    y,
-                                    missileCharacter.getAnimation(),
-                                    angle,
-                                    BaseMissileSpeed.NORMAL));
+      switch (baseMissileType) {
+        case BLAST:
+          // create multiple missiles that fire in different directions
+          for (float angle = 0; angle <= Math.PI; angle += BLAST_ANGLE_DELTA) {
+            baseMissiles.add(
+                new BaseMissileBlast(
+                    x,
+                    y,
+                    missileCharacter.getAnimation(),
+                    angle,
+                    BaseMissileSpeed.NORMAL));
                 }
                 break;
             case GUIDED:

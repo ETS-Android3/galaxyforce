@@ -8,7 +8,6 @@ import com.danosoftware.galaxyforce.waves.config.aliens.exploding.ExplosionConfi
 import com.danosoftware.galaxyforce.waves.config.aliens.missiles.MissileConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spawning.SpawnConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.spinning.SpinningConfig;
-
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NonNull;
@@ -16,28 +15,28 @@ import lombok.NonNull;
 @Getter
 public class HunterConfig extends BasicAlienConfig {
 
-    private final AlienSpeed speed;
-    private final HunterBoundariesConfig boundaries;
+  private final AlienSpeed speed;
+  private final BoundariesConfig boundaries;
 
-    @Builder
-    public HunterConfig(
-            @NonNull final AlienCharacter alienCharacter,
-            @NonNull final Integer energy,
-            final MissileConfig missileConfig,
-            final SpawnConfig spawnConfig,
-            final SpinningConfig spinningConfig,
-            final ExplosionConfig explosionConfig,
-            @NonNull final AlienSpeed speed,
-            @NonNull final HunterBoundariesConfig boundaries) {
-        super(
-                AlienType.HUNTER,
-                alienCharacter,
-                energy,
-                missileConfig,
-                spawnConfig,
-                spinningConfig,
-                explosionConfig);
-        this.speed = speed;
-        this.boundaries = boundaries;
-    }
+  @Builder
+  public HunterConfig(
+      @NonNull final AlienCharacter alienCharacter,
+      @NonNull final Integer energy,
+      final MissileConfig missileConfig,
+      final SpawnConfig spawnConfig,
+      final SpinningConfig spinningConfig,
+      final ExplosionConfig explosionConfig,
+      @NonNull final AlienSpeed speed,
+      @NonNull final BoundariesConfig boundaries) {
+    super(
+        AlienType.HUNTER,
+        alienCharacter,
+        energy,
+        missileConfig,
+        spawnConfig,
+        spinningConfig,
+        explosionConfig);
+    this.speed = speed;
+    this.boundaries = boundaries;
+  }
 }

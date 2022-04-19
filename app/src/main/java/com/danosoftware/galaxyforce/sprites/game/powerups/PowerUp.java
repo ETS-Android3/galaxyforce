@@ -1,10 +1,10 @@
 package com.danosoftware.galaxyforce.sprites.game.powerups;
 
+import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenBottom;
+
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.sprites.common.AbstractCollidingSprite;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
-
-import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenBottom;
 
 public class PowerUp extends AbstractCollidingSprite implements IPowerUp {
 
@@ -17,13 +17,13 @@ public class PowerUp extends AbstractCollidingSprite implements IPowerUp {
     private boolean isDestroyed;
 
     public PowerUp(
-            ISpriteIdentifier spriteId,
-            int x,
-            int y,
-            PowerUpType powerUpType) {
-        super(spriteId, x, y);
-        this.isDestroyed = false;
-        this.powerUpType = powerUpType;
+        ISpriteIdentifier spriteId,
+        float x,
+        float y,
+        PowerUpType powerUpType) {
+      super(spriteId, x, y);
+      this.isDestroyed = false;
+      this.powerUpType = powerUpType;
     }
 
     @Override
@@ -33,9 +33,9 @@ public class PowerUp extends AbstractCollidingSprite implements IPowerUp {
 
     @Override
     public void animate(float deltaTime) {
-        moveYByDelta((int) (POWER_UP_MOVE_PIXELS * deltaTime));
+      moveYByDelta(POWER_UP_MOVE_PIXELS * deltaTime);
 
-        // if power-up is now off screen then destory it
+        // if power-up is now off screen then destroy it
         if (offScreenBottom(this)) {
             destroy();
         }

@@ -8,11 +8,11 @@ import com.danosoftware.galaxyforce.text.Text;
  */
 public interface SpriteTextButton extends SpriteButton {
 
-    /**
-     * Get the button's text label (if any).
-     *
-     * @return the text object of the button's label
-     */
-    Text getText();
+  /**
+   * Get the button's text label (if any).
+   *
+   * @return the text object of the button's label
+   */
+  Text getText();
 
 }

@@ -5,13 +5,13 @@ import lombok.Getter;
 @Getter
 public abstract class MissileConfig {
 
-    private final MissileConfigType type;
+  private final MissileConfigType type;
 
-    public MissileConfig(MissileConfigType type) {
-        this.type = type;
-    }
+  public MissileConfig(MissileConfigType type) {
+    this.type = type;
+  }
 
-    public enum MissileConfigType {
-        MISSILE, MULTI_MISSILE
-    }
+  public enum MissileConfigType {
+    MISSILE, MULTI_MISSILE
+  }
 }

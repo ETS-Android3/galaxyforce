@@ -1,7 +1,18 @@
 package com.danosoftware.galaxyforce.sprites.game.bases;
 
-import android.util.Log;
+import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
+import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_BOTTOM;
+import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
+import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.ACTIVE;
+import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.DESTROYED;
+import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.EXPLODING;
+import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.LEFT;
+import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.RIGHT;
+import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.BASE;
+import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.BASE_LEFT;
+import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.BASE_RIGHT;
 
+import android.util.Log;
 import com.danosoftware.galaxyforce.enumerations.BaseMissileType;
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
@@ -25,23 +36,10 @@ import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
 import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
 import com.danosoftware.galaxyforce.utilities.MoveBaseHelper;
 import com.danosoftware.galaxyforce.view.Animation;
-
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-
-import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
-import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_BOTTOM;
-import static com.danosoftware.galaxyforce.constants.GameConstants.SCREEN_MID_X;
-import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.ACTIVE;
-import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.DESTROYED;
-import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.EXPLODING;
-import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.LEFT;
-import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.RIGHT;
-import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.BASE;
-import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.BASE_LEFT;
-import static com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier.BASE_RIGHT;
 
 public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary {
 
@@ -99,6 +97,12 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
      * indicates no change is needed.
      */
     private float timeUntilShieldRemoved = 0f;
+
+    /*
+     * variable to store time until helper bases should be destroyed. Value
+     * of zero indicates no change is needed.
+     */
+    private float timeUntilHelpersExplode;
 
     /* does base have shield */
     private boolean shielded = false;
@@ -232,6 +236,16 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
                     shield.animate(deltaTime);
                 }
             }
+
+            // helpers should be destroyed when timer expires
+            if (!activeHelpers.isEmpty()) {
+                timeUntilHelpersExplode -= deltaTime;
+                if (timeUntilHelpersExplode <= 0) {
+                    for (IBaseHelper aHelperBase : activeHelpers.values()) {
+                        aHelperBase.destroy();
+                    }
+                }
+            }
         }
 
         // if exploding then animate or set destroyed once finished
@@ -259,15 +273,15 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
      * Set movement weightings of base
      */
     @Override
-    public void moveTarget(int targetX, int targetY) {
+    public void moveTarget(float targetX, float targetY) {
         /*
          only allow target changes when ACTIVE.
          when in MOVING_TO_START_POSITION state, base must move to a set
          position before becoming ACTIVE
           */
-        if (state == ACTIVE) {
-            moveHelper.updateTarget(targetX, targetY);
-        }
+      if (state == ACTIVE) {
+        moveHelper.updateTarget(targetX, targetY);
+      }
     }
 
     @Override
@@ -322,7 +336,7 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
 
             // add blast missile for set time
             case MISSILE_BLAST:
-                setBaseMissileType(BaseMissileType.BLAST, 0.5f, 10f);
+                setBaseMissileType(BaseMissileType.BLAST, 0.5f, 2f);
                 break;
 
             // add fast missile for set time
@@ -332,7 +346,7 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
 
             // add guided missile for set time
             case MISSILE_GUIDED:
-                setBaseMissileType(BaseMissileType.GUIDED, 0.5f, 10f);
+                setBaseMissileType(BaseMissileType.GUIDED, 0.5f, 7.5f);
                 break;
 
             // add laser missile for set time
@@ -342,21 +356,22 @@ public class BasePrimary extends AbstractCollidingSprite implements IBasePrimary
 
             // add parallel missile for set time
             case MISSILE_PARALLEL:
-                setBaseMissileType(BaseMissileType.PARALLEL, 0.5f, 10f);
+                setBaseMissileType(BaseMissileType.PARALLEL, 0.5f, 7.5f);
                 break;
 
             // add spray missile for set time
             case MISSILE_SPRAY:
-                setBaseMissileType(BaseMissileType.SPRAY, 0.5f, 10f);
+                setBaseMissileType(BaseMissileType.SPRAY, 0.5f, 5f);
                 break;
 
             // add shield for set time
             case SHIELD:
-                addShield(10f);
+                addShield(7.5f);
                 break;
 
             // add helper bases for set time
             case HELPER_BASES:
+                timeUntilHelpersExplode = 10f;
                 if (!helpers.containsKey(LEFT)) {
                     createHelperBase(LEFT);
                 }

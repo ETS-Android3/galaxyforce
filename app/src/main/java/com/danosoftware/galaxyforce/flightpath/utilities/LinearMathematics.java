@@ -1,13 +1,12 @@
 package com.danosoftware.galaxyforce.flightpath.utilities;
 
-import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
-
-import java.util.ArrayList;
-import java.util.List;
-
 import static com.danosoftware.galaxyforce.flightpath.utilities.PointMathematics.addition;
 import static com.danosoftware.galaxyforce.flightpath.utilities.PointMathematics.multiply;
 import static com.danosoftware.galaxyforce.flightpath.utilities.PointMathematics.subtraction;
+
+import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Linear Mathematics Utilities

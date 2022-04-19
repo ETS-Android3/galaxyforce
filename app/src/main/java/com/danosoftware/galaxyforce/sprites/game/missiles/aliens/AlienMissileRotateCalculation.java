@@ -10,7 +10,7 @@ import lombok.Value;
 @Builder
 public class AlienMissileRotateCalculation {
 
-    private final float angle;
-    private final int rotation;
+  float angle;
+  float rotation;
 
 }

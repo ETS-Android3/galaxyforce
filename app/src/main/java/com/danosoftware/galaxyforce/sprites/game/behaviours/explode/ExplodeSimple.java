@@ -5,6 +5,7 @@ import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.services.vibration.VibrateTime;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
+import com.danosoftware.galaxyforce.sprites.game.aliens.IAlienFollower;
 import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
 import com.danosoftware.galaxyforce.view.Animation;
 
@@ -39,7 +40,9 @@ public class ExplodeSimple implements ExplodeBehaviour {
     }
 
     @Override
-    public void startExplosionSilently() {
+    public void startExplosionFollower(IAlienFollower alien) {
+        // start explosion for follower without sound or vibration
+        // followable alien will handle these.
         explosionTime = 0f;
     }
 

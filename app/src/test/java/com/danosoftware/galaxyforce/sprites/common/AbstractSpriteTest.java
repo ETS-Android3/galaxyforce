@@ -1,11 +1,5 @@
 package com.danosoftware.galaxyforce.sprites.common;
 
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteProperties;
-
-import org.junit.Before;
-import org.junit.Test;
-
 import static org.hamcrest.CoreMatchers.equalTo;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Mockito.mock;
@@ -13,15 +7,20 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
+import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.ISpriteProperties;
+import org.junit.Before;
+import org.junit.Test;
+
 public class AbstractSpriteTest {
 
-    private static final int HEIGHT = 24;
-    private static final int WIDTH = 32;
-    private static final int HALF_HEIGHT = HEIGHT / 2;
-    private static final int HALF_WIDTH = WIDTH / 2;
+  private static final int HEIGHT = 24;
+  private static final int WIDTH = 32;
+  private static final int HALF_HEIGHT = HEIGHT / 2;
+  private static final int HALF_WIDTH = WIDTH / 2;
 
-    // test implementation of an abstract sprite
-    private static class TestSprite extends AbstractSprite {
+  // test implementation of an abstract sprite
+  private static class TestSprite extends AbstractSprite {
         private TestSprite(ISpriteIdentifier spriteId, int x, int y, int rotation) {
             super(spriteId, x, y, rotation);
         }
@@ -88,7 +87,7 @@ public class AbstractSpriteTest {
         int halfHeight = sprite.halfHeight();
         int halfWidth = sprite.halfWidth();
 
-        // multiple unneccessary calls - should all be cached
+        // multiple unnecessary calls - should all be cached
         sprite.height();
         sprite.width();
         sprite.halfHeight();

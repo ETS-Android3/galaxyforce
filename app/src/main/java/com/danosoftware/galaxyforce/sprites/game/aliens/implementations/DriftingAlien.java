@@ -1,5 +1,13 @@
 package com.danosoftware.galaxyforce.sprites.game.aliens.implementations;
 
+import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
+import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
+import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenBottom;
+import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenLeft;
+import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenRight;
+import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenTop;
+
+import android.util.Log;
 import com.danosoftware.galaxyforce.enumerations.PowerUpType;
 import com.danosoftware.galaxyforce.sprites.game.aliens.AbstractAlien;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.explode.ExplosionBehaviourFactory;
@@ -9,78 +17,73 @@ import com.danosoftware.galaxyforce.sprites.game.behaviours.powerup.PowerUpBehav
 import com.danosoftware.galaxyforce.sprites.game.behaviours.spawn.SpawnBehaviourFactory;
 import com.danosoftware.galaxyforce.sprites.game.behaviours.spinner.SpinningBehaviourFactory;
 import com.danosoftware.galaxyforce.waves.config.aliens.types.DriftingConfig;
-
 import lombok.Builder;
 import lombok.NonNull;
 
-import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_HEIGHT;
-import static com.danosoftware.galaxyforce.constants.GameConstants.GAME_WIDTH;
-import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenBottom;
-import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenLeft;
-import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenRight;
-import static com.danosoftware.galaxyforce.utilities.OffScreenTester.offScreenTop;
-
 /**
- * Alien that drifts from starting position across the screen.
- * When it reaches the edge of the screen, it reappears on the other side.
+ * Alien that drifts from starting position across the screen. When it reaches the edge of the
+ * screen, it reappears on the other side.
  */
 public class DriftingAlien extends AbstractAlien {
 
-    // offset applied to x and y every move
-    private final int xDelta;
-    private final int yDelta;
+  // offset applied to x and y every move
+  private final float xDelta;
+  private final float yDelta;
 
-    /* how many seconds to delay before alien starts */
-    private float timeDelayStart;
+  /* how many seconds to delay before alien starts */
+  private float timeDelayStart;
 
-    @Builder
-    public DriftingAlien(
-            @NonNull final ExplosionBehaviourFactory explosionFactory,
-            @NonNull final SpawnBehaviourFactory spawnFactory,
-            @NonNull final SpinningBehaviourFactory spinningFactory,
-            @NonNull final PowerUpBehaviourFactory powerUpFactory,
-            @NonNull final FireBehaviourFactory fireFactory,
-            @NonNull final HitBehaviourFactory hitFactory,
-            @NonNull final DriftingConfig alienConfig,
-            final PowerUpType powerUpType,
-            @NonNull final Integer xStart,
-            @NonNull final Integer yStart,
-            @NonNull final Float timeDelayStart,
-            @NonNull final Boolean restartImmediately) {
+  @Builder
+  public DriftingAlien(
+      @NonNull final ExplosionBehaviourFactory explosionFactory,
+      @NonNull final SpawnBehaviourFactory spawnFactory,
+      @NonNull final SpinningBehaviourFactory spinningFactory,
+      @NonNull final PowerUpBehaviourFactory powerUpFactory,
+      @NonNull final FireBehaviourFactory fireFactory,
+      @NonNull final HitBehaviourFactory hitFactory,
+      @NonNull final DriftingConfig alienConfig,
+      final PowerUpType powerUpType,
+      @NonNull final Float xStart,
+      @NonNull final Float yStart,
+      @NonNull final Float timeDelayStart,
+      @NonNull final Boolean restartImmediately) {
 
-        super(
-                alienConfig.getAlienCharacter(),
-                alienConfig.getAlienCharacter().getAnimation(),
-                xStart,
-                yStart,
-                alienConfig.getEnergy(),
-                fireFactory.createFireBehaviour(
-                        alienConfig.getMissileConfig()),
-                powerUpFactory.createPowerUpBehaviour(
+    super(
+        alienConfig.getAlienCharacter(),
+        alienConfig.getAlienCharacter().getAnimation(),
+        xStart,
+        yStart,
+        alienConfig.getEnergy(),
+        fireFactory.createFireBehaviour(
+            alienConfig.getMissileConfig()),
+        powerUpFactory.createPowerUpBehaviour(
                         powerUpType),
                 spawnFactory.createSpawnBehaviour(
                         alienConfig.getSpawnConfig()),
                 hitFactory.createHitBehaviour(
-                        alienConfig.getAlienCharacter().getHitAnimation()),
-                explosionFactory.createExplosionBehaviour(
-                        alienConfig.getExplosionConfig(),
-                        alienConfig.getAlienCharacter()),
-                spinningFactory.createSpinningBehaviour(
-                        alienConfig.getSpinningConfig(),
-                        alienConfig.getSpeed()));
+                    alienConfig.getAlienCharacter().getHitAnimation()),
+        explosionFactory.createExplosionBehaviour(
+            alienConfig.getExplosionConfig(),
+            alienConfig.getAlienCharacter()),
+        spinningFactory.createSpinningBehaviour(
+            alienConfig.getSpinningConfig(),
+            alienConfig.getSpeed()));
 
-        waiting();
+    waiting();
 
-        // set positional and movement behaviour
-        this.timeDelayStart = timeDelayStart;
+    // set positional and movement behaviour
+    this.timeDelayStart = timeDelayStart;
 
-        // calculate the deltas to be applied each move
-        final int movePixelsPerSecond = alienConfig.getSpeed().getSpeedInPixelsPerSeconds();
-        final float angle = alienConfig.getAngle();
+    // calculate the deltas to be applied each move
+    final int movePixelsPerSecond = alienConfig.getSpeed().getSpeedInPixelsPerSeconds();
+    final float angle = alienConfig.getAngle();
+    Log.i("ALIEN", Float.toString(angle));
 
-        this.xDelta = (int) (movePixelsPerSecond * Math.cos(angle));
-        this.yDelta = (int) (movePixelsPerSecond * Math.sin(angle));
-    }
+    this.xDelta = movePixelsPerSecond * (float) Math.cos(angle);
+    this.yDelta = movePixelsPerSecond * (float) Math.sin(angle);
+    Log.i("ALIEN", Float.toString(xDelta));
+    Log.i("ALIEN", Float.toString(yDelta));
+  }
 
     @Override
     public void animate(float deltaTime) {
@@ -89,20 +92,20 @@ public class DriftingAlien extends AbstractAlien {
         /* if active then alien can move */
         if (isActive()) {
 
-            // move alien by calculated deltas
-            moveByDelta(
-                    (int) (xDelta * deltaTime),
-                    (int) (yDelta * deltaTime));
+          // move alien by calculated deltas
+          moveByDelta(
+              xDelta * deltaTime,
+              yDelta * deltaTime);
 
-            // test if alien is off the screen and is continuing to move
-            // away. In that case, shift aline to the opposite side of screen
-            // so it will re-appear on the opposite side.
-            if (offScreenLeft(this) && xDelta < 0) {
-                moveXByDelta(GAME_WIDTH - x() + halfWidth());
-            }
-            if (offScreenRight(this) && xDelta > 0) {
-                moveXByDelta(-GAME_WIDTH - ((x() + halfWidth()) % GAME_WIDTH));
-            }
+          // test if alien is off the screen and is continuing to move
+          // away. In that case, shift aline to the opposite side of screen
+          // so it will re-appear on the opposite side.
+          if (offScreenLeft(this) && xDelta < 0) {
+            moveXByDelta(GAME_WIDTH - x() + halfWidth());
+          }
+          if (offScreenRight(this) && xDelta > 0) {
+            moveXByDelta(-GAME_WIDTH - ((x() + halfWidth()) % GAME_WIDTH));
+          }
             if (offScreenBottom(this) && yDelta < 0) {
                 moveYByDelta(GAME_HEIGHT - y() + halfHeight());
             }

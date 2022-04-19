@@ -26,10 +26,9 @@ public class PowerUpSimple implements PowerUpBehaviour {
     }
 
     /**
-     * Behaviour that will create a random power-up from a supplied list when
-     * alien is destroyed.
+     * Behaviour that will create a random power-up from a supplied list when alien is destroyed.
      *
-     * @param model - game handler to receive power-up
+     * @param model    - game handler to receive power-up
      * @param powerUps - list of power-ups to choose from
      */
     public PowerUpSimple(GameModel model, PowerUpType... powerUps) {

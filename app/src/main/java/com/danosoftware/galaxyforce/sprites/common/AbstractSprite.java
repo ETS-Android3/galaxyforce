@@ -5,52 +5,52 @@ import com.danosoftware.galaxyforce.sprites.properties.ISpriteProperties;
 
 public abstract class AbstractSprite implements ISprite {
 
-    // sprite's x,y position
-    protected int x, y;
+  // sprite's x,y position
+  protected float x, y;
 
-    // sprite's angle rotation
-    int rotation;
+  // sprite's angle rotation
+  float rotation;
 
-    // sprite's width and height.
-    // this is obtained from the sprite's properties
-    // but not available until the sprite is loaded.
-    // these may not be available on construction
-    // but will be cached once available.
-    private int width, height;
-    private int halfWidth, halfHeight;
-    private boolean dimensionsCached;
+  // sprite's width and height.
+  // this is obtained from the sprite's properties
+  // but not available until the sprite is loaded.
+  // these may not be available on construction
+  // but will be cached once available.
+  private int width, height;
+  private int halfWidth, halfHeight;
+  private boolean dimensionsCached;
 
-    // sprite properties
-    private ISpriteIdentifier spriteId;
+  // sprite properties
+  private ISpriteIdentifier spriteId;
 
-    AbstractSprite(
-            ISpriteIdentifier spriteId,
-            int x,
-            int y,
-            int rotation) {
-        this.spriteId = spriteId;
-        this.x = x;
-        this.y = y;
-        this.rotation = rotation;
-        this.dimensionsCached = false;
+  AbstractSprite(
+      ISpriteIdentifier spriteId,
+      float x,
+      float y,
+      float rotation) {
+    this.spriteId = spriteId;
+    this.x = x;
+    this.y = y;
+    this.rotation = rotation;
+    this.dimensionsCached = false;
+  }
+
+  protected AbstractSprite(
+      ISpriteIdentifier spriteId,
+      float x,
+      float y) {
+    this(spriteId, x, y, 0);
+  }
+
+  @Override
+  public void changeType(ISpriteIdentifier newSpriteId) {
+    if (this.spriteId != newSpriteId) {
+      this.spriteId = newSpriteId;
+      this.dimensionsCached = false;
     }
+  }
 
-    protected AbstractSprite(
-            ISpriteIdentifier spriteId,
-            int x,
-            int y) {
-        this(spriteId, x, y, 0);
-    }
-
-    @Override
-    public void changeType(ISpriteIdentifier newSpriteId) {
-        if (this.spriteId != newSpriteId) {
-            this.spriteId = newSpriteId;
-            this.dimensionsCached = false;
-        }
-    }
-
-    @Override
+  @Override
     public int width() {
         if (dimensionsCached) {
             return width;
@@ -74,38 +74,38 @@ public abstract class AbstractSprite implements ISprite {
         return cacheHalfWidth();
     }
 
-    @Override
-    public int halfHeight() {
-        if (dimensionsCached) {
-            return halfHeight;
-        }
-        return cacheHalfHeight();
+  @Override
+  public int halfHeight() {
+    if (dimensionsCached) {
+      return halfHeight;
     }
+    return cacheHalfHeight();
+  }
 
-    @Override
-    public int rotation() {
-        return rotation;
-    }
+  @Override
+  public float rotation() {
+    return rotation;
+  }
 
-    @Override
-    public int x() {
-        return x;
-    }
+  @Override
+  public float x() {
+    return x;
+  }
 
-    @Override
-    public int y() {
-        return y;
-    }
+  @Override
+  public float y() {
+    return y;
+  }
 
-    @Override
-    public ISpriteIdentifier spriteId() {
-        return spriteId;
-    }
+  @Override
+  public ISpriteIdentifier spriteId() {
+    return spriteId;
+  }
 
-    // cache and return width from sprite properties if available
-    private int cacheWidth() {
-        ISpriteProperties props = spriteId.getProperties();
-        if (props != null) {
+  // cache and return width from sprite properties if available
+  private int cacheWidth() {
+    ISpriteProperties props = spriteId.getProperties();
+    if (props != null) {
             cacheDimensions(props);
             return width;
         }
