@@ -1,101 +1,115 @@
 package com.danosoftware.galaxyforce.sprites.game.starfield;
 
-import com.danosoftware.galaxyforce.view.Animation;
-import java.util.ArrayList;
-import java.util.EnumMap;
-import java.util.List;
-import java.util.Map;
+import static com.danosoftware.galaxyforce.waves.utilities.Randomiser.random;
+import static com.danosoftware.galaxyforce.waves.utilities.Randomiser.randomFloat;
 
 /**
  * Star field of multiple animated stars.
- * <p>
- * Stars are created from a supplied template.
- * <p>
- * The created stars can be fast-forwarded to the current state. This allows
- * a new starfield to be created using different sprite IDs that should be
- * the identical state to the previous starfield.
- * <p>
- * This ensures seamless animation of the starfield when switching screens.
  */
 public class StarField {
 
-    private final StarFieldTemplate starFieldTemplate;
+    /* number of stars to show */
+    private static final int NUMBER_OF_STARS = 125;
 
-    // map of star-tuples grouped per speed
-    // allows more efficient updating stars with the same speed
-    private final Map<StarSpeed, List<StarTuple>> starSpeedMap;
+    // Star speed will either be slow, normal or fast.
+    // Stars with an index less than "slow index" will be slow.
+    // Stars with an index greater than "fast index" will be fast.
+    // All others will be normal speed.
+    private static final int SLOW_STAR_INDEX = NUMBER_OF_STARS / 3;
+    private static final int FAST_STAR_INDEX = SLOW_STAR_INDEX * 2;
 
-    // separate list of all stars to simplify returning all sprites
-    private final List<Star> stars;
+    // stars in our star-field
+    private final Star[] starField;
 
-    public StarField(
-            StarFieldTemplate starFieldTemplate,
-            StarAnimationType starAnimationType) {
+    // height of our playing area
+    private final int height;
 
-        this.starFieldTemplate = starFieldTemplate;
-        this.stars = new ArrayList<>();
+    private float stateTime;
 
-        // initialise map
-        this.starSpeedMap = new EnumMap<>(StarSpeed.class);
-        for (StarSpeed speed : StarSpeed.values()) {
-            starSpeedMap.put(speed, new ArrayList<>());
-        }
+    // star colours to choose from when creating a random colour.
+    // weighted so white stars are more common
+    private static final StarColour[] STAR_COLOURS = {
+        StarColour.WHITE, StarColour.BLUE, StarColour.RED, StarColour.WHITE
+    };
 
-        final Animation[] animations = starAnimationType.getAnimations();
-        for (StarTemplate starTemplate : starFieldTemplate.getStarTemplates()) {
-            Star star = new Star(
-                    starTemplate.getInitialX(),
-                    starTemplate.getInitialY(),
-                    animations[starTemplate.getAnimationIndex()],
-                    starTemplate.getAnimationStateTime());
-
-            stars.add(star);
-
-            List<StarTuple> starsWithSameSpeed = starSpeedMap.get(starTemplate.getSpeed());
-            StarTuple starTuple = new StarTuple(
-                    star,
-                    starTemplate.getInitialY());
-            starsWithSameSpeed.add(starTuple);
-        }
+    public StarField(int width, int height) {
+        this.starField = setupStars(width, height);
+        this.height = height;
+        this.stateTime = 0f;
     }
 
-
+    /**
+     * Animate our star-field. Each star will descend according to time
+     * since last animation frame and speed of star.
+     *
+     * @param deltaTime - time since last animation frame
+     */
     public void animate(float deltaTime) {
 
-        // increase total elapsed time since starfield created.
-        // used to compute current star positions/animation.
-        // also needed to allow template to create future stars in the same state
-        starFieldTemplate.increaseTimeElapsed(deltaTime);
+        stateTime += deltaTime;
 
-        // each star with the same speed, will move the same computed amount.
-        // more efficient if we update stars in batches based on their speed.
-        for (StarSpeed speed : StarSpeed.values()) {
+        // compute distances moved for each star speed
+        final float slowDistanceDelta = distanceDelta(StarSpeed.SLOW, deltaTime);
+        final float normalDistanceDelta = distanceDelta(StarSpeed.MEDIUM, deltaTime);
+        final float fastDistanceDelta = distanceDelta(StarSpeed.FAST, deltaTime);
 
-            // for consistent movement, we compute the distance from the initial
-            // position using the total time elapsed since initial construction.
-            float distanceDelta =
-                (speed.getPixelsPerSecond() * starFieldTemplate.getTimeElapsed())
-                    % starFieldTemplate.getHeight();
+        for (int idx = 0; idx < starField.length; idx++) {
 
-            for (StarTuple starTuple : starSpeedMap.get(speed)) {
+            // move star down screen according to speed.
+            float starY = starField[idx].y;
+            if (idx < SLOW_STAR_INDEX) {
+                starY -= slowDistanceDelta;
+            } else if (idx < FAST_STAR_INDEX) {
+                starY -= normalDistanceDelta;
+            } else {
+                starY -= fastDistanceDelta;
+            }
 
-                float starY = starTuple.getInitialY() - distanceDelta;
-
-                // if star has reached the bottom of screen then re-position at the top.
-                if (starY < 0) {
-                    starY = starFieldTemplate.getHeight() + starY;
-                }
-
-                Star star = starTuple.getStar();
-                star.moveY(starY);
-
-                // update animation frame
-                star.animate(starFieldTemplate.getTimeElapsed());
+            // if star has reached the bottom of screen then re-position at the top.
+            if (starY < 0) {
+                starField[idx].y = height + starY;
+            } else {
+                starField[idx].y = starY;
             }
         }
     }
 
-    public List<Star> getSprites() {
+    /**
+     * return the star-field
+     */
+    public Star[] getStarField() {
+        return starField;
+    }
+
+    /**
+     * initialise background stars.
+     * returns an array of stars in random positions with random colours.
+     */
+    private Star[] setupStars(int width, int height) {
+        Star[] stars = new Star[NUMBER_OF_STARS];
+
+        for (int idx = 0; idx < stars.length; idx++) {
+            float x = width * randomFloat();
+            float y = height * randomFloat();
+            StarColour starColour = getRandomStarColour();
+            stars[idx] = new Star(x, y, starColour);
+        }
+
         return stars;
+    }
+
+    /**
+     * compute the distance a star has moved based on the speed and time elapsed.
+     */
+    private float distanceDelta(StarSpeed speed, float timeElapsed) {
+        return (speed.getPixelsPerSecond() * timeElapsed) % height;
+    }
+
+    /**
+     * return a random star colour
+     */
+    private StarColour getRandomStarColour() {
+        int colourIndex = (int) (STAR_COLOURS.length * random());
+        return STAR_COLOURS[colourIndex];
     }
 }

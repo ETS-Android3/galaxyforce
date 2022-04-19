@@ -6,10 +6,8 @@ import static org.junit.Assert.assertThat;
 
 import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
 import com.danosoftware.galaxyforce.flightpath.paths.PathSpeed;
-
-import org.junit.Test;
-
 import java.util.List;
+import org.junit.Test;
 
 /**
  * Test Circular Mathematics Utility

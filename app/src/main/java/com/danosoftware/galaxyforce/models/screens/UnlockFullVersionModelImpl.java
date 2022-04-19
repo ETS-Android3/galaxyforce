@@ -20,35 +20,40 @@ import com.danosoftware.galaxyforce.models.screens.flashing.FlashingText;
 import com.danosoftware.galaxyforce.models.screens.flashing.FlashingTextImpl;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarAnimationType;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarFieldTemplate;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
-import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.providers.BasicMenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.MenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
+import com.danosoftware.galaxyforce.text.TextChangeListener;
 import com.danosoftware.galaxyforce.text.TextPositionX;
+import com.danosoftware.galaxyforce.text.TextProvider;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public class UnlockFullVersionModelImpl implements Model, BillingObserver, ButtonModel,
-    SkuDetailsListener {
+    SkuDetailsListener, TextChangeListener {
 
   /* logger tag */
   private static final String LOCAL_TAG = "UnlockFullVersionModel";
 
   private final Game game;
-  private final StarField starField;
   private final ISprite logo;
 
   // messages to display on the screen
   private final List<Text> messages;
+  private final TextProvider textProvider;
+  private final MenuSpriteProvider spriteProvider;
   private final Controller controller;
   private final BillingService billingService;
   // all visible buttons
   private final List<SpriteTextButton> buttons;
   private FlashingText flashingText;
+  private boolean updateText;
+  private boolean updateSprites;
   private ModelState modelState;
   // details of the full game unlock purchase
   private volatile SkuDetails skuDetails;
@@ -61,8 +66,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
   public UnlockFullVersionModelImpl(
       Game game,
       Controller controller,
-      BillingService billingService,
-      StarFieldTemplate starFieldTemplate) {
+      BillingService billingService) {
 
     this.game = game;
     this.controller = controller;
@@ -70,10 +74,11 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
     this.modelState = ModelState.RUNNING;
     this.buttons = new ArrayList<>();
     this.messages = new ArrayList<>();
+    this.textProvider = new TextProvider();
+    this.spriteProvider = new BasicMenuSpriteProvider();
     this.flashingText = null;
-    this.starField = new StarField(starFieldTemplate, StarAnimationType.MENU);
     this.logo = new SplashSprite(GameConstants.SCREEN_MID_X, 817,
-        MenuSpriteIdentifier.GALAXY_FORCE);
+        SpriteDetails.GALAXY_FORCE);
     this.reBuildSprites = false;
 
     // register this model with the billing service
@@ -124,6 +129,10 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
     else if (billingService.getFullGamePurchaseState() == PurchaseState.NOT_READY) {
       prepareUnknownPurchaseState();
     }
+
+    // trigger refresh of model sprites/text
+    updateText = true;
+    updateSprites = true;
   }
 
   private void prepareUpgradeFullVersion(boolean showButtons) {
@@ -158,7 +167,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
               TextPositionX.CENTRE,
               300 + 50));
       messages.add(
-          Text.newTextRelativePositionX(
+          Text.newUntrustedTextRelativePositionX(
               skuDetails.getPrice(),
               TextPositionX.CENTRE,
               300));
@@ -175,6 +184,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
               TextPositionX.CENTRE,
               200)),
           0.5f,
+          this,
           false);
     }
   }
@@ -215,6 +225,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
                 TextPositionX.CENTRE,
                 300)),
         0.5f,
+        this,
         false);
 
     addNewMenuButton(0, "BACK", ButtonType.EXIT);
@@ -256,6 +267,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
                 TextPositionX.CENTRE,
                 300)),
         0.5f,
+        this,
         false);
 
     addNewMenuButton(0, "BACK", ButtonType.EXIT);
@@ -294,8 +306,8 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
         100 + (row * 170),
         label,
         buttonType,
-        MenuSpriteIdentifier.MAIN_MENU,
-        MenuSpriteIdentifier.MAIN_MENU_PRESSED);
+        SpriteDetails.MAIN_MENU,
+        SpriteDetails.MAIN_MENU_PRESSED);
 
     // add a new menu button to controller's list of touch controllers
     controller.addTouchController(new DetectButtonTouch(button));
@@ -305,31 +317,32 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
   }
 
   @Override
-  public List<ISprite> getSprites() {
-
-    List<ISprite> sprites = new ArrayList<>(starField.getSprites());
-    sprites.add(logo);
-
-    for (SpriteTextButton button : buttons) {
-      sprites.add(button.getSprite());
+  public TextProvider getTextProvider() {
+    if (updateText) {
+      textProvider.clear();
+      for (SpriteTextButton button : buttons) {
+        textProvider.add(button.getText());
+      }
+      textProvider.addAll(messages);
+      if (flashingText != null) {
+        textProvider.addAll(flashingText.text());
+      }
+      updateText = false;
     }
-
-    return sprites;
+    return textProvider;
   }
 
   @Override
-  public List<Text> getText() {
-
-    List<Text> text = new ArrayList<>();
-    for (SpriteTextButton button : buttons) {
-      text.add(button.getText());
+  public SpriteProvider getSpriteProvider() {
+    if (updateSprites) {
+      spriteProvider.clear();
+      spriteProvider.add(logo);
+      for (SpriteTextButton button : buttons) {
+        spriteProvider.add(button.getSprite());
+      }
+      updateSprites = false;
     }
-    text.addAll(messages);
-    if (flashingText != null) {
-      text.addAll(flashingText.text());
-    }
-
-    return text;
+    return spriteProvider;
   }
 
   @Override
@@ -345,9 +358,6 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
       game.screenReturn();
       return;
     }
-
-    // move stars
-    starField.animate(deltaTime);
 
     /*
      * refresh screen sprites. triggered following the billing state change.
@@ -375,6 +385,11 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
   @Override
   public RgbColour background() {
     return DEFAULT_BACKGROUND_COLOUR;
+  }
+
+  @Override
+  public boolean animateStars() {
+    return true;
   }
 
   @Override
@@ -437,5 +452,10 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
   public void onFullGamePurchaseStateChange(PurchaseState state) {
     Log.d(GameConstants.LOG_TAG, "Received full game purchase update: " + state.name());
     this.reBuildSprites = true;
+  }
+
+  @Override
+  public void onTextChange() {
+    updateText = true;
   }
 }

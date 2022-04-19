@@ -36,8 +36,6 @@ import com.danosoftware.galaxyforce.services.savedgame.SavedGame;
 import com.danosoftware.galaxyforce.services.sound.SoundEffect;
 import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
-import com.danosoftware.galaxyforce.sprites.common.ICollidingSprite;
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.bases.BasePrimary;
 import com.danosoftware.galaxyforce.sprites.game.bases.IBase;
@@ -46,22 +44,25 @@ import com.danosoftware.galaxyforce.sprites.game.factories.AlienFactory;
 import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.missiles.bases.IBaseMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarAnimationType;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarFieldTemplate;
+import com.danosoftware.galaxyforce.sprites.providers.GamePlaySpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.GameSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
+import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.text.Text;
+import com.danosoftware.galaxyforce.text.TextChangeListener;
 import com.danosoftware.galaxyforce.text.TextPositionX;
+import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.utilities.OverlapTester;
+import com.danosoftware.galaxyforce.utilities.Rectangle;
 import com.danosoftware.galaxyforce.waves.managers.WaveManager;
 import com.danosoftware.galaxyforce.waves.managers.WaveManagerImpl;
 import com.danosoftware.galaxyforce.waves.utilities.PowerUpAllocatorFactory;
 import com.danosoftware.galaxyforce.waves.utilities.WaveCreationUtils;
 import com.danosoftware.galaxyforce.waves.utilities.WaveFactory;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class GamePlayModelImpl implements Model, GameModel {
+public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
 
   /*
    * ******************************************************
@@ -84,7 +85,6 @@ public class GamePlayModelImpl implements Model, GameModel {
    */
   // handles aliens and waves
   private final IAlienManager alienManager;
-  private final SpriteButton pauseButton;
   // sound player that provide sound effects
   private final SoundPlayerService sounds;
   // vibration service
@@ -111,6 +111,9 @@ public class GamePlayModelImpl implements Model, GameModel {
   private IBasePrimary primaryBase;
   // get ready text instances
   private Text waveText;
+  private final TextProvider textProvider;
+  private final GamePlaySpriteProvider spriteProvider;
+  private boolean updateText;
 
   /*
    * Instance variables required in GET_READY state
@@ -123,6 +126,11 @@ public class GamePlayModelImpl implements Model, GameModel {
   // set to false whenever a life is lost
   private boolean noLivesLostInWave;
 
+  private boolean transitioningToUpgradeScreen;
+  private boolean transitioningToGameCompletedScreen;
+
+  private final TaskService taskService;
+
   public GamePlayModelImpl(
       Game game,
       Controller controller,
@@ -133,7 +141,7 @@ public class GamePlayModelImpl implements Model, GameModel {
       SavedGame savedGame,
       AchievementService achievements,
       AssetManager assets,
-      StarFieldTemplate starFieldTemplate) {
+      TaskService taskService) {
     this.game = game;
     this.wave = wave;
     this.billingService = billingService;
@@ -141,10 +149,15 @@ public class GamePlayModelImpl implements Model, GameModel {
     this.vibrator = vibrator;
     this.savedGame = savedGame;
     this.achievements = achievements;
+    this.taskService = taskService;
+    this.transitioningToUpgradeScreen = false;
+    this.transitioningToGameCompletedScreen = false;
 
     // no text initially
     this.waveText = null;
     this.getReadyFlashingText = null;
+    this.textProvider = new TextProvider();
+    this.spriteProvider = new GameSpriteProvider();
 
     /*
      * create alien manager used to co-ordinate aliens waves.
@@ -154,8 +167,7 @@ public class GamePlayModelImpl implements Model, GameModel {
     /*
      * create asset manager to co-ordinate in-game assets
      */
-    StarField starField = new StarField(starFieldTemplate, StarAnimationType.GAME);
-    this.assets = new GamePlayAssetsManager(starField);
+    this.assets = new GamePlayAssetsManager(spriteProvider);
 
     // reset lives
     this.lives = START_LIVES;
@@ -163,8 +175,9 @@ public class GamePlayModelImpl implements Model, GameModel {
     /*
      * add pause button
      */
-    this.pauseButton = new PauseButton(this);
+    final SpriteButton pauseButton = new PauseButton(this);
     controller.addTouchController(new DetectButtonTouch(pauseButton));
+    spriteProvider.setButtons(Collections.singletonList(pauseButton.getSprite()));
 
     /*
      * add base controller
@@ -188,19 +201,21 @@ public class GamePlayModelImpl implements Model, GameModel {
    */
 
   @Override
-  public List<ISprite> getSprites() {
-    List<ISprite> gameSprites = new ArrayList<>();
-    gameSprites.addAll(assets.getStars());
-    gameSprites.addAll(alienManager.allAliens());
-    gameSprites.addAll(primaryBase.allSprites());
-    gameSprites.addAll(assets.getAliensMissiles());
-    gameSprites.addAll(assets.getBaseMissiles());
-    gameSprites.addAll(assets.getPowerUps());
-    gameSprites.add(pauseButton.getSprite());
-    gameSprites.addAll(assets.getFlags());
-    gameSprites.addAll(assets.getLives());
+  public TextProvider getTextProvider() {
+    if (updateText) {
+      textProvider.clear();
+      if (modelState == ModelState.GET_READY) {
+        textProvider.add(waveText);
+        textProvider.addAll(getReadyFlashingText.text());
+      }
+      updateText = false;
+    }
+    return textProvider;
+  }
 
-    return gameSprites;
+  @Override
+  public SpriteProvider getSpriteProvider() {
+    return spriteProvider;
   }
 
   /*
@@ -208,32 +223,6 @@ public class GamePlayModelImpl implements Model, GameModel {
    * PUBLIC INTERFACE METHODS
    * ******************************************************
    */
-
-  private List<ISprite> getPausedSprites() {
-    List<ISprite> pausedSprites = new ArrayList<>();
-    pausedSprites.addAll(assets.getStars());
-    pausedSprites.addAll(alienManager.allAliens());
-    pausedSprites.addAll(primaryBase.allSprites());
-    pausedSprites.addAll(assets.getAliensMissiles());
-    pausedSprites.addAll(assets.getBaseMissiles());
-    pausedSprites.addAll(assets.getPowerUps());
-    pausedSprites.addAll(assets.getFlags());
-    pausedSprites.addAll(assets.getLives());
-
-    return pausedSprites;
-  }
-
-  @Override
-  public List<Text> getText() {
-
-    List<Text> text = new ArrayList<>();
-    if (modelState == ModelState.GET_READY) {
-      text.add(waveText);
-      text.addAll(getReadyFlashingText.text());
-    }
-
-    return text;
-  }
 
   @Override
   public void update(float deltaTime) {
@@ -254,13 +243,10 @@ public class GamePlayModelImpl implements Model, GameModel {
         updateGetReady(deltaTime);
         break;
 
+      case UPGRADING:
       case PAUSE:
-        game.changeToGamePausedScreen(getPausedSprites(), background());
-        this.modelState = previousModelState;
-        break;
-
       case GAME_OVER:
-        game.changeToGameOverScreen(wave);
+        // no action
         break;
 
       default:
@@ -269,9 +255,10 @@ public class GamePlayModelImpl implements Model, GameModel {
         throw new GalaxyForceException(errorMsg);
     }
 
-    // move game sprites
-    alienManager.animate(deltaTime);
-    assets.animate(deltaTime);
+    if (modelState != ModelState.PAUSE) {
+      alienManager.animate(deltaTime);
+      assets.animate(deltaTime);
+    }
 
     // check for game object collision
     collisionDetection();
@@ -300,6 +287,12 @@ public class GamePlayModelImpl implements Model, GameModel {
     if (modelState != ModelState.PAUSE) {
       this.previousModelState = this.modelState;
     }
+
+    // if we're playing start transition to pause screen
+    if (modelState == ModelState.GET_READY || modelState == ModelState.PLAYING) {
+      game.changeToGamePausedScreen(spriteProvider.pausedSprites(), background());
+    }
+
     this.modelState = ModelState.PAUSE;
     vibrator.stop();
     sounds.pause();
@@ -311,12 +304,32 @@ public class GamePlayModelImpl implements Model, GameModel {
   @Override
   public void resume() {
     Log.i(TAG, "Resume Game.");
+
+    // if we were paused, return to previous state so we can carry on where we left off.
+    if (modelState == ModelState.PAUSE) {
+      this.modelState = this.previousModelState;
+    }
+
+    // we want to return back to pause state after upgrading.
+    // give user option of exiting if they didn't upgrade.
+    if (modelState == ModelState.UPGRADING) {
+      modelState = ModelState.PLAYING;
+      pause();
+    }
+
     sounds.resume();
+    transitioningToUpgradeScreen = false;
+    transitioningToGameCompletedScreen = false;
   }
 
   @Override
   public RgbColour background() {
     return primaryBase.background();
+  }
+
+  @Override
+  public boolean animateStars() {
+    return true;
   }
 
   /**
@@ -380,6 +393,10 @@ public class GamePlayModelImpl implements Model, GameModel {
    * base method will manage setting up the next level.
    */
   private void updatePlayingState() {
+    if (isTransitioningToAnotherScreen()) {
+      return;
+    }
+
     if (isWaveComplete()) {
 
       // reward user with end of wave achievements
@@ -396,8 +413,9 @@ public class GamePlayModelImpl implements Model, GameModel {
           && (billingService.getFullGamePurchaseState() == PurchaseState.NOT_PURCHASED
           || billingService.getFullGamePurchaseState() == PurchaseState.NOT_READY
           || billingService.getFullGamePurchaseState() == PurchaseState.PENDING)) {
+
         Log.i(TAG, "Exceeded maximum free zone. Must upgrade.");
-        game.changeToReturningScreen(ScreenType.UPGRADE_FULL_VERSION);
+        this.modelState = ModelState.UPGRADING;
 
         /*
          * the user may not upgrade but we still want to store the
@@ -405,11 +423,14 @@ public class GamePlayModelImpl implements Model, GameModel {
          * when the next wave is set-up but if the user does not
          * upgrade, this set-up will never be called.
          */
-        final int unlockedWave = wave + 1;
-        int maxLevelUnlocked = savedGame.getGameLevel();
-        if (unlockedWave > maxLevelUnlocked) {
-          savedGame.saveGameLevel(unlockedWave);
-        }
+          final int unlockedWave = wave + 1;
+          int maxLevelUnlocked = savedGame.getGameLevel();
+          if (unlockedWave > maxLevelUnlocked) {
+            savedGame.saveGameLevel(unlockedWave);
+          }
+
+          transitioningToUpgradeScreen = true;
+          game.changeToReturningScreen(ScreenType.UPGRADE_FULL_VERSION);
 
         /*
          * must return at this point to prevent next wave being
@@ -422,6 +443,7 @@ public class GamePlayModelImpl implements Model, GameModel {
       // check if all waves have been completed
       else if (wave >= GameConstants.MAX_WAVES) {
         Log.i(TAG, "Game completed.");
+        transitioningToGameCompletedScreen = true;
         game.changeToScreen(ScreenType.GAME_COMPLETE);
         return;
       }
@@ -467,56 +489,80 @@ public class GamePlayModelImpl implements Model, GameModel {
         assets.alienMissilesDestroyed();
   }
 
+  private boolean isTransitioningToAnotherScreen() {
+    return transitioningToUpgradeScreen || transitioningToGameCompletedScreen;
+  }
+
   /**
    * checks for sprite collisions.
    */
   private void collisionDetection() {
 
-    for (IAlien eachAlien : alienManager.activeAliens()) {
-      // check for base and alien collisions
-      for (IBase eachBase : primaryBase.activeBases()) {
-        if (checkCollision(eachAlien, eachBase)) {
-          eachBase.onHitBy(eachAlien);
-        }
-      }
+    List<IBase> bases = primaryBase.activeBases();
+    List<IAlien> aliens = alienManager.activeAliens();
+    List<IAlienMissile> aliensMissiles = assets.getAliensMissiles();
+    List<IPowerUp> powerUps = assets.getPowerUps();
 
-      /*
-       * check for base missiles and alien collisions.
-       *
-       * we also check if base missile and alien have collided before.
-       * base missiles can only damage the same alien once.
-       * used for missile implementations that do not destroy
-       * themselves on initial collision (e.g. laser).
-       *
-       * lastly, each missile could already be destroyed if it has hit another alien
-       * in the current collision detection loop. So, we also check for this.
-       * Failure to do this, could result in a single base missile destroying
-       * multiple closely located aliens.
-       */
-      for (IBaseMissile eachBaseMissile : assets.getBaseMissiles()) {
-        if (checkCollision(eachAlien, eachBaseMissile)
-            && !eachBaseMissile.hitBefore(eachAlien)
-            && !eachBaseMissile.isDestroyed()) {
-          eachAlien.onHitBy(eachBaseMissile);
+    // collision detection for base with aliens, alien missiles and power-ups
+    if (!aliens.isEmpty() || !aliensMissiles.isEmpty() || !powerUps.isEmpty()) {
+      for (IBase eachBase : bases) {
+        Rectangle baseBounds = eachBase.getBounds();
+
+        // collision detection for base and aliens
+        for (IAlien eachAlien : aliens) {
+          Rectangle alienBounds = eachAlien.getBounds();
+          if (checkCollision(alienBounds, baseBounds)) {
+            eachBase.onHitBy(eachAlien);
+          }
+        }
+
+        // collision detection for base and alien missiles
+        if (eachBase.isActive()) {
+          for (IAlienMissile eachAlienMissile : aliensMissiles) {
+            Rectangle alienMissileBounds = eachAlienMissile.getBounds();
+            if (checkCollision(alienMissileBounds, baseBounds)) {
+              eachBase.onHitBy(eachAlienMissile);
+            }
+          }
+        }
+
+        // collision detection for base and power ups
+        if (eachBase.isActive()) {
+          for (IPowerUp eachPowerUp : powerUps) {
+            Rectangle powerUpBounds = eachPowerUp.getBounds();
+            if (checkCollision(powerUpBounds, baseBounds)) {
+              eachBase.collectPowerUp(eachPowerUp);
+              sounds.play(SoundEffect.POWER_UP_COLLIDE);
+              achievements.powerUpCollected(eachPowerUp.getPowerUpType());
+            }
+          }
         }
       }
     }
 
-    for (IBase eachBase : primaryBase.activeBases()) {
-
-      // collision detection for base and alien missiles
-      for (IAlienMissile eachAlienMissile : assets.getAliensMissiles()) {
-        if (checkCollision(eachAlienMissile, eachBase)) {
-          eachBase.onHitBy(eachAlienMissile);
-        }
-      }
-
-      // collision detection for base and power ups
-      for (IPowerUp eachPowerUp : assets.getPowerUps()) {
-        if (checkCollision(eachPowerUp, eachBase)) {
-          eachBase.collectPowerUp(eachPowerUp);
-          sounds.play(SoundEffect.POWER_UP_COLLIDE);
-          achievements.powerUpCollected(eachPowerUp.getPowerUpType());
+    /*
+     * check for base missiles and alien collisions.
+     *
+     * we also check if base missile and alien have collided before.
+     * base missiles can only damage the same alien once.
+     * used for missile implementations that do not destroy
+     * themselves on initial collision (e.g. laser).
+     *
+     * lastly, each missile could already be destroyed if it has hit another alien
+     * in the current collision detection loop. So, we also check for this.
+     * Failure to do this, could result in a single base missile destroying
+     * multiple closely located aliens.
+     */
+    if (!aliens.isEmpty()) {
+      for (IBaseMissile eachBaseMissile : assets.getBaseMissiles()) {
+        Rectangle baseMissileBounds = eachBaseMissile.getBounds();
+        for (IAlien eachAlien : aliens) {
+          if (!eachBaseMissile.isDestroyed() && !eachBaseMissile.hitBefore(eachAlien)) {
+            Rectangle alienBounds = eachAlien.getBounds();
+            if (checkCollision(alienBounds, baseMissileBounds)) {
+              eachAlien.onHitBy(eachBaseMissile);
+            }
+          }
         }
       }
     }
@@ -525,8 +571,8 @@ public class GamePlayModelImpl implements Model, GameModel {
   /**
    * helper method to check if two sprites have collided. returns true if sprites have collided.
    */
-  private boolean checkCollision(ICollidingSprite sprite1, ICollidingSprite sprite2) {
-    return OverlapTester.overlapRectangles(sprite1.getBounds(), sprite2.getBounds());
+  private boolean checkCollision(Rectangle r1, Rectangle r2) {
+    return OverlapTester.overlapRectangles(r1, r2);
   }
 
   /**
@@ -569,16 +615,18 @@ public class GamePlayModelImpl implements Model, GameModel {
         yPosition);
     this.getReadyFlashingText = new FlashingTextImpl(
         Collections.singletonList(getReadyText),
-        0.5f);
+        0.5f,
+        this);
 
     timeSinceGetReady = 0f;
+    updateText = true;
   }
 
   /**
    * add new base - normally called at start of game or after losing a life.
    */
   private void addNewBase() {
-    primaryBase = new BasePrimary(this, sounds, vibrator);
+    primaryBase = new BasePrimary(this, sounds, vibrator, spriteProvider);
 
     // bind base controller to the new base
     TouchBaseControllerModel baseController = new BaseDragModel(primaryBase);
@@ -609,6 +657,7 @@ public class GamePlayModelImpl implements Model, GameModel {
       getReadyFlashingText = null;
       waveText = null;
       modelState = ModelState.PLAYING;
+      updateText = true;
     }
   }
 
@@ -628,6 +677,7 @@ public class GamePlayModelImpl implements Model, GameModel {
     else {
       this.modelState = ModelState.GAME_OVER;
       achievements.gameOver();
+      game.changeToGameOverScreen(wave);
     }
   }
 
@@ -646,12 +696,17 @@ public class GamePlayModelImpl implements Model, GameModel {
     WaveCreationUtils creationUtils = new WaveCreationUtils(alienFactory, pathFactory,
         powerUpAllocatorFactory);
     WaveFactory waveFactory = new WaveFactory(creationUtils, powerUpAllocatorFactory);
-    WaveManager waveManager = new WaveManagerImpl(waveFactory);
+    WaveManager waveManager = new WaveManagerImpl(waveFactory, taskService);
 
-    return new AlienManager(waveManager, achievements);
+    return new AlienManager(waveManager, achievements, spriteProvider);
+  }
+
+  @Override
+  public void onTextChange() {
+    updateText = true;
   }
 
   private enum ModelState {
-    GET_READY, PLAYING, PAUSE, GAME_OVER
+    GET_READY, PLAYING, PAUSE, GAME_OVER, UPGRADING
   }
 }

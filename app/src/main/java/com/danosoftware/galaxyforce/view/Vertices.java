@@ -1,44 +1,57 @@
 package com.danosoftware.galaxyforce.view;
 
+import android.opengl.GLES20;
+import com.danosoftware.galaxyforce.utilities.GlUtils;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
-import java.nio.IntBuffer;
+import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
-import javax.microedition.khronos.opengles.GL10;
 
 class Vertices {
 
-  private final GLGraphics glGraphics;
+  private static final String TAG = "Vertices";
+
+  private static final int BYTES_PER_FLOAT = 4;
+  private static final int BYTES_PER_SHORT = 2;
+
+  private static final int POSITION_COORDS_PER_VERTEX = 2;   // x,y
+  private static final int TEXTURE_COORDS_PER_VERTEX = 2;    // u,v
+  private static final int COLOUR_ELEMENTS_PER_VERTEX = 4;   // r,g,b,a
+
   private final boolean hasColor;
   private final boolean hasTexCoords;
-  private final int vertexSize;
-  private final IntBuffer vertices;
-  private final int[] tmpBuffer;
+  private final int vertexStride;
+  private final FloatBuffer vertices;
   private final ShortBuffer indices;
 
-  public Vertices(GLGraphics glGraphics, int maxVertices, int maxIndices, boolean hasColor,
+  public Vertices(int maxVertices, int maxIndices, boolean hasColor,
       boolean hasTexCoords) {
-    this.glGraphics = glGraphics;
     this.hasColor = hasColor;
     this.hasTexCoords = hasTexCoords;
-    this.vertexSize = (2 + (hasColor ? 4 : 0) + (hasTexCoords ? 2 : 0)) * 4;
-    this.tmpBuffer = new int[maxVertices * vertexSize / 4];
 
-    ByteBuffer buffer = ByteBuffer.allocateDirect(maxVertices * vertexSize);
+    // each vertex requires 2 values for x,y position
+    // plus an optional 4 values for RGBA colour (if colour required)
+    // plus an optional 2 values for texture co-ordinates (if texture required)
+    // each float value requires 4 bytes
+    this.vertexStride = (POSITION_COORDS_PER_VERTEX
+        + (hasColor ? COLOUR_ELEMENTS_PER_VERTEX : 0)
+        + (hasTexCoords ? TEXTURE_COORDS_PER_VERTEX : 0))
+        * BYTES_PER_FLOAT;
+
+    // allocate a buffer with a byte-size big enough to hold all vertices (floats)
+    ByteBuffer buffer = ByteBuffer.allocateDirect(maxVertices * vertexStride);
     buffer.order(ByteOrder.nativeOrder());
-    vertices = buffer.asIntBuffer();
-    buffer = ByteBuffer.allocateDirect(maxIndices * Short.SIZE / 8);
+    vertices = buffer.asFloatBuffer();
+
+    // allocate a buffer with a byte-size big enough to hold all indices (shorts)
+    buffer = ByteBuffer.allocateDirect(maxIndices * BYTES_PER_SHORT);
     buffer.order(ByteOrder.nativeOrder());
     indices = buffer.asShortBuffer();
   }
 
   public void setVertices(float[] vertices, int offset, int length) {
     this.vertices.clear();
-    int len = offset + length;
-    for (int i = offset, j = 0; i < len; i++, j++) {
-      tmpBuffer[j] = Float.floatToRawIntBits(vertices[i]);
-    }
-    this.vertices.put(tmpBuffer, 0, length);
+    this.vertices.put(vertices, offset, length);
     this.vertices.flip();
   }
 
@@ -49,44 +62,79 @@ class Vertices {
   }
 
   public void bind() {
-    GL10 gl = glGraphics.getGl();
 
-    gl.glEnableClientState(GL10.GL_VERTEX_ARRAY);
-    vertices.position(0);
-    gl.glVertexPointer(2, GL10.GL_FLOAT, vertexSize, vertices);
+    // holds the offset to the wanted values from the start of each vertex
+    int offset = 0;
 
+    // prepare position co-ordinates from vertices
+    vertices.position(offset);
+    GLES20.glVertexAttribPointer(
+        GLShaderHelper.sPositionHandle,
+        POSITION_COORDS_PER_VERTEX,
+        GLES20.GL_FLOAT,
+        false,
+        vertexStride,
+        vertices);
+    GLES20.glEnableVertexAttribArray(GLShaderHelper.sPositionHandle);
+
+    offset += POSITION_COORDS_PER_VERTEX;
+
+    // prepare colour values from vertices (if enabled)
     if (hasColor) {
-      gl.glEnableClientState(GL10.GL_COLOR_ARRAY);
-      vertices.position(2);
-      gl.glColorPointer(4, GL10.GL_FLOAT, vertexSize, vertices);
+      vertices.position(offset);
+      GLES20.glVertexAttribPointer(
+          GLShaderHelper.sColourHandle,
+          COLOUR_ELEMENTS_PER_VERTEX,
+          GLES20.GL_FLOAT,
+          false,
+          vertexStride,
+          vertices);
+      GLES20.glEnableVertexAttribArray(GLShaderHelper.sColourHandle);
+
+      offset += COLOUR_ELEMENTS_PER_VERTEX;
     }
 
+    // prepare texture co-ordinates from vertices (if enabled)
     if (hasTexCoords) {
-      gl.glEnableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
-      vertices.position(hasColor ? 6 : 2);
-      gl.glTexCoordPointer(2, GL10.GL_FLOAT, vertexSize, vertices);
+      vertices.position(offset);
+      GLES20.glVertexAttribPointer(
+          GLShaderHelper.sTexturePositionHandle,
+          TEXTURE_COORDS_PER_VERTEX,
+          GLES20.GL_FLOAT,
+          false,
+          vertexStride,
+          vertices);
+      GLES20.glEnableVertexAttribArray(GLShaderHelper.sTexturePositionHandle);
     }
+    // report any errors seen during binding - removed in release
+    GlUtils.checkGlError("bindSpriteVertices");
   }
 
   public void draw(int primitiveType, int offset, int numVertices) {
-    GL10 gl = glGraphics.getGl();
 
-    if (indices != null) {
+    if (indices != null && indices.hasRemaining()) {
       indices.position(offset);
-      gl.glDrawElements(primitiveType, numVertices, GL10.GL_UNSIGNED_SHORT, indices);
+      GLES20.glDrawElements(primitiveType, numVertices, GLES20.GL_UNSIGNED_SHORT, indices);
     } else {
-      gl.glDrawArrays(primitiveType, offset, numVertices);
+      GLES20.glDrawArrays(primitiveType, offset, numVertices);
     }
+
+    // report any errors seen during drawing - removed in release
+    GlUtils.checkGlError("drawSpriteVertices");
   }
 
   public void unbind() {
-    GL10 gl = glGraphics.getGl();
+
+    // Disable vertex array.  Not strictly necessary.
+    GLES20.glDisableVertexAttribArray(GLShaderHelper.sPositionHandle);
+    if (hasColor) {
+      GLES20.glDisableVertexAttribArray(GLShaderHelper.sColourHandle);
+    }
     if (hasTexCoords) {
-      gl.glDisableClientState(GL10.GL_TEXTURE_COORD_ARRAY);
+      GLES20.glDisableVertexAttribArray(GLShaderHelper.sTexturePositionHandle);
     }
 
-    if (hasColor) {
-      gl.glDisableClientState(GL10.GL_COLOR_ARRAY);
-    }
+    // report any errors seen during unbinding - removed in release
+    GlUtils.checkGlError("unbindSpriteVertices");
   }
 }

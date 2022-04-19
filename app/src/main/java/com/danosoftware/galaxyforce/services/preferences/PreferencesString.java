@@ -3,9 +3,7 @@ package com.danosoftware.galaxyforce.services.preferences;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
-
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
-
 import java.util.Map;
 
 /**

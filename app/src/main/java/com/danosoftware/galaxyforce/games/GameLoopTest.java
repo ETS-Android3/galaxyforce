@@ -7,6 +7,7 @@ import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.services.configurations.ConfigurationService;
 import com.danosoftware.galaxyforce.services.googleplay.GooglePlayServices;
+import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.view.GLGraphics;
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +31,11 @@ public class GameLoopTest extends GameImpl {
       GLSurfaceView glView,
       BillingService billingService,
       GooglePlayServices playService,
-      ConfigurationService configurationService) {
+      ConfigurationService configurationService,
+      TaskService taskService) {
 
-    super(context, glGraphics, glView, billingService, playService, configurationService);
+    super(context, glGraphics, glView, billingService, playService, configurationService,
+        taskService);
     this.activity = (Activity) context;
     this.sequence = createSequences();
     this.nextSequence = 0;

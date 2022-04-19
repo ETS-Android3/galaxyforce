@@ -16,20 +16,21 @@ import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.models.screens.flashing.FlashingText;
 import com.danosoftware.galaxyforce.models.screens.flashing.FlashingTextImpl;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarAnimationType;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarFieldTemplate;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
-import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.providers.BasicMenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.MenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
+import com.danosoftware.galaxyforce.text.TextChangeListener;
 import com.danosoftware.galaxyforce.text.TextPositionX;
+import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.utilities.WaveUtilities;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class GameOverModelImpl implements Model, ButtonModel {
+public class GameOverModelImpl implements Model, ButtonModel, TextChangeListener {
 
   /*
    * ******************************************************
@@ -48,10 +49,12 @@ public class GameOverModelImpl implements Model, ButtonModel {
    */
   /* reference to pause menu buttons */
   private final List<SpriteTextButton> menuButtons;
-  /* stars sprites */
-  private final StarField starField;
+  private final TextProvider textProvider;
+  private final MenuSpriteProvider spriteProvider;
   /* reference to flashing game over text */
   private final FlashingText flashingGameOverText;
+  private boolean updateText;
+  private boolean updateSprites;
   private final int lastWave;
   /* reference to current state */
   private GameOverState modelState;
@@ -59,13 +62,13 @@ public class GameOverModelImpl implements Model, ButtonModel {
   public GameOverModelImpl(
       Game game,
       Controller controller,
-      int lastWave,
-      StarFieldTemplate starFieldTemplate) {
+      int lastWave) {
     this.game = game;
-    this.starField = new StarField(starFieldTemplate, StarAnimationType.GAME);
     this.lastWave = lastWave;
     this.menuButtons = new ArrayList<>();
     this.modelState = GameOverState.RUNNING;
+    this.textProvider = new TextProvider();
+    this.spriteProvider = new BasicMenuSpriteProvider();
 
     // build menu buttons
     addNewMenuButton(controller, 3, "PLAY", ButtonType.PLAY);
@@ -79,7 +82,10 @@ public class GameOverModelImpl implements Model, ButtonModel {
         100 + (4 * 170));
     this.flashingGameOverText = new FlashingTextImpl(
         Collections.singletonList(gameOver),
-        0.5f);
+        0.5f,
+            this);
+    this.updateText = true;
+    this.updateSprites = true;
   }
 
   /*
@@ -90,16 +96,6 @@ public class GameOverModelImpl implements Model, ButtonModel {
    * ******************************************************
    */
 
-  @Override
-  public List<ISprite> getSprites() {
-
-    List<ISprite> sprites = new ArrayList<>(starField.getSprites());
-    for (SpriteTextButton eachButton : menuButtons) {
-      sprites.add(eachButton.getSprite());
-    }
-    return sprites;
-  }
-
   /*
    * ******************************************************
    * PUBLIC INTERFACE METHODS
@@ -107,14 +103,28 @@ public class GameOverModelImpl implements Model, ButtonModel {
    */
 
   @Override
-  public List<Text> getText() {
-
-    List<Text> text = new ArrayList<>();
-    for (SpriteTextButton eachButton : menuButtons) {
-      text.add(eachButton.getText());
+  public TextProvider getTextProvider() {
+    if (updateText) {
+      textProvider.clear();
+      for (SpriteTextButton eachButton : menuButtons) {
+        textProvider.add(eachButton.getText());
+      }
+      textProvider.addAll(flashingGameOverText.text());
+      updateText = false;
     }
-    text.addAll(flashingGameOverText.text());
-    return text;
+    return textProvider;
+  }
+
+  @Override
+  public SpriteProvider getSpriteProvider() {
+    if (updateSprites) {
+      spriteProvider.clear();
+      for (SpriteTextButton eachButton : menuButtons) {
+        spriteProvider.add(eachButton.getSprite());
+      }
+      updateSprites = false;
+    }
+    return spriteProvider;
   }
 
   @Override
@@ -123,12 +133,12 @@ public class GameOverModelImpl implements Model, ButtonModel {
 
       case RUNNING:
         // normal state before any buttons are pressed
-        starField.animate(deltaTime);
         break;
 
       case EXIT:
         // exit game. go to select level screen
         game.changeToScreen(ScreenType.SELECT_LEVEL);
+        this.modelState = GameOverState.RUNNING;
         break;
 
       case NEW_GAME:
@@ -140,6 +150,7 @@ public class GameOverModelImpl implements Model, ButtonModel {
           nextWave = lastWave;
         }
         game.changeToGameScreen(nextWave);
+        this.modelState = GameOverState.RUNNING;
         break;
 
       case OPTIONS:
@@ -201,6 +212,11 @@ public class GameOverModelImpl implements Model, ButtonModel {
   }
 
   @Override
+  public boolean animateStars() {
+    return true;
+  }
+
+  @Override
   public void pause() {
     // no action for this model
   }
@@ -213,14 +229,23 @@ public class GameOverModelImpl implements Model, ButtonModel {
         100 + (row * 170),
         label,
         buttonType,
-        GameSpriteIdentifier.MENU_BUTTON_UP,
-        GameSpriteIdentifier.MENU_BUTTON_DOWN);
+        SpriteDetails.MENU_BUTTON_UP,
+        SpriteDetails.MENU_BUTTON_DOWN);
 
     // add a new menu button to controller's list of touch controllers
     controller.addTouchController(new DetectButtonTouch(button));
 
     // add new button to list
     menuButtons.add(button);
+
+    // trigger update
+    updateText = true;
+    updateSprites = true;
+  }
+
+  @Override
+  public void onTextChange() {
+    updateText = true;
   }
 
   /*

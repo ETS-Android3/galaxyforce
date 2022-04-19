@@ -1,24 +1,17 @@
 package com.danosoftware.galaxyforce.models.screens;
 
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
-import com.danosoftware.galaxyforce.text.Text;
-import java.util.List;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
+import com.danosoftware.galaxyforce.text.TextProvider;
 
 /**
  * Generic interface for any models containing the logic behind any screens.
  */
 public interface Model {
 
-  /**
-   * Used to initialise model after model has been instantiated. The model should only be
-   * initialised once.
-   */
-//    void initialise();
+  TextProvider getTextProvider();
 
-  List<ISprite> getSprites();
-
-  List<Text> getText();
+  SpriteProvider getSpriteProvider();
 
   void update(float deltaTime);
 
@@ -50,4 +43,9 @@ public interface Model {
    * Get background colour.
    */
   RgbColour background();
+
+  /**
+   * Should stars animate for this model.
+   */
+  boolean animateStars();
 }

@@ -5,7 +5,6 @@ import com.danosoftware.galaxyforce.input.Input;
 import com.danosoftware.galaxyforce.input.Input.TouchEvent;
 import com.danosoftware.galaxyforce.view.Camera2D;
 import com.danosoftware.galaxyforce.view.Vector2;
-
 import java.util.ArrayList;
 import java.util.List;
 

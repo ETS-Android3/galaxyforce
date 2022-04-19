@@ -1,5 +1,6 @@
 package com.danosoftware.galaxyforce.sprites.game.bases;
 
+import static com.danosoftware.galaxyforce.common.SpriteDetailsCommon.setUpSpriteDetailsForTests;
 import static com.danosoftware.galaxyforce.enumerations.BaseMissileType.NORMAL;
 import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.ACTIVE;
 import static com.danosoftware.galaxyforce.sprites.game.bases.enums.BaseState.EXPLODING;
@@ -7,7 +8,6 @@ import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.L
 import static com.danosoftware.galaxyforce.sprites.game.bases.enums.HelperSide.RIGHT;
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
-import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -29,9 +29,7 @@ import com.danosoftware.galaxyforce.sprites.game.missiles.bases.BaseMissileUpwar
 import com.danosoftware.galaxyforce.sprites.game.missiles.bases.IBaseMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
 import com.danosoftware.galaxyforce.sprites.game.powerups.PowerUp;
-import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
-import com.danosoftware.galaxyforce.textures.Texture;
-import com.danosoftware.galaxyforce.textures.TextureDetail;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.textures.TextureService;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -65,18 +63,14 @@ public class BaseHelperTest {
 
     @Before
     public void setup() {
-        // mock any static android logging
-        mockStatic(Log.class);
+      // mock any static android logging
+      mockStatic(Log.class);
 
-        final TextureDetail mockTextureDetail = new TextureDetail("mock", "0", "0", "100", "100");
-        Texture mockTexture = mock(Texture.class);
-        when(mockTexture.getTextureDetail(any(String.class))).thenReturn(mockTextureDetail);
-        for (GameSpriteIdentifier spriteId : GameSpriteIdentifier.values()) {
-            spriteId.updateProperties(mockTexture);
-        }
+      // pre-populate sprite details
+      setUpSpriteDetailsForTests();
 
-        when(primaryBase.x()).thenReturn(INITIAL_X);
-        when(primaryBase.y()).thenReturn(INITIAL_Y);
+      when(primaryBase.x()).thenReturn(INITIAL_X);
+      when(primaryBase.y()).thenReturn(INITIAL_Y);
     }
 
 
@@ -203,10 +197,11 @@ public class BaseHelperTest {
 
     @Test()
     public void shouldCallPrimaryBasePowerUp() {
-        IPowerUp parallelMissilePowerUp = new PowerUp(GameSpriteIdentifier.POWERUP_MISSILE_PARALLEL, 0, 0, PowerUpType.MISSILE_PARALLEL);
-        baseHelper = shieldedHelper(LEFT);
-        baseHelper.collectPowerUp(parallelMissilePowerUp);
-        verify(primaryBase, times(1)).collectPowerUp(parallelMissilePowerUp);
+      IPowerUp parallelMissilePowerUp = new PowerUp(SpriteDetails.POWERUP_MISSILE_PARALLEL, 0, 0,
+          PowerUpType.MISSILE_PARALLEL);
+      baseHelper = shieldedHelper(LEFT);
+      baseHelper.collectPowerUp(parallelMissilePowerUp);
+      verify(primaryBase, times(1)).collectPowerUp(parallelMissilePowerUp);
     }
 
     @Test()

@@ -3,6 +3,7 @@ package com.danosoftware.galaxyforce.models.screens.level;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
+
 import com.danosoftware.galaxyforce.billing.BillingObserver;
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.billing.PurchaseState;
@@ -22,12 +23,13 @@ import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.services.savedgame.HighestLevelChangeObserver;
 import com.danosoftware.galaxyforce.services.savedgame.SavedGame;
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarAnimationType;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarFieldTemplate;
-import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.providers.ScrollableSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
+import com.danosoftware.galaxyforce.text.ScrollableTextProvider;
 import com.danosoftware.galaxyforce.text.Text;
+import com.danosoftware.galaxyforce.text.TextProvider;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -44,11 +46,12 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
   // map of zone number to x position
   private final Map<Integer, Integer> zoneXPosition;
   // on-screen components
-  private final StarField starField;
   private final List<SpriteButton> buttons;
   private final List<SpriteTextButton> textButtons;
-  private final List<SpriteTextButton> staticTextButtons;
   private final List<Text> messages;
+  private final ScrollableTextProvider textProvider;
+  private final ScrollableSpriteProvider spriteProvider;
+
   /* reference to controller */
   private final Controller controller;
   // reference to the billing service
@@ -76,8 +79,7 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
       Game game,
       Controller controller,
       BillingService billingService,
-      SavedGame savedGame,
-      StarFieldTemplate starFieldTemplate) {
+      SavedGame savedGame) {
     this.game = game;
     this.controller = controller;
     this.billingService = billingService;
@@ -85,9 +87,10 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
     this.modelState = ModelState.RUNNING;
     this.reBuildAssets = false;
     this.messages = new ArrayList<>();
+    this.textProvider = new ScrollableTextProvider();
+    this.spriteProvider = new ScrollableSpriteProvider();
     this.buttons = new ArrayList<>();
     this.textButtons = new ArrayList<>();
-    this.staticTextButtons = new ArrayList<>();
 
     /*
      * calculate zone from highest wave reached - must use double to avoid
@@ -95,9 +98,6 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
      */
     this.maxWaveUnlocked = savedGame.getGameLevel();
     this.zone = (int) Math.ceil((double) maxWaveUnlocked / GameConstants.WAVES_PER_ZONE);
-
-    /* set-up star-field */
-    this.starField = new StarField(starFieldTemplate, StarAnimationType.MENU);
 
     // create map of zone numbers to zone page x positions
     this.zoneXPosition = new HashMap<>();
@@ -130,7 +130,6 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
 
     buttons.clear();
     textButtons.clear();
-    staticTextButtons.clear();
     messages.clear();
 
     /*
@@ -164,6 +163,22 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
     this.xPosition = zoneXPosition.get(zone);
     this.xTarget = zoneXPosition.get(zone);
     this.xOffset = 0;
+
+    // update sprites to display
+    spriteProvider.clear();
+    for (SpriteButton button : buttons) {
+      spriteProvider.add(button.getSprite());
+    }
+    for (SpriteTextButton button : textButtons) {
+      spriteProvider.add(button.getSprite());
+    }
+
+    // update text to display
+    textProvider.clear();
+    for (SpriteTextButton button : textButtons) {
+      textProvider.add(button.getText());
+    }
+    textProvider.addAll(messages);
   }
 
   /**
@@ -211,8 +226,8 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
           xPosition + 100 + (column * 170),
           100 + (row * 170),
           zone,
-          MenuSpriteIdentifier.PREVIOUS_LEVEL,
-          MenuSpriteIdentifier.PREVIOUS_LEVEL_PRESSED);
+          SpriteDetails.PREVIOUS_LEVEL,
+          SpriteDetails.PREVIOUS_LEVEL_PRESSED);
       controller.addTouchController(new DetectButtonTouch(prevButton));
       buttons.add(prevButton);
     }
@@ -226,8 +241,8 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
           xPosition + 100 + (column * 170),
           100 + (row * 170),
           zone,
-          MenuSpriteIdentifier.NEXT_LEVEL,
-          MenuSpriteIdentifier.NEXT_LEVEL_PRESSED);
+          SpriteDetails.NEXT_LEVEL,
+          SpriteDetails.NEXT_LEVEL_PRESSED);
       controller.addTouchController(new DetectButtonTouch(nextButton));
       buttons.add(nextButton);
     }
@@ -242,61 +257,27 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
   }
 
   @Override
-  public List<ISprite> getSprites() {
-    List<ISprite> sprites = new ArrayList<>();
-    for (SpriteButton button : buttons) {
-      sprites.add(button.getSprite());
-    }
-    for (SpriteTextButton button : textButtons) {
-      sprites.add(button.getSprite());
-    }
-
-    return sprites;
+  public TextProvider getTextProvider() {
+    textProvider.updateScrollPosition(xPosition);
+    return textProvider;
   }
 
   @Override
-  public List<ISprite> getStaticSprites() {
-    List<ISprite> sprites = new ArrayList<>(starField.getSprites());
-    for (SpriteTextButton button : staticTextButtons) {
-      sprites.add(button.getSprite());
-    }
-
-    return sprites;
-  }
-
-  @Override
-  public List<Text> getStaticText() {
-    List<Text> text = new ArrayList<>();
-    for (SpriteTextButton button : staticTextButtons) {
-      text.add(button.getText());
-    }
-
-    return text;
-  }
-
-  @Override
-  public List<Text> getText() {
-    List<Text> text = new ArrayList<>();
-    for (SpriteTextButton button : textButtons) {
-      text.add(button.getText());
-    }
-    text.addAll(messages);
-
-    return text;
+  public SpriteProvider getSpriteProvider() {
+    spriteProvider.updateScrollPosition(xPosition);
+    return spriteProvider;
   }
 
   @Override
   public void update(float deltaTime) {
     if (modelState == ModelState.GO_BACK) {
       game.changeToScreen(ScreenType.MAIN_MENU);
+      modelState = ModelState.RUNNING;
     }
 
     // calculate screen scroll speed based on distance from target.
     float speed = (xTarget - xPosition) * 10;
     xPosition = xPosition + (speed * deltaTime);
-
-    // move stars
-    starField.animate(deltaTime);
 
     /*
      * refresh screen sprites. triggered following the billing state change.
@@ -386,12 +367,17 @@ public class SelectLevelModelImpl implements LevelModel, SelectLevelModel, Billi
 
   @Override
   public void resume() {
-    // no implementation
+    // no action
   }
 
   @Override
   public RgbColour background() {
     return DEFAULT_BACKGROUND_COLOUR;
+  }
+
+  @Override
+  public boolean animateStars() {
+    return true;
   }
 
   @Override

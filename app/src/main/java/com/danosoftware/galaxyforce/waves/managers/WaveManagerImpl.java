@@ -1,17 +1,14 @@
 package com.danosoftware.galaxyforce.waves.managers;
 
+import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.waves.SubWave;
 import com.danosoftware.galaxyforce.waves.Wave;
 import com.danosoftware.galaxyforce.waves.utilities.WaveFactory;
 import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 public class WaveManagerImpl implements WaveManager {
 
-  // executor service for threads to create waves
-  private final ExecutorService pool;
   // factory used to create waves
   private final WaveFactory waveFactory;
   // iterator for sub-waves
@@ -19,11 +16,14 @@ public class WaveManagerImpl implements WaveManager {
   // wave manager state
   private WaveManagerState state;
 
-  public WaveManagerImpl(WaveFactory waveFactory) {
-    this.waveFactory = waveFactory;
+  // service for threads to create waves
+  private final TaskService taskService;
 
-    // created single thread pool for creating waves
-    this.pool = Executors.newFixedThreadPool(1);
+  public WaveManagerImpl(
+      WaveFactory waveFactory,
+      TaskService taskService) {
+    this.waveFactory = waveFactory;
+    this.taskService = taskService;
 
     // set initial state
     this.state = WaveManagerState.NONE;
@@ -33,7 +33,7 @@ public class WaveManagerImpl implements WaveManager {
   public synchronized void setUpWave(int wave) {
     this.state = WaveManagerState.CREATING_WAVE;
     WaveCreator waveCreator = new WaveCreator(this, waveFactory, wave);
-    pool.execute(waveCreator);
+    taskService.execute(waveCreator);
   }
 
   /*

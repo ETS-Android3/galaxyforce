@@ -38,7 +38,8 @@ public class AlienMissileDownwardsRotated extends AbstractAlienMissile {
     super(
         animation,
         xStart,
-        yStart);
+        yStart,
+        animation.getKeyFrame(0, Animation.ANIMATION_LOOPING));
 
     // if missile is starting above base then calculate a direct angle to the base.
     final float angle;

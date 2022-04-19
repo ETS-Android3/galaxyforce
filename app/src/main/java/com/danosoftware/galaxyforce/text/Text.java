@@ -1,8 +1,6 @@
 package com.danosoftware.galaxyforce.text;
 
-import android.util.Log;
 import com.danosoftware.galaxyforce.constants.GameConstants;
-import java.util.regex.Pattern;
 
 /* used to store any game text. contains a string of the actual text and the x, y position */
 public class Text {
@@ -24,9 +22,14 @@ public class Text {
   private final String text;
 
   // private constructor as static factories are used
-  private Text(String text, int x, int y, TextPositionX textPositionX,
-      TextPositionY textPositionY) {
-    this.text = removeInvalidCharacters(text);
+  private Text(
+          String text,
+          int x,
+          int y,
+          TextPositionX textPositionX,
+          TextPositionY textPositionY,
+          boolean trustedText) {
+    this.text = trustedText ? text : removeInvalidCharacters(text);
     this.x = x;
     this.y = y;
     this.textPositionX = textPositionX;
@@ -34,19 +37,38 @@ public class Text {
   }
 
   // static factory for text in absolute position
-  public static Text newTextAbsolutePosition(String text, int x, int y) {
-    return new Text(text, x, y, null, null);
+  public static Text newTextAbsolutePosition(
+          String text,
+          int x,
+          int y) {
+    return new Text(text, x, y, null, null, true);
   }
 
   // static factory for text using relative position enum
-  public static Text newTextRelativePositionBoth(String text, TextPositionX textPositionX,
-      TextPositionY textPositionY) {
-    return new Text(text, 0, 0, textPositionX, textPositionY);
+  public static Text newTextRelativePositionBoth(
+          String text,
+          TextPositionX textPositionX,
+          TextPositionY textPositionY) {
+    return new Text(text, 0, 0, textPositionX, textPositionY, true);
   }
 
   // static factory for text using relative position enum
-  public static Text newTextRelativePositionX(String text, TextPositionX textPositionX, int y) {
-    return new Text(text, 0, y, textPositionX, null);
+  public static Text newTextRelativePositionX(
+          String text,
+          TextPositionX textPositionX,
+          int y) {
+    return new Text(text, 0, y, textPositionX, null, true);
+  }
+
+  // static factory for untrusted text using relative position enum.
+  // untrusted text is normally used when we don't know the text content at compile time.
+  // e.g. price of upgrade or game version number.
+  // in these cases, we want to remove any unsupported characters from the text.
+  public static Text newUntrustedTextRelativePositionX(
+          String text,
+          TextPositionX textPositionX,
+          int y) {
+    return new Text(text, 0, y, textPositionX, null, false);
   }
 
   public int getX() {
@@ -74,48 +96,18 @@ public class Text {
    * will be any characters that don't exist in the font character map.
    */
   private String removeInvalidCharacters(String text) {
-    // string that contains only valid characters
-    String validCharacters = GameConstants.FONT_CHARACTER_MAP;
 
-    // string to hold invalid characters to be removed
-    StringBuilder charsToRemove = new StringBuilder();
+    final StringBuilder validStr = new StringBuilder();
+    final String validCharacters = GameConstants.FONT_CHARACTER_MAP;
 
-    for (int i = 0; i < text.length(); i++) {
-
-      // returns index of current character within the character map
-      // returns -1 if it can't be found.
-      char nextChar = text.charAt(i);
-      int charIndex = validCharacters.indexOf(nextChar);
-
-      /*
-       * if character isn't valid then mark it for removal from text
-       * string. Only add it to the list of characters to remove if it
-       * hasn't been seen before.
-       */
-      if (charIndex == -1 && charsToRemove.indexOf(Character.toString(nextChar)) == -1) {
-        Log.w(GameConstants.LOG_TAG,
-            "Text: Invalid Character: '" + nextChar + "'. ASCII Code: '" + (int) nextChar
-                + "'. Removing from text.");
-
-        charsToRemove.append(nextChar);
+    final int strLength = text.length();
+    for (int i = 0; i < strLength; i++){
+      char c = text.charAt(i);
+      if (validCharacters.indexOf(c) != -1) {
+        validStr.append(c);
       }
     }
 
-    /*
-     * If invalid characters need to be removed, then create a regular
-     * expression pattern to remove them from the original string.
-     */
-    if (charsToRemove.length() > 0) {
-      Log.d(GameConstants.LOG_TAG,
-          "Text: Removing Invalid Characters: '" + charsToRemove + "' from '" + text + "'.");
-
-      // create regular expression to remove unwanted characters
-      String pattern = "[" + Pattern.quote(charsToRemove.toString()) + "]";
-      text = text.replaceAll(pattern, "");
-
-      Log.d(GameConstants.LOG_TAG, "Text: Corrected text: '" + text + "'.");
-    }
-
-    return text;
+    return validStr.toString();
   }
 }

@@ -11,46 +11,36 @@ import com.danosoftware.galaxyforce.games.Game;
 import com.danosoftware.galaxyforce.models.buttons.TouchScreenModel;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.common.RotatingSprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarAnimationType;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarFieldTemplate;
-import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.providers.BasicMenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.MenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
+import com.danosoftware.galaxyforce.text.TextProvider;
 import java.util.ArrayList;
 import java.util.List;
 
 public class GameCompleteModelImpl implements Model, TouchScreenModel {
 
-  /* logger tag */
-  private static final String TAG = "GameCompleteImpl";
-
   private final Game game;
-
-  // references to stars
-  private final StarField starField;
-
-  // reference to all sprites in model
-  private final List<ISprite> allSprites;
 
   // reference to all sprites in model to be rotated
   private final List<RotatingSprite> rotatedSprites;
   // reference to all text objects in model
-  private final List<Text> allText;
+  private final TextProvider textProvider;
+  private final MenuSpriteProvider spriteProvider;
   private ModelState modelState;
 
   public GameCompleteModelImpl(
       Game game,
-      Controller controller,
-      StarFieldTemplate starFieldTemplate) {
+      Controller controller) {
     this.game = game;
-    this.allSprites = new ArrayList<>();
     this.rotatedSprites = new ArrayList<>();
-    this.allText = new ArrayList<>();
-    this.starField = new StarField(starFieldTemplate, StarAnimationType.MENU);
+    this.textProvider = new TextProvider();
+    this.spriteProvider = new BasicMenuSpriteProvider();
     this.modelState = ModelState.RUNNING;
 
     // add model sprites
@@ -62,31 +52,28 @@ public class GameCompleteModelImpl implements Model, TouchScreenModel {
   }
 
   private void addSprites() {
-
-    allSprites.addAll(starField.getSprites());
-
     for (int column = 0; column < 3; column++) {
       RotatingSprite base = new RotatingSprite(100 + (column * 170), 580,
-          MenuSpriteIdentifier.BASE);
+          SpriteDetails.BASE_LARGE);
       rotatedSprites.add(base);
-      allSprites.add(base);
+      spriteProvider.add(base);
     }
 
-    allSprites
-        .add(new SplashSprite(GameConstants.SCREEN_MID_X, 817, MenuSpriteIdentifier.GALAXY_FORCE));
+    spriteProvider
+        .add(new SplashSprite(GameConstants.SCREEN_MID_X, 817, SpriteDetails.GALAXY_FORCE));
 
-    allText.add(
+    textProvider.add(
         Text.newTextRelativePositionX("GAME COMPLETED!", TextPositionX.CENTRE, 175 + (3 * 170)));
   }
 
   @Override
-  public List<ISprite> getSprites() {
-    return allSprites;
+  public TextProvider getTextProvider() {
+    return textProvider;
   }
 
   @Override
-  public List<Text> getText() {
-    return allText;
+  public SpriteProvider getSpriteProvider() {
+    return spriteProvider;
   }
 
   @Override
@@ -94,9 +81,6 @@ public class GameCompleteModelImpl implements Model, TouchScreenModel {
     if (modelState == ModelState.GO_BACK) {
       game.changeToScreen(ScreenType.MAIN_MENU);
     }
-
-    // move stars
-    starField.animate(deltaTime);
 
     // rotate sprites
     for (RotatingSprite eachSprite : rotatedSprites) {
@@ -117,6 +101,11 @@ public class GameCompleteModelImpl implements Model, TouchScreenModel {
   @Override
   public RgbColour background() {
     return DEFAULT_BACKGROUND_COLOUR;
+  }
+
+  @Override
+  public boolean animateStars() {
+    return true;
   }
 
   @Override

@@ -5,12 +5,27 @@ import com.danosoftware.galaxyforce.textures.Texture;
 import com.danosoftware.galaxyforce.textures.TextureRegion;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class Font {
 
   private final int glyphWidth;
   private final int glyphHeight;
-  private final TextureRegion[] glyphs = new TextureRegion[96];
+
+  // text position must be offset by half a character glyph's width.
+  // pre-calculate to save time later
+  private final float glyphHalfWidth;
+  private final float glyphHalfHeight;
+  private final TextureRegion[] glyphs;
   private final String charsInMap;
+
+  // each string is converted into character indexes.
+  // each index represents each character's position within the character map.
+  // speeds-up re-creating characters from previously seen text.
+  private final Map<String, List<Integer>> characterIndexesCache;
 
   /**
    * font constructor setting up fonts using the texture map. alternative constructor where list of
@@ -27,13 +42,19 @@ public class Font {
   public Font(Texture texture, int offsetX, int offsetY, int glyphsPerRow, int glyphWidth,
       int glyphHeight, String charsInMap) {
 
+    int charCount = charsInMap.length();
+
     this.glyphWidth = glyphWidth;
+    this.glyphHalfWidth = glyphWidth / 2f;
     this.glyphHeight = glyphHeight;
+    this.glyphHalfHeight = glyphHeight / 2f;
     this.charsInMap = charsInMap;
+    this.glyphs = new TextureRegion[charCount];
+    this.characterIndexesCache = new HashMap<>();
 
     int x = offsetX;
     int y = offsetY;
-    for (int i = 0; i < charsInMap.length(); i++) {
+    for (int i = 0; i < charCount; i++) {
       glyphs[i] = new TextureRegion(texture, x, y, glyphWidth, glyphHeight);
       x += glyphWidth;
       if (x == offsetX + glyphsPerRow * glyphWidth) {
@@ -43,54 +64,66 @@ public class Font {
     }
   }
 
-  // drawText method that calculates x and y from Position enums (e.g. LEFT,
-  // BOTTOM) if supplied. otherwise uses absolute x, y values.
-  //
-  public void drawText(SpriteBatcher batcher, String text, float x, float y, TextPositionX textPosX,
-      TextPositionY textPosY) {
-
-    // choose the correct drawText method depending on whether text
-    // position enums have been set.
-    //
-    if (textPosX != null && textPosY != null) {
-      drawText(batcher, text, calculateX(textPosX, text), calculateY(textPosY));
-    } else if (textPosX != null) {
-      drawText(batcher, text, calculateX(textPosX, text), y);
-    } else if (textPosY != null) {
-      drawText(batcher, text, x, calculateY(textPosY));
-    } else {
-      drawText(batcher, text, calculateCentreX(text, x), y);
+  /*
+   * Draw characters to the screen
+   */
+  public void drawText(SpriteBatcher batcher, List<Character> characters) {
+    for (Character aChar : characters) {
+      batcher.drawSprite(
+          aChar.getX(),
+          aChar.getY(),
+          glyphWidth,
+          glyphHeight,
+          aChar.getRegion());
     }
   }
 
-  private void drawText(SpriteBatcher batcher, String text, float x, float y) {
-    int len = text.length();
-    for (int i = 0; i < len; i++) {
+  /*
+   * Add characters using provided position and text.
+   *
+   * calculates x and y from position enums (e.g. LEFT,BOTTOM)
+   * if supplied. otherwise uses absolute x, y values.
+   */
+  public void updateCharacters(
+      List<Character> characters,
+      String text,
+      float x,
+      float y,
+      TextPositionX textPosX,
+      TextPositionY textPosY) {
 
-      int c;
+    // choose the correct method depending on whether text position enums have been set.
+    if (textPosX != null && textPosY != null) {
+      updateCharacters(characters, text, calculateX(textPosX, text), calculateY(textPosY));
+    } else if (textPosX != null) {
+      updateCharacters(characters, text, calculateX(textPosX, text), y);
+    } else if (textPosY != null) {
+      updateCharacters(characters, text, x, calculateY(textPosY));
+    } else {
+      updateCharacters(characters, text, calculateCentreX(text, x), y);
+    }
+  }
 
-      // if character map was supplied find current character's position
-      // in map
-      if (charsInMap != null) {
-        // returns index of current character within the character map
-        c = charsInMap.indexOf(text.charAt(i));
+  /*
+   * Add characters using provided position and text
+   */
+  private void updateCharacters(
+      List<Character> characters,
+      String text,
+      float x,
+      float y) {
+    // compute indexes for text or retrieve from cache
+    final List<Integer> characterIndexes;
+    if (characterIndexesCache.containsKey(text)) {
+      characterIndexes = characterIndexesCache.get(text);
+    } else {
+      characterIndexes = computeTextIndexes(text);
+      characterIndexesCache.put(text, characterIndexes);
+    }
 
-        if (c == -1) {
-          continue;
-        }
-
-      }
-      // otherwise get index based on ASCII value
-      else {
-        c = text.charAt(i) - ' ';
-
-        if (c < 0 || c > glyphs.length - 1) {
-          continue;
-        }
-      }
-
-      TextureRegion glyph = glyphs[c];
-      batcher.drawSprite(x, y, glyphWidth, glyphHeight, glyph);
+    for (Integer idx : characterIndexes) {
+      TextureRegion glyph = glyphs[idx];
+      characters.add(new Character(x, y, glyph));
       x += glyphWidth;
     }
   }
@@ -104,19 +137,15 @@ public class Font {
     // calculate total width of text
     int textLength = text.length() * glyphWidth;
 
-    // text position must be offset by half a character glyph's width
-    // x position represents the centre of the first character.
-    float offset = (glyphWidth / 2f);
-
     switch (posX) {
       case CENTRE:
-        x = ((GameConstants.GAME_WIDTH - textLength) / 2f) + offset;
+        x = ((GameConstants.GAME_WIDTH - textLength) / 2f) + glyphHalfWidth;
         break;
       case LEFT:
-        x = offset;
+        x = glyphHalfWidth;
         break;
       case RIGHT:
-        x = (GameConstants.GAME_WIDTH - textLength) + offset;
+        x = (GameConstants.GAME_WIDTH - textLength) + glyphHalfWidth;
         break;
       default:
         x = 0;
@@ -132,19 +161,15 @@ public class Font {
   private float calculateY(TextPositionY posY) {
     float y;
 
-    // text position must be offset by half a character glyph's height
-    // y position represents the centre of the text.
-    float offset = (glyphWidth / 2f);
-
     switch (posY) {
       case TOP:
-        y = GameConstants.GAME_HEIGHT - offset;
+        y = GameConstants.GAME_HEIGHT - glyphHalfHeight;
         break;
       case CENTRE:
         y = GameConstants.GAME_HEIGHT / 2f;
         break;
       case BOTTOM:
-        y = offset;
+        y = glyphHalfHeight;
         break;
       default:
         y = 0;
@@ -166,9 +191,44 @@ public class Font {
     // 2 characters - offset by half width
     // 3 characters - offset by one width
     // ...etc...
-    float offset = (glyphWidth / 2f) * (text.length() - 1);
+    float offset = glyphHalfWidth * (text.length() - 1);
 
     return x - offset;
   }
 
+  // Each string must be converted into a list of character indexes.
+  // Each index represents each character's position in the character map
+  private List<Integer> computeTextIndexes(String text) {
+
+    int len = text.length();
+    final List<Integer> characterIndexes = new ArrayList<>(len);
+
+    for (int i = 0; i < len; i++) {
+
+      int c;
+
+      // if character map was supplied find current character's position in map
+      if (charsInMap != null) {
+        // returns index of current character within the character map
+        c = charsInMap.indexOf(text.charAt(i));
+
+        if (c == -1) {
+          continue;
+        }
+
+      }
+      // otherwise get index based on ASCII value
+      else {
+        c = text.charAt(i) - ' ';
+
+        if (c < 0 || c > glyphs.length - 1) {
+          continue;
+        }
+      }
+
+      characterIndexes.add(c);
+    }
+
+    return characterIndexes;
+  }
 }

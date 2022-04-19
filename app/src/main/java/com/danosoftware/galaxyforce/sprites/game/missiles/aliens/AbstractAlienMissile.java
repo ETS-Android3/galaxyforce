@@ -1,6 +1,7 @@
 package com.danosoftware.galaxyforce.sprites.game.missiles.aliens;
 
 import com.danosoftware.galaxyforce.sprites.common.AbstractCollidingSprite;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.view.Animation;
 
 public abstract class AbstractAlienMissile extends AbstractCollidingSprite implements IAlienMissile {
@@ -14,21 +15,18 @@ public abstract class AbstractAlienMissile extends AbstractCollidingSprite imple
     AbstractAlienMissile(
         Animation animation,
         float x,
-        float y) {
+        float y,
+        SpriteDetails spriteDetails) {
 
-      super(
-          animation.getKeyFrame(
-              0,
-              Animation.ANIMATION_LOOPING),
-          x,
-          y - (
-              animation.getKeyFrame(
-                  0,
-                  Animation.ANIMATION_LOOPING))
-              .getProperties()
-              .getHeight() / 2f);
-      this.isDestroyed = false;
-      this.animation = animation;
+        super(
+            spriteDetails,
+            x,
+            y -
+                (spriteDetails.getDimensions() != null
+                    ? spriteDetails.getDimensions().getHeight() / 2f
+                    : 0f));
+        this.isDestroyed = false;
+        this.animation = animation;
       this.stateTime = 0f;
     }
 

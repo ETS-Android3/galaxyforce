@@ -1,16 +1,13 @@
 package com.danosoftware.galaxyforce.textures;
 
 import android.graphics.Bitmap;
+import android.opengl.GLES20;
 import android.opengl.GLUtils;
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
-import com.danosoftware.galaxyforce.view.GLGraphics;
-
+import com.danosoftware.galaxyforce.view.GLShaderHelper;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.microedition.khronos.opengles.GL10;
 
 /**
  * Represents a single texture map and associated properties/utilities.
@@ -23,7 +20,6 @@ import javax.microedition.khronos.opengles.GL10;
  */
 public class Texture {
 
-    private final GLGraphics glGraphics;
     private final TextureMap textureMap;
     private final TextureLoader textureLoader;
 
@@ -31,74 +27,74 @@ public class Texture {
     private final Map<String, TextureDetail> textureDetailMap;
 
     private int textureId;
-    private int minFilter;
-    private int magFilter;
     private int width;
     private int height;
 
     private static final String TAG = "Texture";
 
     public Texture(
-            final GLGraphics glGraphics,
             final TextureRegionXmlParser xmlParser,
             final TextureLoader textureLoader,
             final TextureMap textureMap) {
         this.textureMap = textureMap;
-        this.glGraphics = glGraphics;
         this.textureLoader = textureLoader;
         this.textureDetailMap = buildTextureRegionMap(
-                xmlParser,
-                textureMap.getTextureXml());
-        load();
+            xmlParser,
+            textureMap.getTextureXml());
     }
 
-    private void load() {
-        GL10 gl = glGraphics.getGl();
+    public void load() {
+
+        // create unique id for our texture
         int[] textureIds = new int[1];
-        gl.glGenTextures(1, textureIds, 0);
+        GLES20.glGenTextures(1, textureIds, 0);
         textureId = textureIds[0];
 
-        Bitmap bitmap = textureLoader.load(
-                textureMap.getTextureImage());
+        // load bitmap
+        Bitmap bitmap = textureLoader.load(textureMap.getTextureImage());
         this.width = bitmap.getWidth();
         this.height = bitmap.getHeight();
 
-        gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
-        GLUtils.texImage2D(GL10.GL_TEXTURE_2D, 0, bitmap, 0);
-        setFilters(GL10.GL_NEAREST, GL10.GL_NEAREST);
-        gl.glBindTexture(GL10.GL_TEXTURE_2D, 0);
+        // Bind the texture id to the 2D texture target.
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
 
-        Log.d(TAG, "Loaded texture. Id: " + textureId + ". Filename: " + textureMap.getTextureImage() + ".");
-    }
+        // Configure min/mag filtering, i.e. what scaling method do we use if what we're rendering
+        // is smaller or larger than the source image.
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER,
+            GLES20.GL_NEAREST);
+        GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER,
+            GLES20.GL_NEAREST);
 
-    public void reload() {
-        load();
-        bind();
-        setFilters(minFilter, magFilter);
-        glGraphics.getGl().glBindTexture(GL10.GL_TEXTURE_2D, 0);
-    }
+        // Load the bitmap into the bound texture.
+        GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
 
-    private void setFilters(int minFilter, int magFilter) {
-        this.minFilter = minFilter;
-        this.magFilter = magFilter;
-        GL10 gl = glGraphics.getGl();
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MIN_FILTER, minFilter);
-        gl.glTexParameterf(GL10.GL_TEXTURE_2D, GL10.GL_TEXTURE_MAG_FILTER, magFilter);
+        bitmap.recycle();
+
+        Log.d(TAG,
+            "Loaded texture. Id: " + textureId + ". Filename: " + textureMap.getTextureImage()
+                + ".");
     }
 
     public void bind() {
-        GL10 gl = glGraphics.getGl();
-        gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
+        // Set the active texture unit to texture unit 0.
+        GLES20.glActiveTexture(GLES20.GL_TEXTURE0);
+
+        // Bind our texture to this unit.
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
+
+        // Tell the texture uniform sampler to use this texture in the shader by binding to texture unit 0.
+        GLES20.glUniform1i(GLShaderHelper.sTextureHandle, 0);
     }
 
     public void dispose() {
-        GL10 gl = glGraphics.getGl();
-        gl.glBindTexture(GL10.GL_TEXTURE_2D, textureId);
+        GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureId);
         int[] textureIds =
-                {textureId};
-        gl.glDeleteTextures(1, textureIds, 0);
+            {textureId};
+        GLES20.glDeleteTextures(1, textureIds, 0);
 
-        Log.d(TAG, "Disposed texture. Id: " + textureId + ". Filename: " + textureMap.getTextureImage() + ".");
+        Log.d(TAG,
+            "Disposed texture. Id: " + textureId + ". Filename: " + textureMap.getTextureImage()
+                + ".");
     }
 
     public int width() {

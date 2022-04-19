@@ -2,6 +2,7 @@ package com.danosoftware.galaxyforce.sprites.game.missiles.bases;
 
 import com.danosoftware.galaxyforce.sprites.common.AbstractCollidingSprite;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.view.Animation;
 
 
@@ -17,21 +18,18 @@ public abstract class AbstractBaseMissile extends AbstractCollidingSprite implem
     AbstractBaseMissile(
         Animation animation,
         float x,
-        float y) {
+        float y,
+        SpriteDetails spriteDetails) {
 
-      // adjust missile starting position by half the missile's height
-      super(
-          animation.getKeyFrame(
-              0,
-              Animation.ANIMATION_LOOPING),
-          x,
-          y + (
-              animation.getKeyFrame(
-                  0,
-                  Animation.ANIMATION_LOOPING))
-              .getProperties()
-              .getHeight() / 2f);
-      this.isDestroyed = false;
+        // adjust missile starting position by half the missile's height
+        super(
+            spriteDetails,
+            x,
+            y +
+                (spriteDetails.getDimensions() != null
+                    ? spriteDetails.getDimensions().getHeight() / 2f
+                    : 0f));
+        this.isDestroyed = false;
       this.animation = animation;
       this.stateTime = 0f;
     }

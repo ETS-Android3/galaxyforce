@@ -17,18 +17,16 @@ import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.sprites.common.IMovingSprite;
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.BaseMovingSprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.LogoMovingSprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.PlanetMovingSprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarAnimationType;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarFieldTemplate;
-import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.providers.BasicMenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.MenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
-import java.util.ArrayList;
-import java.util.List;
+import com.danosoftware.galaxyforce.text.TextProvider;
 
 public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver {
 
@@ -41,9 +39,8 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
   private static final int START_LOGO_Y_POS = GameConstants.GAME_HEIGHT + (184 / 2);
   private final Game game;
   private final BillingService billingService;
-  private final List<Text> text;
-  private final List<ISprite> sprites;
-  private final StarField starField;
+  private final TextProvider textProvider;
+  private final MenuSpriteProvider spriteProvider;
   // version name of this package
   private final String versionName;
   private final IMovingSprite planet;
@@ -57,36 +54,37 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
    */
   private volatile boolean reBuildText;
 
+  // have we requested to move to main menu? (we only want to request once)
+  // required to avoid triggering multiple requests (while waiting for main menu screen to be created).
+  private boolean requestedMainMenu;
+
   public SplashModelImpl(Game game,
       Controller controller,
       BillingService billingService,
       String versionName,
-      StarFieldTemplate starFieldTemplate,
       SoundPlayerService sounds) {
 
     this.game = game;
     this.billingService = billingService;
     this.versionName = versionName;
-    this.sprites = new ArrayList<>();
-    this.text = new ArrayList<>();
+    this.textProvider = new TextProvider();
+    this.spriteProvider = new BasicMenuSpriteProvider();
     this.splashScreenTime = 0f;
     this.reBuildText = true;
-    this.starField = new StarField(starFieldTemplate, StarAnimationType.MENU);
     this.planet = new PlanetMovingSprite(
         GameConstants.SCREEN_MID_X,
         START_PLANET_Y_POS,
-        MenuSpriteIdentifier.PLUTO);
+        SpriteDetails.PLUTO);
     this.logo = new LogoMovingSprite(
         GameConstants.SCREEN_MID_X,
         START_LOGO_Y_POS,
-        MenuSpriteIdentifier.GALAXY_FORCE);
+        SpriteDetails.GALAXY_FORCE);
     this.base = new BaseMovingSprite(
         sounds);
 
-    sprites.addAll(starField.getSprites());
-    sprites.add(planet);
-    sprites.add(base);
-    sprites.add(logo);
+    spriteProvider.add(planet);
+    spriteProvider.add(base);
+    spriteProvider.add(logo);
 
     // add button that covers the entire screen
     Button screenTouch = new ScreenTouch(this);
@@ -94,6 +92,8 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
 
     // register this model with the billing service
     billingService.registerPurchasesObserver(this);
+
+    requestedMainMenu = false;
   }
 
   /**
@@ -101,20 +101,20 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
    */
   private void buildTextMessages() {
 
-    text.clear();
+    textProvider.clear();
 
     /*
      * Add text to indicate whether full game has been purchased
      */
     if (billingService.getFullGamePurchaseState() == PurchaseState.NOT_PURCHASED
         || billingService.getFullGamePurchaseState() == PurchaseState.PENDING) {
-      text.add(
+      textProvider.add(
           Text.newTextRelativePositionX(
               "FREE TRIAL",
               TextPositionX.CENTRE,
               150));
     } else if (billingService.getFullGamePurchaseState() == PurchaseState.PURCHASED) {
-      text.add(
+      textProvider.add(
           Text.newTextRelativePositionX(
               "FULL GAME",
               TextPositionX.CENTRE,
@@ -123,23 +123,22 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
 
     // add version name if it exists
     if (versionName != null) {
-      text.add(
-          Text.newTextRelativePositionX(
+      textProvider.add(
+          Text.newUntrustedTextRelativePositionX(
               "VERSION " + versionName,
               TextPositionX.CENTRE,
               100));
     }
   }
 
-
   @Override
-  public List<ISprite> getSprites() {
-    return sprites;
+  public TextProvider getTextProvider() {
+    return textProvider;
   }
 
   @Override
-  public List<Text> getText() {
-    return text;
+  public SpriteProvider getSpriteProvider() {
+    return spriteProvider;
   }
 
   @Override
@@ -156,15 +155,13 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
       reBuildText = false;
     }
 
-    // move stars
-    starField.animate(deltaTime);
-
     planet.animate(deltaTime);
     logo.animate(deltaTime);
     base.animate(deltaTime);
 
     // if splash screen has been shown for required time, move to main menu
-    if (splashScreenTime >= SPLASH_SCREEN_WAIT) {
+    if (!requestedMainMenu && splashScreenTime >= SPLASH_SCREEN_WAIT) {
+      requestedMainMenu = true;
       game.changeToScreen(ScreenType.MAIN_MENU);
     }
   }
@@ -178,6 +175,7 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
   @Override
   public void screenTouched() {
     // if screen pressed, then go to main menu
+    requestedMainMenu = true;
     game.changeToScreen(ScreenType.MAIN_MENU);
   }
 
@@ -194,6 +192,11 @@ public class SplashModelImpl implements Model, TouchScreenModel, BillingObserver
   @Override
   public RgbColour background() {
     return DEFAULT_BACKGROUND_COLOUR;
+  }
+
+  @Override
+  public boolean animateStars() {
+    return true;
   }
 
   @Override

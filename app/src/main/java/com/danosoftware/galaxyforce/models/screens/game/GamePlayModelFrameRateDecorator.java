@@ -6,12 +6,14 @@ import com.danosoftware.galaxyforce.models.assets.PowerUpsDto;
 import com.danosoftware.galaxyforce.models.assets.SpawnedAliensDto;
 import com.danosoftware.galaxyforce.models.screens.Model;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.bases.IBasePrimary;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
+import com.danosoftware.galaxyforce.text.TextChangeListener;
 import com.danosoftware.galaxyforce.text.TextPositionX;
 import com.danosoftware.galaxyforce.text.TextPositionY;
+import com.danosoftware.galaxyforce.text.TextProvider;
 import com.danosoftware.galaxyforce.view.FPSCounter;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +21,7 @@ import java.util.List;
 /**
  * Game Handler decorator that adds frame-rate calculations and display functionality.
  */
-public class GamePlayModelFrameRateDecorator implements Model, GameModel {
+public class GamePlayModelFrameRateDecorator implements Model, GameModel, TextChangeListener {
 
   // decorated game model
   private final GameModel gameModel;
@@ -30,14 +32,20 @@ public class GamePlayModelFrameRateDecorator implements Model, GameModel {
   // FPS counter
   private final FPSCounter fpsCounter;
 
-  // FPS display text
-  private Text tempFps;
+  // text provider that includes model text and FPS text
+  private final TextProvider textProvider;
+  private List<Text> modelText;
+
+  // has FPS text changed?
+  private boolean updateText;
 
   public GamePlayModelFrameRateDecorator(GamePlayModelImpl gameHandler) {
     this.gameModel = gameHandler;
     this.model = gameHandler;
-    this.fpsCounter = new FPSCounter();
-    this.tempFps = createFpsText();
+    this.fpsCounter = new FPSCounter(this);
+    this.textProvider = new TextProvider();
+    this.modelText = new ArrayList<>();
+    this.updateText = false;
   }
 
   private Text createFpsText() {
@@ -48,29 +56,36 @@ public class GamePlayModelFrameRateDecorator implements Model, GameModel {
   }
 
   @Override
-  public List<Text> getText() {
-    List<Text> text = new ArrayList<>(model.getText());
-    text.add(tempFps);
+  public TextProvider getTextProvider() {
+    // update text if FPS or model text has changed
+    TextProvider modelTextProvider = model.getTextProvider();
+    List<Text> latestModelText = modelTextProvider.text();
+    if (updateText || !modelText.equals(latestModelText)) {
+      textProvider.clear();
+      textProvider.addAll(latestModelText);
+      textProvider.add(createFpsText());
+      updateText = false;
+      modelText = new ArrayList<>(latestModelText);
+    }
+    return textProvider;
+  }
 
-    return text;
+  @Override
+  public SpriteProvider getSpriteProvider() {
+    return model.getSpriteProvider();
   }
 
   @Override
   public void update(float deltaTime) {
     model.update(deltaTime);
 
-    // update fps text
-    tempFps = createFpsText();
+    // update fps
+    fpsCounter.update();
   }
 
   @Override
   public IBasePrimary getBase() {
     return gameModel.getBase();
-  }
-
-  @Override
-  public List<ISprite> getSprites() {
-    return model.getSprites();
   }
 
   @Override
@@ -96,6 +111,11 @@ public class GamePlayModelFrameRateDecorator implements Model, GameModel {
   @Override
   public RgbColour background() {
     return model.background();
+  }
+
+  @Override
+  public boolean animateStars() {
+    return model.animateStars();
   }
 
   @Override
@@ -136,5 +156,10 @@ public class GamePlayModelFrameRateDecorator implements Model, GameModel {
   @Override
   public List<IAlien> getActiveAliens() {
     return gameModel.getActiveAliens();
+  }
+
+  @Override
+  public void onTextChange() {
+    updateText = true;
   }
 }

@@ -5,82 +5,96 @@ import com.danosoftware.galaxyforce.sprites.game.assets.Life;
 import com.danosoftware.galaxyforce.sprites.game.missiles.aliens.IAlienMissile;
 import com.danosoftware.galaxyforce.sprites.game.missiles.bases.IBaseMissile;
 import com.danosoftware.galaxyforce.sprites.game.powerups.IPowerUp;
-import com.danosoftware.galaxyforce.sprites.game.starfield.Star;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
+import com.danosoftware.galaxyforce.sprites.providers.GamePlaySpriteProvider;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.ListIterator;
 
 public class GamePlayAssetsManager implements IGamePlayAssetsManager {
 
-  private final StarField starField;
-  private List<IAlienMissile> aliensMissiles;
-  private List<IBaseMissile> baseMissiles;
-  private List<IPowerUp> powerUps;
-  private List<Flag> flags;
-  private List<Life> lives;
+  private final GamePlaySpriteProvider spriteProvider;
+  private final List<IAlienMissile> aliensMissiles;
+  private final List<IBaseMissile> baseMissiles;
+  private final List<IPowerUp> powerUps;
 
-  public GamePlayAssetsManager(
-      StarField starField) {
+  public GamePlayAssetsManager(GamePlaySpriteProvider spriteProvider) {
 
+    this.spriteProvider = spriteProvider;
     this.aliensMissiles = new ArrayList<>();
     this.baseMissiles = new ArrayList<>();
     this.powerUps = new ArrayList<>();
-    this.starField = starField;
-    this.flags = new ArrayList<>();
-    this.lives = new ArrayList<>();
   }
 
   @Override
   public void animate(float deltaTime) {
 
-    List<IBaseMissile> nonDestroyedBaseMissiles = new ArrayList<>();
-    for (IBaseMissile baseMissile : baseMissiles) {
+    // animate base missiles
+    boolean baseMissilesChanged = false;
+    ListIterator<IBaseMissile> baseMissileIterator = baseMissiles.listIterator();
+    while (baseMissileIterator.hasNext()) {
+      IBaseMissile baseMissile = baseMissileIterator.next();
       baseMissile.animate(deltaTime);
-      if (!baseMissile.isDestroyed()) {
-        nonDestroyedBaseMissiles.add(baseMissile);
+      if (baseMissile.isDestroyed()) {
+        baseMissileIterator.remove();
+        baseMissilesChanged = true;
       }
     }
-    baseMissiles = nonDestroyedBaseMissiles;
+    if (baseMissilesChanged) {
+      spriteProvider.setBaseMissiles(baseMissiles);
+    }
 
-    List<IAlienMissile> nonDestroyedAlienMissiles = new ArrayList<>();
-    for (IAlienMissile alienMissile : aliensMissiles) {
+    // animate alien missiles
+    boolean alienMissilesChanged = false;
+    ListIterator<IAlienMissile> alienMissileIterator = aliensMissiles.listIterator();
+    while (alienMissileIterator.hasNext()) {
+      IAlienMissile alienMissile = alienMissileIterator.next();
       alienMissile.animate(deltaTime);
-      if (!alienMissile.isDestroyed()) {
-        nonDestroyedAlienMissiles.add(alienMissile);
+      if (alienMissile.isDestroyed()) {
+        alienMissileIterator.remove();
+        alienMissilesChanged = true;
       }
     }
-    aliensMissiles = nonDestroyedAlienMissiles;
+    if (alienMissilesChanged) {
+      spriteProvider.setAlienMissiles(aliensMissiles);
+    }
 
-    List<IPowerUp> nonDestroyedPowerUps = new ArrayList<>();
-    for (IPowerUp powerUp : powerUps) {
+    // animate power-ups
+    boolean powerUpsChanged = false;
+    ListIterator<IPowerUp> powerUpIterator = powerUps.listIterator();
+    while (powerUpIterator.hasNext()) {
+      IPowerUp powerUp = powerUpIterator.next();
       powerUp.animate(deltaTime);
-      if (!powerUp.isDestroyed()) {
-        nonDestroyedPowerUps.add(powerUp);
+      if (powerUp.isDestroyed()) {
+        powerUpIterator.remove();
+        powerUpsChanged = true;
       }
     }
-    powerUps = nonDestroyedPowerUps;
-
-    starField.animate(deltaTime);
+    if (powerUpsChanged) {
+      spriteProvider.setPowerUps(powerUps);
+    }
   }
 
   @Override
   public void setLevelFlags(int wave) {
-    flags = Flag.getFlagList(wave);
+    spriteProvider.setFlags(Flag.getFlagList(wave));
   }
 
   @Override
   public void addPowerUp(PowerUpsDto powerUp) {
     powerUps.add(powerUp.getPowerUp());
+    spriteProvider.setPowerUps(powerUps);
   }
 
   @Override
   public void fireBaseMissiles(BaseMissilesDto missiles) {
     baseMissiles.addAll(missiles.getMissiles());
+    spriteProvider.setBaseMissiles(baseMissiles);
   }
 
   @Override
   public void fireAlienMissiles(AlienMissilesDto missiles) {
     aliensMissiles.addAll(missiles.getMissiles());
+    spriteProvider.setAlienMissiles(aliensMissiles);
   }
 
   @Override
@@ -99,23 +113,8 @@ public class GamePlayAssetsManager implements IGamePlayAssetsManager {
   }
 
   @Override
-  public List<Star> getStars() {
-    return starField.getSprites();
-  }
-
-  @Override
-  public List<Flag> getFlags() {
-    return flags;
-  }
-
-  @Override
-  public List<Life> getLives() {
-    return lives;
-  }
-
-  @Override
   public void setLives(int livesRemaining) {
-    lives = Life.getLives(livesRemaining);
+    spriteProvider.setLives(Life.getLives(livesRemaining));
   }
 
   @Override

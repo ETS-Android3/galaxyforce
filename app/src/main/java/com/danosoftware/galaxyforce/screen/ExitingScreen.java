@@ -2,11 +2,13 @@ package com.danosoftware.galaxyforce.screen;
 
 import com.danosoftware.galaxyforce.controllers.common.Controller;
 import com.danosoftware.galaxyforce.models.screens.Model;
+import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
+import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.textures.TextureMap;
 import com.danosoftware.galaxyforce.textures.TextureService;
 import com.danosoftware.galaxyforce.view.Camera2D;
-import com.danosoftware.galaxyforce.view.GLGraphics;
 import com.danosoftware.galaxyforce.view.SpriteBatcher;
+import com.danosoftware.galaxyforce.view.StarBatcher;
 
 public class ExitingScreen extends AbstractScreen {
 
@@ -15,11 +17,14 @@ public class ExitingScreen extends AbstractScreen {
       Controller controller,
       TextureService textureService,
       TextureMap textureMap,
-      GLGraphics glGraphics,
       Camera2D camera,
-      SpriteBatcher batcher) {
+      SpriteBatcher batcher,
+      StarBatcher starBatcher,
+      TaskService taskService,
+      StarField starField) {
 
-    super(model, controller, textureService, textureMap, glGraphics, camera, batcher);
+    super(model, controller, textureService, textureMap, camera, batcher, starBatcher, taskService,
+        starField);
   }
 
   @Override

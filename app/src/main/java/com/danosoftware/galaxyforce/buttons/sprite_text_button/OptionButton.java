@@ -4,7 +4,7 @@ import com.danosoftware.galaxyforce.buttons.toggle_group.ToggleButtonGroup;
 import com.danosoftware.galaxyforce.options.Option;
 import com.danosoftware.galaxyforce.sprites.buttons.ButtonSprite;
 import com.danosoftware.galaxyforce.sprites.buttons.IButtonSprite;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.utilities.Rectangle;
 
@@ -20,8 +20,8 @@ public class OptionButton implements SpriteTextButton {
   private final IButtonSprite levelSprite;
 
   // sprites to be used for when button is up (not pressed) or down (pressed)
-  private final ISpriteIdentifier spriteButtonUp;
-  private final ISpriteIdentifier spriteButtonDown;
+  private final SpriteDetails spriteButtonUp;
+  private final SpriteDetails spriteButtonDown;
 
   // parent toggle button group
   private final ToggleButtonGroup toggleButtonGroup;
@@ -33,8 +33,8 @@ public class OptionButton implements SpriteTextButton {
       int xPos,
       int yPos,
       Option optionType,
-      ISpriteIdentifier spriteButtonUp,
-      ISpriteIdentifier spriteButtonDown,
+      SpriteDetails spriteButtonUp,
+      SpriteDetails spriteButtonDown,
       ToggleButtonGroup toggleButtonGroup) {
     this.levelSprite = new ButtonSprite(spriteButtonUp, xPos, yPos);
     this.spriteButtonUp = spriteButtonUp;

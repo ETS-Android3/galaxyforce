@@ -7,7 +7,9 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_RE
 import static com.danosoftware.galaxyforce.constants.GameConstants.RC_SIGN_IN;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
@@ -17,6 +19,9 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
+import androidx.core.view.WindowInsetsControllerCompat;
 import com.danosoftware.galaxyforce.billing.BillingManager;
 import com.danosoftware.galaxyforce.billing.BillingManagerImpl;
 import com.danosoftware.galaxyforce.billing.BillingService;
@@ -31,7 +36,9 @@ import com.danosoftware.galaxyforce.services.configurations.ConfigurationService
 import com.danosoftware.galaxyforce.services.googleplay.GooglePlayServices;
 import com.danosoftware.galaxyforce.services.preferences.IPreferences;
 import com.danosoftware.galaxyforce.services.preferences.PreferencesString;
+import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.view.GLGraphics;
+import com.danosoftware.galaxyforce.view.GLShaderHelper;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.Task;
@@ -68,18 +75,18 @@ public class MainActivity extends Activity {
     /* Google Play Games Services */
     private GooglePlayServices mPlayServices;
 
+    private TaskService taskService = new TaskService();
+
     /* runs when application initially starts */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
         Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Create Application");
+        super.onCreate(savedInstanceState);
 
         setupScreen();
 
         // set-up GL view
-        glView = new GLSurfaceView(this);
-        glView.setRenderer(new GLRenderer());
+        glView = new GameGLSurfaceView(this);
         setContentView(glView);
         this.glGraphics = new GLGraphics(glView);
 
@@ -102,11 +109,13 @@ public class MainActivity extends Activity {
         if (launchIntentAction != null &&
             launchIntentAction.equals("com.google.intent.action.TEST_LOOP")) {
             game = new GameLoopTest(this, glGraphics, glView, billingService, mPlayServices,
-                configurationService);
+                configurationService, taskService);
         } else {
             game = new GameImpl(this, glGraphics, glView, billingService, mPlayServices,
-                configurationService);
+                configurationService, taskService);
         }
+
+        Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Application Created");
     }
 
     /* runs after onCreate or resuming after being in background */
@@ -151,19 +160,23 @@ public class MainActivity extends Activity {
             }
 
         }
-
         glView.onPause();
         super.onPause();
+        Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Application Paused");
     }
 
     @Override
     protected void onDestroy() {
+        Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Destroying Application");
         super.onDestroy();
+
+        taskService.dispose();
 
         Log.i(ACTIVITY_TAG, "Destroying Billing Manager.");
         if (mBillingManager != null) {
             mBillingManager.destroy();
         }
+        Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Application Destroyed");
     }
 
     @Override
@@ -190,31 +203,30 @@ public class MainActivity extends Activity {
     }
 
     private void setupScreen() {
-        // set application to use full screen
+        // turn off screen title
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN, WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
-        // stop window dimming when window is visible (recommended over
-        // deprecated full wake lock)
+        // stop window dimming when window is visible
         getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
     }
 
-    // setSystemUiVisibility() is deprecated but WindowInsetsController replacement requires API 30.
-    // not replaced to simply support older APIs.
     private void hideSystemUI() {
         // See https://developer.android.com/training/system-ui/immersive
-        // Using "sticky immersive"
         View decorView = getWindow().getDecorView();
-        decorView.setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
-                        // Set the content to appear under the system bars so that the
-                        // content doesn't resize when the system bars hide and show.
-                        | View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        // Hide the nav bar and status bar
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
-                        | View.SYSTEM_UI_FLAG_FULLSCREEN);
+
+        WindowInsetsControllerCompat windowInsetsController =
+            ViewCompat.getWindowInsetsController(decorView);
+        if (windowInsetsController == null) {
+            return;
+        }
+
+        // Configure the behavior of the hidden system bars
+        windowInsetsController.setSystemBarsBehavior(
+            WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+        );
+
+        // Hide both the status bar and the navigation bar
+        windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
     }
 
     // invoked with result on attempts to sign-in to Google Play Services.
@@ -237,7 +249,7 @@ public class MainActivity extends Activity {
         long startTime;
 
         @Override
-        public void onDrawFrame(GL10 gl) {
+        public void onDrawFrame(GL10 unused) {
             ActivityState stateCheck;
 
             synchronized (stateChanged) {
@@ -257,6 +269,7 @@ public class MainActivity extends Activity {
             }
 
             if (stateCheck == ActivityState.PAUSED) {
+                Log.i(GameConstants.LOG_TAG, "Render Pause");
                 game.pause();
 
                 synchronized (stateChanged) {
@@ -266,6 +279,7 @@ public class MainActivity extends Activity {
             }
 
             if (stateCheck == ActivityState.FINISHED) {
+                Log.i(GameConstants.LOG_TAG, "Render Finish");
                 game.pause();
                 game.dispose();
 
@@ -273,27 +287,39 @@ public class MainActivity extends Activity {
                     state = ActivityState.IDLE;
                     stateChanged.notifyAll();
                 }
+                // delete our GL shaders program
+                GLShaderHelper.deleteProgram();
             }
         }
 
         @Override
-        public void onSurfaceChanged(GL10 gl, int width, int height) {
-            Log.i(GameConstants.LOG_TAG, LOCAL_TAG + ": onSurfaceChanged. width: " + width + ". height: " + height + ".");
+        public void onSurfaceChanged(GL10 unused, int width, int height) {
+            Log.i(GameConstants.LOG_TAG,
+                LOCAL_TAG + ": onSurfaceChanged. width: " + width + ". height: " + height + ".");
+            // set viewport to match view
+            GLES20.glViewport(0, 0, width, height);
         }
 
         @Override
-        public void onSurfaceCreated(GL10 gl, EGLConfig config) {
+        public void onSurfaceCreated(GL10 unused, EGLConfig config) {
             Log.i(GameConstants.LOG_TAG, LOCAL_TAG + ": onSurfaceCreated");
+
+            // create and initialise our GL shaders program
+            GLShaderHelper.createProgram();
 
             // set game background colour.
             // i.e. colour used when screen is cleared before each frame
-            gl.glClearColor(
-                    BACKGROUND_RED,
-                    BACKGROUND_GREEN,
-                    BACKGROUND_BLUE,
-                    BACKGROUND_ALPHA);
+            GLES20.glClearColor(
+                BACKGROUND_RED,
+                BACKGROUND_GREEN,
+                BACKGROUND_BLUE,
+                BACKGROUND_ALPHA);
 
-            glGraphics.setGl(gl);
+            // Disable depth testing -- we're 2D only.
+            GLES20.glDisable(GLES20.GL_DEPTH_TEST);
+
+            // Don't need backface culling.
+            GLES20.glDisable(GLES20.GL_CULL_FACE);
 
             synchronized (stateChanged) {
                 if (state == ActivityState.INITIALISED) {
@@ -303,6 +329,25 @@ public class MainActivity extends Activity {
                 game.resume();
                 startTime = System.nanoTime();
             }
+        }
+    }
+
+    /**
+     * Inner class for GL Surface View
+     */
+    private class GameGLSurfaceView extends GLSurfaceView {
+
+        private final GLRenderer renderer;
+
+        public GameGLSurfaceView(Context context) {
+            super(context);
+
+            // Create an OpenGL ES 2.0 context
+            setEGLContextClientVersion(2);
+
+            // Set the Renderer for drawing on the GLSurfaceView
+            renderer = new GLRenderer();
+            setRenderer(renderer);
         }
     }
 }

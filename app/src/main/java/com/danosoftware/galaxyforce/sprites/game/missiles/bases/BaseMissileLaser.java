@@ -27,7 +27,8 @@ public class BaseMissileLaser extends AbstractBaseMissile {
         super(
             animation,
             xStart,
-            yStart);
+            yStart,
+            animation.getKeyFrame(0, Animation.ANIMATION_LOOPING));
         this.missileSpeed = baseMissileSpeed.getSpeed();
         this.hitAliens = new HashSet<>();
     }

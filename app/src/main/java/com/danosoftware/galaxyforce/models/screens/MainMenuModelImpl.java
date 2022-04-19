@@ -19,12 +19,12 @@ import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarAnimationType;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarFieldTemplate;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
-import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
-import com.danosoftware.galaxyforce.text.Text;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.providers.BasicMenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.MenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
+import com.danosoftware.galaxyforce.text.TextProvider;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,7 +36,6 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
   private final Game game;
 
   // sprites
-  private final StarField starField;
   private final ISprite logo;
   private final ISprite planet;
 
@@ -45,6 +44,9 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
 
   private final Controller controller;
   private final BillingService billingService;
+
+  private final TextProvider textProvider;
+  private final MenuSpriteProvider spriteProvider;
 
   /*
    * Should we rebuild the buttons?
@@ -55,17 +57,17 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
   public MainMenuModelImpl(
       Game game,
       Controller controller,
-      BillingService billingService,
-      StarFieldTemplate starFieldTemplate) {
+      BillingService billingService) {
     this.game = game;
     this.controller = controller;
     this.billingService = billingService;
     this.buttons = new ArrayList<>();
-    this.starField = new StarField(starFieldTemplate, StarAnimationType.MENU);
+    this.textProvider = new TextProvider();
+    this.spriteProvider = new BasicMenuSpriteProvider();
     this.logo = new SplashSprite(GameConstants.SCREEN_MID_X, LOGO_Y_POS,
-        MenuSpriteIdentifier.GALAXY_FORCE);
+        SpriteDetails.GALAXY_FORCE);
     this.planet = new SplashSprite(GameConstants.SCREEN_MID_X, PLANET_Y_POS,
-        MenuSpriteIdentifier.PLUTO);
+        SpriteDetails.PLUTO);
 
     // register this model with the billing service
     billingService.registerPurchasesObserver(this);
@@ -73,6 +75,9 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
     // build on-screen buttons
     buildButtons();
     this.rebuildButtons = false;
+
+    // build sprites
+    buildSprites();
   }
 
   private void buildButtons() {
@@ -86,6 +91,19 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
 
     // add optional billing buttons
     addOptionalBillingButtons();
+  }
+
+  private void buildSprites() {
+    spriteProvider.clear();
+    textProvider.clear();
+
+    spriteProvider.add(planet);
+    spriteProvider.add(logo);
+
+    for (SpriteTextButton button : buttons) {
+      spriteProvider.add(button.getSprite());
+      textProvider.add(button.getText());
+    }
   }
 
   /**
@@ -121,8 +139,8 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
         100 + (row * 170),
         label,
         buttonType,
-        MenuSpriteIdentifier.MAIN_MENU,
-        MenuSpriteIdentifier.MAIN_MENU_PRESSED);
+        SpriteDetails.MAIN_MENU,
+        SpriteDetails.MAIN_MENU_PRESSED);
 
     // add a new menu button to controller's list of touch controllers
     controller.addTouchController(new DetectButtonTouch(button));
@@ -132,39 +150,22 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
   }
 
   @Override
-  public List<ISprite> getSprites() {
-
-    List<ISprite> sprites = new ArrayList<>(starField.getSprites());
-    sprites.add(planet);
-    sprites.add(logo);
-
-    for (SpriteTextButton button : buttons) {
-      sprites.add(button.getSprite());
-    }
-
-    return sprites;
+  public TextProvider getTextProvider() {
+    return textProvider;
   }
 
   @Override
-  public List<Text> getText() {
-
-    List<Text> text = new ArrayList<>();
-    for (SpriteTextButton button : buttons) {
-      text.add(button.getText());
-    }
-
-    return text;
+  public SpriteProvider getSpriteProvider() {
+    return spriteProvider;
   }
 
   @Override
   public void update(float deltaTime) {
-    // move stars
-    starField.animate(deltaTime);
-
-    // do we need to rebuild menu buttons?
+    // do we need to rebuild menu buttons and sprites?
     if (rebuildButtons) {
       buildButtons();
       rebuildButtons = false;
+      buildSprites();
     }
   }
 
@@ -202,12 +203,17 @@ public class MainMenuModelImpl implements Model, ButtonModel, BillingObserver {
 
   @Override
   public void resume() {
-    // no implementation
+    // no action
   }
 
   @Override
   public RgbColour background() {
     return DEFAULT_BACKGROUND_COLOUR;
+  }
+
+  @Override
+  public boolean animateStars() {
+    return true;
   }
 
   @Override

@@ -4,7 +4,6 @@ import com.danosoftware.galaxyforce.models.screens.game.GameModel;
 import com.danosoftware.galaxyforce.waves.config.aliens.missiles.MissileConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.missiles.MissileFiringConfig;
 import com.danosoftware.galaxyforce.waves.config.aliens.missiles.MissileMultiFiringConfig;
-
 import java.util.ArrayList;
 import java.util.List;
 

@@ -6,7 +6,7 @@ import com.danosoftware.galaxyforce.services.vibration.VibrateTime;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlien;
 import com.danosoftware.galaxyforce.sprites.game.aliens.IAlienFollower;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.view.Animation;
 
 public class ExplodeSimple implements ExplodeBehaviour {
@@ -36,24 +36,24 @@ public class ExplodeSimple implements ExplodeBehaviour {
     public void startExplosion(IAlien alien) {
         explosionTime = 0f;
         sounds.play(SoundEffect.EXPLOSION);
-        vibrator.vibrate(VibrateTime.TINY);
+      vibrator.vibrate(VibrateTime.TINY);
     }
 
-    @Override
-    public void startExplosionFollower(IAlienFollower alien) {
-        // start explosion for follower without sound or vibration
-        // followable alien will handle these.
-        explosionTime = 0f;
-    }
+  @Override
+  public void startExplosionFollower(IAlienFollower alien) {
+    // start explosion for follower without sound or vibration
+    // followable alien will handle these.
+    explosionTime = 0f;
+  }
 
-    @Override
-    public ISpriteIdentifier getExplosion(float deltaTime) {
-        explosionTime += deltaTime;
-        return animation.getKeyFrame(explosionTime, Animation.ANIMATION_NONLOOPING);
-    }
+  @Override
+  public SpriteDetails getExplosion(float deltaTime) {
+    explosionTime += deltaTime;
+    return animation.getKeyFrame(explosionTime, Animation.ANIMATION_NONLOOPING);
+  }
 
-    @Override
-    public boolean finishedExploding() {
-        return animation.isAnimationComplete();
-    }
+  @Override
+  public boolean finishedExploding() {
+    return animation.isAnimationComplete();
+  }
 }

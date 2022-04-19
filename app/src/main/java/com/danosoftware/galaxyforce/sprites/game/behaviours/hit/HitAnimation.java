@@ -4,7 +4,7 @@ import com.danosoftware.galaxyforce.services.sound.SoundEffect;
 import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.services.vibration.VibrateTime;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 import com.danosoftware.galaxyforce.view.Animation;
 
 /**
@@ -66,21 +66,21 @@ public class HitAnimation implements HitBehaviour {
     // handle sound/vibration effects.
     @Override
     public void startHitFollower(float stateTime) {
-        initialiseHit(stateTime);
+      initialiseHit(stateTime);
     }
 
-    @Override
-    public boolean isHit() {
-        return hit;
-    }
+  @Override
+  public boolean isHit() {
+    return hit;
+  }
 
-    @Override
-    public ISpriteIdentifier getHit(float deltaTime) {
-        stateTime += deltaTime;
-        timeSinceHit += deltaTime;
-        if (timeSinceHit > HIT_TIME_SECONDS) {
-            this.hit = false;
-        }
-        return hitAnimation.getKeyFrame(stateTime, Animation.ANIMATION_LOOPING);
+  @Override
+  public SpriteDetails getHit(float deltaTime) {
+    stateTime += deltaTime;
+    timeSinceHit += deltaTime;
+    if (timeSinceHit > HIT_TIME_SECONDS) {
+      this.hit = false;
     }
+    return hitAnimation.getKeyFrame(stateTime, Animation.ANIMATION_LOOPING);
+  }
 }

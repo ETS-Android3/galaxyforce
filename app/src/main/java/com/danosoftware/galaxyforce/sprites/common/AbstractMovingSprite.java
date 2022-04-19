@@ -1,11 +1,11 @@
 package com.danosoftware.galaxyforce.sprites.common;
 
-import com.danosoftware.galaxyforce.sprites.properties.ISpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
 
 public abstract class AbstractMovingSprite extends AbstractSprite implements IMovingSprite {
 
   AbstractMovingSprite(
-      ISpriteIdentifier spriteId,
+      SpriteDetails spriteId,
       float x,
       float y,
       float rotation) {
@@ -14,7 +14,7 @@ public abstract class AbstractMovingSprite extends AbstractSprite implements IMo
   }
 
   protected AbstractMovingSprite(
-      ISpriteIdentifier spriteId,
+      SpriteDetails spriteId,
       float x,
       float y) {
 

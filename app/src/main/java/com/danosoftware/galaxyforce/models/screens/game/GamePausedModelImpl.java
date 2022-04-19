@@ -16,14 +16,19 @@ import com.danosoftware.galaxyforce.models.screens.flashing.FlashingTextImpl;
 import com.danosoftware.galaxyforce.screen.enums.ScreenType;
 import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
-import com.danosoftware.galaxyforce.sprites.properties.GameSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.providers.BasicMenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.MenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
+import com.danosoftware.galaxyforce.text.TextChangeListener;
 import com.danosoftware.galaxyforce.text.TextPositionX;
+import com.danosoftware.galaxyforce.text.TextProvider;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class GamePausedModelImpl implements Model, ButtonModel {
+public class GamePausedModelImpl implements Model, ButtonModel, TextChangeListener {
 
   /*
    * ******************************************************
@@ -46,6 +51,10 @@ public class GamePausedModelImpl implements Model, ButtonModel {
   private final List<ISprite> pausedSprites;
   /* reference to flashing paused text */
   private final FlashingText flashingPausedText;
+  private final TextProvider textProvider;
+  private final MenuSpriteProvider spriteProvider;
+  private boolean updateText;
+  private boolean updateSprites;
   private final RgbColour backgroundColour;
   /* reference to current state */
   private PausedState modelState;
@@ -60,6 +69,8 @@ public class GamePausedModelImpl implements Model, ButtonModel {
     this.menuButtons = new ArrayList<>();
     this.backgroundColour = backgroundColour;
     this.modelState = PausedState.RUNNING;
+    this.textProvider = new TextProvider();
+    this.spriteProvider = new BasicMenuSpriteProvider();
 
     // create list of menu buttons
     addNewMenuButton(controller, 3, "RESUME", ButtonType.RESUME);
@@ -73,25 +84,11 @@ public class GamePausedModelImpl implements Model, ButtonModel {
         100 + (4 * 170));
     this.flashingPausedText = new FlashingTextImpl(
         Collections.singletonList(pausedText),
-        0.5f);
-  }
+        0.5f,
+            this);
 
-  /*
-   * ******************************************************
-   *
-   * PUBLIC CONSTRUCTOR
-   *
-   * ******************************************************
-   */
-
-  @Override
-  public List<ISprite> getSprites() {
-
-    List<ISprite> sprites = new ArrayList<>(pausedSprites);
-    for (SpriteTextButton eachButton : menuButtons) {
-      sprites.add(eachButton.getSprite());
-    }
-    return sprites;
+    this.updateText = true;
+    this.updateSprites = true;
   }
 
   /*
@@ -101,14 +98,29 @@ public class GamePausedModelImpl implements Model, ButtonModel {
    */
 
   @Override
-  public List<Text> getText() {
-
-    List<Text> text = new ArrayList<>();
-    for (SpriteTextButton eachButton : menuButtons) {
-      text.add(eachButton.getText());
+  public TextProvider getTextProvider() {
+    if (updateText) {
+      textProvider.clear();
+      for (SpriteTextButton eachButton : menuButtons) {
+        textProvider.add(eachButton.getText());
+      }
+      textProvider.addAll(flashingPausedText.text());
+      updateText = false;
     }
-    text.addAll(flashingPausedText.text());
-    return text;
+    return textProvider;
+  }
+
+  @Override
+  public SpriteProvider getSpriteProvider() {
+    if (updateSprites) {
+      spriteProvider.clear();
+      spriteProvider.addAll(pausedSprites);
+      for (SpriteTextButton eachButton : menuButtons) {
+        spriteProvider.add(eachButton.getSprite());
+      }
+      updateSprites = false;
+    }
+    return spriteProvider;
   }
 
   @Override
@@ -124,6 +136,7 @@ public class GamePausedModelImpl implements Model, ButtonModel {
       case EXIT:
         // on exit, return to select level screen
         game.changeToScreen(ScreenType.SELECT_LEVEL);
+        this.modelState = PausedState.RUNNING;
         break;
 
       case OPTIONS:
@@ -135,6 +148,7 @@ public class GamePausedModelImpl implements Model, ButtonModel {
       case RESUME:
         // on resume - return back to game screen
         game.screenReturn();
+        this.modelState = PausedState.RUNNING;
         break;
 
       default:
@@ -183,6 +197,11 @@ public class GamePausedModelImpl implements Model, ButtonModel {
   }
 
   @Override
+  public boolean animateStars() {
+    return false;
+  }
+
+  @Override
   public void pause() {
     // no action for this model
   }
@@ -200,14 +219,23 @@ public class GamePausedModelImpl implements Model, ButtonModel {
         100 + (row * 170),
         label,
         buttonType,
-        GameSpriteIdentifier.MENU_BUTTON_UP,
-        GameSpriteIdentifier.MENU_BUTTON_DOWN);
+        SpriteDetails.MENU_BUTTON_UP,
+        SpriteDetails.MENU_BUTTON_DOWN);
 
     // add a new menu button to controller's list of touch controllers
     controller.addTouchController(new DetectButtonTouch(button));
 
     // add new button to list
     menuButtons.add(button);
+
+    // trigger view update
+    updateText = true;
+    updateSprites = true;
+  }
+
+  @Override
+  public void onTextChange() {
+    updateText = true;
   }
 
   /*

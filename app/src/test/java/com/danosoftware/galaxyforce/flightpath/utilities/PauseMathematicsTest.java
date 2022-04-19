@@ -5,10 +5,8 @@ import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.IsEqual.equalTo;
 
 import com.danosoftware.galaxyforce.flightpath.paths.DoublePoint;
-
-import org.junit.Test;
-
 import java.util.List;
+import org.junit.Test;
 
 /**
  * Test Pause Mathematics Utility

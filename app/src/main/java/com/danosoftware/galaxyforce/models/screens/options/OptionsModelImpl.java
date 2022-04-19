@@ -29,17 +29,16 @@ import com.danosoftware.galaxyforce.services.sound.SoundEffect;
 import com.danosoftware.galaxyforce.services.sound.SoundPlayerService;
 import com.danosoftware.galaxyforce.services.vibration.VibrateTime;
 import com.danosoftware.galaxyforce.services.vibration.VibrationService;
-import com.danosoftware.galaxyforce.sprites.common.ISprite;
 import com.danosoftware.galaxyforce.sprites.game.splash.SplashSprite;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarAnimationType;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarField;
-import com.danosoftware.galaxyforce.sprites.game.starfield.StarFieldTemplate;
 import com.danosoftware.galaxyforce.sprites.mainmenu.MenuButton;
-import com.danosoftware.galaxyforce.sprites.properties.MenuSpriteIdentifier;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDetails;
+import com.danosoftware.galaxyforce.sprites.properties.SpriteDimensions;
+import com.danosoftware.galaxyforce.sprites.providers.BasicMenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.MenuSpriteProvider;
+import com.danosoftware.galaxyforce.sprites.providers.SpriteProvider;
 import com.danosoftware.galaxyforce.text.Text;
 import com.danosoftware.galaxyforce.text.TextPositionX;
-import java.util.ArrayList;
-import java.util.List;
+import com.danosoftware.galaxyforce.text.TextProvider;
 
 public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayConnectionObserver {
 
@@ -55,18 +54,17 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
   private final VibrationService vibrator;
   private final GooglePlayServices playService;
 
-  // references to stars
-  private final StarField starField;
-
-  // reference to all sprites in model
-  private final List<ISprite> allSprites;
   // reference to all text objects in model
-  private final List<Text> allText;
+  private final TextProvider textProvider;
+  private final MenuSpriteProvider spriteProvider;
   private ModelState modelState;
   private boolean reBuildAssets;
 
   // current state of google play service connection
   private ConnectionState connectionState;
+
+  private final static SpriteDetails GOOGLE_PLAY_ICON = SpriteDetails.GOOGLE_PLAY;
+  private final static int DEFAULT_GOOGLE_PLAY_ICON_WIDTH = 52; // fallback is dimensions not loaded
 
   public OptionsModelImpl(
       Game game,
@@ -75,8 +73,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
       SoundPlayerService sounds,
       MusicPlayerService music,
       VibrationService vibrator,
-      GooglePlayServices playService,
-      StarFieldTemplate starFieldTemplate) {
+      GooglePlayServices playService) {
     this.game = game;
     this.controller = controller;
     this.configurationService = configurationService;
@@ -84,14 +81,13 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
     this.music = music;
     this.vibrator = vibrator;
     this.playService = playService;
-    this.allSprites = new ArrayList<>();
-    this.allText = new ArrayList<>();
-    this.starField = new StarField(starFieldTemplate, StarAnimationType.MENU);
-    this.reBuildAssets = false;
+    this.textProvider = new TextProvider();
+    this.spriteProvider = new BasicMenuSpriteProvider();
     this.connectionState = playService.connectedState();
 
-    // build screen assets
-    buildAssets();
+    // build screen assets on next update
+    // sprites won't be initialised until screen resumes
+    this.reBuildAssets = true;
 
     // register for connection changes from the google play service
     playService.registerConnectionObserver(this);
@@ -103,17 +99,11 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
     controller.clearTouchControllers();
 
     // clear current sprites prior to rebuilding
-    allSprites.clear();
-    allText.clear();
+    spriteProvider.clear();
+    textProvider.clear();
 
-    // add stars
-    allSprites.addAll(starField.getSprites());
-
-    /**
-     * add buttons
-     */
-
-    allText.add(Text.newTextRelativePositionX(
+    // add buttons
+    textProvider.add(Text.newTextRelativePositionX(
         "SOUND EFFECTS",
         TextPositionX.CENTRE,
         175 + (4 * 170)));
@@ -136,7 +126,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
         soundToggleGroup,
         90);
 
-    allText.add(Text.newTextRelativePositionX(
+    textProvider.add(Text.newTextRelativePositionX(
         "MUSIC",
         TextPositionX.CENTRE,
         175 + (3 * 170)));
@@ -159,7 +149,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
         musicToggleGroup,
         90);
 
-    allText.add(Text.newTextRelativePositionX(
+    textProvider.add(Text.newTextRelativePositionX(
         "VIBRATION",
         TextPositionX.CENTRE,
         175 + (2 * 170)));
@@ -191,21 +181,21 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
       // we will place google play icon alongside text.
       // compute the positions of each so combined icon/text is centred.
       final String text = "GOOGLE PLAY";
-      final MenuSpriteIdentifier icon = MenuSpriteIdentifier.GOOGLE_PLAY;
-      final int halfIconWidth = (icon.getProperties() != null ? icon.getProperties().getWidth() / 2
-          : 0);
+      final SpriteDimensions dimensions = GOOGLE_PLAY_ICON.getDimensions();
+      final int halfIconWidth =
+          dimensions != null ? dimensions.getWidth() / 2 : DEFAULT_GOOGLE_PLAY_ICON_WIDTH / 2;
       final int fontWidth = 30;
       final int buffer = 10;
       final int textLength = text.length() * fontWidth;
       final int xPos = (GameConstants.GAME_WIDTH / 2) + halfIconWidth + buffer;
       final int iconXPos = xPos - (textLength / 2) - halfIconWidth - buffer;
 
-      allSprites.add(
+      spriteProvider.add(
           new SplashSprite(
               iconXPos,
               175 + 170,
-              icon));
-      allText.add(Text.newTextAbsolutePosition(
+              GOOGLE_PLAY_ICON));
+      textProvider.add(Text.newTextAbsolutePosition(
           text,
           xPos,
           175 + 170));
@@ -234,13 +224,13 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
   }
 
   @Override
-  public List<ISprite> getSprites() {
-    return allSprites;
+  public TextProvider getTextProvider() {
+    return textProvider;
   }
 
   @Override
-  public List<Text> getText() {
-    return allText;
+  public SpriteProvider getSpriteProvider() {
+    return spriteProvider;
   }
 
   @Override
@@ -254,9 +244,6 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
       buildAssets();
       reBuildAssets = false;
     }
-
-    // move stars
-    starField.animate(deltaTime);
   }
 
   @Override
@@ -277,18 +264,18 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
         90 + (column * 180) + offset,
         100 + (row * 170),
         optionType,
-        MenuSpriteIdentifier.OPTION_UNSELECTED,
-        MenuSpriteIdentifier.OPTION_SELECTED,
+        SpriteDetails.OPTION_UNSELECTED,
+        SpriteDetails.OPTION_SELECTED,
         toggleGroup);
 
     // add a new button to controller's list of touch controllers
     controller.addTouchController(new DetectButtonTouch(button));
 
     // add new button's sprite to list of sprites
-    allSprites.add(button.getSprite());
+    spriteProvider.add(button.getSprite());
 
     // add new button's text to list of text objects
-    allText.add(button.getText());
+    textProvider.add(button.getText());
 
     // add button to option group
     toggleGroup.addOption(button, optionType);
@@ -310,15 +297,15 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
         100 + (row * 170),
         label,
         buttonType,
-        MenuSpriteIdentifier.MAIN_MENU,
-        MenuSpriteIdentifier.MAIN_MENU_PRESSED);
+        SpriteDetails.MAIN_MENU,
+        SpriteDetails.MAIN_MENU_PRESSED);
 
     // add a new menu button to controller's list of touch controllers
     controller.addTouchController(new DetectButtonTouch(button));
 
     /// add new button
-    allSprites.add(button.getSprite());
-    allText.add(button.getText());
+    spriteProvider.add(button.getSprite());
+    textProvider.add(button.getText());
   }
 
   @Override
@@ -406,6 +393,11 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
   @Override
   public RgbColour background() {
     return DEFAULT_BACKGROUND_COLOUR;
+  }
+
+  @Override
+  public boolean animateStars() {
+    return true;
   }
 
   @Override
