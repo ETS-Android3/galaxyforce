@@ -11,10 +11,8 @@ public enum SoundEffect {
     BIG_EXPLOSION("bigExplosion.ogg"),
     POWER_UP_SPAWN("powerUpSpawn.ogg"),
     POWER_UP_COLLIDE("powerUpCollect.ogg"),
-    BASE_FLIP("explosion.ogg"),
     ALIEN_SPAWN("explosion.ogg"),
     ALIEN_HIT("hit.ogg"),
-    BASE_HIT("explosion.ogg"),
     SHIELD_PULSE("shield-pulse.ogg");
 
     // filename of sound effect
