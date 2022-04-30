@@ -86,7 +86,7 @@ public class BaseMovingSprite extends AbstractMovingSprite {
               changeType(BASE_FLAT);
               maxDistanceToTravel = FINAL_BASE_Y_POS - pausedPosition;
               timeWhenAccelerating = timeElapsed;
-              sounds.play(SoundEffect.BIG_EXPLOSION);
+              sounds.play(SoundEffect.BOOST);
             }
             break;
           case ACCELERATE:
