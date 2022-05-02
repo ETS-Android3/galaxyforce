@@ -43,6 +43,7 @@ import com.danosoftware.galaxyforce.view.GLGraphics;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Initialises model, controller and view for game. Handles the main game loop using the controller,
@@ -145,6 +146,22 @@ public class GameImpl implements Game, OnTaskCompleteListener<IScreen> {
     if (!transitioningToScreen) {
       screenChangeType = ScreenChangeType.NO_RETURN_SCREEN;
       createScreen(() -> screenFactory.newScreen(screenType));
+    }
+  }
+
+  @Override
+  public void changeToScreenAfterDelay(ScreenType screenType, int delayInMilliseconds) {
+    if (!transitioningToScreen) {
+      screenChangeType = ScreenChangeType.NO_RETURN_SCREEN;
+      createScreen(() ->
+      {
+        try {
+          TimeUnit.MILLISECONDS.sleep(delayInMilliseconds);
+        } catch (InterruptedException e) {
+          // no action
+        }
+        return screenFactory.newScreen(screenType);
+      });
     }
   }
 

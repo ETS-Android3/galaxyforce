@@ -441,10 +441,10 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
         return;
       }
       // check if all waves have been completed
-      else if (wave >= GameConstants.MAX_WAVES) {
+      else if (wave >= GameConstants.MAX_WAVES && primaryBase.isActive()) {
         Log.i(TAG, "Game completed.");
         transitioningToGameCompletedScreen = true;
-        game.changeToScreen(ScreenType.GAME_COMPLETE);
+        game.changeToScreenAfterDelay(ScreenType.GAME_COMPLETE, 2000);
         return;
       }
       // advance to next level
