@@ -13,6 +13,8 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.os.StrictMode.VmPolicy;
 import android.os.Trace;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -116,6 +118,14 @@ public class MainActivity extends Activity {
         }
 
         Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Application Created");
+
+        // enable strict mode to detect memory leaks
+        if (BuildConfig.DEBUG) {
+            StrictMode.setVmPolicy(new VmPolicy.Builder()
+                .detectLeakedClosableObjects()
+                .penaltyLog()
+                .build());
+        }
     }
 
     /* runs after onCreate or resuming after being in background */
@@ -152,13 +162,16 @@ public class MainActivity extends Activity {
             }
             while (true) {
                 try {
-                    stateChanged.wait();
+                    // this waits for renderer thread to complete pause.
+                    // GL work (e.g. unloading textures) must happen on renderer thread.
+                    // also applies a short wait time-out in scenarios where renderer isn't called (e.g. view has gone).
+                    // otherwise this would block indefinitely.
+                    stateChanged.wait(250);
                     break;
                 } catch (InterruptedException e) {
                     Log.w(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Unexpected InterruptedException", e);
                 }
             }
-
         }
         glView.onPause();
         super.onPause();
@@ -250,45 +263,42 @@ public class MainActivity extends Activity {
 
         @Override
         public void onDrawFrame(GL10 unused) {
-            ActivityState stateCheck;
-
             synchronized (stateChanged) {
-                stateCheck = state;
-            }
+                ActivityState stateCheck = state;
 
-            if (stateCheck == ActivityState.RUNNING) {
-                float deltaTime = (System.nanoTime() - startTime) / 1000000000.0f;
-                startTime = System.nanoTime();
+                if (stateCheck == ActivityState.RUNNING) {
+                    float deltaTime = (System.nanoTime() - startTime) / 1000000000.0f;
+                    startTime = System.nanoTime();
 
-                Trace.beginSection("onDrawFrame.update");
-                game.update(deltaTime);
-                Trace.endSection();
-                Trace.beginSection("onDrawFrame.draw");
-                game.draw();
-                Trace.endSection();
-            }
+                    Trace.beginSection("onDrawFrame.update");
+                    game.update(deltaTime);
+                    Trace.endSection();
+                    Trace.beginSection("onDrawFrame.draw");
+                    game.draw();
+                    Trace.endSection();
+                }
 
-            if (stateCheck == ActivityState.PAUSED) {
-                Log.i(GameConstants.LOG_TAG, "Render Pause");
-                game.pause();
-
-                synchronized (stateChanged) {
+                if (stateCheck == ActivityState.PAUSED) {
+                    Log.i(GameConstants.LOG_TAG, "Render Pause");
+                    game.pause();
                     state = ActivityState.IDLE;
+
+                    // notify waiting main thread
                     stateChanged.notifyAll();
                 }
-            }
 
-            if (stateCheck == ActivityState.FINISHED) {
-                Log.i(GameConstants.LOG_TAG, "Render Finish");
-                game.pause();
-                game.dispose();
-
-                synchronized (stateChanged) {
+                if (stateCheck == ActivityState.FINISHED) {
+                    Log.i(GameConstants.LOG_TAG, "Render Finish");
+                    game.pause();
+                    game.dispose();
                     state = ActivityState.IDLE;
+
+                    // delete our GL shaders program
+                    GLShaderHelper.deleteProgram();
+
+                    // notify waiting main thread
                     stateChanged.notifyAll();
                 }
-                // delete our GL shaders program
-                GLShaderHelper.deleteProgram();
             }
         }
 

@@ -21,6 +21,8 @@ public interface Game {
 
   void changeToScreen(ScreenType gameScreen);
 
+  void changeToScreenAfterDelay(ScreenType screenType, int delayInMilliseconds);
+
   void changeToGameScreen(int wave);
 
   void changeToGamePausedScreen(List<ISprite> pausedSprites, RgbColour backgroundColour);

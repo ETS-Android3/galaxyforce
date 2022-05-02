@@ -6,7 +6,6 @@ import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.opengl.GLSurfaceView;
 import android.util.Log;
-
 import com.danosoftware.galaxyforce.billing.BillingService;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
@@ -41,10 +40,10 @@ import com.danosoftware.galaxyforce.textures.TextureLoader;
 import com.danosoftware.galaxyforce.textures.TextureRegionXmlParser;
 import com.danosoftware.galaxyforce.textures.TextureService;
 import com.danosoftware.galaxyforce.view.GLGraphics;
-
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Initialises model, controller and view for game. Handles the main game loop using the controller,
@@ -77,6 +76,7 @@ public class GameImpl implements Game, OnTaskCompleteListener<IScreen> {
   private boolean newScreenReady;
   private IScreen newScreen;
   private boolean transitioningToScreen;
+  private boolean gameStarted;
 
   public GameImpl(
       Context context,
@@ -131,12 +131,14 @@ public class GameImpl implements Game, OnTaskCompleteListener<IScreen> {
 
     this.newScreenReady = false;
     this.transitioningToScreen = false;
+    this.gameStarted = false;
   }
 
   @Override
   public void start() {
     Log.i(GameConstants.LOG_TAG, LOCAL_TAG + ": Start Game");
     this.screen = screenFactory.newScreen(ScreenType.SPLASH);
+    gameStarted = true;
   }
 
   @Override
@@ -144,6 +146,22 @@ public class GameImpl implements Game, OnTaskCompleteListener<IScreen> {
     if (!transitioningToScreen) {
       screenChangeType = ScreenChangeType.NO_RETURN_SCREEN;
       createScreen(() -> screenFactory.newScreen(screenType));
+    }
+  }
+
+  @Override
+  public void changeToScreenAfterDelay(ScreenType screenType, int delayInMilliseconds) {
+    if (!transitioningToScreen) {
+      screenChangeType = ScreenChangeType.NO_RETURN_SCREEN;
+      createScreen(() ->
+      {
+        try {
+          TimeUnit.MILLISECONDS.sleep(delayInMilliseconds);
+        } catch (InterruptedException e) {
+          // no action
+        }
+        return screenFactory.newScreen(screenType);
+      });
     }
   }
 
@@ -195,6 +213,11 @@ public class GameImpl implements Game, OnTaskCompleteListener<IScreen> {
 
   @Override
   public void resume() {
+    // in rare scenarios, resume() may be called before the game has initialised.
+    // this can occur if the game paused immediately on start-up.
+    if (!gameStarted) {
+      this.start();
+    }
     Log.i(GameConstants.LOG_TAG, LOCAL_TAG + ": Resume Game");
     textureService.reloadTextures();
     screen.resume();
