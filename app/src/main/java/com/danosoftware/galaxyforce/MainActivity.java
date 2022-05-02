@@ -13,6 +13,8 @@ import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.GLSurfaceView.Renderer;
 import android.os.Bundle;
+import android.os.StrictMode;
+import android.os.StrictMode.VmPolicy;
 import android.os.Trace;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -116,6 +118,14 @@ public class MainActivity extends Activity {
         }
 
         Log.i(GameConstants.LOG_TAG, ACTIVITY_TAG + ": Application Created");
+
+        // enable strict mode to detect memory leaks
+        if (BuildConfig.DEBUG) {
+            StrictMode.setVmPolicy(new VmPolicy.Builder()
+                .detectLeakedClosableObjects()
+                .penaltyLog()
+                .build());
+        }
     }
 
     /* runs after onCreate or resuming after being in background */
