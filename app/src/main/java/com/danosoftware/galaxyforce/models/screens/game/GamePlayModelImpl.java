@@ -557,9 +557,10 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
       for (IBaseMissile eachBaseMissile : assets.getBaseMissiles()) {
         Rectangle baseMissileBounds = eachBaseMissile.getBounds();
         for (IAlien eachAlien : aliens) {
-          if (!eachBaseMissile.isDestroyed() && !eachBaseMissile.hitBefore(eachAlien)) {
+          if (!eachBaseMissile.isDestroyed()) {
             Rectangle alienBounds = eachAlien.getBounds();
-            if (checkCollision(alienBounds, baseMissileBounds)) {
+            if (checkCollision(alienBounds, baseMissileBounds) && !eachBaseMissile
+                .hitBefore(eachAlien)) {
               eachAlien.onHitBy(eachBaseMissile);
             }
           }
