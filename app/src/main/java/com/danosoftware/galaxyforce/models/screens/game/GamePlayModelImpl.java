@@ -444,6 +444,9 @@ public class GamePlayModelImpl implements Model, GameModel, TextChangeListener {
       else if (wave >= GameConstants.MAX_WAVES && primaryBase.isActive()) {
         Log.i(TAG, "Game completed.");
         transitioningToGameCompletedScreen = true;
+        // wait a few seconds before transitioning to game complete.
+        // jarring to user if switch happens immediately after wave ends.
+        // if base was destroyed, allows time for new base to appear before switch.
         game.changeToScreenAfterDelay(ScreenType.GAME_COMPLETE, 3000);
         return;
       }
