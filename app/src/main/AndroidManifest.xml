@@ -43,7 +43,7 @@ See: https://developer.android.com/guide/topics/manifest/manifest-intro.html
           android:name=".MainActivity"
           android:screenOrientation="sensorPortrait"
           android:exported="true"
-          android:configChanges="orientation|screenSize|screenLayout">
+          android:configChanges="orientation|screenSize|screenLayout|keyboardHidden">
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
