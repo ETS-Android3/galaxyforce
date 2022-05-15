@@ -4,7 +4,6 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_AL
 import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_BLUE;
 import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_GREEN;
 import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_RED;
-import static com.danosoftware.galaxyforce.constants.GameConstants.RC_SIGN_IN;
 
 import android.app.Activity;
 import android.content.Context;
@@ -41,9 +40,6 @@ import com.danosoftware.galaxyforce.services.preferences.PreferencesString;
 import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.view.GLGraphics;
 import com.danosoftware.galaxyforce.view.GLShaderHelper;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.tasks.Task;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -65,19 +61,13 @@ public class MainActivity extends Activity {
     /* application state */
     private ActivityState state = ActivityState.INITIALISED;
 
-    /* GL Graphics reference */
-    private GLGraphics glGraphics;
-
     /* GL Surface View reference */
     private GLSurfaceView glView;
 
     /* Billing Manager for In-App Billing Requests */
     private BillingManager mBillingManager;
 
-    /* Google Play Games Services */
-    private GooglePlayServices mPlayServices;
-
-    private TaskService taskService = new TaskService();
+    private final TaskService taskService = new TaskService();
 
     /* runs when application initially starts */
     @Override
@@ -90,7 +80,7 @@ public class MainActivity extends Activity {
         // set-up GL view
         glView = new GameGLSurfaceView(this);
         setContentView(glView);
-        this.glGraphics = new GLGraphics(glView);
+        GLGraphics glGraphics = new GLGraphics(glView);
 
         // Create and initialize billing
         BillingService billingService = new BillingServiceImpl();
@@ -103,7 +93,7 @@ public class MainActivity extends Activity {
         ConfigurationService configurationService = new ConfigurationServiceImpl(configPreferences);
 
         // initialise play games services
-        this.mPlayServices = new GooglePlayServices(this, configurationService);
+        GooglePlayServices mPlayServices = new GooglePlayServices(this);
 
         // create instance of game
         Intent launchIntent = getIntent();
@@ -143,9 +133,6 @@ public class MainActivity extends Activity {
         if (mBillingManager != null && mBillingManager.isConnected()) {
             mBillingManager.queryPurchases();
         }
-
-        // sign-in to google play services
-        mPlayServices.signInSilently();
     }
 
     /* runs when application is paused */
@@ -242,17 +229,6 @@ public class MainActivity extends Activity {
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
     }
 
-    // invoked with result on attempts to sign-in to Google Play Services.
-    // we will pass on result to our service to handle correctly.
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            mPlayServices.handleSignInResult(task);
-        }
-    }
-
     /**
      * Inner class to handle graphics
      */
@@ -347,8 +323,6 @@ public class MainActivity extends Activity {
      */
     private class GameGLSurfaceView extends GLSurfaceView {
 
-        private final GLRenderer renderer;
-
         public GameGLSurfaceView(Context context) {
             super(context);
 
@@ -356,7 +330,7 @@ public class MainActivity extends Activity {
             setEGLContextClientVersion(2);
 
             // Set the Renderer for drawing on the GLSurfaceView
-            renderer = new GLRenderer();
+            GLRenderer renderer = new GLRenderer();
             setRenderer(renderer);
         }
     }

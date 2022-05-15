@@ -5,12 +5,12 @@ package com.danosoftware.galaxyforce.services.googleplay;
  */
 public enum ConnectionState {
 
-    // no request made yet
+    // no authentication request made yet
     NO_ATTEMPT,
 
-    // successfully connected to Google Play Service
-    CONNECTED,
+    // user has been authenticated
+    AUTHENTICATED,
 
-    // not connected (either failed or logged out)
-    DISCONNECTED
+    // user could not be authenticated
+    FAILED
 }

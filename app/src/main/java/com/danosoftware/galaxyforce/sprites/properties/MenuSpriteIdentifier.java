@@ -12,6 +12,10 @@ public enum MenuSpriteIdentifier {
   MAIN_MENU(SpriteDetails.MAIN_MENU, "blueButtonUp"),
   MAIN_MENU_PRESSED(SpriteDetails.MAIN_MENU_PRESSED, "blueButtonDown"),
 
+  // menu buttons
+  OPTIONS_MENU(SpriteDetails.OPTIONS_MENU, "greyMenuButtonUp"),
+  OPTIONS_MENU_PRESSED(SpriteDetails.OPTIONS_MENU_PRESSED, "goldMenuButtonDown"),
+
   // wave select buttons
   LEVEL_FRAME(SpriteDetails.LEVEL_FRAME, "greenButtonUp"),
   LEVEL_FRAME_PRESSED(SpriteDetails.LEVEL_FRAME_PRESSED, "greenButtonDown"),
