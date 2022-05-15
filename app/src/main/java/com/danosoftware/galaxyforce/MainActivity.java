@@ -235,17 +235,6 @@ public class MainActivity extends Activity {
         windowInsetsController.hide(WindowInsetsCompat.Type.systemBars());
     }
 
-    // invoked with result on attempts to sign-in to Google Play Services.
-    // we will pass on result to our service to handle correctly.
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-//        if (requestCode == RC_SIGN_IN) {
-//            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-//            mPlayServices.handleSignInResult(task);
-//        }
-    }
-
     /**
      * Inner class to handle graphics
      */
