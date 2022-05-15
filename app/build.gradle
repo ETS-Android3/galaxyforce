@@ -46,7 +46,7 @@ android {
      * compile your app. This means your app can use the API features included in
      * this API level and lower.
      */
-    compileSdkVersion 31
+    compileSdkVersion 32
 
     /**
      * The defaultConfig block encapsulates default settings and entries for all
@@ -67,7 +67,7 @@ android {
         minSdkVersion 19
 
         // Specifies the API level used to test the app.
-        targetSdkVersion 31
+        targetSdkVersion 32
 
         // Defines the version number of your app.
         versionCode 59
