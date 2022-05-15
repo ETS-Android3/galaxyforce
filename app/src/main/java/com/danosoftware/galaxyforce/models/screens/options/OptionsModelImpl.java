@@ -57,7 +57,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
   private ModelState modelState;
   private boolean reBuildAssets;
 
-  // is user not signed-in or out?
+  // is user signed-in or out?
   // it's possible to be neither if sign-in process still executing
   private boolean playerSignedOut;
   private boolean playerSignedIn;
@@ -176,7 +176,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
     // automatically when the game started.
     //
     // Once signed-in, we remove the button as they can't sign-out.
-    // In it's place, we add a achievements button.
+    // We will replace it with an achievements button.
     if (playerSignedIn || playerSignedOut) {
 
       // we will place google play icon alongside text.
@@ -421,8 +421,8 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
   }
 
   /**
-   * Receives notifications whenever a player signs-in to Google Play service. Once signed-in, they
-   * can not sign-out.
+   * Receives notifications whenever a player signs-in to Google Play service (or fails to sign-in).
+   * Once a player is signed-in, they can not sign-out.
    */
   @Override
   public void onPlayerSignInStateChange() {
