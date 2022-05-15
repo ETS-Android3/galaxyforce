@@ -19,7 +19,6 @@ import com.danosoftware.galaxyforce.options.OptionMusic;
 import com.danosoftware.galaxyforce.options.OptionSound;
 import com.danosoftware.galaxyforce.options.OptionVibration;
 import com.danosoftware.galaxyforce.services.configurations.ConfigurationService;
-import com.danosoftware.galaxyforce.services.googleplay.ConnectionState;
 import com.danosoftware.galaxyforce.services.googleplay.GooglePlayConnectionObserver;
 import com.danosoftware.galaxyforce.services.googleplay.GooglePlayServices;
 import com.danosoftware.galaxyforce.services.music.MusicPlayerService;
@@ -426,10 +425,14 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
    * can not sign-out.
    */
   @Override
-  public void onPlayerSignInStateChange(ConnectionState connectionState) {
-    this.playerSignedOut = (connectionState == ConnectionState.FAILED);
-    this.playerSignedIn = (connectionState == ConnectionState.AUTHENTICATED);
+  public void onPlayerSignInStateChange() {
+    this.playerSignedOut = playService.isPlayerSignedOut();
+    this.playerSignedIn = playService.isPlayerSignedIn();
     this.reBuildAssets = true;
-    Log.d(GameConstants.LOG_TAG, "Player sign-in state is now: " + connectionState);
+    if (playerSignedIn) {
+      Log.d(GameConstants.LOG_TAG, "Player is now signed-in.");
+    } else if (playerSignedOut) {
+      Log.d(GameConstants.LOG_TAG, "Player is now signed-out.");
+    }
   }
 }

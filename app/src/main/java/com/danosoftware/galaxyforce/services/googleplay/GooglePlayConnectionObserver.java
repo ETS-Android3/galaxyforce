@@ -6,5 +6,5 @@ public interface GooglePlayConnectionObserver {
      * <p>
      * Used to tell observers that the player has sign-in was successful or has failed.
      */
-    void onPlayerSignInStateChange(ConnectionState connectionState);
+    void onPlayerSignInStateChange();
 }

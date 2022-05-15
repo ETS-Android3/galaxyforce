@@ -205,9 +205,13 @@ public class GooglePlayServices {
     private synchronized void notifyConnectionObservers(
             ConnectionState connectionState) {
         for (GooglePlayConnectionObserver observer : connectionObservers) {
-            Log.i(ACTIVITY_TAG, "Sending Connection State Change " + connectionState.name() + " to "
-                + observer);
-            observer.onPlayerSignInStateChange(connectionState);
+            Log.i(
+                ACTIVITY_TAG,
+                "Player sign-in state is: "
+                    + connectionState.name()
+                    + ". Sending player sign-in state change to "
+                    + observer);
+            observer.onPlayerSignInStateChange();
         }
     }
 
