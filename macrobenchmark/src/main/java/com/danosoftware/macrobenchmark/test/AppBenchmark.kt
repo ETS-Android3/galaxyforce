@@ -69,6 +69,12 @@ class AppBenchmark {
             click(device, 180, (4 * 170) + 100)
             wait(device, 500)
 
+            // display achievements
+            click(device, GAME_WIDTH / 2, (1 * 170) + 100)
+            wait(device, 5000)
+            device.pressBack()
+            wait(device, 1000)
+
             // return to main menu
             device.pressBack()
             device.waitForIdle()
