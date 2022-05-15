@@ -61,19 +61,13 @@ public class MainActivity extends Activity {
     /* application state */
     private ActivityState state = ActivityState.INITIALISED;
 
-    /* GL Graphics reference */
-    private GLGraphics glGraphics;
-
     /* GL Surface View reference */
     private GLSurfaceView glView;
 
     /* Billing Manager for In-App Billing Requests */
     private BillingManager mBillingManager;
 
-    /* Google Play Games Services */
-    private GooglePlayServices mPlayServices;
-
-    private TaskService taskService = new TaskService();
+    private final TaskService taskService = new TaskService();
 
     /* runs when application initially starts */
     @Override
@@ -86,7 +80,7 @@ public class MainActivity extends Activity {
         // set-up GL view
         glView = new GameGLSurfaceView(this);
         setContentView(glView);
-        this.glGraphics = new GLGraphics(glView);
+        GLGraphics glGraphics = new GLGraphics(glView);
 
         // Create and initialize billing
         BillingService billingService = new BillingServiceImpl();
@@ -99,7 +93,7 @@ public class MainActivity extends Activity {
         ConfigurationService configurationService = new ConfigurationServiceImpl(configPreferences);
 
         // initialise play games services
-        this.mPlayServices = new GooglePlayServices(this);
+        GooglePlayServices mPlayServices = new GooglePlayServices(this);
 
         // create instance of game
         Intent launchIntent = getIntent();
@@ -329,8 +323,6 @@ public class MainActivity extends Activity {
      */
     private class GameGLSurfaceView extends GLSurfaceView {
 
-        private final GLRenderer renderer;
-
         public GameGLSurfaceView(Context context) {
             super(context);
 
@@ -338,7 +330,7 @@ public class MainActivity extends Activity {
             setEGLContextClientVersion(2);
 
             // Set the Renderer for drawing on the GLSurfaceView
-            renderer = new GLRenderer();
+            GLRenderer renderer = new GLRenderer();
             setRenderer(renderer);
         }
     }
