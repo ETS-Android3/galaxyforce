@@ -4,7 +4,6 @@ import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_AL
 import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_BLUE;
 import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_GREEN;
 import static com.danosoftware.galaxyforce.constants.GameConstants.BACKGROUND_RED;
-import static com.danosoftware.galaxyforce.constants.GameConstants.RC_SIGN_IN;
 
 import android.app.Activity;
 import android.content.Context;
@@ -41,9 +40,6 @@ import com.danosoftware.galaxyforce.services.preferences.PreferencesString;
 import com.danosoftware.galaxyforce.tasks.TaskService;
 import com.danosoftware.galaxyforce.view.GLGraphics;
 import com.danosoftware.galaxyforce.view.GLShaderHelper;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.tasks.Task;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
@@ -103,7 +99,7 @@ public class MainActivity extends Activity {
         ConfigurationService configurationService = new ConfigurationServiceImpl(configPreferences);
 
         // initialise play games services
-        this.mPlayServices = new GooglePlayServices(this, configurationService);
+        this.mPlayServices = new GooglePlayServices(this);
 
         // create instance of game
         Intent launchIntent = getIntent();
@@ -143,9 +139,6 @@ public class MainActivity extends Activity {
         if (mBillingManager != null && mBillingManager.isConnected()) {
             mBillingManager.queryPurchases();
         }
-
-        // sign-in to google play services
-        mPlayServices.signInSilently();
     }
 
     /* runs when application is paused */
@@ -247,10 +240,10 @@ public class MainActivity extends Activity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == RC_SIGN_IN) {
-            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
-            mPlayServices.handleSignInResult(task);
-        }
+//        if (requestCode == RC_SIGN_IN) {
+//            Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
+//            mPlayServices.handleSignInResult(task);
+//        }
     }
 
     /**

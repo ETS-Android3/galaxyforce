@@ -1,7 +1,6 @@
 package com.danosoftware.galaxyforce.sprites.properties;
 
 import com.danosoftware.galaxyforce.textures.TextureRegion;
-
 import java.util.EnumMap;
 
 public enum SpriteDetails {
@@ -677,6 +676,10 @@ public enum SpriteDetails {
   // menu buttons
   MENU_BUTTON_UP,
   MENU_BUTTON_DOWN,
+
+  // options menu buttons
+  OPTIONS_MENU,
+  OPTIONS_MENU_PRESSED,
 
   // lives remaining
   LIVES,

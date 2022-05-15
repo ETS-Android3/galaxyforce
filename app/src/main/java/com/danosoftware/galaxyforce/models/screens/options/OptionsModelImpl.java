@@ -15,12 +15,10 @@ import com.danosoftware.galaxyforce.models.buttons.ButtonType;
 import com.danosoftware.galaxyforce.models.screens.ModelState;
 import com.danosoftware.galaxyforce.models.screens.background.RgbColour;
 import com.danosoftware.galaxyforce.options.Option;
-import com.danosoftware.galaxyforce.options.OptionGooglePlay;
 import com.danosoftware.galaxyforce.options.OptionMusic;
 import com.danosoftware.galaxyforce.options.OptionSound;
 import com.danosoftware.galaxyforce.options.OptionVibration;
 import com.danosoftware.galaxyforce.services.configurations.ConfigurationService;
-import com.danosoftware.galaxyforce.services.googleplay.ConnectionRequest;
 import com.danosoftware.galaxyforce.services.googleplay.ConnectionState;
 import com.danosoftware.galaxyforce.services.googleplay.GooglePlayConnectionObserver;
 import com.danosoftware.galaxyforce.services.googleplay.GooglePlayServices;
@@ -60,8 +58,10 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
   private ModelState modelState;
   private boolean reBuildAssets;
 
-  // current state of google play service connection
-  private ConnectionState connectionState;
+  // is user not signed-in or out?
+  // it's possible to be neither if sign-in process still executing
+  private boolean playerSignedOut;
+  private boolean playerSignedIn;
 
   private final static SpriteDetails GOOGLE_PLAY_ICON = SpriteDetails.GOOGLE_PLAY;
   private final static int DEFAULT_GOOGLE_PLAY_ICON_WIDTH = 52; // fallback is dimensions not loaded
@@ -83,7 +83,8 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
     this.playService = playService;
     this.textProvider = new TextProvider();
     this.spriteProvider = new BasicMenuSpriteProvider();
-    this.connectionState = playService.connectedState();
+    this.playerSignedOut = playService.isPlayerSignedOut();
+    this.playerSignedIn = playService.isPlayerSignedIn();
 
     // build screen assets on next update
     // sprites won't be initialised until screen resumes
@@ -172,11 +173,12 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
         vibrationToggleGroup,
         90);
 
-    // Google Play options are different to other options.
-    // They do not reflect the state of the persisted options.
-    // Instead they show the current Google Play signed-in state.
-    if (connectionState == ConnectionState.CONNECTED
-        || connectionState == ConnectionState.DISCONNECTED) {
+    // We will only show the sign-in option if they failed to sign-in
+    // automatically when the game started.
+    //
+    // Once signed-in, we remove the button as they can't sign-out.
+    // In it's place, we add a achievements button.
+    if (playerSignedIn || playerSignedOut) {
 
       // we will place google play icon alongside text.
       // compute the positions of each so combined icon/text is centred.
@@ -190,6 +192,7 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
       final int xPos = (GameConstants.GAME_WIDTH / 2) + halfIconWidth + buffer;
       final int iconXPos = xPos - (textLength / 2) - halfIconWidth - buffer;
 
+      // add google play icon and text
       spriteProvider.add(
           new SplashSprite(
               iconXPos,
@@ -200,24 +203,13 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
           xPos,
           175 + 170));
 
-      ToggleButtonGroup googlePlayToggleGroup = new ToggleOption(
-          this,
-          (connectionState == ConnectionState.CONNECTED) ? OptionGooglePlay.ON
-              : OptionGooglePlay.OFF);
-      addOptionsButton(
-          controller,
-          1,
-          0,
-          OptionGooglePlay.ON,
-          googlePlayToggleGroup,
-          90);
-      addOptionsButton(
-          controller,
-          1,
-          1,
-          OptionGooglePlay.OFF,
-          googlePlayToggleGroup,
-          90);
+      if (playerSignedOut) {
+        // add sign-in button
+        addNewOptionsMenuButton(controller, 1, "SIGN IN", ButtonType.SIGN_IN);
+      } else if (playerSignedIn) {
+        // add achievements button
+        addNewOptionsMenuButton(controller, 1, "AWARDS", ButtonType.ACHIEVEMENTS);
+      }
     }
 
     addNewMenuButton(controller, 0, "BACK", ButtonType.EXIT);
@@ -308,6 +300,33 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
     textProvider.add(button.getText());
   }
 
+  /**
+   * add wanted options button using the supplied row, label and type.
+   */
+  private void addNewOptionsMenuButton(
+      Controller controller,
+      int row,
+      String label,
+      ButtonType buttonType) {
+
+    // create button
+    MenuButton button = new MenuButton(
+        this,
+        GameConstants.GAME_WIDTH / 2,
+        100 + (row * 170),
+        label,
+        buttonType,
+        SpriteDetails.OPTIONS_MENU,
+        SpriteDetails.OPTIONS_MENU_PRESSED);
+
+    // add a new menu button to controller's list of touch controllers
+    controller.addTouchController(new DetectButtonTouch(button));
+
+    /// add new button
+    spriteProvider.add(button.getSprite());
+    textProvider.add(button.getText());
+  }
+
   @Override
   public void optionSelected(Option optionSelected) {
 
@@ -351,30 +370,6 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
       // vibrate (if enabled) to prove vibrator is on
       vibrator.vibrate(VibrateTime.MEDIUM);
     }
-
-    if (optionSelected instanceof OptionGooglePlay) {
-      OptionGooglePlay googlePlayType = (OptionGooglePlay) optionSelected;
-      Log.d(TAG, "Google Play Option Selected: " + googlePlayType.getText());
-
-      switch (googlePlayType) {
-        case ON:
-          if (connectionState != ConnectionState.CONNECTED) {
-            Log.d(GameConstants.LOG_TAG, "Attempting to connect to Google Play.");
-            playService.startSignInIntent();
-          }
-          break;
-        case OFF:
-          if (connectionState != ConnectionState.DISCONNECTED) {
-            Log.d(GameConstants.LOG_TAG, "Attempting to disconnect from Google Play.");
-            playService.signOut();
-          }
-          break;
-        default:
-          Log.e(GameConstants.LOG_TAG,
-              "Unsupported Google Play Option: '" + googlePlayType.name() + "'.");
-          break;
-      }
-    }
   }
 
   @Override
@@ -412,6 +407,14 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
         Log.d(GameConstants.LOG_TAG, "Exit Options.");
         goBack();
         break;
+      case SIGN_IN:
+        Log.d(GameConstants.LOG_TAG, "Attempt to sign-in player.");
+        playService.signIn();
+        break;
+      case ACHIEVEMENTS:
+        Log.d(GameConstants.LOG_TAG, "Show player achievements.");
+        playService.showAchievements();
+        break;
       default:
         Log.e(GameConstants.LOG_TAG, "Unsupported button: '" + buttonType + "'.");
         break;
@@ -419,23 +422,14 @@ public class OptionsModelImpl implements OptionsModel, ButtonModel, GooglePlayCo
   }
 
   /**
-   * Receives notifications whenever the Google Play service connection state change (e.g. following
-   * a successful login attempt)
+   * Receives notifications whenever a player signs-in to Google Play service. Once signed-in, they
+   * can not sign-out.
    */
   @Override
-  public void onConnectionStateChange(
-      ConnectionRequest request,
-      ConnectionState connectionState) {
-    this.connectionState = connectionState;
+  public void onPlayerSignInStateChange(ConnectionState connectionState) {
+    this.playerSignedOut = (connectionState == ConnectionState.FAILED);
+    this.playerSignedIn = (connectionState == ConnectionState.AUTHENTICATED);
     this.reBuildAssets = true;
-
-    // Remember if user has chosen to sign-in or sign-out (and this was successful).
-    // This is used to decide whether to sign them in automatically (silently) next time.
-    if (request == ConnectionRequest.LOG_OUT && connectionState == ConnectionState.DISCONNECTED) {
-      configurationService.setGooglePlayOption(OptionGooglePlay.OFF);
-    }
-    if (request == ConnectionRequest.LOG_IN && connectionState == ConnectionState.CONNECTED) {
-      configurationService.setGooglePlayOption(OptionGooglePlay.ON);
-    }
+    Log.d(GameConstants.LOG_TAG, "Player sign-in state is now: " + connectionState);
   }
 }

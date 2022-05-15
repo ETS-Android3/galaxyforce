@@ -1,54 +1,44 @@
 package com.danosoftware.galaxyforce.services.googleplay;
 
-import static com.danosoftware.galaxyforce.constants.GameConstants.RC_SIGN_IN;
 import static com.danosoftware.galaxyforce.constants.GameConstants.SAVED_GAME_FILENAME;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.content.Intent;
 import android.util.Log;
+import android.widget.Toast;
 import com.danosoftware.galaxyforce.R;
 import com.danosoftware.galaxyforce.exceptions.GalaxyForceException;
-import com.danosoftware.galaxyforce.options.OptionGooglePlay;
-import com.danosoftware.galaxyforce.services.configurations.ConfigurationService;
 import com.danosoftware.galaxyforce.services.savedgame.SavedGame;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.Scope;
-import com.google.android.gms.games.Games;
-import com.google.android.gms.games.GamesClient;
-import com.google.android.gms.games.GamesClientStatusCodes;
+import com.google.android.gms.games.AuthenticationResult;
+import com.google.android.gms.games.GamesSignInClient;
+import com.google.android.gms.games.PlayGames;
+import com.google.android.gms.games.PlayGamesSdk;
 import com.google.android.gms.games.SnapshotsClient;
 import com.google.android.gms.games.snapshot.Snapshot;
-import com.google.android.gms.games.snapshot.SnapshotMetadata;
 import com.google.android.gms.games.snapshot.SnapshotMetadataChange;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.TaskCompletionSource;
-import com.google.android.gms.tasks.Tasks;
-import com.google.api.services.drive.DriveScopes;
 import java.io.IOException;
 import java.util.HashSet;
+import java.util.Locale;
+import java.util.Objects;
 import java.util.Set;
 
 /**
- * Services responsible for connecting to Google Play Services and
- * managing Saved Games.
+ * Services responsible for connecting to Google Play Services and managing Saved Games.
  */
 public class GooglePlayServices {
 
     /* logger tag */
-    private static final String ACTIVITY_TAG = "GooglePlayServices";
+    private static final String ACTIVITY_TAG = "GoogleGamePlayServices";
+
+    private static final int RC_ACHIEVEMENT_UI = 9003;
 
     private static final int MAX_SNAPSHOT_RESOLVE_RETRIES = 10;
 
     private final Activity mActivity;
-    private final ConfigurationService configurationService;
-    private final GoogleSignInClient signInClient;
     private volatile ConnectionState connectedState;
 
     /*
@@ -62,26 +52,115 @@ public class GooglePlayServices {
     private volatile SavedGame savedGame;
 
     public GooglePlayServices(
-            final Activity activity,
-            final ConfigurationService configurationService) {
+        final Activity activity) {
         this.mActivity = activity;
-        this.configurationService = configurationService;
         this.connectionObservers = new HashSet<>();
-        final GoogleSignInOptions signInOptions =
-                new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_GAMES_SIGN_IN)
-                        .requestScopes(new Scope(DriveScopes.DRIVE_APPDATA))
-                        .build();
-        this.signInClient = GoogleSignIn.getClient(
-                activity,
-                signInOptions);
         this.connectedState = ConnectionState.NO_ATTEMPT;
+        PlayGamesSdk.initialize(mActivity);
+        authenticate();
     }
 
     /**
-     * Return current connection state.
+     * Attempt to authenticate the player with Google Play Games Services. This should be called when
+     * the game starts to determine if we have access to Google Play Games Services.
      */
-    public synchronized ConnectionState connectedState() {
-        return connectedState;
+    private void authenticate() {
+        GamesSignInClient gamesSignInClient = PlayGames
+            .getGamesSignInClient(mActivity);
+        gamesSignInClient
+            .isAuthenticated()
+            .addOnCompleteListener(authenticationTask());
+    }
+
+    /**
+     * Attempt to manually sign-in the player to Google Game Play Services. Normally only required if
+     * the initial automatic sign-in failed.
+     */
+    public void signIn() {
+        GamesSignInClient gamesSignInClient = PlayGames
+            .getGamesSignInClient(mActivity);
+        gamesSignInClient
+            .signIn()
+            .addOnCompleteListener(authenticationTask())
+            .addOnSuccessListener((task) -> showToastSignInMessage())
+            .addOnFailureListener((task) -> showToastSignInMessage());
+    }
+
+    private void showToastSignInMessage() {
+        if (connectedState == ConnectionState.AUTHENTICATED) {
+            Toast.makeText(
+                    mActivity, "Sign-in succeeded",
+                    Toast.LENGTH_LONG)
+                .show();
+        } else if (connectedState == ConnectionState.FAILED) {
+            Toast.makeText(
+                    mActivity, "Sign-in failed. Please try again later",
+                    Toast.LENGTH_LONG)
+                .show();
+        }
+    }
+
+    /*
+     * Task that will verify if the user successfully authenticated to
+     * Google Play Games Service.
+     * Used by authenticate() and signIn() methods.
+     *
+     * Once authenticated, we will attempt to load the latest saved game snapshot.
+     */
+    private OnCompleteListener<AuthenticationResult> authenticationTask() {
+        return (isAuthenticatedTask) -> {
+            boolean isAuthenticated =
+                (isAuthenticatedTask.isSuccessful() &&
+                    isAuthenticatedTask.getResult().isAuthenticated());
+
+            if (isAuthenticated) {
+                // Player authenticated. Continue with Google Play Games Services.
+                connectedState = ConnectionState.AUTHENTICATED;
+                Log.i(ACTIVITY_TAG, "Player has successfully authenticated.");
+                // load saved game
+                loginAndLoadSnapshotAsync();
+            } else {
+                // Authentication failed.
+                // Disable integration with Play Games Services.
+                // Show a sign-in button allowing players to manually re-attempt sign-in
+                // using GamesSignInClient.signIn().
+                connectedState = ConnectionState.FAILED;
+                Log.i(ACTIVITY_TAG, "Player authentication has failed.");
+            }
+            notifyConnectionObservers(connectedState);
+        };
+    }
+
+    /**
+     * Displays the user achievements.
+     */
+    public void showAchievements() {
+        if (connectedState != ConnectionState.AUTHENTICATED) {
+            // Player is not signed-in.
+            Log.d(ACTIVITY_TAG, "Show Achievements Unavailable. User is not authenticated.");
+            return;
+        }
+
+        PlayGames.getAchievementsClient(mActivity)
+            .getAchievementsIntent()
+            .addOnSuccessListener(
+                intent -> mActivity.startActivityForResult(intent, RC_ACHIEVEMENT_UI));
+    }
+
+    /**
+     * Is player signed-out? In other words, did the authentication attempt fail? A player can not
+     * manually sign-out once authenticated.
+     */
+    public synchronized boolean isPlayerSignedOut() {
+        return connectedState == ConnectionState.FAILED;
+    }
+
+    /**
+     * Is player signed-in? In other words, did the authentication attempt succeed? A player can not
+     * manually sign-out once authenticated.
+     */
+    public synchronized boolean isPlayerSignedIn() {
+        return connectedState == ConnectionState.AUTHENTICATED;
     }
 
     /*
@@ -92,7 +171,7 @@ public class GooglePlayServices {
      * connectionObservers in connection callback threads.
      */
     public synchronized void registerConnectionObserver(GooglePlayConnectionObserver observer) {
-        Log.d(ACTIVITY_TAG, "Register Google Service Observer '" + observer + "'.");
+        Log.d(ACTIVITY_TAG, "Register Google Play Games Service Observer '" + observer + "'.");
         connectionObservers.add(observer);
     }
 
@@ -118,112 +197,18 @@ public class GooglePlayServices {
     }
 
     /**
-     * Called following any successful connection to Google Play Services.
-     */
-    private void onConnected(
-            GoogleSignInAccount signedInAccount,
-            ConnectionRequest connectionRequest) {
-
-        // set view for any google-play pop-ups
-        GamesClient gamesClient = Games.getGamesClient(mActivity, signedInAccount);
-        gamesClient.setViewForPopups(mActivity.findViewById(android.R.id.content));
-        connectedState = ConnectionState.CONNECTED;
-        notifyConnectionObservers(connectionRequest, ConnectionState.CONNECTED);
-    }
-
-    /**
-     * Called following any disconnection from Google Play Services.
-     * This includes failed log-ins or successful log-outs.
-     */
-    private void onDisconnected(ConnectionRequest connectionRequest) {
-        connectedState = ConnectionState.DISCONNECTED;
-        notifyConnectionObservers(connectionRequest, ConnectionState.DISCONNECTED);
-    }
-
-    /**
      * Notify observers of the latest connection state.
      * <p>
      * Synchronized to avoid sending notifications to observers while observers
      * are being added/removed in another thread.
      */
     private synchronized void notifyConnectionObservers(
-            ConnectionRequest connectionRequest,
             ConnectionState connectionState) {
         for (GooglePlayConnectionObserver observer : connectionObservers) {
-            Log.i(ACTIVITY_TAG, "Sending Connection State Change " + connectionState.name() + " to " + observer);
-            observer.onConnectionStateChange(connectionRequest, connectionState);
+            Log.i(ACTIVITY_TAG, "Sending Connection State Change " + connectionState.name() + " to "
+                + observer);
+            observer.onPlayerSignInStateChange(connectionState);
         }
-    }
-
-    /**
-     * Attempt to sign-in without interrupting the user. If previous attempts have resulted in us
-     * being disconnected, do not try again.
-     */
-    public void signInSilently() {
-
-        if (configurationService.getGooglePlayOption() == OptionGooglePlay.OFF) {
-            Log.i(ACTIVITY_TAG, "User has previously chosen to sign-out. We will not attempt to sign-in silently.");
-            onDisconnected(ConnectionRequest.LOG_IN);
-            return;
-        }
-
-        // start async login and snapshot loading (using silent sign-in)
-        loginAndLoadSnapshotAsync(
-                silentSignInTask()
-        );
-    }
-
-    /**
-     * Initiate a manual sign-in to Google PLay Services
-     */
-    public void startSignInIntent() {
-        Log.d(ACTIVITY_TAG, "startSignInIntent()");
-        Intent intent = signInClient.getSignInIntent();
-
-        // invoke manual sign-on using our activity.
-        // on-completion, this will call onActivityResult() within our activity.
-        // this will in-turn pass the result back to our handleSignInResult()
-        mActivity.startActivityForResult(intent, RC_SIGN_IN);
-    }
-
-    /**
-     * Handles the response following a sign-in attempt.
-     */
-    public void handleSignInResult(Task<GoogleSignInAccount> signInTask) {
-        signInTask
-            .addOnSuccessListener(googleSignInAccount -> {
-                Log.i(ACTIVITY_TAG, "signInResult:success");
-                onConnected(googleSignInAccount, ConnectionRequest.LOG_IN);
-            })
-            .addOnFailureListener(ex -> {
-                final String reason = extractApiFailure(ex);
-                Log.w(ACTIVITY_TAG, "signInResult:failed=" + reason);
-                onDisconnected(ConnectionRequest.LOG_IN);
-                new AlertDialog.Builder(mActivity)
-                    .setMessage("Sign-in failed. Please try again later.")
-                    .setNeutralButton(android.R.string.ok, null)
-                    .show();
-
-            });
-
-        // start async login and snapshot loading (using supplied sign-in task)
-        loginAndLoadSnapshotAsync(
-                signInTask
-        );
-    }
-
-    /**
-     * Disconnect from Google Play Services
-     */
-    public void signOut() {
-        signInClient.signOut()
-            .addOnCompleteListener(
-                mActivity,
-                task -> {
-                    boolean successful = task.isSuccessful();
-                    Log.d(ACTIVITY_TAG, "signOut(): " + (successful ? "success" : "failed"));
-                    onDisconnected(ConnectionRequest.LOG_OUT);
-                });
     }
 
     /**
@@ -231,30 +216,30 @@ public class GooglePlayServices {
      */
     public void saveGame(final GooglePlaySavedGame savedGame) {
 
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(mActivity);
-        if (connectedState != ConnectionState.CONNECTED || account == null) {
-            // we are no longer signed-in. Saving game is impossible.
-            Log.d(ACTIVITY_TAG, "Save Game Unavailable. User is not signed-in.");
+        if (connectedState != ConnectionState.AUTHENTICATED) {
+            // Player is not signed-in. Saving game is impossible.
+            Log.d(ACTIVITY_TAG, "Save Game Unavailable. User is not authenticated.");
             return;
         }
 
         // start async save game
-        saveSnapshotAsync(account, savedGame);
+        saveSnapshotAsync(savedGame);
     }
 
     /**
      * Unlock supplied achievements.
      */
     public boolean unlockAchievement(int id) {
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(mActivity);
-        if (connectedState != ConnectionState.CONNECTED || account == null) {
-            Log.i(ACTIVITY_TAG, "Achievement Unlocks Unavailable. User is not signed-in.");
+        if (connectedState != ConnectionState.AUTHENTICATED) {
+            Log.d(ACTIVITY_TAG, "Achievement Unlocks Unavailable. User is not authenticated.");
             return false;
         }
+
         String achievementId = mActivity.getString(id);
         Log.i(ACTIVITY_TAG, "Achievements: Unlocking id: " + achievementId);
-        Games.getAchievementsClient(mActivity, account)
-                .unlock(achievementId);
+        PlayGames
+            .getAchievementsClient(mActivity)
+            .unlock(achievementId);
         return true;
     }
 
@@ -262,139 +247,125 @@ public class GooglePlayServices {
      * Increment supplied achievements.
      */
     public boolean incrementAchievement(int id, int amount) {
-        GoogleSignInAccount account = GoogleSignIn.getLastSignedInAccount(mActivity);
-        if (connectedState != ConnectionState.CONNECTED || account == null) {
-            Log.i(ACTIVITY_TAG, "Achievement Increments Unavailable. User is not signed-in.");
+        if (connectedState != ConnectionState.AUTHENTICATED) {
+            Log.d(ACTIVITY_TAG, "Achievement Increments Unavailable. User is not authenticated.");
             return false;
         }
+
         String achievementId = mActivity.getString(id);
         Log.i(ACTIVITY_TAG, "Achievements: Incrementing id: " + achievementId + " by " + amount);
-        Games.getAchievementsClient(mActivity, account)
-                .increment(achievementId, amount);
+        PlayGames
+            .getAchievementsClient(mActivity)
+            .increment(achievementId, amount);
         return true;
     }
 
     /**
-     * Asynchronously sign-in to Google Play Services.
-     * Then Asynchronously load latest snapshot and resolve conflicts.
-     * Then asynchronously overwrite snapshot with current game progress.
+     * Asynchronously load latest snapshot and resolve conflicts.
      * <p>
      * If current device's game progress is on a higher wave than the the wave
      * stored in Google Play, then immediately overwrite the Google Play's snapshot
      * so other devices can see this progress.
      */
-    private void loginAndLoadSnapshotAsync(Task<GoogleSignInAccount> signInTask) {
+    private void loginAndLoadSnapshotAsync() {
 
-        // attempt to sign-in to Google Play
-        signInTask
-            // then attempt to load snapshot and resolve conflicts
-            .continueWithTask(
-                accountTask -> loadSnapshotAndResolveConflictsTask(accountTask.getResult()))
-            // then attempt to save snapshot if player has progressed beyond current saved snapshot
-            .continueWithTask(snapshotTask -> {
-                Snapshot snapshot = snapshotTask.getResult();
+        final SnapshotsClient snapshotsClient =
+            PlayGames.getSnapshotsClient(mActivity);
+
+        // attempt to load snapshot from Google Game Play Services
+        loadSnapshotAndResolveConflictsTask(snapshotsClient)
+            .addOnSuccessListener(snapshot -> {
+
+                // read snapshot
                 GooglePlaySavedGame googleSavedGame = extractSavedGame(snapshot);
-                Log.i(ACTIVITY_TAG, "Loaded wave " + googleSavedGame.getHighestWaveReached());
+                int snapshotWaveReached =
+                    googleSavedGame != null ? googleSavedGame.getHighestWaveReached() : 0;
+                Log.i(ACTIVITY_TAG, "Game loaded. Wave: " + snapshotWaveReached);
 
-                // tell SavedGame service of latest saved game loaded and ask for highest wave reached.
+                // tell SavedGame service of latest saved game loaded.
+                // ask for highest wave reached on local device.
                 if (savedGame != null) {
                     GooglePlaySavedGame deviceSavedGame = savedGame
                         .computeHighestWaveOnSavedGameLoaded(googleSavedGame);
 
-                    // if player has already progressed beyond cloud's saved game on local device then update cloud save
-                    if (deviceSavedGame.getHighestWaveReached() > googleSavedGame
-                        .getHighestWaveReached()) {
-                        return writeSnapshotTask(snapshot, deviceSavedGame);
+                    // if player has already progressed beyond snapshot's saved game
+                    // on local device then update snapshot's save.
+                    int localWaveReached = deviceSavedGame.getHighestWaveReached();
+                    if (localWaveReached > snapshotWaveReached) {
+                        Log.i(ACTIVITY_TAG,
+                            "Player has reached wave " + localWaveReached + " on device");
+                        writeAndCloseSnapshotTask(snapshotsClient, snapshot, deviceSavedGame);
+                        return;
                     }
                 }
-                // otherwise just return task for current snapshot without saving anything
-                SnapshotsClient snapshotsClient =
-                    Games.getSnapshotsClient(mActivity,
-                        GoogleSignIn.getLastSignedInAccount(mActivity));
-                snapshotsClient.discardAndClose(snapshot);
-                return Tasks.forResult(snapshot.getMetadata());
-            })
-            // all requests successful
-            .addOnSuccessListener(
-                snapshotMetadata -> Log.i(ACTIVITY_TAG, "Successful login and saved game load."))
-            .addOnFailureListener(
-                e -> Log.i(ACTIVITY_TAG, "Failed login and saved game load.", e));
+                // otherwise just close snapshot
+                snapshotsClient.discardAndClose(snapshot)
+                    .addOnSuccessListener(
+                        mActivity,
+                        task -> Log.i(ACTIVITY_TAG, "Snapshot closed."));
+            });
     }
 
     /**
-     * Asynchronously load latest snapshot and resolve conflicts. Then asynchronously overwrite
-     * snapshot with current game progress
+     * Asynchronously load latest snapshot and resolve conflicts.
      *
-     * @param account    - player's account
+     * Then overwrite snapshot with current game progress
+     *
      * @param gameToSave - latest game progress to save
      */
     private void saveSnapshotAsync(
-            final GoogleSignInAccount account,
-            final GooglePlaySavedGame gameToSave) {
+        final GooglePlaySavedGame gameToSave) {
 
-        loadSnapshotAndResolveConflictsTask(account)
-            .continueWithTask(snapshotTask -> {
+        final SnapshotsClient snapshotsClient =
+            PlayGames.getSnapshotsClient(mActivity);
 
-                Snapshot snapshot = snapshotTask.getResult();
+        // attempt to load snapshot from Google Game Play Services
+        loadSnapshotAndResolveConflictsTask(snapshotsClient)
+            .addOnSuccessListener(snapshot -> {
+
+                // read snapshot
                 GooglePlaySavedGame googleSavedGame = extractSavedGame(snapshot);
+                int snapshotWaveReached =
+                    googleSavedGame != null ? googleSavedGame.getHighestWaveReached() : 0;
+                int savedGameWaveReached = gameToSave.getHighestWaveReached();
 
                 // check for the very rare scenario that another device has progressed
                 // beyond the wave we're about to save while we've been playing.
                 // in this case, update our saved game service but there's no need
                 // for us to save anything to the google play service.
-                if (googleSavedGame.getHighestWaveReached() >= gameToSave.getHighestWaveReached()) {
+                if (snapshotWaveReached >= savedGameWaveReached) {
                     Log.i(ACTIVITY_TAG, "Wave "
-                        + googleSavedGame.getHighestWaveReached()
+                        + snapshotWaveReached
                         + " already saved to Google Play. Save Cancelled.");
                     savedGame.computeHighestWaveOnSavedGameLoaded(googleSavedGame);
-                    SnapshotsClient snapshotsClient =
-                        Games.getSnapshotsClient(mActivity,
-                            GoogleSignIn.getLastSignedInAccount(mActivity));
-                    snapshotsClient.discardAndClose(snapshot);
-                    return Tasks.forResult(snapshot.getMetadata());
+                    snapshotsClient.discardAndClose(snapshot)
+                        .addOnSuccessListener(
+                            mActivity,
+                            task -> Log.i(ACTIVITY_TAG, "Snapshot closed."));
                 }
 
                 Log.i(ACTIVITY_TAG,
-                    "Game Saved: Saving wave " + gameToSave.getHighestWaveReached());
-                return writeSnapshotTask(snapshot, gameToSave);
-            })
-            .addOnSuccessListener(
-                snapshotMetadata -> Log.i(ACTIVITY_TAG, "Game Saved Completed"))
-            .addOnFailureListener(e -> Log.e(ACTIVITY_TAG, "Game Saved Failed", e));
-    }
-
-    /**
-     * Return a task that will asynchronously attempt to sign-in to Google Play Services.
-     */
-    private Task<GoogleSignInAccount> silentSignInTask() {
-        return signInClient.silentSignIn()
-            .addOnSuccessListener(googleSignInAccount -> {
-                Log.i(ACTIVITY_TAG, "Success signedIn");
-                onConnected(googleSignInAccount, ConnectionRequest.LOG_IN);
-            }).addOnFailureListener(e -> {
-                Log.e(ACTIVITY_TAG, "Failed signIn", e);
-                onDisconnected(ConnectionRequest.LOG_IN);
+                    "Saving wave " + savedGameWaveReached);
+                writeAndCloseSnapshotTask(snapshotsClient, snapshot, gameToSave);
             });
     }
 
     /**
      * Load the latest snapshot and resolve any conflicts (if any).
      */
-    private Task<Snapshot> loadSnapshotAndResolveConflictsTask(GoogleSignInAccount account) {
-
-        // Get the SnapshotsClient from the signed in account.
-        SnapshotsClient snapshotsClient =
-                Games.getSnapshotsClient(mActivity, account);
+    private Task<Snapshot> loadSnapshotAndResolveConflictsTask(SnapshotsClient snapshotsClient) {
 
         // Open the saved game using its name.
         return snapshotsClient
             .open(SAVED_GAME_FILENAME, true)
-            .addOnFailureListener(e -> Log.e(ACTIVITY_TAG, "Error while opening Snapshot.", e))
+            .addOnSuccessListener(
+                snapshot -> Log.i(ACTIVITY_TAG, "Successfully opened Snapshot."))
             .continueWithTask(
-                task -> processSnapshotAndResolveConflictsTask(
-                    task.getResult(),
-                    0)).addOnSuccessListener(
-                snapshot -> Log.i(ACTIVITY_TAG, "Successfully opened Snapshot."));
+                snapshot -> processSnapshotAndResolveConflictsTask(
+                    snapshotsClient,
+                    snapshot.getResult(),
+                    0)
+            );
     }
 
     /**
@@ -402,19 +373,21 @@ public class GooglePlayServices {
      * Will eventually give-up if snapshot is still in conflict after a supplied number of re-tries.
      */
     private Task<Snapshot> processSnapshotAndResolveConflictsTask(
-            final SnapshotsClient.DataOrConflict<Snapshot> result,
-            final int retryCount) {
+        final SnapshotsClient snapshotsClient,
+        final SnapshotsClient.DataOrConflict<Snapshot> result,
+        final int retryCount) {
 
         if (!result.isConflict()) {
+            Log.i(ACTIVITY_TAG, "Snapshot has no conflicts.");
             // There was no conflict, so return the result of the source.
             TaskCompletionSource<Snapshot> source = new TaskCompletionSource<>();
             source.setResult(result.getData());
             return source.getTask();
         }
-        Log.w(ACTIVITY_TAG, "Snapshot conflict found. Attempting to resolve conflict.");
 
         // There was a conflict - we need to resolve it.
-        SnapshotsClient.SnapshotConflict conflict = result.getConflict();
+        Log.w(ACTIVITY_TAG, "Snapshot conflict found. Attempting to resolve conflict.");
+        SnapshotsClient.SnapshotConflict conflict = Objects.requireNonNull(result.getConflict());
 
         Snapshot snapshot = conflict.getSnapshot();
         Snapshot conflictSnapshot = conflict.getConflictingSnapshot();
@@ -424,7 +397,7 @@ public class GooglePlayServices {
         // Resolve between conflicts by selecting the snapshots with the most progress.
         Snapshot resolvedSnapshot = snapshot;
         if (savedGame != null
-                && conflictSavedGame != null
+            && conflictSavedGame != null
                 && conflictSavedGame.getHighestWaveReached() > savedGame.getHighestWaveReached()) {
             resolvedSnapshot = conflictSnapshot;
         } else if (savedGame == null
@@ -432,14 +405,16 @@ public class GooglePlayServices {
             resolvedSnapshot = conflictSnapshot;
         }
 
-        return Games.getSnapshotsClient(mActivity, GoogleSignIn.getLastSignedInAccount(mActivity))
+        return snapshotsClient
             .resolveConflict(conflict.getConflictId(), resolvedSnapshot)
             .continueWithTask(
                 task -> {
                     // Resolving the conflict may cause another conflict,
                     // so recurse and try another resolution.
                     if (retryCount < MAX_SNAPSHOT_RESOLVE_RETRIES) {
-                        return processSnapshotAndResolveConflictsTask(task.getResult(),
+                        return processSnapshotAndResolveConflictsTask(
+                            snapshotsClient,
+                            task.getResult(),
                             retryCount + 1);
                     } else {
                         throw new GalaxyForceException("Could not resolve snapshot conflicts");
@@ -451,34 +426,42 @@ public class GooglePlayServices {
     /**
      * Returns a task to write the save game snapshot with a suitable description.
      */
-    private Task<SnapshotMetadata> writeSnapshotTask(
-            Snapshot snapshot,
-            GooglePlaySavedGame savedGame) throws JsonProcessingException {
+    private void writeAndCloseSnapshotTask(
+        SnapshotsClient snapshotsClient,
+        Snapshot snapshot,
+        GooglePlaySavedGame savedGame) {
 
         // Set the data payload for the snapshot
         final ObjectMapper mapper = new ObjectMapper();
-        final byte[] gameData = mapper.writeValueAsBytes(savedGame);
-        snapshot.getSnapshotContents().writeBytes(gameData);
+        final byte[] gameData;
+        try {
+            gameData = mapper.writeValueAsBytes(savedGame);
+        } catch (JsonProcessingException e) {
+            Log.w(ACTIVITY_TAG, "Gamed saved failed. Could not create saved game data.", e);
+            return;
+        }
 
+        snapshot.getSnapshotContents().writeBytes(gameData);
         final int waveUnlocked = savedGame.getHighestWaveReached();
+        final String appName = mActivity.getString(R.string.app_name);
         final String description =
-                String.format(
-                        "%s: Unlocked Wave %d",
-                        mActivity.getString(R.string.app_name),
-                        waveUnlocked);
+            String.format(
+                Locale.getDefault(),
+                "%s: Unlocked Wave %d",
+                appName,
+                waveUnlocked);
 
         // Create the change operation
         SnapshotMetadataChange metadataChange = new SnapshotMetadataChange.Builder()
                 .setDescription(description)
                 .build();
 
-        SnapshotsClient snapshotsClient =
-                Games.getSnapshotsClient(mActivity, GoogleSignIn.getLastSignedInAccount(mActivity));
-
         // Commit the operation
-        return snapshotsClient.commitAndClose(snapshot, metadataChange)
+        snapshotsClient.commitAndClose(snapshot, metadataChange)
             .addOnSuccessListener(
-                snapshotMetadata -> Log.i(ACTIVITY_TAG, "Gamed saved. Wave: " + waveUnlocked));
+                mActivity,
+                snapshotMetadata -> Log.i(ACTIVITY_TAG,
+                    "Gamed saved and snapshot closed. Wave: " + waveUnlocked));
     }
 
     /**
@@ -497,23 +480,5 @@ public class GooglePlayServices {
             Log.e(ACTIVITY_TAG, "Failed to read Saved Game", e);
             return null;
         }
-    }
-
-    /**
-     * Extract a reason for a ApiException
-     * This is not designed to be readable/understandable to a player
-     * and should only be used in logging/debugging.
-     */
-    private String extractApiFailure(Exception exception) {
-        if (exception instanceof ApiException) {
-            ApiException apiException = (ApiException) exception;
-            final int code = apiException.getStatusCode();
-            String message = GamesClientStatusCodes.getStatusCodeString(code);
-            if (message == null || message.isEmpty()) {
-                message = "Unknown Failure:" + code;
-            }
-            return message;
-        }
-        return "Unknown Failure:" + exception.getMessage();
     }
 }
