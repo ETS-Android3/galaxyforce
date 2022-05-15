@@ -311,9 +311,9 @@ public class GooglePlayServices {
     }
 
     /**
-     * Asynchronously load latest snapshot and resolve conflicts.
-     *
-     * Then overwrite snapshot with current game progress
+     * Asynchronously save game progress.
+     * <p>
+     * Load latest snapshot and resolve conflicts. Then overwrite snapshot with current game progress
      *
      * @param gameToSave - latest game progress to save
      */
@@ -364,6 +364,8 @@ public class GooglePlayServices {
             .open(SAVED_GAME_FILENAME, true)
             .addOnSuccessListener(
                 snapshot -> Log.i(ACTIVITY_TAG, "Successfully opened Snapshot."))
+            .addOnFailureListener(
+                e -> Log.e(ACTIVITY_TAG, "Error while opening Snapshot.", e))
             .continueWithTask(
                 snapshot -> processSnapshotAndResolveConflictsTask(
                     snapshotsClient,
@@ -402,10 +404,10 @@ public class GooglePlayServices {
         Snapshot resolvedSnapshot = snapshot;
         if (savedGame != null
             && conflictSavedGame != null
-                && conflictSavedGame.getHighestWaveReached() > savedGame.getHighestWaveReached()) {
+            && conflictSavedGame.getHighestWaveReached() > savedGame.getHighestWaveReached()) {
             resolvedSnapshot = conflictSnapshot;
         } else if (savedGame == null
-                && conflictSavedGame != null) {
+            && conflictSavedGame != null) {
             resolvedSnapshot = conflictSnapshot;
         }
 
