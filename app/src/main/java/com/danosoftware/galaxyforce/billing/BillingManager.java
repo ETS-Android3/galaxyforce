@@ -1,20 +1,19 @@
 package com.danosoftware.galaxyforce.billing;
 
-import com.android.billingclient.api.BillingClient;
-import com.android.billingclient.api.SkuDetails;
-import com.android.billingclient.api.SkuDetailsResponseListener;
+import com.android.billingclient.api.ProductDetails;
+import com.android.billingclient.api.ProductDetailsResponseListener;
+import com.android.billingclient.api.QueryProductDetailsParams.Product;
 import java.util.List;
 
 public interface BillingManager {
 
   void queryPurchases();
 
-  void initiatePurchaseFlow(final SkuDetails skuDetails);
+  void initiatePurchaseFlow(final ProductDetails productDetails);
 
-  void querySkuDetailsAsync(
-      @BillingClient.SkuType final String itemType,
-      final List<String> skuList,
-      final SkuDetailsResponseListener listener);
+  void queryProductDetailsAsync(
+      final List<Product> products,
+      final ProductDetailsResponseListener listener);
 
   void consumeAsync(final String purchaseToken);
 

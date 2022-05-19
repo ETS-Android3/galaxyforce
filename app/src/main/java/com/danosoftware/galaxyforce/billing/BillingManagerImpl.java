@@ -9,18 +9,20 @@ import androidx.annotation.Nullable;
 import com.android.billingclient.api.AcknowledgePurchaseParams;
 import com.android.billingclient.api.AcknowledgePurchaseResponseListener;
 import com.android.billingclient.api.BillingClient;
-import com.android.billingclient.api.BillingClient.SkuType;
+import com.android.billingclient.api.BillingClient.ProductType;
 import com.android.billingclient.api.BillingClientStateListener;
 import com.android.billingclient.api.BillingFlowParams;
+import com.android.billingclient.api.BillingFlowParams.ProductDetailsParams;
 import com.android.billingclient.api.BillingResult;
 import com.android.billingclient.api.ConsumeParams;
 import com.android.billingclient.api.ConsumeResponseListener;
+import com.android.billingclient.api.ProductDetails;
+import com.android.billingclient.api.ProductDetailsResponseListener;
 import com.android.billingclient.api.Purchase;
-import com.android.billingclient.api.Purchase.PurchasesResult;
 import com.android.billingclient.api.PurchasesUpdatedListener;
-import com.android.billingclient.api.SkuDetails;
-import com.android.billingclient.api.SkuDetailsParams;
-import com.android.billingclient.api.SkuDetailsResponseListener;
+import com.android.billingclient.api.QueryProductDetailsParams;
+import com.android.billingclient.api.QueryProductDetailsParams.Product;
+import com.android.billingclient.api.QueryPurchasesParams;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -32,6 +34,10 @@ import java.util.Set;
  * through BillingClient and caches temporary states/data if needed
  */
 public class BillingManagerImpl implements PurchasesUpdatedListener, BillingManager {
+
+  private enum BillingClientState {
+    PENDING, CONNECTED, DISCONNECTED;
+  }
 
   private static final String TAG = "BillingManager";
   /*
@@ -46,6 +52,7 @@ public class BillingManagerImpl implements PurchasesUpdatedListener, BillingMana
   private BillingClient mBillingClient;
   private boolean mIsServiceConnected;
   private Set<String> mTokensToBeConsumed;
+  private BillingClientState clientState;
 
   public BillingManagerImpl(
       final Activity activity,
@@ -53,6 +60,7 @@ public class BillingManagerImpl implements PurchasesUpdatedListener, BillingMana
     Log.d(TAG, "Creating Billing client.");
     this.mActivity = activity;
     this.mBillingUpdatesListener = updatesListener;
+    this.clientState = BillingClientState.PENDING;
     this.mBillingClient = BillingClient
         .newBuilder(mActivity)
         .setListener(this)
@@ -64,6 +72,7 @@ public class BillingManagerImpl implements PurchasesUpdatedListener, BillingMana
       @Override
       public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
         if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+          clientState = BillingClientState.CONNECTED;
           mBillingUpdatesListener.onBillingClientSetupFinished(billingManager);
           Log.d(TAG, "Billing Setup successful. Querying inventory.");
           queryPurchases();
@@ -72,10 +81,38 @@ public class BillingManagerImpl implements PurchasesUpdatedListener, BillingMana
 
       @Override
       public void onBillingServiceDisconnected() {
+        clientState = BillingClientState.DISCONNECTED;
         Log.d(TAG, "Billing Service Disconnected.");
       }
     });
   }
+
+//  private void clientSetUp() {
+//    mBillingClient.startConnection(new BillingClientStateListener() {
+//      @Override
+//      public void onBillingSetupFinished(@NonNull BillingResult billingResult) {
+//        if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+//          clientState = BillingClientState.CONNECTED;
+//          //mBillingUpdatesListener.onBillingClientSetupFinished(billingManager);
+//          Log.d(TAG, "Billing Setup successful. Querying inventory.");
+//          queryPurchases();
+//        }
+//      }
+//
+//      @Override
+//      public void onBillingServiceDisconnected() {
+//        clientState = BillingClientState.DISCONNECTED;
+//        Log.d(TAG, "Billing Service Disconnected.");
+//      }
+//    });
+//  }
+//
+//  private void checkClientState() {
+//    if (clientState == BillingClientState.DISCONNECTED) {
+//      Log.d(TAG, "Client is unavailable. Will attempt to reconnect async.");
+//      return;
+//    }
+//  }
 
   /**
    * Handle a callback that purchases were updated from the Billing library
@@ -100,16 +137,32 @@ public class BillingManagerImpl implements PurchasesUpdatedListener, BillingMana
    * Start a purchase
    */
   @Override
-  public void initiatePurchaseFlow(final SkuDetails skuDetails) {
-    Runnable purchaseFlowRequest = () -> {
-      Log.d(TAG, "Launching in-app purchase flow for: " + skuDetails.getSku());
-      BillingFlowParams purchaseParams = BillingFlowParams
-          .newBuilder()
-          .setSkuDetails(skuDetails)
-          .build();
-      mBillingClient.launchBillingFlow(mActivity, purchaseParams);
-    };
-    executeRetryableBillingRequest(purchaseFlowRequest);
+  public void initiatePurchaseFlow(final ProductDetails productDetails) {
+    List<ProductDetailsParams> productDetailsParams = new ArrayList<>();
+    productDetailsParams.add(
+        ProductDetailsParams.newBuilder()
+            // fetched via queryProductDetailsAsync
+            .setProductDetails(productDetails)
+
+            // to get an offer token, call ProductDetails.getOfferDetails()
+            // for a list of offers that are available to the user
+            //.setOfferToken(selectedOfferToken)
+            .build());
+
+    BillingFlowParams billingFlowParams =
+        BillingFlowParams.newBuilder()
+            .setProductDetailsParamsList(productDetailsParams)
+            .build();
+
+    //Runnable purchaseFlowRequest = () -> {
+    Log.d(TAG, "Launching in-app purchase flow for: " + productDetails.getProductId());
+//      BillingFlowParams purchaseParams = BillingFlowParams
+//          .newBuilder()
+//          .setSkuDetails(skuDetails)
+//          .build();
+    mBillingClient.launchBillingFlow(mActivity, billingFlowParams);
+    //};
+    //executeRetryableBillingRequest(purchaseFlowRequest);
   }
 
   /**
@@ -125,27 +178,69 @@ public class BillingManagerImpl implements PurchasesUpdatedListener, BillingMana
   }
 
   @Override
-  public void querySkuDetailsAsync(
-      @SkuType final String itemType,
-      final List<String> skuList,
-      final SkuDetailsResponseListener listener) {
+  public void queryProductDetailsAsync(
+      //@SkuType final String itemType,
+      final List<Product> products,
+      final ProductDetailsResponseListener listener) {
+
+    QueryProductDetailsParams queryProductDetailsParams =
+        QueryProductDetailsParams.newBuilder()
+            .setProductList(products)
+            .build();
+
+    mBillingClient.queryProductDetailsAsync(
+        queryProductDetailsParams,
+        new ProductDetailsResponseListener() {
+          public void onProductDetailsResponse(BillingResult billingResult,
+              List<ProductDetails> list) {
+            listener.onProductDetailsResponse(billingResult, list);
+
+            // check BillingResult
+            // process returned ProductDetails list
+          }
+        }
+    );
+
     // Creating a runnable from the request to use it inside our connection retry policy below
-    Runnable queryRequest = () -> {
-      // Query the purchase async
-      SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
-      params.setSkusList(skuList).setType(itemType);
-      mBillingClient.querySkuDetailsAsync(params.build(),
-          new SkuDetailsResponseListener() {
-            @Override
-            public void onSkuDetailsResponse(
-                @NonNull BillingResult billingResult,
-                @Nullable List<SkuDetails> skuDetailsList) {
-              listener.onSkuDetailsResponse(billingResult, skuDetailsList);
-            }
-          });
-    };
-    executeRetryableBillingRequest(queryRequest);
+//    Runnable queryRequest = () -> {
+//      // Query the purchase async
+//      SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
+//      params.setSkusList(skuList).setType(itemType);
+//      mBillingClient.querySkuDetailsAsync(params.build(),
+//          new SkuDetailsResponseListener() {
+//            @Override
+//            public void onSkuDetailsResponse(
+//                @NonNull BillingResult billingResult,
+//                @Nullable List<SkuDetails> skuDetailsList) {
+//              listener.onSkuDetailsResponse(billingResult, skuDetailsList);
+//            }
+//          });
+//    };
+//    executeRetryableBillingRequest(queryRequest);
   }
+
+//  @Override
+//  public void querySkuDetailsAsync(
+//      @SkuType final String itemType,
+//      final List<String> skuList,
+//      final SkuDetailsResponseListener listener) {
+//    // Creating a runnable from the request to use it inside our connection retry policy below
+//    Runnable queryRequest = () -> {
+//      // Query the purchase async
+//      SkuDetailsParams.Builder params = SkuDetailsParams.newBuilder();
+//      params.setSkusList(skuList).setType(itemType);
+//      mBillingClient.querySkuDetailsAsync(params.build(),
+//          new SkuDetailsResponseListener() {
+//            @Override
+//            public void onSkuDetailsResponse(
+//                @NonNull BillingResult billingResult,
+//                @Nullable List<SkuDetails> skuDetailsList) {
+//              listener.onSkuDetailsResponse(billingResult, skuDetailsList);
+//            }
+//          });
+//    };
+//    executeRetryableBillingRequest(queryRequest);
+//  }
 
   @Override
   public void consumeAsync(final String purchaseToken) {
@@ -221,17 +316,40 @@ public class BillingManagerImpl implements PurchasesUpdatedListener, BillingMana
   /**
    * Handle a result from querying of purchases and report an updated list to the listener
    */
-  private void onQueryPurchasesFinished(PurchasesResult result) {
+//  private void onQueryPurchasesFinished(PurchasesResult result) {
+//    // Have we been disposed of in the meantime? If so, or bad result code, then quit
+//    if (mBillingClient == null
+//        || result.getResponseCode() != BillingClient.BillingResponseCode.OK) {
+//      Log.w(
+//          TAG,
+//          "Billing client was null or result code ("
+//              + result.getResponseCode()
+//              + ") was bad - quitting");
+//      return;
+//    }
+//
+//    Log.d(TAG, "Query inventory was successful.");
+//
+//    // Update the UI and purchases inventory with new list of purchases
+//    mPurchases.clear();
+//    onPurchasesUpdated(
+//        BillingResult
+//            .newBuilder()
+//            .setResponseCode(BillingClient.BillingResponseCode.OK)
+//            .build(),
+//        result.getPurchasesList());
+//  }
+  private void onQueryPurchasesFinished(List<Purchase> result) {
     // Have we been disposed of in the meantime? If so, or bad result code, then quit
-    if (mBillingClient == null
-        || result.getResponseCode() != BillingClient.BillingResponseCode.OK) {
-      Log.w(
-          TAG,
-          "Billing client was null or result code ("
-              + result.getResponseCode()
-              + ") was bad - quitting");
-      return;
-    }
+//    if (mBillingClient == null
+//        || result.getResponseCode() != BillingClient.BillingResponseCode.OK) {
+//      Log.w(
+//          TAG,
+//          "Billing client was null or result code ("
+//              + result.getResponseCode()
+//              + ") was bad - quitting");
+//      return;
+//    }
 
     Log.d(TAG, "Query inventory was successful.");
 
@@ -242,7 +360,7 @@ public class BillingManagerImpl implements PurchasesUpdatedListener, BillingMana
             .newBuilder()
             .setResponseCode(BillingClient.BillingResponseCode.OK)
             .build(),
-        result.getPurchasesList());
+        result);
   }
 
   /**
@@ -251,20 +369,37 @@ public class BillingManagerImpl implements PurchasesUpdatedListener, BillingMana
    */
   @Override
   public void queryPurchases() {
-    Runnable queryToExecute = () -> {
-      long time = System.currentTimeMillis();
-      PurchasesResult purchasesResult = mBillingClient.queryPurchases(SkuType.INAPP);
-      Log.i(TAG, "Querying purchases elapsed time: " + (System.currentTimeMillis() - time)
-          + "ms");
-      if (purchasesResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
-        Log.i(TAG, "queryPurchases() was successful");
-      } else {
-        Log.w(TAG, "queryPurchases() got an error response code: "
-            + purchasesResult.getResponseCode());
-      }
-      onQueryPurchasesFinished(purchasesResult);
-    };
-    executeRetryableBillingRequest(queryToExecute);
+
+//      long time = System.currentTimeMillis();
+//      PurchasesResult purchasesResult = mBillingClient.queryPurchases(SkuType.INAPP);
+
+    mBillingClient.queryPurchasesAsync(
+        QueryPurchasesParams.newBuilder()
+            .setProductType(ProductType.INAPP)
+            .build(),
+        (billingResult, purchases) -> {
+//            Log.i(TAG, "Querying purchases elapsed time: " + (System.currentTimeMillis() - time)
+//                + "ms");
+          if (billingResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+            Log.i(TAG, "queryPurchases() was successful");
+          } else {
+            Log.w(TAG, "queryPurchases() got an error response code: "
+                + billingResult.getResponseCode());
+          }
+          onQueryPurchasesFinished(purchases);
+        }
+    );
+
+//      Log.i(TAG, "Querying purchases elapsed time: " + (System.currentTimeMillis() - time)
+//          + "ms");
+//      if (purchasesResult.getResponseCode() == BillingClient.BillingResponseCode.OK) {
+//        Log.i(TAG, "queryPurchases() was successful");
+//      } else {
+//        Log.w(TAG, "queryPurchases() got an error response code: "
+//            + purchasesResult.getResponseCode());
+//      }
+//      onQueryPurchasesFinished(purchasesResult);
+    //executeRetryableBillingRequest(queryToExecute);
   }
 
   private void startServiceConnection(final Runnable executeOnSuccess) {

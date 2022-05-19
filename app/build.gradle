@@ -152,7 +152,7 @@ android {
  * restricting which dependencies leak their APIs to other modules.
  */
 dependencies {
-    def billing_version = "3.0.3"
+    def billing_version = "5.0.0"
     def jackson_version = "2.11.1"
 
     implementation "androidx.core:core:1.7.0"

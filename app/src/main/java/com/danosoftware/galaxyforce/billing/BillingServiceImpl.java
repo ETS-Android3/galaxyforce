@@ -3,10 +3,12 @@ package com.danosoftware.galaxyforce.billing;
 import android.util.Log;
 import androidx.annotation.NonNull;
 import com.android.billingclient.api.BillingClient;
+import com.android.billingclient.api.BillingClient.ProductType;
 import com.android.billingclient.api.BillingResult;
+import com.android.billingclient.api.ProductDetails;
 import com.android.billingclient.api.Purchase;
-import com.android.billingclient.api.SkuDetails;
-import java.util.Collections;
+import com.android.billingclient.api.QueryProductDetailsParams.Product;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -49,14 +51,15 @@ public class BillingServiceImpl implements BillingService, BillingUpdatesListene
     this.fullGamePurchaseState = PurchaseState.NOT_PURCHASED;
 
     for (Purchase purchase : purchases) {
-      if (BillingConstants.SKU_FULL_GAME.equals(purchase.getSku())) {
+      List<String> products = purchase.getProducts();
+      if (products.contains(BillingConstants.FULL_GAME_PRODUCT_ID)) {
         switch (purchase.getPurchaseState()) {
           case Purchase.PurchaseState.PURCHASED:
-            Log.i(TAG, "Full Game Purchased: '" + purchase.getSku() + "'");
+            Log.i(TAG, "Full Game Purchased: '" + products + "'");
             this.fullGamePurchaseState = PurchaseState.PURCHASED;
             break;
           case Purchase.PurchaseState.PENDING:
-            Log.i(TAG, "Full Game Pending: '" + purchase.getSku() + "'");
+            Log.i(TAG, "Full Game Pending: '" + products + "'");
             this.fullGamePurchaseState = PurchaseState.PENDING;
             break;
           default:
@@ -64,7 +67,7 @@ public class BillingServiceImpl implements BillingService, BillingUpdatesListene
             break;
         }
       } else {
-        String errorMsg = "Unknown Purchased SKU: '" + purchase.getSku() + "'";
+        String errorMsg = "Unknown Purchased Product: '" + purchase.getProducts() + "'";
         Log.e(TAG, errorMsg);
       }
     }
@@ -111,23 +114,36 @@ public class BillingServiceImpl implements BillingService, BillingUpdatesListene
    * @param listener - supplied listener to receive/process the SKU details
    */
   @Override
-  public void queryFullGameSkuDetailsAsync(
-      final SkuDetailsListener listener) {
+  public void queryFullGameProductDetailsAsync(
+      final ProductDetailsListener listener) {
 
     if (!isBillingManagerReady()) {
       Log.e(TAG, "Unable to query SKU details. Billing Manager is not ready.");
     } else {
-      billingManager.querySkuDetailsAsync(
-          BillingClient.SkuType.INAPP,
-          Collections.singletonList(BillingConstants.SKU_FULL_GAME),
+      List<Product> products = new ArrayList<>();
+      products.add(
+          Product.newBuilder()
+              .setProductId(BillingConstants.FULL_GAME_PRODUCT_ID)
+              .setProductType(ProductType.INAPP)
+              .build());
+//      QueryProductDetailsParams queryProductDetailsParams =
+//          QueryProductDetailsParams.newBuilder()
+//              .setProductList(products)
+//              .build();
+
+      billingManager.queryProductDetailsAsync(
+          //queryProductDetailsParams,
+          //BillingClient.SkuType.INAPP,
+//          Collections.singletonList(BillingConstants.SKU_FULL_GAME),
+          products,
           (billingResult, skuDetailsList) -> {
             if (billingResult.getResponseCode() != BillingClient.BillingResponseCode.OK) {
               Log.w(TAG,
                   "Unsuccessful SKU query. Error code: " + billingResult.getResponseCode());
             } else if (skuDetailsList != null) {
-              for (SkuDetails details : skuDetailsList) {
-                if (details.getSku().equals(BillingConstants.SKU_FULL_GAME)) {
-                  listener.onSkuDetailsRetrieved(details);
+              for (ProductDetails details : skuDetailsList) {
+                if (details.getProductId().equals(BillingConstants.FULL_GAME_PRODUCT_ID)) {
+                  listener.onProductDetailsRetrieved(details);
                 }
               }
             }
@@ -136,12 +152,12 @@ public class BillingServiceImpl implements BillingService, BillingUpdatesListene
   }
 
   @Override
-  public void purchaseFullGame(SkuDetails details) {
+  public void purchaseFullGame(ProductDetails details) {
     if (!isBillingManagerReady()) {
       Log.e(TAG, "Unable to purchase Full Game. Billing Manager is not ready.");
     } else if (details == null) {
       Log.e(TAG, "Unable to purchase Full Game. SkuDetails is null.");
-    } else if (!details.getSku().equals(BillingConstants.SKU_FULL_GAME)) {
+    } else if (!details.getProductId().equals(BillingConstants.FULL_GAME_PRODUCT_ID)) {
       Log.e(TAG, "Unable to purchase Full Game. Incorrect SkuDetails supplied.");
     } else if (getFullGamePurchaseState() == PurchaseState.NOT_READY) {
       Log.e(TAG, "Unable to purchase Full Game. Previous purchases are not ready.");
@@ -150,7 +166,7 @@ public class BillingServiceImpl implements BillingService, BillingUpdatesListene
     } else if (getFullGamePurchaseState() == PurchaseState.PENDING) {
       Log.e(TAG, "Unable to purchase Full Game. An existing purchase is still pending.");
     } else {
-      Log.i(TAG, "Requesting purchase of: '" + details.getSku() + "'");
+      Log.i(TAG, "Requesting purchase of: '" + details.getProductId() + "'");
       billingManager.initiatePurchaseFlow(details);
     }
   }

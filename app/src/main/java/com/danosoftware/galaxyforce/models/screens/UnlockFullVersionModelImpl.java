@@ -3,11 +3,11 @@ package com.danosoftware.galaxyforce.models.screens;
 import static com.danosoftware.galaxyforce.constants.GameConstants.DEFAULT_BACKGROUND_COLOUR;
 
 import android.util.Log;
-import com.android.billingclient.api.SkuDetails;
+import com.android.billingclient.api.ProductDetails;
 import com.danosoftware.galaxyforce.billing.BillingObserver;
 import com.danosoftware.galaxyforce.billing.BillingService;
+import com.danosoftware.galaxyforce.billing.ProductDetailsListener;
 import com.danosoftware.galaxyforce.billing.PurchaseState;
-import com.danosoftware.galaxyforce.billing.SkuDetailsListener;
 import com.danosoftware.galaxyforce.buttons.sprite_text_button.SpriteTextButton;
 import com.danosoftware.galaxyforce.constants.GameConstants;
 import com.danosoftware.galaxyforce.controllers.common.Controller;
@@ -35,7 +35,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class UnlockFullVersionModelImpl implements Model, BillingObserver, ButtonModel,
-    SkuDetailsListener, TextChangeListener {
+    ProductDetailsListener, TextChangeListener {
 
   /* logger tag */
   private static final String LOCAL_TAG = "UnlockFullVersionModel";
@@ -56,7 +56,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
   private boolean updateSprites;
   private ModelState modelState;
   // details of the full game unlock purchase
-  private volatile SkuDetails skuDetails;
+  private volatile ProductDetails productDetails;
   /*
    * Should we rebuild the screen sprites?
    * Normally triggered by a change in state from a billing thread.
@@ -160,7 +160,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
             TextPositionX.CENTRE,
             450));
 
-    if (skuDetails != null) {
+    if (productDetails != null) {
       messages.add(
           Text.newTextRelativePositionX(
               "PRICE",
@@ -168,7 +168,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
               300 + 50));
       messages.add(
           Text.newUntrustedTextRelativePositionX(
-              skuDetails.getPrice(),
+              productDetails.getOneTimePurchaseOfferDetails().getFormattedPrice(),
               TextPositionX.CENTRE,
               300));
 
@@ -379,7 +379,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
   public void resume() {
     // query upgrade price by requesting the full-game purchase SKU details asynchronously.
     // onSkuDetailsRetrieved() will be invoked when SKU details are available.
-    billingService.queryFullGameSkuDetailsAsync(this);
+    billingService.queryFullGameProductDetailsAsync(this);
   }
 
   @Override
@@ -410,7 +410,7 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
         reBuildSprites(false);
 
         // purchase product
-        billingService.purchaseFullGame(skuDetails);
+        billingService.purchaseFullGame(productDetails);
 
         break;
 
@@ -430,11 +430,11 @@ public class UnlockFullVersionModelImpl implements Model, BillingObserver, Butto
   }
 
   @Override
-  public void onSkuDetailsRetrieved(SkuDetails skuDetails) {
-    if (skuDetails != null) {
-      this.skuDetails = skuDetails;
+  public void onProductDetailsRetrieved(ProductDetails productDetails) {
+    if (productDetails != null) {
+      this.productDetails = productDetails;
       this.reBuildSprites = true;
-      Log.d(LOCAL_TAG, "Retrieved SkuDetails: " + skuDetails);
+      Log.d(LOCAL_TAG, "Retrieved SkuDetails: " + productDetails);
     } else {
       Log.w(GameConstants.LOG_TAG, "Null skuDetails received.");
     }
